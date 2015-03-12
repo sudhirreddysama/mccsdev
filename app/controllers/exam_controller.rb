@@ -269,7 +269,7 @@ class ExamController < CrudController
 							sum(t.perf_waived) perf_waived
          		from exams
 						join applicants a on a.exam_id = exams.id
-            left join hr_apply_online.exam_prices xx on a.web_exam_id = xx.exam_id and xx.applicant_id = a.web_applicant_id
+            left join ' + HRAPPLYDB + '.exam_prices xx on a.web_exam_id = xx.exam_id and xx.applicant_id = a.web_applicant_id
 						left join app_statuses s on s.id = a.app_status_id
 						left join (
 							select 

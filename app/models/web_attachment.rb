@@ -1,6 +1,6 @@
 class WebAttachment < ActiveRecord::Base
 
-	set_table_name 'hr_apply_online.attachments'	
+	set_table_name "#{HRAPPLYDB}.attachments"
 	
 	def path
 		"/home/rails/hrapply/attachments/#{id}#{File.extname(name)}"

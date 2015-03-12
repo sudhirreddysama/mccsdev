@@ -1,6 +1,6 @@
 class WebEmployment < ActiveRecord::Base
 
-	set_table_name 'hr_apply_online.employments'	
+	set_table_name "#{HRAPPLYDB}.employments"
 	
 	belongs_to :web_applicant, :foreign_key => 'applicant_id'
 	

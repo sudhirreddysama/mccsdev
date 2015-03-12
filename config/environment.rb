@@ -109,3 +109,12 @@ class Date
 		alias_method_chain :_parse, :auto_year_adjust
 	end
 end 
+
+
+if RAILS_ENV == 'production'
+	HRAPPLYDB = 'hr_apply_online'
+else
+	HRAPPLYDB = 'hr_apply_onlinedev'
+end
+	
+

@@ -1,5 +1,5 @@
 class WebOtherExam < ActiveRecord::Base
 
-	set_table_name 'hr_apply_online.other_exams'	
+	set_table_name "#{HRAPPLYDB}.other_exams"
 	
 end
