@@ -6,12 +6,12 @@ class WebExam < ActiveRecord::Base
 	
 	has_one :web_exam_total, :foreign_key => 'id'
 	
-	set_table_name 'hr_apply_online.exams'
+	set_table_name "#{HRAPPLYDB}.exams"
 	
 	has_and_belongs_to_many :users
 	
 	has_and_belongs_to_many(:web_new_categories, {
-		:join_table => 'hr_apply_online.exams_new_categories', 
+		:join_table => "#{HRAPPLYDB}.exams_new_categories", 
 		:foreign_key => :exam_id, 
 		:association_foreign_key => :new_category_id
 	})
@@ -41,14 +41,14 @@ class WebExam < ActiveRecord::Base
 	def self.web_exam_deadline_cron
 		User.find(:all, {
 			:include => :liaison_web_exams,
-			:conditions => 'date(hr_apply_online.exams.deadline) = date(now())'
+			:conditions => 'date(' + HRAPPLYDB + '.exams.deadline) = date(now())'
 		}).each { |u|
 			Notifier.deliver_web_exam_deadline u, u.liaison_web_exams
 		}
 		# This does exactly the same as above but for liason2
 		User.find(:all, {
 			:include => :liaison2_web_exams,
-			:conditions => 'date(hr_apply_online.exams.deadline) = date(now())'
+			:conditions => 'date(' + HRAPPLYDB + '.exams.deadline) = date(now())'
 		}).each { |u|
 			Notifier.deliver_web_exam_deadline u, u.liaison2_web_exams
 		}		
