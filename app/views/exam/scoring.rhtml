@@ -1,0 +1,252 @@
+<%= partial 'nav' %>
+<%= partial 'scoring_nav' %>
+<%= partial 'applicant_sort' %>
+
+
+<% if params[:id2] == 'perf' %>
+
+	<% if @exam_perfs.empty? %>
+		<p class="marg">This exam does not have any performance tests associated with it.</p>
+	<% else %>
+		
+		<%= partial 'save_bar', {:url => url_for(:action => :perf_save, :id => @obj.id)} %>	
+		<% perf_codes = PerfCode.find(:all, :order => 'perf_codes.label') %>
+		<form id="review-form" onsubmit="return false;">
+			<%= partial 'pages' %>
+			<table class="dg keynav">
+				<thead>
+					<tr>
+						<th colspan="8">
+						Valid Result Codes:
+						<%= perf_codes.collect { |s| "#{s.code}:&nbsp;#{s.label}" }.join(', ') %>
+						</th>
+					</tr>
+					<tr>
+						<th width="1%">SSN</th>
+						<th class="nobr" width="1%">Name</th>
+						<th width="1%">Performance&nbsp;Test</th>
+						<th width="1%">Taken</th>
+						<th width="1%">Time</th>
+						<th width="1%">Result</th>
+						<th width="1%">P. Test Notes</th>
+						<th width="93%">History</th>
+					</tr>
+				</thead>
+				<% row = 0 %>
+				<% @objs.each_with_index { |o, i| %>
+					<tbody class="<%= cycle 'odd', 'even' %>">
+						<% @exam_perfs.each_with_index { |e, j| %>
+							<tr>
+								<% if j == 0 %>
+									<td class="nobr"><%= h o.person.ssn %></td>
+									<td class="nobr">
+										<%= partial 'notes', {:o => o} %>
+										<%= link_to o.person.label, {:controller => :applicant, :action => :view, :id => o.id}, :target => '_blank' %>
+										
+									</td>
+								<% else %>
+									<td colspan="2"></td>
+								<% end %>
+								<td class="nobr"><%= h e.perf_test.name %></td>
+								<% tp = o.taken_perfs.find_by_exam_id_and_perf_test_id(@obj.id, e.perf_test_id) || TakenPerf.new %>
+								<td><%= text_field_tag "perf[#{o.id}-#{e.perf_test_id}][date_taken]", tp.date_taken.d0?, :size => 13, :id => "cell-#{row}-1", :class => "cell row-#{row} col-1 ucase" %></td>
+								<td><%= text_field_tag "perf[#{o.id}-#{e.perf_test_id}][time_taken]", tp.time_taken, :size => 8, :id => "cell-#{row}-2", :class => "cell row-#{row} col-2 ucase" %></td>
+								<td><%= text_field_tag "perf[#{o.id}-#{e.perf_test_id}][result_code]", tp.result_code, :size => 3, :id => "cell-#{row}-3", :class => "cell row-#{row} col-3 ucase" %></td>
+								<td><%= text_field_tag "perf[#{o.id}-#{e.perf_test_id}][notes]", tp.notes, :size => 20, :id => "cell-#{row}-4", :class => "cell row-#{row} col-4 ucase" %></td>								
+								<td class="phists">
+									<% prev = o.person.taken_perfs.find(:all, {
+										:conditions => ['taken_perfs.exam_id != ? and taken_perfs.perf_test_id not in (1,5,8)', @obj.id],
+										:include => [:perf_code, :exam, :perf_test],
+										:order => 'taken_perfs.date_taken desc'
+									}) %>
+                                  <% if prev.count>0  %>
+                                  <fieldset class="coolfieldset collapsed"><legend>Performance History</legend>
+                                    <% end %>
+									<% prev.each_with_index { |p, i| %>
+										<div>
+											<%= p.perf_test.name if p.perf_test %>
+											<%= p.date_taken %>
+											<%= h p.perf_code.label if p.perf_code %>
+											<%= h p.notes %>
+											<%= link_to(p.exam.exam_no, {:controller => :exam, :action => :view, :id => p.exam_id}, :target => '_blank') if p.exam %>
+										</div>
+									<% } %>
+                                      <% if prev.count>0  %>
+
+                                          </fieldset>
+                                          <% end %>
+								</td>
+							</tr>
+							<% row += 1 %>
+						<% } %>
+					</tbody>
+				<% } %>
+			</table>
+			<%= partial 'pages' %>
+		</form>
+		<script type="text/javascript">
+			
+			var cell_change;
+			
+			enable_arrow_keys_for_table_inputs(4, {change: cell_change});
+		
+		</script>
+		
+	<% end %>
+			
+			
+
+<% else %>
+	
+	<%= partial 'save_bar', {:url => url_for(:action => :applicants_save, :id => @obj.id)} %>
+	<form id="review-form" onsubmit="return false;">
+		<%= partial 'pages' %>
+		<table class="dg keynav">
+			<thead>
+				<tr>
+					<th colspan="9">
+					Valid Status Codes:
+					<%= @statuses.collect { |s| "#{s.code}:&nbsp;#{s.name}" }.join(', ') %>
+					</th>
+				</tr>
+				<tr>
+					<th width="1%">SSN</th>
+					<th width="1%">Name (click to view application)</th>
+					<th width="1%">St.</th>
+					<th width="1%">LScore</th>
+					<th width="1%">Base</th>
+					<th width="1%">VC</th>
+					<th width="1%">OC</th>
+					<th width="1%">Score</th>
+					<th width="99%">Gender (M/F)</th>
+				</tr>
+			</thead>
+			<% @objs.each_with_index { |o, i| %>
+				<tbody class="<%= cycle 'odd', 'even' %>">
+					<% fields_for("applicant[#{o.id}]", o) { |f| %>
+						<tr>
+							<td class="nobr"><%= h o.person.ssn %></td>
+							<td class="nobr">
+								<%= partial 'notes', {:o => o} %>
+								<%= link_to o.person.label, {:controller => :applicant, :action => :view, :id => o.id}, :target => '_blank' %>
+								<% if o.person.veteran == 'VETERAN' || o.person.veteran == 'DISABLED VET' %>
+									<div style="color: #00a; font-size: 80%;">
+										<%= h o.person.veteran %>
+										- <%= o.person.veteran_verified ? 'VERIFIED' : 'UNVERIFIED' %>
+										- <%= o.person.veteran_used ? 'USED' : 'UNUSED' %>
+									</div>
+								<% end %>
+							</td>
+							<td><%= f.text_field :status_code, :size => 3, :id => "cell-#{i}-1", :class => "cell row-#{i} col-1 ucase" %></td>
+							<td><%= f.text_field :raw_score, :size => 6, :id => "cell-#{i}-2", :class => "cell row-#{i} col-2 ucase" %></td>
+							<td><%= f.text_field :base_score, :size => 6, :id => "cell-#{i}-3", :class => "cell row-#{i} col-3 ucase" %></td>
+							<td><%= f.text_field :veterans_credits, :size => 6, :id => "cell-#{i}-4", :class => "cell row-#{i} col-4 ucase" %></td>
+							<td><%= f.text_field :other_credits, :size => 6, :id => "cell-#{i}-5", :class => "cell row-#{i} col-5 ucase" %></td>
+							<td><%= f.text_field :final_score, :size => 6, :id => "cell-#{i}-6", :class => "cell row-#{i} col-6 ucase" %></td>
+							<td>
+								<%= f.text_field :gender, :size => 3, :id => "cell-#{i}-7", :class => "cell row-#{i} col-7 ucase" %>
+								<% if o.army_served %>
+									<a href="#" style="color: #a00;" onclick="jQuery('#vet-<%= o.id %>').toggle(); return false">VET. INFO</a>
+								<% end %>
+								<% if o.agency_residency %>
+									<span style="color: #a0a;">BOCES RES.</span>
+								<% end %>
+							</td>
+						</tr>
+						<% if o.army_served %>
+							<tr id="vet-<%= o.id %>" style="display: none;">
+								<td></td>
+								<td colspan="8" style="color: #a00; font-size: 90%;">
+								Served From: <%= o.army_from ? o.army_from.d0? : '(blank)' %>&nbsp;&nbsp;&nbsp;
+								Served To: <%= o.army_to ? o.army_to.d0? : '(blank)' %>&nbsp;&nbsp;&nbsp;
+								Enlisted: <%= o.army_enlisted ? o.army_enlisted.d0? : '(blank)' %>&nbsp;&nbsp;&nbsp;
+								Hon. Discharge? <%= o.army_discharge_honorable.nil? ? '(blank)' : o.army_discharge_honorable ? 'yes' : '*NO*' %>&nbsp;&nbsp;&nbsp;
+								Reason: <%= o.army_discharge_reason.blank? ? '(blank)' : h(o.army_discharge_reason) %>&nbsp;&nbsp;&nbsp;
+								VC Type: <%= o.vc_type.blank? ? '(blank)' : h(o.vc_type) %>&nbsp;&nbsp;&nbsp;
+								Dis. Claim No.: <%= o.vc_disabled_claim_no.blank? ? '(blank)' : h(o.vc_disabled_claim_no) %>&nbsp;&nbsp;&nbsp;
+								Dis. Auth. Date: <%= o.vc_disabled_auth_date ? o.vc_disabled_auth_date.d0? : '(blank)' %>&nbsp;&nbsp;&nbsp;
+								DD214: <%= o.dd214_included.nil? ? '(blank)' : o.dd214_included ? 'yes' : 'no' %>
+								</td>
+							</tr>
+						<% end %>
+					<% } %>
+				</tbody>
+			<% } %>
+		</table>
+		<%= partial 'pages' %>
+	</form>
+	
+	<script type="text/javascript">
+			
+		var cell_change;
+		
+		var bandscore = <%= @obj.bandscore ? @obj.bandscore.attributes.to_json : 'null' %>;
+		
+		if(bandscore && !bandscore.gd1) {
+			bandscore = null;
+		}
+		
+		(function($) { 
+			
+			var focus_tbody;
+			$('table input').focus(function(e) {
+				var tbody = $(this).parents('tbody');
+				if(focus_tbody && focus_tbody[0] != tbody[0]) {
+					focus_tbody.removeClass('highlight');
+				}
+				focus_tbody = tbody;
+				focus_tbody.addClass('highlight');
+			});
+			
+			cell_change = function(cell, id, row, col, val) {
+			
+				if(col != 1 && col != 7) {
+					var v = parseFloat(val);
+					cell.val(isNaN(v) ? '' : v.toFixed(2));
+				}
+			
+				if((col == 2 && bandscore) || col == 3 || col == 4 || col == 5) {	
+					var pre = '#cell-' + row + '-';
+					var raw = toFloat($(pre + '2').val());
+					var base = toFloat($(pre + '3').val());
+					var vc = toFloat($(pre + '4').val());
+					var oc = toFloat($(pre + '5').val());
+					
+					var bs_found = false;
+					if(bandscore) {
+						use_score = raw + oc;
+						for(var i = 1; i <= 12 && !bs_found; i++) {
+							rg = bandscore['rg' + i];
+							gd = bandscore['gd' + i];
+							if(rg && gd) {
+								from_to = rg.split('-');
+								from = from_to[0];
+								to = from_to[1];
+								if(from && to) {
+									from = toFloat(from);
+									to = toFloat(to);
+									if(use_score >= from && use_score <= to) {
+										base = toFloat(gd);
+										$(pre + '3').val(gd);
+										bs_found = true;
+									}
+								}
+							}
+						}
+					}
+					if(bs_found) {
+						$('#cell-' + row + '-6').val((base + vc).toFixed(2));
+					}
+					else {
+						$('#cell-' + row + '-6').val((base + vc + oc).toFixed(2));
+					}
+				}
+			}
+			
+		})(jQuery);
+			
+		enable_arrow_keys_for_table_inputs(7, {change: cell_change});
+	
+	</script>
+
+<% end %>

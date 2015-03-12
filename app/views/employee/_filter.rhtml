@@ -1,0 +1,59 @@
+<% form_for(:filter, @filter, :builder => TableFormBuilder) { |f| %>
+	<div class="left">
+		<table class="form">
+			<tr>
+				<th colspan="2">Search / Sort:</th>
+			</tr>
+			<tr><td colspan="2"><%= f.text_field :search %></td></tr>
+			<tr>
+				<td><%= f.select :sort1, @orders, {:include_blank => 'Sort 1'}, :style => 'width: 100px;' %></td>
+				<td><%= f.select :dir1, [['Asc.', 'asc'], ['Desc.', 'desc']] %></td>
+			</tr>
+			<tr>
+				<td><%= f.select :sort2, @orders, {:include_blank => 'Sort 2'}, :style => 'width: 100px;' %></td>
+				<td><%= f.select :dir2, [['Asc.', 'asc'], ['Desc.', 'desc']] %></td>
+			</tr>
+			<tr>
+				<td><%= f.select :sort3, @orders, {:include_blank => 'Sort 3'}, :style => 'width: 100px;' %></td>
+				<td><%= f.select :dir3, [['Asc.', 'asc'], ['Desc.', 'desc']] %></td>
+			</tr>
+		</table>
+	</div>
+	<div class="left">
+		<table class="form">
+			<tr>
+				<% if @current_user.staff_level? %>
+					<th>Agencies:</th>
+					<th>Departments:</th>
+				<% end %>
+				<th>Titles:</th>
+				<th>Date Range:</th>
+			</tr>
+			<tr>
+				<% if @current_user.staff_level? %>
+					<td><%= f.select :agency_ids, Agency.find(:all, :order => 'agencies.name asc').collect { |a| [a.name, a.id] }, {}, :multiple => true, :style => 'width: 200px; height: 100px;' %></td>
+					<td><%= f.select :department_ids, Department.find(:all, :order => 'departments.name asc').collect { |d| [d.name, d.id] }, {}, :multiple => true, :style => 'width: 200px; height: 100px;' %></td>
+				<% end %>
+				<td><%= f.select :job_ids, Job.find(:all, :order => 'jobs.name asc').collect { |j| [j.name, j.id] }, {}, :multiple => true, :style => 'width: 200px; height: 100px;' %></td>				
+				<td class="subform">
+					<table class="form">
+						<tr><td><%= f.select :date_type, @date_types %></td></tr>
+						<tr><th>From/To:</th></tr>
+						<tr><td><%= f.calendar_date_select :from_date, :size => 20 %></td></tr>
+						<tr><td><%= f.calendar_date_select :to_date, :size => 20 %></td></tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<th colspan="4">
+					<label><%= f.radio_button :status, 'all' %> All Employees</label>&nbsp;&nbsp;&nbsp;
+					<label><%= f.radio_button :status, 'current' %> Current Employees</label>&nbsp;&nbsp;&nbsp;
+					<label><%= f.radio_button :status, 'prior' %> Prior Employees</label>
+				</th>
+		</table>
+	</div>
+	<div class="clear"></div>
+	<div style="padding: 0px 5px 5px 5px;"><%= f.submit 'Apply Filter' %> 
+	<%= f.submit 'Clear Filter', :name => 'filter[clear]' %>
+	<%= f.submit 'Export (xls)', :name => 'export[xls]' %></div>
+<% } %>

@@ -1,0 +1,6 @@
+<% if @current_user.staff_level? || @allow_liaison %>
+	<%= tab 'New History', :id => params[:sid] || params[:id], :sc => nil, :sid => nil, :controller => params[:sc] || params[:controller], :action => :action_new %>
+	<%= tab 'Edit History', :action => :action_edit, :id => @obj.id, :id2 => @act.id if params[:action] == 'action_edit' %>
+	<%= tab 'Delete History', :action => :action_delete, :id => @obj.id, :id2 => @act.id if params[:action] == 'action_delete' %>
+<% end %>
+<%= tab 'Documents', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>

@@ -1,0 +1,3 @@
+<%= tab 'List Notes', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :list_note}, {:action => :index}, :class => 'tab-list_note' %>
+<%= tab 'Documents', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>
+<%= tab 'Letters', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :message}, {:action => :index, :id => nil}, {:class => 'tab-letter'} %>

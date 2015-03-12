@@ -1,0 +1,243 @@
+<%
+
+@applicants = @obj.cert_applicants.find(:all, {
+	:include => [{:applicant => [:person, :exam]}, :cert_code],
+	:order => 'applicants.final_score desc, applicants.tiebreaker desc'
+})
+
+@exam_nos = []
+if @obj.exam.continuous && @obj.exam.current_exam_id
+	@exam_nos = Exam.find(:all, {
+		:conditions => [
+			'exams.established_date <= ? and exams.valid_until >= ? and exams.current_exam_id = ?', 
+			@obj.certification_date.to_s,
+			@obj.certification_date.to_s,
+			@obj.exam.current_exam_id
+		],
+		:order => 'exams.established_date desc'
+	}).collect(&:exam_no)
+else
+	@exam_nos << @obj.exam.exam_no
+end
+
+%><html>
+	<head>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th, input, select, textarea { font: 11px/16px Trebuchet MS, Verdana, Arial, sans-serif; }
+			
+			h1 { text-align: center; font-weight: bold; font-size: 150%; }
+			
+			table { border-collapse: collapse; width: 100%; margin: 5px 0; }
+			th, td { vertical-align: top; text-align: left; border: 1px solid #aaa; padding: 5px; }
+			
+			table.app { margin: 0; border-top: none; }
+			table.app td { border-top: none; }
+			
+			.nobreak { page-break-inside: avoid; }
+			
+		</style>
+	</head>
+	<body>
+		<h1>CERTIFICATION OF ELIGIBLES</h1>
+		<table>
+			<tr>
+				<td width="50%">
+					<div style="float: left; font-weight: bold; padding-right: 5px;">TO:</div>
+					<div style="float: left;"><%= h @obj.requestor %><br />
+					<% unless @obj.line2.blank? %><%= @obj.line2 %><br /><% end %>
+					<% unless @obj.line3.blank? %><%= @obj.line3 %><br /><% end %>
+					<% unless @obj.line4.blank? %><%= @obj.line4 %><br /><% end %>
+					</div>
+					<div style="clear: both;"></div>					
+					<div style="padding-top: 10px; border-bottom: 1px solid #aaa;">Appointing Officer:</div>
+					<div style="padding-top: 10px; border-bottom: 1px solid #aaa;">Title:</div>
+					<div style="padding-top: 10px; border-bottom: 1px solid #aaa;">Date:</div>
+				</td>
+				<td width="50%">
+					<div style="float: left; font-weight: bold; padding-right: 5px;">FROM:</div>
+					<div style="float: left;">MONROE COUNTY<br />
+					DEPARTMENT OF HUMAN RESOURCES<br />
+					39 WEST MAIN STREET<br />
+					ROCHESTER, NY 14614<br />
+					</div>
+					<div style="clear: both;"></div>
+					<div style="margin-top: 30px; border-top: 1px solid #aaa;">
+					MONROE COUNTY
+					CIVIL SERVICE COMMISSION
+					</div>
+				</td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td colspan="3" style="font-weight: bold;">
+					CERTIFICATION EXPIRES ON, AND APPTS MUST BE MADE BY: <%= @obj.return_date.d0? %>
+					<% unless @obj.comments.blank? %>
+						&nbsp;&nbsp;&nbsp;
+						NOTE: <%= h @obj.comments %>
+					<% end %>
+				</td>
+			</tr>
+			<tr>
+				<td width="33%">
+					TITLE:
+					<div style="text-align: center;"><%= h @obj.job.name %></div>
+				</td>
+				<td width="33%">
+					AGENCY, DEPT:
+					<div style="text-align: center;"><%= h @obj.agency.name %> <%= @obj.department.name if @obj.department && @obj.department.name.strip != @obj.agency.name.strip %></div>
+				</td>
+				<td width="33%">
+					EXAM NUMBER, LIST EXPIRES:
+					<div style="text-align: center;">
+						<% if @obj.exam.continuous %>
+							CONTINUOUS RECRUITMENT
+						<% else %>
+							<%= h @exam_nos.join(', ') %>, <%= h @obj.exam.valid_until.d0? %>
+						<% end %>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					# POS / TYPE:
+					<div style="text-align: center;">
+						<%= h @obj.number_of_positions %> / 
+						<%= h Const::JOB_STATUSES.rassoc(@obj.job_type)[0] rescue nil %><% if !@obj.temp_duration.blank? %>, <%= @obj.temp_duration %><% end %>
+					</div>
+				</td>
+				<td>
+					SALARY:
+					<div style="text-align: center;"><%= h @obj.salary_range %></div>
+				</td>
+				<td>
+					DATE OF CERTIFICATION:
+					<div style="text-align: center;"><%= @obj.certification_date.d0? %></div>
+				</td>
+			</tr>
+          <tr>
+            <td>
+              FT/PT:
+              <div style="text-align: center;">
+                <% if (@obj.job_time=="F") then %>
+                    FT
+                <% else %>
+                <% if (@obj.job_time=="P") then %>
+                    PT
+                <% else %>
+                <%= h @obj.job_time %>
+                        <% end
+                        end
+                        %>
+               </div>
+            </td>
+            <td>
+              GEN/DEPT/RES:
+              <div style="text-align: center;"><%= h @obj.general_or_residential %></div>
+            </td>
+            <td>
+              MONTHS:
+              <div style="text-align: center;"><%= @obj.months %></div>
+            </td>
+          </tr>
+		</table>
+		<table style="margin-bottom: 0;">
+			<tr>
+				<td colspan="5">
+					<div style="font-weight: bold;">READ CAREFULLY THE INSTRUCTIONS PROVIDED FOR USE OF THIS FORM</div>
+					<div>When an appointment is made, any eligible candidate who was interviewed or whose score
+					was higher than the candidate appointed should be notified per section 61.3 of New York State Civil Service Law.</div>
+					<div>Final rating includes any veteran or disabled veteran credits shown.
+				</td>
+			</tr>
+			<% unless @obj.bottom_note.blank? %>
+				<tr>
+					<td colspan="5" style="font-size: 9px;"><%= nl2br_h @obj.bottom_note %></td>
+				</tr>
+			<% end %>
+			<tr>
+				<th width="5%">#</th>
+				<th width="33%">NAME AND ADDRESS</th>
+				<th width="11%" style="text-align: center; white-space: nowrap;">FINAL EXAM<br />RATING</th>
+				<th width="11%" style="text-align: center; white-space: nowrap;">V or DV<br />CREDITS</th>
+				<th width="34%">REPORT OF ACTION / SALARY /<br />EFFECTIVE DATE OF APPOINTMENT</th>
+			</tr>
+		</table>
+		<% @applicants.each_with_index { |ca, i| %>
+			
+			<%
+			
+				a = ca.applicant
+				p = a.person
+				e = a.exam
+				c = ca.cert_code
+	
+				restricted = false
+				a.exam.exam_perfs.each { |ep|
+					taken_perf = a.taken_perfs.to_a.find { |tp| tp.perf_test_id == ep.perf_test_id }
+					if !taken_perf || !taken_perf.perf_code || !taken_perf.perf_code.pass_fail == 1
+						restricted = true
+					end
+				}
+			
+			%>
+			<div class="nobreak">
+				<table class="app">
+					<tr>
+						<td width="5%"><%= i + 1 %>.</td>
+						<td width="33%">
+							<%= h p.last_name %>, <%= h p.first_name %>&nbsp;<br />
+							<%= h p.mailing_address %>&nbsp;<br />
+							<% unless p.mailing_address2.blank? %>
+								<%= h p.mailing_address2 %>&nbsp;<br />
+							<% end %>
+							<%= h p.mailing_city %>, <%= h p.mailing_state %> <%= h p.mailing_zip %>&nbsp;<br />
+							<% unless p.home_phone.blank? %>
+								<%= h phone_format(p.home_phone) %> (home)&nbsp;<br />
+							<% end %>
+							<% if false %>
+								<% unless p.work_phone.blank? %>
+									<%= h p.work_phone %> (work)&nbsp;<br />
+								<% end %>
+								<% unless p.fax.blank? %>
+									<%= h p.fax %> (fax)&nbsp;<br />
+								<% end %>
+								<% unless p.cell_phone.blank? %>
+									<%= h p.cell_phone %> (cell)&nbsp;<br />
+								<% end %>
+								<% unless p.email.blank? %>
+									<%= h p.email %>&nbsp;<br />
+								<% end %>
+							<% end %>
+							<% if @obj.exam.continuous %>
+								Eligibility Expires: <%= e.valid_until.d0? %>&nbsp;<br />
+							<% end %>
+							<% if restricted %>
+								* RESTRICTED *<br />
+							<% end %>
+							&nbsp;<br />
+						</td>
+						<td width="11%" style="text-align: right;"><%= nwp a.final_score, 2 %></td>
+						<td width="11%" style="text-align: right;"><%= nwp a.veterans_credits, 2 %></td>
+						<td width="34%">
+							<% if c %>
+								<%= c.description %>&nbsp;<br />
+							<% end %>
+							<% if !ca.comments.blank? && (!c || (c.description != ca.comments)) %>
+								<%= h ca.comments %>&nbsp;<br />
+							<% end %>
+							<% if ca.action_date %>
+								<%= ca.action_date.d0? %>
+							<% end %>
+						</td>
+					</tr>
+				</table>
+			</div>
+		<% } %>
+		<% unless @obj.end_of_list.blank? %>
+			<table style="margin: 0; border-top: none;"><tr><td colspan="5"><%= h @obj.end_of_list %></td></tr></table>
+		<% end %>
+	</body>
+</html>

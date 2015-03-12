@@ -1,0 +1,125 @@
+<% 
+
+k = %w(no_applied no_approved no_disapproved no_check_confirmed no_check_unconfirmed no_cash no_credit no_reg_waiver no_empl_waiver no_money_order_confirmed no_money_order_unconfirmed no_bounced no_unpaid no_nocharge)
+
+tot = {}
+tot_m = {'collected' => 0.0}
+k.each { |i| tot[i] = 0; tot_m[i] = 0.0 }
+
+%><html>
+	<head>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th { font: 11px/16px Trebuchet MS, Verdana, Arial, sans-serif; }
+			
+			table { border-collapse: collapse; width: 100%; }
+			td, th { vertical-align: top; text-align: left; padding: 2px; }
+			
+			th { font-weight: bold; }
+			
+			.r { text-align: right; }
+			.l { text-align: left; }
+			
+			td { text-align: right; }
+			
+		</style>
+	</head>
+	<body>
+		<div style="float: right;"><%= Time.now.d0? %></div>
+		<h3>
+			Application Fees Paid<br />
+			From <%= @from_date.d0? %> to <%= @to_date.d0? %>
+		</h3>
+		<table>
+			<% @objs.each_hash { |o| %>
+				<%
+				
+				f = o.fee.to_f
+				m = {}
+				
+				k.each { |i|
+					o[i] = o[i].to_i
+					m[i] = o[i] * f
+					tot[i] += o[i]
+					tot_m[i] += m[i]
+					
+				}
+				
+				collected = 
+					m['no_check_confirmed'] +
+					m['no_cash'] +
+					m['no_credit'] +
+					m['no_money_order_confirmed']
+				
+				tot_m['collected'] += collected
+				
+				approved_and_waived = o.no_reg_waiver_approved.to_i + o.no_empl_waiver_approved.to_i
+				
+				%>
+				<tr style="border-top: 1px solid #000; border-bottom: 1px solid #000;">
+					<th colspan="8">
+						<%= h o.job_name %>&nbsp;&nbsp;&nbsp;
+						<%= h o.exam_no %>&nbsp;&nbsp;&nbsp;
+						<%= Date.parse(o.given_at).d0? rescue nil %>&nbsp;&nbsp;&nbsp;
+						<%= m o.fee %>
+					</th>
+				</tr>
+				<tr>
+					<td>Approved:</td>
+					<td class="r"><%= nwp o.no_approved %></td>
+					<td>Cash:</td>
+					<td class="r"><%= m0 m.no_cash %></td>
+					<td>Reg. Waived:</td>
+					<td class="r"><%= m0 m.no_reg_waiver %></td>
+					<td>Bounced:</td>
+					<td class="r"><%= m0 m.no_bounced %></td>
+				</tr>
+				<tr>
+					<td>Disapproved:</td>
+					<td class="r"><%= nwp o.no_disapproved %></td>
+					<td>Check:</td>
+					<td class="r"><%= m0 m.no_check_confirmed %></td>
+					<td>Empl. Waived:</td>
+					<td class="r"><%= m0 m.no_empl_waiver %></td>
+					<td>Unpaid:</td>
+					<td class="r"><%= m0 m.no_unpaid %></td>
+				</tr>
+				<tr>
+					<td>TOTAL:</td>
+					<td class="r"><%= nwp o.no_applied %></td>
+					<td>Money Order:</td>
+					<td class="r"><%= m0 m.no_money_order_confirmed %></td>
+					<td>Total Waived:</td>
+					<td class="r"><%= m0(m.no_reg_waiver + m.no_empl_waiver) %></td>
+					<td>Unconf. Check:</td>
+					<td class="r"><%= m0 m.no_check_unconfirmed %></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="r"></td>
+					<td>Credit Card:</td>
+					<td class="r"><%= m0 m.no_credit %></td>
+					<td>No Charge:</td>
+					<td class="r"><%= m0 m.no_nocharge %></td>
+					<td>Unconf. MO:</td>
+					<td class="r"><%= m0 m.no_money_order_unconfirmed %></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="r"></td>
+					<td>TOTAL:</td>
+					<td class="r"><%= m0 collected %></td>
+					<td colspan="4" class="l">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						# Approved & Waived, Reg.: <%= nwp o.no_reg_waiver_approved, 0 %>
+						, Empl.: <%= nwp o.no_empl_waiver_approved, 0 %>
+					</td>
+				</tr>
+			<% } %>
+		</table>
+		
+		<h3>Total Collected: <%= m tot_m.collected %></h3>
+		
+	</body>
+</html>

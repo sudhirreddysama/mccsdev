@@ -1,0 +1,66 @@
+<div class="tabs buttons">
+	<% if @current_user.staff_level? || @allow_liaison %>
+		<%= tab 'Process File', :action => :process_file, :id => @obj.id %>
+	<% end %>
+	<%= tab 'Print Verified', {:action => :print, :id => @obj.id, :id2 => 'verified'}, {}, {:target => '_blank'} %>
+	<%= tab 'Print Errors', {:action => :print, :id => @obj.id, :id2 => 'errors'}, {}, {:target => '_blank'} %>
+	<%= tab 'Export to Excel', {:action => :excel, :id => @obj.id}, {}, {:target => '_blank'} %>
+	<div class="clear"></div>
+</div>
+
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>As Of Date:</label>
+					<%= h o.as_of_date.d0? %>
+				</td>
+				<td>
+					<label>User:</label>
+					<%= h o.user.username if o.user %>
+				</td>
+				<td>
+					<label>Agency:</label>
+					<%= h o.agency.name if o.agency %>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>File:</label>
+					<%= link_to o.filename, :action => :download, :id => o.id %>
+				</td>
+				<td>
+					<label>Verified:</label>
+					<%= o.verified_count.n0? %>
+				</td>
+				<td>
+					<label>Errors:</label>
+					<%= o.error_count.n0? %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Notes:</label>
+					<%= nl2br_h o.notes %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+</div>
+<% if !@current_user.agency_level? %>
+	<%= partial 'error_lines' %>
+<% end %>

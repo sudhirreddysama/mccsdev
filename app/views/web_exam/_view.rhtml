@@ -1,0 +1,152 @@
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Exam No.:</label>
+					<%= o.no %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.name %>
+				</td>
+				<td>
+					<label>Type:</label>
+					<%= o.web_exam_type.name if o.web_exam_type %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Categories:</label>
+					<%= h o.web_new_categories.collect(&:name).join(', ') %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Who May Apply:</label>
+					<%= h o.who_may_apply %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Fee:</label>
+					<%= nwp o.price, 2 %>
+				</td>
+				<td>
+					<label>Published?:</label>
+					<%= yn o.published %>
+				</td>
+				<td>
+					<label>Can Apply?:</label>
+					<%= yn o.can_apply %>
+				</td>
+				<td>
+					<label>Publish At:</label>
+					<%= o.publish.dt0? %>
+				</td>
+				<td>
+					<label>Deadline:</label>
+					<%= o.deadline.dt0? %>
+				</td>
+				<td>
+					<label>Exam Date:</label>
+					<%= o.exam_date.dt0? %>
+				</td>
+				<% if false %>
+					<td>
+						<label>Ask Loans?:</label>
+						<%= yn o.ask_loans %>
+					</td>
+				<% end %>
+				<td>
+					<label>Ask Typing Waiv.?:</label>
+					<%= yn o.ask_typing_waiver %>
+				</td>
+				<td>
+					<label>Liaison(s):</label>
+					<%= o.liaison ? o.liaison.name : '' %>
+					<% if o.liaison2 %>, <%= o.liaison2.name %><% end %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Minimum Age:</label>
+					<%= h o.minimum_age %>
+				</td>
+				<td>
+					<label>License Req.:</label>
+					&nbsp;<%= h o.license_requirement %>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Description:</label>
+					<%= o.description %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<% if false %>
+<h2>Applications</h2>
+
+<% apps = o.applicants.find(:all, :order => 'applicants.submitted_at desc') %>
+
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">View</th>
+			<th width="1%">ID</th>
+			<th width="1%">Submitted</th>
+			<th width="1%">Status</th>
+			<th width="1%">Exam&nbsp;No.</th>
+			<th width="95%">Title</th>
+			</tr>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% apps.each { |a| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= a.id %>">
+				<td class="nobr">
+					<%= link_to 'Application', :controller => :applicant, :action => :view, :id => a.id %> &bull;
+					<%= link_to 'Exam', :controller => :exam, :action => :view, :id => a.exam_id if a.exam %>
+				</td>
+				<td><%= a.id %></td>
+				<td class="nobr"><%= a.submitted_at.d0? %></td>
+				<td class="nobr"><%= h a.app_status.name if a.app_status %></td>
+				<td class="nobr"><%= h a.exam.exam_no if a.exam %></td>
+				<td><%= h a.exam.title if a.exam %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
+<% end %>

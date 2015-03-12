@@ -1,0 +1,13 @@
+<%= render :partial => 'partial/errors', :locals => {:errors => @errors} %>
+<% if params[:action] != 'switch' %>
+	<h2 id="login-form"><span>Login</span></h2>
+<% end %>
+<% form_for(:login) { |f| %>
+	<table class="form">
+		<tr><th><%= f.label :username, 'Username:' %></th></tr>
+		<tr><td><%= f.text_field :username, :style => 'width: 90%;' %></td></tr>
+		<tr><th><%= f.label :password, 'Password:' %></th></tr>
+		<tr><td><%= f.password_field :password, :style => 'width: 90%;' %></td></tr>
+		<tr><td class="ct"><%= f.submit 'Login' %></td></tr>
+	</table>
+<% } %>

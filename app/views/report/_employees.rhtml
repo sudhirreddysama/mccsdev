@@ -1,0 +1,59 @@
+<% if objs.is_a? Array %>
+	<% objs.each { |o| %>
+		<tr>
+			<% depth.times { %>
+				<td></td>
+			<% } %>
+			<td class="dept-<%= depth %>"><%= h "#{o.last_name if o.last_name}, #{o.first_name if o.first_name}" %></td>
+			<% unless @jobs %>
+				<td><%= h o.job_name %></td>
+			<% end %>
+			<% unless @agencies %>
+				<td><%= h o.agency_name %></td>
+			<% end %>
+			<% unless @departments %>
+				<td><%= h o.department_name %></td>
+			<% end %>
+			<td><%= h o.classification %></td>
+			<td><%= h o.status %></td>
+			<td><%= h o.job_time %></td>
+			<% if params[:show_ssn] %>
+				<td><%= h o.ssn %></td>
+			<% end %>
+			<% if params[:show_seniority_date] %>
+				<td><%= Date.parse(o.seniority_date).d0? rescue nil %></td>
+			<% end %>
+			<% if params[:show_salary] %>
+				<td><%= nwp(o.wage, 2) %><% unless o.wage_per.blank? %>/<%= h o.wage_per %><% end %></td>
+			<% end %>
+			<% if params[:show_veteran] %>
+				<td><%= h o.veteran %></td>
+			<% end %>	
+			<% if params[:show_pension_no] %>
+				<td><%= h o.pension_no %></td>
+			<% end %>			
+		</tr>
+	<% } %>
+	<tr>
+		<% depth.times { %>
+			<td></td>
+		<% } %>
+		<td colspan="300" style="text-align: center; font-size: 70%; font-style: italic;">
+			TOTAL FOR <%= h labels.join(' / ') %>: <%= objs.length %>
+		</td>
+	</tr>
+<% else %>
+	<% keys = objs.keys.sort %>
+	<% keys.each { |k| objs2 = objs[k] %>
+		<tr>
+			<% depth.times { %>
+				<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<% } %>
+			<th colspan="300">
+				<% labels2 = labels + [k] %>
+				<%= labels2.join(' / ') %>
+			</th>
+		</tr>
+		<%= partial 'employees', :objs => objs2, :depth => depth + 1, :labels => labels2 %>
+	<% } %>
+<% end %>

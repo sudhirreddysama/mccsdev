@@ -1,0 +1,172 @@
+<div class="viewer">
+	<div class="header">General Info.</div>
+
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Class:</label>
+					<%= o.job_class.description if o.job_class %>
+				</td>
+				<td>
+					<label>Type:</label>
+					<%= o.job_type.description if o.job_type %>
+				</td>
+				<td>
+					<label>Time:</label>
+					<%= o.full_or_part_time %>
+				</td>
+				<td>
+					<label>Job No.:</label>
+					<%= o.job_no %>
+				</td>
+				<td>
+					<label>Created At:</label>
+					<%= o.created_at.d0? %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Title:</label>
+					<%= h o.title %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.name %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Department:</label>
+					<%= o.department.name if o.name %>
+				</td>
+				<td>
+					<label>Agency:</label>
+					<%= o.agency.name if o.agency %>
+				</td>
+				<td>
+					<label>Title of Position (links to title record):</label>
+					<%= link_to(o.job.name, :controller => :job, :action => :view, :id => o.job_id) if o.job %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+		
+</div>
+
+<% actions = @obj.empl_actions.find(:all, :order => 'empl_actions.action_date desc').to_a %>
+<% actions.each_with_index { |a, i| %>
+	<div class="viewer">
+		<div class="header">History #<%= i + 1 %></div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Date:</label>
+						<%= a.action_date.d0? %>
+					</td>
+					<td>
+						<label>Action:</label>
+						<%= h a.empl_action_type.name if a.empl_action_type %>
+					</td>
+					<td>
+						<label>Authorization:</label>
+						<%= h a.authorization %>
+					</td>
+					<td>
+						<label>Wage:</label>
+						<%= h a.wage.n2? %><% unless a.wage_per.blank? %>/<%= h a.wage_per %><% end %>
+					</td>					
+					<td>
+						<label>Class:</label>
+						<%= h a.classification %>
+					</td>					
+					<td>
+						<label>Status:</label>
+						<%= h a.status %>
+					</td>					
+					<td>
+						<label>Type:</label>
+						<%= h a.job_type %>
+					</td>					
+					<td>
+						<label>Time:</label>
+						<%= h a.job_time %>
+					</td>					
+					<td>
+						<label>Reference Date:</label>
+						<%= a.reference_date.d0? %>
+					</td>					
+				</tr>
+			</table>
+		</div>
+		<% e = a.employee %>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Empl. No.:</label>
+						<%= h e.employee_no if e %>
+					</td>
+					<td>
+						<label>SSN:</label>
+						<%= h e.ssn if e %>
+					</td>
+					<td>
+						<label>Name (links to employee):</label>
+						<%= link_to(e.label, :controller => :employee, :action => :view, :id => e.id) if e %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>		
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Info:</label>
+						<%= h a.info %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>				
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Cert Info:</label>
+						<%= h a.cert_info %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>		
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Leave Date:</label>
+						<%= a.leave_date.d0? %>
+					</td>
+					<td>
+						<label>Leave Reason:</label>
+						<%= h a.leave_reason %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>		
+	</div>
+<% } %>

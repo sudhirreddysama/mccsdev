@@ -1,0 +1,6 @@
+<%= partial 'nav' %>
+<% if @current_user.agency_level? && @obj.status != 'started' && @obj.status != 'disapproved' %>
+	<div class="marg">This form has been submitted and can no longer be edited.</div>
+<% else %>
+	<%= partial 'form', :o => @obj %>
+<% end %>

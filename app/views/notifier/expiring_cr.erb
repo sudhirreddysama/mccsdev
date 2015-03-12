@@ -1,0 +1,7 @@
+Exams may need to be refreshed/exported to website:
+
+<% @exams.each { |e| -%>
+<%= e.exam_no %> - <%= e.title %>
+https://www.monroecounty.gov/mccs/exam/view/<%= e.id %>
+	
+<% } -%>

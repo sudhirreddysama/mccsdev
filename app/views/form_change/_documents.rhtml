@@ -1,0 +1,16 @@
+<div class="row">
+	<table>
+		<tr>
+			<td>
+				<label>Documents:</label>
+				<% if @obj.documents.empty? %>
+					None
+				<% else %>
+					<% @obj.documents.each { |d| %>
+						<div><%= link_to d.filename, {:sc => :form_change, :sid => @obj.id, :controller => :document, :action => :download, :id => d.id}, :target => '_blank' %></div>
+					<% } %>
+				<% end %>
+			</td>
+		</tr>
+	</table>
+</div>

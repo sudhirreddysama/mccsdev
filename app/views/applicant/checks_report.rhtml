@@ -1,0 +1,67 @@
+<%= partial 'nav' %>
+<% if @current_user.staff_level? %>
+	<div class="marg">Listed below are all applications paid by check not yet confirmed. Check the box to the left of the application to mark them as confirmed. Check the top box to select all.</div>
+	<%= form_tag %>
+		<table class="dg">
+			<thead>
+				<tr>
+					<th width="1%"><%= check_box_tag 'select_all' %></th>
+					<th width="1%">Paid By</th>
+					<th width="1%">Check #</th>
+					<th width="1%">SSN</th>
+					<th width="47%">Name (click to view application)</th>
+					<th width="46%">Exam (click to view exam)</th>
+					<th width="1%">Cost</th>
+				</tr>
+			</thead>
+			<tbody>
+			<% @objs.each { |o| %>
+				<% fields_for("objs[#{o.id}]", o) { |f| %>
+					<tr class="<%= cycle 'odd', 'even' %>">
+						<td><%= f.check_box :check_confirmed, :class => 'check_confirmed' %></td>
+						<td><%= f.select :paid_by, Const::PAID_BY, :include_blank => true %></td>
+						<td><%= f.text_field :check_no, :size => 10 %></td>
+						<td class="nobr"><%= o.person.ssn if o.person %></td>
+						<td><%= link_to o.person ? "#{o.person.last_name}, #{o.person.first_name}" : 'UNKNOWN', :controller => :applicant, :action => :view, :id => o.id %></td>
+						<td><%= o.exam ? link_to("#{o.exam.exam_no} #{o.exam.title}", :controller => :exam, :action => :view, :id => o.exam_id) : 'UNKNOWN' %></td>
+						<td class="nobr">$<%= o.exam.fee.n2? %></td>
+					</tr>
+				<% } %>
+			<% } %>
+			</tbody>
+		</table>
+		<div class="marg" style="text-align: center;"><%= submit_tag 'Update Payments / Create Deposit Slip' %></div>
+	</form>
+<% end %>
+<script type="text/javascript">
+	
+	(function($) {
+		$('#select_all').change(function(e) {
+			v = $('#select_all:checked')[0] ? true : false;
+			$('.check_confirmed').attr('checked', v);
+		});
+	})(jQuery);
+	
+</script>
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">ID</th>
+			<th width="1%">Created</th>
+			<th width="98%">Click to Download Reports</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @reports.each { |r| %>
+			<tr class="<%= cycle 'odd', 'even' %>">
+				<td><%= r.id %></td>
+				<td class="nobr"><%= r.created_at.dt0? %></td>
+				<td>
+					<%= link_to 'Deposit Slip', {:action => :checks_file, :id => r.id, :id2 => 'paid'}, :target => '_blank' %>
+					&nbsp;&nbsp;&bull;&nbsp;&nbsp;
+					<%= link_to 'Unpaid Report', {:action => :checks_file, :id => r.id, :id2 => 'unpaid'}, :target => '_blank' %>
+				</td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

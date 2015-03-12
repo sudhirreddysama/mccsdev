@@ -1,0 +1,31 @@
+<div class="tabs buttons">
+	<%= tab 'Preview PDF', {:action => 'print', :id => @obj.id}, {}, :target => '_blank' %>
+	<div class="clear"></div>
+</div>
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.name %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Body Preview:</label>
+					<%= o.body %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>

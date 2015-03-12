@@ -1,0 +1,32 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">Submitted</th>
+			<th width="1%">Status</th>
+			<th width="1%">SSN</th>
+			<th width="37%">Name</th>
+			<th width="1%">Exam&nbsp;No.</th>
+			<th width="28%">Title</th>
+			<th width="1%">Web&nbsp;Type</th>
+			<th width="29%">Web Post</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td><%= o.id %></td>
+				<td class="nobr"><%= o.submitted_at.d0? %></td>
+				<td class="nobr"><%= h o.app_status.name if o.app_status %></td>
+				<td class="nobr"><%= h o.person.ssn if o.person %></td>
+				<td><%= link_to o.person.label, :action => :view, :id => o.id if o.person %></td>
+				<td class="nobr"><%= h o.exam.exam_no if o.exam %></td>
+				<td><%= h o.exam.title if o.exam %></td>
+				<td><%= h o.web_exam.web_exam_type.short_name if o.web_exam && o.web_exam.web_exam_type %></td>
+				<td><%= h o.web_exam.name if o.web_exam %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

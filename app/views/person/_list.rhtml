@@ -1,0 +1,28 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">SSN</th>
+			<th width="25%">Name</th>
+			<th width="19%">Town</th>
+			<th width="19%">Village</th>
+			<th width="19%">School Dist.</th>
+			<th width="18%">Fire Dist.</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td><%= o.id %></td>
+				<td class="nobr"><%= h o.ssn %></td>
+				<td><%= link_to o.label, :action => :view, :id => o.id %></td>
+				<td><%= o.town.name if o.town %></td>
+				<td><%= o.village.name if o.village %></td>
+				<td><%= o.school_district.name if o.school_district %></td>
+				<td><%= o.fire_district.name if o.fire_district %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

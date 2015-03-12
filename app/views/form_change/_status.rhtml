@@ -1,0 +1,68 @@
+<% if params[:action] != 'print' %>
+	<div class="tabs buttons">
+		<%= tab 'Printable Version', {:action => :print, :id => @obj.id}, {}, :target => '_blank' %>
+		<% if @obj.employee %>
+			<%= tab 'Employee History Details', {:controller => :employee, :action => :print, :id => @obj.employee_id}, {}, :target => '_blank' %>
+		<% end %>
+		<div class="clear"></div>
+	</div>
+
+	<% if @current_user.agency_level? %>
+		<% if @obj.status == 'started' || @obj.status == 'disapproved' %>
+			<% if @current_user.level == 'agency-head' %>
+				<%= link_to('This form has not yet been submitted to HR. Click here to submit.', 
+					{:action => :submit, :id => @obj.id},
+					:confirm => 'Are you sure you want to submit this form? No changes can be made after submitting. Please make sure all required information and documents have been provided.',
+					:style => 'display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: underline;') 
+				%>
+			<% else %>
+				<div style="display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: none;">
+					This form has not yet been submitted to HR. An agency-head level user must submit it from this page.
+				</div>
+			<% end %>
+		<% end %>
+	<% end %>
+
+<% end %>
+
+<% form = (@current_user.staff_level? || @current_user.level == 'liaison') && !(params[:action] == 'print') %>
+<% if form %>
+	<%= form_tag %>
+<% end %>
+<div class="viewer">
+	<div class="header">Status</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Status:</label>
+					<% if form %>
+						<%= select :obj, :status, ['started', 'submitted', 'approved', 'disapproved'] %>
+					<% else %>
+						<%= form_status o.status %>
+					<% end %>
+				</td>
+				<td>
+					<label>Reason:</label>
+					<% if form %>
+						<%= text_field :obj, :status_reason, :size => '90' %>
+						<%= submit_tag 'Update' %>
+					<% else %>
+						<%= h o.status_reason %>
+					<% end %>
+				</td>
+				<td>
+					<label>Updated By:</label>
+					<%= h o.status_user.name if o.status_user %>
+				</td>
+				<td>
+					<label>Updated At:</label>
+					<%= h o.status_date.d0? %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<% if form %>
+	</form>
+<% end %>

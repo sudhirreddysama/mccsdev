@@ -1,0 +1,86 @@
+<table class="dg4">
+	<thead>
+		<tr>
+			<th width="1%">Pos.</th>
+			<th width="45%">Name</th>
+			<% if @obj.continuous %>
+				<th width="1%">Valid<br />Until</th>
+			<% end %>
+			<th width="1%">Exam<br />Score</th>
+			<th width="1%">Vet.<br />Cred.</th>
+			<th width="1%">Other<br />Cred.</th>
+			<th width="47%">Final<br />Score</th>
+			<th width="1%" style="text-align: right;">Notes</th>
+			<th width="1%" style="text-align: right;">Activity</th>
+			<th width="1%" style="text-align: right;">Residency</th>
+		</tr>
+	</thead>
+	<% objs.each_with_index { |o, i| p = o.person %>
+		<tbody class="<%= cycle 'odd', 'even' %>" id="obj-<%= o.id %>">
+			<tr>
+				<td class="nobr"><%= i + 1 %></td>
+				<td><%= link_to "#{p.last_name}, #{p.first_name}", :action => :applicant, :id => p.id %></td>
+				<% if @obj.continuous %>
+					<td><%= o.exam.valid_until.d0? %></td>
+				<% end %>
+				<td><%= nwp o.base_score, 2 %></td>
+				<td><%= nwp o.veterans_credits, 2 %></td>
+				<td><% if @obj.bandscored %>(<%= nwp o.other_credits, 2 %>)<% else %><%= nwp o.other_credits, 2 %><% end %></td>
+				<td><%= nwp o.final_score, 2 %></td>
+				<%
+						
+				t = p.town
+				v = p.village
+				f = p.fire_district
+				s = p.school_district
+				
+
+				actions = o.cert_applicants.find(:all, {
+					:include => [{:cert => :agency}, :cert_code],
+					:conditions => 'certs.id is not null and certs.certification_date is not null'
+				})
+				
+				list_notes = o.list_notes.find(:all, :conditions => 'list_notes.note_date is not null')
+				
+				activity = (actions.to_a + list_notes.to_a).sort_by(&:date).reverse
+				
+				%>				
+				<td class="info-links">
+					<% unless o.list_note.blank? %>
+						<a href="#" id="link-<%= o.id %>-notes" onclick="toggle_info(this); return false;">notes</a>	
+					<% end %>
+				</td>
+				<td class="info-links">
+					<% unless activity.empty? %>
+						<a href="#" id="link-<%= o.id %>-activity" onclick="toggle_info(this); return false;">activity</a>
+					<% end %>
+				</td>
+				<td class="info-links">
+					<% if t || v || f || s %>
+						<a href="#" id="link-<%= o.id %>-residency" onclick="toggle_info(this); return false;">residency</a>	
+					<% end %>
+				</td>
+			</tr>
+			
+			<% unless o.list_note.blank? %>
+				<tr id="obj-<%= o.id %>-notes" class="list-extra" style="display: none;">
+					<td colspan="10">
+						<%= nl2br_h o.list_note %>
+					</td>
+				</tr>
+			<% end %>
+			<%= partial 'activity', :acts => activity, :id => o.id %>
+			<% if t || v || f || s %>
+				<tr id="obj-<%= o.id %>-residency" class="list-extra" style="display: none;">
+					<td colspan="10">
+						<% if t %><span class="dim-label">Town:</span> <%= h t.name %>&nbsp;&nbsp;&nbsp;<% end %>
+						<% if v %><span class="dim-label">Village:</span> <%= h v.name %>&nbsp;&nbsp;&nbsp;<% end %>
+						<% if f %><span class="dim-label">Fire:</span> <%= h f.name %>&nbsp;&nbsp;&nbsp;<% end %>
+						<% if s %><span class="dim-label">School:</span> <%= h s.name %>&nbsp;&nbsp;&nbsp;<% end %>
+					</td>
+				</tr>
+			<% end %>
+			
+		</tbody>
+	<% } %>
+</table>

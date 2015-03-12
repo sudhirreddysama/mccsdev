@@ -1,0 +1,4 @@
+td.info-links a { background: url(../images/menu-collapsed.png) 0 center no-repeat; padding: 0 0 0 12px; display: block; }
+td.info-links a.open { background-image: url(../images/menu-expanded.png); }
+
+.dim-label { font-weight: bold; color: #777; }

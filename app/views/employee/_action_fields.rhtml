@@ -1,0 +1,109 @@
+<% if params[:controller] == 'form_hire' || params[:controller] == 'form_change' %>
+	<tr>
+		<th>Employee: <span class="req">*</span></th>
+		<td>
+			<%= partial 'pop_field', :id => 'obj_employee_label', :text => (@obj.employee ? @obj.employee.label : ''), :name => 'obj[employee_id]', :id => 'obj_employee_id', :url => popup_url({:controller => :employee}), :value => @obj.employee_id %>
+			<div>Click the field above to open a popup where you can select an existing employee/position. This will autofill the information below.</div>
+		</td>
+	</tr>
+<% end %>
+<tr>
+	<th>Dates: <span class="req">*</span></th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>Action Date: <span class="req">*</span></th>
+				<th>Reference Date: <span class="req">*</span></th>
+			</tr>
+			<tr>
+				<td><%= f.calendar_date_select :action_date, :req => true, :label => 'Action Date', :class => 'ucase' %></td>
+				<td><%= f.calendar_date_select :reference_date, :label => 'Reference Date', :class => 'ucase' %></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<% 
+
+empl_action_types = EmplActionType.find(:all, :order => 'empl_action_types.name asc') 
+
+action_types_absent = {}
+empl_action_types.each { |t|
+	action_types_absent[t.id] = t.absent
+}
+
+%>
+<%= f.tr_select :empl_action_type_id, empl_action_types.collect { |t| [t.label, t.id] }, :include_blank => true, :label => 'Action', :req => true %>
+<%= f.tr_calendar_date_select :leave_date, :label => 'Leave Date' %>
+<%= f.tr_calendar_date_select :received_date, :label => 'Received Date' %>
+<% if false %>
+	<%= f.tr_check :absent, :label => 'Absent?', :text => 'Check here to make this employee no longer current. The action date will be the date left. This will autopopulate from the action but can be overridden.' %>
+<% end %>
+
+
+<%= f.tr_select :job_id, Job.find(:all, {
+	:order => 'jobs.inactive asc, jobs.name asc',
+}).collect { |j| [j.inactive ? "*#{j.name}" : j.name, j.id] }, :include_blank => true, :label => 'Title', :req => true, :help => 'With options open, type * to view inactive titles.' %>
+<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name asc').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Agency', :req => true %>
+<%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name asc').collect { |d| [d.name, d.id] }, :include_blank => true, :label => 'Department', :req => true %>
+<tr>
+	<th>Salary/Wage:</th>
+	<td>
+		<%= f.text_field :wage, :size => 10, :class => 'ucase nocomma' %> / <%= f.select :wage_per, Const::WAGE_UNITS, :include_blank => true %>
+	</td>
+</tr>	
+<%= f.tr_select :classification, Const::JOB_CLASSES, :include_blank => true, :label => 'Class' %>
+<%= f.tr_select :status, Const::JOB_STATUSES, :include_blank => true, :label => 'Status' %>
+<tr>
+	<th>Time:</th>
+	<td>
+		<% Const::JOB_TIMES.each { |t| %>
+			<label><%= f.radio_button :job_time, t[1] %> <%= h t[0] %></label>&nbsp;&nbsp;
+		<% } %>
+	</td>
+</tr>
+<%= f.tr_text_field :authorization, :label => 'Authorization', :class => 'ucase' %>
+<%= f.tr_text_field :info, :label => 'Info', :class => 'ucase' %>
+
+<script type="text/javascript">
+	
+	(function($) { 
+		
+		var agency_id = $('#obj_new_empl_action_agency_id, #act_agency_id');
+		var department_id = $('#obj_new_empl_action_department_id, #act_department_id');
+		
+		agency_id.change(function(e) {
+			
+			var txt = $(this).find('option[value=' + agency_id.val() + ']').text();
+			var val = department_id.find('option:contains("' + txt + '")').attr('value');
+			department_id.val(val);
+		});
+		
+		<% if false %>
+		var action_type_id = $('#obj_new_empl_action_empl_action_type_id, #act_empl_action_type_id');
+		var absent = $('#obj_new_empl_action_absent, #act_absent');
+		
+		var action_types_absent = <%= action_types_absent.to_json %>;
+		
+		action_type_id.change(function(e) {
+			var v = $(this).val();
+			var a = action_types_absent[v];
+			absent[0].checked = a;
+		});
+		<% end %>
+		
+	})(jQuery);
+	
+</script>
+
+
+
+
+
+
+
+
+
+<% if false %>
+	<%= f.tr_text_field :exam_no, :label => 'Exam No.', :size => 30 %>
+	<%= f.tr_text_field :cert_info, :label => 'Cert. Info' %>
+<% end %>

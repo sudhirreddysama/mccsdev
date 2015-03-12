@@ -1,0 +1,7 @@
+<% if @objs.class == WillPaginate::Collection %>
+	<div class="pages">
+		<div class="pages-links"><%= will_paginate @objs %></div>
+		<div class="pages-total">Total: <%= @objs.total_entries %></div>
+		<div class="clear"></div>
+	</div>
+<% end %>

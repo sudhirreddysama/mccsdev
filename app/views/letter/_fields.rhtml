@@ -1,0 +1,45 @@
+<%= f.tr_text_field :name, :label => 'Name', :req => true, :class => 'ucase' %>
+<tr>
+	<th>Body: <span class="req">*</span></th>
+	<td>
+		<%= f.text_area :body, :style => 'width: 400px; height: 500px; float: left;' %>
+		<div style="float: left;">
+			<table id="tplvars" style="width: 500px;">
+				<tr><th colspan="4">Template Variables:</th></tr>
+				<% cls = ['Exam/List', 'Applicant', 'Certification', 'Web Post', 'User'] %>
+				<tr>
+					<% cls.each { |c| %>
+						<th width="25%"><%= c %></th>
+					<% } %>
+				</tr>
+				<tr>
+					<% cls.each { |c| %>
+						<td>
+							<% Letter::VARS[c].each { |v| %>
+								<a href="#">$$<%= v %>$$</a><br />
+							<% } %>
+						</td>
+					<% } %>
+				</tr>
+			</table>
+		</div>
+		<div class="clear"></div>
+	</td>
+</tr>
+
+<script type="text/javascript">
+
+	(function($){
+	
+		 var ck = CKEDITOR.replace('obj_body', {
+		 	filebrowserBrowseUrl: 'https://cs.monroecounty.gov/hrapply/javascripts/fckeditor/editor/filemanager/browser/default/browser.html?Connector=/hrapply/fckeditor/command',
+		 	customConfig: '/mccs/javascripts/ckeditor/config_custom.js'
+		 });
+		
+		$('#tplvars a').click(function(e) {
+			ck.insertHtml($(this).text());
+		});
+		
+	})(jQuery);
+	
+</script>

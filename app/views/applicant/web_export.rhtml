@@ -1,0 +1,8 @@
+<%= partial 'nav' %>
+<div class="marg">Click the buttons below to export eligible list/application/cert data to the public website.</div>
+<div class="marg"><span class="req">WARNING:</span> Do not run the export if you currently have a interfiled continuous recruitment
+exam with an established date set in the future.</div>
+<%= form_tag %>
+	<div class="marg"><%= submit_tag 'Run Applications / People / Exams Export', :name => 'export_exams' %></div>
+	<div class="marg"><%= submit_tag 'Run Certs / Actions / List Notes Export', :name => 'export_certs' %></div>
+</form>

@@ -1,0 +1,15 @@
+<%= f.tr_text_field :name, :label => 'Name', :req => true, :class => 'ucase' %>
+<%= f.tr_text_field :address1, :label => 'Address1', :class => 'ucase' %>
+<%= f.tr_text_field :address2, :label => 'Address2',  :class => 'ucase' %>
+<%= f.tr_text_field :city, :label => 'City',  :class => 'ucase', :size => 30 %>
+<%= f.tr_select :state, USState::UNAMES, :include_blank => true, :label => 'State' %>
+<%= f.tr_text_field :zip, :label => 'Zip Code',  :class => 'ucase', :size => 20 %>
+<%= f.tr_text_field :phone, :label => 'Phone',  :class => 'ucase' , :size => 20%>
+<%= f.tr_text_field :fax, :label => 'Fax',  :class => 'ucase', :size => 20 %>
+
+<%= f.tr_text_field :abbreviation, :label => 'Abbreviation', :class => 'ucase' %>
+<%= f.tr_select :agency_type, Const::AGENCY_TYPES, :include_blank => true, :label => 'Agency Type' %>
+<%= f.tr_select :liaison_id, User.find(:all, :conditions => 'users.level not in ("agency", "agency-head")', :order => 'users.name asc').collect { |u| [u.name, u.id] }, :include_blank => true, :label => 'Liaison User' %>
+<%= f.tr_check :use_dept_liaison, :label => 'Use Dept. Liaison?', :text => 'Check here to specify the liaison via department rather than agency.' %>
+<%= f.tr_check :show_web_posts, :label => 'Show Web Posts?', :text => 'If checked, users in this agency will see the web posts tab when logged in.' %>
+<%= f.tr_text_area :notes, :label => 'Notes', :text => '' %>

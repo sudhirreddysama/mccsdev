@@ -1,0 +1,7 @@
+<div class="tabs">
+	<%= tab 'Exam Scoring', {:action => 'scoring', :id => @obj.id, :id2 => 'exam'}, {}, :class => 'tab-applicant' %>
+	<%= tab 'Performance Tests', {:action => 'scoring', :id => @obj.id, :id2 => 'perf'}, {}, :class => 'tab-perf_test' %>
+	<%= tab 'Establish List', {:action => 'scoring', :id => @obj.id, :id2 => 'establish'}, {}, :class => 'tab-establish' %>
+	<%= tab 'Bandscoring', {:action => 'scoring', :id => @obj.id, :id2 => 'bandscore'}, {}, :class => 'tab-bandscore' %>	
+	<div class="clear"></div>
+</div>

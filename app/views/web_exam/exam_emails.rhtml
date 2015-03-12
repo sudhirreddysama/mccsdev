@@ -1,0 +1,17 @@
+<%= partial 'nav' %>
+<%= form_tag({:action => :send_exam_emails}, {:target => '_blank'}) %>
+	<table class="form">
+		<tr>
+			<th>Preview Date:</th>
+			<td><%= calendar_date_select_tag :id, Time.now.to_date %></td>
+			<td><%= submit_tag 'Preview PDF' %></td>
+	</table>
+</form>
+<div class="marg">
+	Emails listed below will receive email notices when new examinations are announced. The email will contain a link to a printable
+	PDF listing all the new examinations. Enter each email on a new line or separate with commas.
+</div>
+<%= form_tag %>
+	<div class="marg"><%= text_area_tag 'exam_emails', @system.exam_emails, :size => '80x20' %></div>
+	<div class="marg"><%= submit_tag %></div>
+</form>

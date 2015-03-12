@@ -1,0 +1,68 @@
+<%= f.tr_text_field :name, :label => 'Name', :req => true %>
+<%= f.tr_text_field :no, :label => 'Exam No.' %>
+<%= f.tr_select :exam_type_id, WebExamType.find(:all, :order => 'name asc').collect { |t| [t.name, t.id] }, :label => 'Type', :include_blank => true, :req => true %>
+<tr>
+	<th>Categories:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<% WebNewCategory.find(:all, :order => 'name asc').in_groups(2, false) { |g| %>
+					<td>
+						<% g.each { |c| %>
+							<label style="display: block;">
+								<%= check_box_tag 'obj[new_web_new_category_ids][]', c.id, @obj.new_web_new_category_ids.include?(c.id) %>
+								<%= c.name %>
+							</label>
+						<% } %>
+					</td>
+				<% } %>
+			</tr>
+		</table>
+	</td>
+</tr>
+<%= f.tr_text_field :price, :label => 'Exam Fee Amount' %>
+<%= f.tr_check :published, :label => 'Published', :text => 'Uncheck to hide this exam irregardless of dates below' %>
+<%= f.tr_check :can_apply, :label => 'Can Apply Online?', :text => 'Uncheck to disable the apply-online functionality' %>
+<%= f.tr_calendar_date_select :publish, :label => 'Publish Date/Time' %>
+<%= f.tr_calendar_date_select :deadline, :label => 'Appl. Deadline Date/Time' %>
+<%= f.tr_calendar_date_select :exam_date, :label => 'Exam Date' %>
+<%= f.tr_text_area :description, :label => 'Description', :size => '70x15' %>
+<% if false %>
+	<%= f.tr_check :ask_loans, :label => 'Ask Loans Question?', :text => 'Present the outstanding loans made or guaranteed by NYS question' %>
+<% end %>
+<%= f.tr_check :ask_typing_waiver, :label => 'Ask Typing Waiver?', :text => 'Present the typing waiver page' %>
+<%= f.tr_check :ask_veterans, :label => 'Ask Veterans?', :text => 'Present the veterans credit page' %>
+<%= f.tr_check :require_degree, :label => 'Require Degree?', :text => 'Require at least one college with a graduation date' %>
+<%= f.tr_text_field :license_requirement, :label => 'License Requirement', :help => 'If a license requirement is specified applicants will be required to enter at least one license and will be presented this text if no license is entered.'  %>
+<%= f.tr_text_field :minimum_age, :size => 6, :label => 'Minimum Age', :help => 'If specified applicants will be forced to enter a date of birth and will be presented an error if below this age. NOTE: This checks age on the exam date. If no exam date is given this field will do nothing.' %>
+<%= f.tr_text_area :who_may_apply, :label => 'Who May Apply', :size => '60x2' %>
+<tr>
+	<th>Liaison User(s):</th>
+	<td>
+		<% users = User.find(:all, :conditions => 'users.level not in ("agency", "agency-head")', :order => 'users.name asc').collect { |u| [u.name, u.id] } %>
+		<%= f.select :liaison_id, users, :include_blank => true %>
+		<%= f.select :liaison2_id, users, :include_blank => true %>
+		<div>Liaison(s) will be notified by email on the deadline for this web post.</div>
+	</td>
+</tr>
+
+
+<script type="text/javascript">
+
+	(function($){
+	
+		 var ck = CKEDITOR.replace('obj_description', {
+		 	filebrowserBrowseUrl: 'https://cs.monroecounty.gov/hrapply/javascripts/fckeditor/editor/filemanager/browser/default/browser.html?Connector=/hrapply/fckeditor/command',
+		 	customConfig: '/mccs/javascripts/ckeditor/config_custom.js'
+		 });
+        var ckf = CKEDITOR.replace('obj_facebook_description', {
+            filebrowserBrowseUrl: 'https://cs.monroecounty.gov/hrapply/javascripts/fckeditor/editor/filemanager/browser/default/browser.html?Connector=/hrapply/fckeditor/command',
+            customConfig: '/mccs/javascripts/ckeditor/config_custom.js'
+        });
+				
+	})(jQuery);
+    function toggle_twitter() {
+            jQuery('twitter_description')[$('obj_social_media_twitter').checked ? 'show' : 'hide']();
+    }
+	
+</script>

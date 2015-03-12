@@ -1,0 +1,54 @@
+<% if @obj.postal_count > 0 || @obj.both_count > 0 %>
+	<% to_print = (@obj.postal_count + @obj.both_count) %>
+	<% @print = {:offset => 1, :limit => to_print} %>
+	<% table_form_for(:print, {:url => {:action => :print, :id => @obj.id}, :html => {:target => '_blank'}}) { |f| %>
+		<tr>
+			<th colspan="4">Number of Letters to Print: <%= to_print %></th>
+		</tr>
+		<tr>
+			<th>Start Print at Letter #:</th>
+			<td><%= f.text_field :offset, :size => 5 %></td>
+			<th>Print This Many:</th>
+			<td><%= f.text_field :limit, :size => 5 %></td>
+			<td><%= submit_tag 'Print Postal Messages' %></td>
+		</tr>
+	<% } %>
+<% end %>
+<div class="viewer">
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Created:</label>
+					<%= o.created_at.dt0? %>
+				</td>
+				<td>
+					<label>User:</label>
+					<%= o.user.username if o.user %>
+				</td>
+				<td>
+					<label>Total Messages:</label>
+					<%= o.message_count %>
+				</td>
+				<td>
+					<label>Email:</label>
+					<%= o.email_count %>
+				</td>
+				<td>
+					<label>Postal:</label>
+					<%= o.postal_count %>
+				</td>
+				<td>
+					<label>Both:</label>
+					<%= o.both_count %>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<% @messages = @obj.messages.find(:all, :include => :person, :order => 'people.last_name, people.first_name') %>
+<%= partial 'message_list' %>

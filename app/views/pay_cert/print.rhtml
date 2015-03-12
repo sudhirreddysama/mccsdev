@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<style type="text/css">
+		
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th, input, select, textarea { font: 10px/16px Trebuchet MS, Verdana, Arial, sans-serif; }
+			
+			table { border-collapse: collapse; width: 100%; }
+			th, td { text-align: left; vertical-align: top; border: 1px solid #aaa; }
+			
+			th { font-weight: bold; }
+			
+			h1 { font-size: 140%; }
+			h2 { font-size: 120%; }
+			
+			
+		</style>
+	</head>
+	<body>
+		<h1>PAYROLL CERTIFICATION FOR <%= @obj.agency.name %> AS OF <%= @obj.as_of_date.d0? %> - 
+			<% if params[:id2] == 'verified' %>
+				VERIFIED
+			<% else %>
+				ERRORS
+			<% end %>
+		</h1>
+		<% if params[:id2] == 'verified' %>
+			<%= partial 'print_lines', :error => nil, :objs => @objs %>
+		<% else %>
+			<%= partial 'error_lines' %>
+		<% end %>
+	</body>
+</html>

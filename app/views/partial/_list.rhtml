@@ -1,0 +1,22 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<th>Actions</th>
+			<th>ID</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td>
+					<a href="<%= url_for :action => :view, :id => o.id %>"><img src="/images/icons/zoom.png" width="16" height="16" /></a>
+					<a href="<%= url_for :action => :edit, :id => o.id %>"><img src="/images/icons/pencil.png" width="16" height="16" /></a>
+					<a href="#" class="move"><img src="/images/icons/arrow_ns.png" width="16" height="16" /></a>
+				</td>
+				<td><%= o.id %></td>
+				<td></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

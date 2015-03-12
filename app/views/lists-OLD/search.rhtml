@@ -1,0 +1,18 @@
+<h1>Applicant Search</h1>
+<%= partial 'search' %>
+<% if @objs %>
+	<% if @objs.empty? %>
+		<p>No applicants found.</p>
+	<% else %>
+		<% @objs.in_groups(3, false).each { |g| %>
+			<div style="float: left; width: 32%;">
+				<ul>
+					<% g.each { |o| %>
+						<li><%= link_to "#{o.last_name}, #{o.first_name}", :action => :applicant, :id => o.id %></li>
+					<% } %>
+				</ul>
+			</div>
+		<% } %>
+	<% end %>
+<% end %>
+<div class="clear"></div>

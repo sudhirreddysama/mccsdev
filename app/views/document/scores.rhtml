@@ -1,0 +1,177 @@
+<%= partial 'nav' %>
+
+<h2>Import Scores</h2>
+
+<% if @objs_found.empty? %>
+	<div class="marg">No records from the import file match applicants in the database.</div>
+<% else %>
+	<%= form_tag %>
+		<div class="marg"><%= @objs_found.size %> matching record(s) can be imported.</div>
+		<div class="marg"><%= submit_tag 'Import Scores' %></div>
+	</form>
+<% end %>
+
+<h2>Band Scoring</h2>
+
+<% if @band_scoring %>
+	<table class="form">
+		<tr>
+			<th class="r">From:</th>
+			<th class="r">To:</th>
+			<th class="r">Score:</th>
+		</tr>
+		<% @band_scoring.each { |b| %>
+			<tr>
+				<td class="r"><%= b.from %></td>
+				<td class="r"><%= b.to %></td>
+				<td class="r"><%= b.score %></td>
+			</tr>
+		<% } %>
+	</table>
+<% else %>
+	<p class="marg">No bandscoring data found.</p>
+<% end %>
+
+<h2>Applicants Found in Import File, Not in Database</h2>
+
+<% if @objs_not_found.empty? %>
+	<div class="marg">No Records</div>
+<% else %>
+	<div class="marg">Total: <%= @objs_not_found.size %></div>
+	<table class="dg">
+		<thead>
+			<tr>
+				<th width="1%">SSN</th>
+				<th width="1%">Status</th>
+				<th width="1%" class="nobr">DB Score</th>
+				<th width="1%" class="nobr">File Score</th>
+				<th size="96%">Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @objs_not_found.each { |o| %>
+				<tr class="<%= cycle 'odd', 'even' %>">
+					<td class="nobr"><%= h o.ssn %></td>
+					<td class="nobr r">---</td>
+					<td class="nobr r">---</td>
+					<td class="nobr r"><%= nwp o.final_score, 2 %></td>
+					<td><%= h o.last_name %>, <%= h o.first_name %></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+<% end %>
+
+<h2>Applicants Found in Database, Not in Import File (FTA, WITHREW, FAILED, DISAPPROVED and No Status Applicants Ignored)</h2>
+
+<%
+
+@applicants_not_found2 = @applicants_not_found.find_all { |a|
+	a.app_status and !(['W', 'F', 'D', '-'].include?(a.app_status.code))
+}
+
+%>
+
+<% if @applicants_not_found2.empty? %>
+	<div class="marg">No Records</div>
+<% else %>
+	<div class="marg">Total: <%= @applicants_not_found.size %></div>
+	<table class="dg">
+		<thead>
+			<tr>
+				<th width="1%">SSN</th>
+				<th width="1%">Status</th>
+				<th width="1%" class="nobr">DB Score</th>
+				<th width="1%" class="nobr">File Score</th>
+				<th size="96%">Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @applicants_not_found2.each { |o| %>
+				<tr class="<%= cycle 'odd', 'even' %>">
+					<td class="nobr"><%= h o.person.ssn %></td>
+					<td class="nobr"><%= h o.app_status.name if o.app_status %></td>
+					<td class="nobr r"><%= nwp o.final_score, 2 %></td>
+					<td class="nobr r">---</td>
+					<td><%= h o.person.last_name %>, <%= h o.person.first_name %></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+<% end %>
+
+<h2>Applicants Found, Status NOT ACTIVE</h2>
+
+<% 
+
+@objs_not_active = []
+@objs_active = []
+@objs_found.each { |o| 
+	if !o.applicant.app_status || o.applicant.app_status.eligible == 'N'
+		@objs_not_active << o
+	else
+		@objs_active << o
+	end	
+}
+	
+%>
+
+<% if @objs_not_active.empty? %>
+	<div class="marg">No Records</div>
+<% else %>
+	<div class="marg">Total: <%= @objs_not_active.size %></div>
+	<table class="dg">
+		<thead>
+			<tr>
+				<th width="1%">SSN</th>
+				<th width="1%">Status</th>
+				<th width="1%" class="nobr">DB Score</th>
+				<th width="1%" class="nobr">File Score</th>
+				<th size="96%">Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @objs_not_active.each { |o| %>
+				<tr class="<%= cycle 'odd', 'even' %>">
+					<td class="nobr"><%= h o.applicant.person.ssn %></td>
+					<td class="nobr"><%= h o.applicant.app_status.name if o.applicant.app_status %></td>
+					<td class="nobr r"><%= nwp o.applicant.final_score, 2 %></td>
+					<td class="nobr r"><%= nwp o.final_score, 2 %></td>
+					<td><%= h o.applicant.person.last_name %>, <%= h o.applicant.person.first_name %></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+<% end %>
+
+<h2>Applicants Found, Status IS ACTIVE</h2>
+
+<% if @objs_active.empty? %>
+	<div class="marg">No Records</div>
+<% else %>
+	<div class="marg">Total: <%= @objs_active.size %></div>
+	<table class="dg">
+		<thead>
+			<tr>
+				<th width="1%">SSN</th>
+				<th width="1%">Status</th>
+				<th width="1%" class="nobr">DB Score</th>
+				<th width="1%" class="nobr">File Score</th>
+				<th size="96%">Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @objs_active.each { |o| %>
+				<tr class="<%= cycle 'odd', 'even' %>">
+					<td class="nobr"><%= h o.applicant.person.ssn %></td>
+					<td class="nobr"><%= h o.applicant.app_status.name if o.applicant.app_status %></td>
+					<td class="nobr r"><%= nwp o.applicant.final_score, 2 %></td>
+					<td class="nobr r"><%= nwp o.final_score, 2 %></td>
+					<td><%= h o.applicant.person.last_name %>, <%= h o.applicant.person.first_name %></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+<% end %>
+
+

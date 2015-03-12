@@ -1,0 +1,11 @@
+<% fname = "applicant[#{o.id}][new_taken_perfs][]" %>
+<% fields_for(fname, tp, :index => nil) { |f| %>
+	<tbody>
+		<tr>
+			<td><%= f.select :perf_test_id, @perf_tests, {:include_blank => true}, :style => 'width: 130px;' %></td>
+			<td><%= f.select :perf_code_id, @perf_codes, {:include_blank => true}, :style => 'width: 120px;' %></td>
+			<td><%= f.calendar_date_select :date_taken, :style => 'width: 100px;', :name => "#{fname}[date_taken]" %></td>
+			<td colspan="2"><a href="#" onclick="remove_taken_perf(this); return false;">remove</a>
+		</tr>
+	</tbody>
+<% } %>

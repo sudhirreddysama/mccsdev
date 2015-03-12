@@ -1,0 +1,48 @@
+<%= partial 'pages' %>
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">Submitted</th>
+			<th width="1%">Status</th>
+			<th width="1%">SSN</th>
+			<% if params[:action] == 'all_applicants' %>
+				<th width="47%">Name</th>
+				<th width="48%">Web Post</th>
+			<% else %>
+				<th width="96%">Name</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr">
+					<% if @current_user.staff_level? %>
+						<%= partial 'actions', :o => o %></td>
+					<% else %>
+						<%= link_to image_tag('icons/zoom.png', :size => '16x16', :alt => 'view', :title => 'View'), {:action => :applicant, :id => o.web_exam_id, :id2 => o.id}, :target => '_blank' %>
+					<% end %>
+				<td><%= o.id %></td>
+				<td class="nobr"><%= o.submitted_at.d0? %></td>
+				<td class="nobr"><%= h o.app_status.name if o.app_status %></td>
+				<td class="nobr"><%= h o.person.ssn if o.person %></td>
+				<td>
+					<% if @current_user.staff_level? %>
+						<%= link_to o.person.label, :controller => :applicant, :action => :view, :id => o.id if o.person %>
+					<% else %>
+						<%= link_to o.person.label, {:controller => :web_exam, :action => :applicant, :id => o.web_exam_id, :id2 => o.id}, :target => '_blank' if o.person %>
+					<% end %>
+					<% if params[:action] == 'all_applicants' %>
+						<%= link_to o.web_exam.name, {:controller => :web_exam, :action => :view, :id => o.web_exam_id} %>
+					<% end %>
+					<% if o.conditional %>
+						<span style="color: #800;">&nbsp;&nbsp;&nbsp;Conditional: <%= h o.conditional_reason %></span>
+					<% end %>					
+				</td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
+<%= partial 'pages' %>

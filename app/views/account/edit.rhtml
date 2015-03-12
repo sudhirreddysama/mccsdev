@@ -1,0 +1,12 @@
+<%= partial 'errors', :errors => @obj.errors.full_messages %>
+<p>&nbsp;</p>
+<% table_form_for(:obj) { |f| %>
+	<%= f.tr_text_field :username, :label => 'Username', :req => true %>
+	<%= f.tr_text_field :name, :label => 'Name', :req => true %>
+	<%= f.tr_text_field :initials, :label => 'Initials', :req => true %>
+	<%= f.tr_password_field :password, :label => 'Password', :req => true, :help => @obj.new_record? ? nil : 'Leave blank to keep the current password.' %>
+	<%= f.tr_password_field :password_confirmation, :label => 'Retype Password', :req => true %>
+	<%= f.tr_text_field :email, :label => 'Email', :req => true %>
+	
+	<%= f.tr_submit %>
+<% } %>

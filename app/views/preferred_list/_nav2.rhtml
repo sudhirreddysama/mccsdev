@@ -1,0 +1,9 @@
+<% if @current_user.staff_level? %>
+	<%= tab 'New Candidate', {:action => 'new_candidate', :id => params[:id]}, {}, :class => 'tab-new' %>
+<% end %>
+<% if params[:action] == 'edit_candidate' %>
+	<%= tab 'Edit Candidate', {:action => 'edit_candidate', :id => params[:id], :id2 => params[:id2]}, {}, :class => 'tab-edit' %>
+<% end %>
+<% if params[:action] == 'delete_candidate' %>
+	<%= tab 'Delete Candidate', {:action => 'delete_candidate', :id => params[:id], :id2 => params[:id2]}, {}, :class => 'tab-delete' %>
+<% end %>

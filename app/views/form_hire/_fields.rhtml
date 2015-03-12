@@ -1,0 +1,255 @@
+<% @job_opts = Job.find(:all, :order => 'jobs.name').collect { |j| [j.name, j.id] } %>
+<tr>
+	<th>Check One: <span class="req">*</span></th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th><label><%= f.radio_button :hire_type, 'New Hire' %> New Hire</label></th>
+				<th><label><%= f.radio_button :hire_type, 'Rehire' %> Rehire</label></th>
+				<th><label><%= f.radio_button :hire_type, 'Additional Position' %> Additional Position</label></th>
+			</tr>
+		</table>
+	</td>
+</tr>
+<%= f.tr_calendar_date_select :effective_date, :label => 'Effective Date', :class => 'ucase' %>
+<% if !@current_user.agency_level? || !@current_user.agency %>
+	<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name').collect { |a| [a.name, a.id] }, :label => 'Agency', :req => true, :include_blank => true %>
+<% end %>
+<% if !@current_user.agency_level? || !@current_user.department %>
+	<%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name').collect { |a| [a.name, a.id] }, :label => 'Department', :req => true, :include_blank => true %>
+<% end %>
+<tr id="employee">
+	<th>Employee: <span class="req">*</span></th>
+	<td>
+		<%= partial 'pop_field', :id => 'obj_employee_label', :text => (@obj.employee ? @obj.employee.label : ''), :name => 'obj[employee_id]', :id => 'obj_employee_id', :url => popup_url({:controller => :employee}), :value => @obj.employee_id %>
+		<div>If this is a rehire or additional position, click the field above to open a popup where you can select an existing employee/position. This will autofill the information below.</div>
+	</td>
+</tr>
+<script type="text/javascript">
+
+	var toggle_employee;
+	
+	(function($){
+		
+		var b1 = $('#obj_hire_type_rehire');
+		var b2 = $('#obj_hire_type_additional_position');
+		var b3 = $('#obj_hire_type_new_hire');
+		
+		toggle_employee = function(e) {
+			if(b1.is(':checked') || b2.is(':checked')) {
+				$('#employee').show();
+			}
+			else {
+				$('#employee').hide();
+			}
+		}
+	
+		b1.change(toggle_employee);
+		b2.change(toggle_employee);
+		b3.change(toggle_employee);
+		
+	})(jQuery);
+	
+	toggle_employee();
+
+</script>
+<tr>
+	<th>Name: <span class="req">*</span></th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>First: <span class="req">*</span></th>
+				<th>Last: <span class="req">*</span></th>
+				<th>Middle</th>
+			</tr>
+			<tr>
+				<td><%= f.text_field :first_name, :size => '30', :class => 'ucase' %></td>
+				<td><%= f.text_field :last_name, :size => '30', :class => 'ucase' %></td>
+				<td><%= f.text_field :middle_name, :size => '30', :class => 'ucase' %></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<%= f.tr_text_field :address, :label => 'Address', :class => 'ucase' %>
+<%= f.tr_text_field :address2, :label => 'Address (line 2)', :class => 'ucase' %>
+<tr>
+	<th>City, State, Zip:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<td><%= f.text_field :address_city, :class => 'ucase' %></td>
+				<td><%= f.select :address_state, USState::NAMES %></td>
+				<td><%= f.text_field :address_zip, :size => '11', :class => 'ucase' %></td>
+		</table>
+	</td>
+</tr>
+<%= f.tr_text_field :ssn, :label => 'SSN', :size => '30', :class => 'ucase' %>
+<%= f.tr_calendar_date_select :date_of_birth, :label => 'Date of Birth', :class => 'ucase' %>
+<%= f.tr_text_field :retirement_no, :label => 'Retirement No.', :size => '30', :class => 'ucase' %>
+<tr>
+	<th>Certified List:</th>
+	<td>
+		<%= partial 'pop_field', :id => 'obj_cert_label', :text => (@obj.cert ? @obj.cert.label : ''), :name => 'obj[cert_id]', :id => 'obj_cert_id', :url => popup_url({:controller => :cert}), :value => @obj.cert_id %>
+		<div>If this hire is the result of a certified list, Click the field above to open a popup where you can select the certified list.</div>
+	</td>
+</tr>
+<tr>
+	<td class="subform" colspan="2">
+		<table>
+			<tr>
+				<th style="vertical-align: middle;">Exempt Volunteer Firefighter?</th>
+				<th><label><%= f.radio_button :exempt_vol_firefighter, true %> Yes</label></th>
+				<th><label><%= f.radio_button :exempt_vol_firefighter, false %> No</label></th>
+				<th style="padding-left: 10px; vertical-align: middle;">Veteran?</th>
+				<th><label><%= f.radio_button :veteran, true %> Yes</label></th>
+				<th><label><%= f.radio_button :veteran, false %> No</label></th>
+			</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<th colspan="2">Within the past four years has the nominee held a Civil Service position, other than<br /> seasonal, by this or
+	any other municipality (County, City, Town, Village, School District)?</th>
+</tr>
+<tr>
+	<td class="subform" colspan="2">
+		<table>
+			<tr>
+				<th><label><%= f.radio_button :employed_4years, true %> Yes</label></th>
+				<th><label><%= f.radio_button :employed_4years, false %> No</label></th>	
+				<th style="vertical-align: middle;">If yes, year and location:</th>
+				<td><%= f.text_field :employed_4years_year_location, :size => '60', :class => 'ucase' %></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<tr id="title">
+	<th>Title:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<td><%= f.select :job_id, @job_opts, :include_blank => true %></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<th>Salary:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<td><%= f.text_field :salary, :size => '20', :class => 'ucase' %></td>
+				<th>Per:</th>
+				<td><%= f.select :salary_per, Const::WAGE_UNITS, :include_blank => true %></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<th>FT/PT:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<td><label><%= f.radio_button :full_or_part_time, 'FT' %> Full Time</label></td>
+				<td><label><%= f.radio_button :full_or_part_time, 'PT' %> Part Time</label></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<%= f.tr_text_field :hours_per_week, :label => 'Hours Per Week', :size => '5', :class => 'ucase' %>
+<tr>
+	<th>Class:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<td><label><%= f.radio_button :classification, 'Competitive' %> Competitive</label></td>
+				<td><label><%= f.radio_button :classification, 'Non-Competitive' %> Non-Competitive</label></td>
+				<td><label><%= f.radio_button :classification, 'Labor' %> Labor</label></td>
+				<td><label><%= f.radio_button :classification, 'Exempt' %> Exempt</label></td>
+				<td><label><%= f.radio_button :classification, 'Unclassified' %> Unclassified</label></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<th>Status:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<td><label><%= f.radio_button :civil_service_status, 'Permanent' %> Permanent</label></td>
+				<td><label><%= f.radio_button :civil_service_status, 'Contigent Permanent' %> Contigent Permanent</label></td>
+				<td><label><%= f.radio_button :civil_service_status, 'Provisional' %> Provisional</label></td>
+				<td><label><%= f.radio_button :civil_service_status, 'Temporary' %> Temporary*</label></td>
+				<td><label><%= f.radio_button :civil_service_status, 'Pending NYS Approval' %> Pending NYS Approval</label></td>
+			</tr>
+		</table>
+		<table>
+			<tr><th colspan="4">*If Temporary, Check One:</th></tr>
+			<tr>
+				<td><label><%= f.radio_button :temporary_type, 'Sub' %> Sub</label></td>
+				<td><label><%= f.radio_button :temporary_type, 'On-Call' %> On-Call</label></td>
+				<td><label><%= f.radio_button :temporary_type, 'Seasonal' %> Seasonal</label></td>
+				<td><label><%= f.radio_button :temporary_type, 'Filling in for Leave of Absence' %> Filling in for Leave of Absence</label></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<th colspan="2">
+		If temporary or seasonal, appointment should not exceed three months. Form 105 must be sent to remove<br />
+		employee upon completion of the temporary/seasonal appointment.
+	</th>
+</tr>
+<tr>
+	<th colspan="2">
+		If provisional, attach a current CS application using the documents tab after submitting this form.
+	</th>
+</tr>
+<tr>
+	<th colspan="2">
+		If permanent, contigent permanent or competitive temporary, enter the eligible list number below and attach<br />
+		CS certification and all supporting documentation using the documents tab after submitting this form.
+	</th>
+</tr>
+<%= f.tr_text_field :eligible_list_no, :label => 'List No.', :size => '30', :class => 'ucase' %>
+<tr>
+	<th>Comments:</th>
+	<td>
+		<div>Use this field to add any additional comments to this form:</div>
+		<%= f.text_area :comments, :size => '60x5' %>
+	</td>
+</tr>
+
+<script type="text/javascript">
+
+	(function($) {
+		var employee_id = $('#obj_employee_id');
+		var employee_id_text = $('#obj_employee_id_text');
+		employee_id.change(function(e) {
+			var v = employee_id.val();
+			if(v) {
+				employee_id_text.addClass('busy-bg');
+				$.ajax({
+					url: '<%= url_for :controller => "employee", :action => "employee_data" %>/' + v,
+					data: {id: v},
+					dataType: 'json',
+					complete: function() {
+						employee_id_text.removeClass('busy-bg');
+					},
+					success: function(data, status, xhr) {
+						if(data) {
+							$('#obj_first_name').val(data.first_name);
+							$('#obj_last_name').val(data.last_name);
+							$('#obj_address').val(data.address);
+							$('#obj_address2').val(data.address2);
+							$('#obj_address_city').val(data.city);
+							$('#obj_address_zip').val(data.zip);
+							$('#obj_ssn').val(data.ssn);
+						}
+					}
+				});
+			}
+		});
+	})(jQuery);
+	
+</script>

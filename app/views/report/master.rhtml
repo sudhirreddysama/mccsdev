@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<%= javascript_include_tag :defaults, 'jquery-1.6.1.js' %>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th { font: 11px/16px Trebuchet MS, Verdana, Arial, sans-serif; }
+			
+			table { border-collapse: collapse; width: 100%; margin: 5px; }
+			td, th { vertical-align: top; text-align: left; padding: 2px 5px; border: 1px solid #888; white-space: nowrap; }
+			
+			th { font-weight: bold; background-color: #ffd; }
+			
+			.grey td { background-color: #ccc; }
+			
+			.busy-bg td { background-color: #fff !important; background-image: url(/mccs/images/busy-bg.gif) !important; background-repeat: repeat !important; }
+			
+			a { color: #000; }
+			
+		</style>
+		<script type="text/javascript">
+		
+			function remove_list(typ, id) {
+				var row = $('#' + typ + '-' + id);
+				row.addClass('busy-bg');
+				if(confirm('Remove Exam/List?')) {
+					$.ajax({
+						url: '<%= url_for :action => :remove_from_master %>/',
+						data: {obj_typ: typ, obj_id: id},
+						complete: function() {
+							row.removeClass('busy-bg');
+						},
+						success: function() {
+							row.remove();
+						}
+					})
+				}
+				else {
+					row.removeClass('busy-bg');
+				}
+			}
+		
+		</script>
+	</head>
+	<body>
+		<table>
+			<tr>
+				<th>REM</th>
+				<th>TITLE</th>
+				<th>EXAM #</th>
+				<th>TEST DATE</th>
+				<th>LIST EST.</th>
+				<th>LIST EXP.</th>
+				<th>EXAM ORD.</th>
+				<th>NOTES</th>
+			</tr>
+			<% @objs.each_with_index { |o, i| %>
+				<%
+				pl = o.is_a? PreferredList
+				job = o.is_a? Job
+				%>
+				<% if job %>
+					<tr>			
+						<td></td>			
+						<td><%= h o.title %></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td><%= h o.ordered_date %></td>
+						<td></td>
+					</tr>
+				<% else %>
+					<tr class="<% if o.grey_on_master? %>grey<% end %>" id="<% if pl %>list<% else %>exam<% end %>-<%= o.id %>">
+						<td><a href="#" onclick="remove_list('<% if pl %>list<% else %>exam<% end %>', <%= o.id %>); return false">REM</a></td>
+						<td><%= h o.title %></td>
+						<td><%= pl ? 'PREFERRED LIST' : h(o.exam_no) %></td>
+						<td><%= pl ? nil : o.given_at.d0? %></td>
+						<td><%= o.established_date.d0? %></td>
+						<td><%= o.valid_until.d0? %></td>
+						<td><%= pl ? nil : h(o.ordered_date) %></td>
+						<td>
+							<% if pl %>
+								<%= h [o.agency && o.agency.name.to_s, o.department && o.department.name.to_s].reject(&:blank?).uniq.join(' ') %>
+								<% if !o.master_notes.blank? %>
+									, NOTES: <%= h o.master_notes %>
+								<% end %>
+							<% else %>
+								<%= h o.master_notes %>
+							<% end %>
+						</td>
+					</tr>
+				<% end %>
+			<% } %>
+		</table>
+	</body>
+</html>

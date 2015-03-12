@@ -1,0 +1,8 @@
+A Certified List request has been forwared to you by a liaison and is pending certification.
+
+http://www.monroecounty.gov/mccs/cert/view/<%= @c.id %>
+
+Exam: <%= @c.exam ? @c.exam.exam_no : 'None' %>
+Title: <%= @c.job ? @c.job.name : 'None' %>
+Agency: <%= @c.agency ? @c.agency.name : 'None' %>
+Department: <%= @c.department ? @c.department.name : 'None' %>

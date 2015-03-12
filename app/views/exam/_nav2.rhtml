@@ -1,0 +1,8 @@
+<% if @current_user.staff_level? %>
+	<%= tab 'Applicants', {:sc => nil, :sid => nil, :controller => :exam, :action => :applicants, :id => (params[:sid] || params[:id])}, {}, :class => 'tab-applicant' %>
+	<%= tab 'Scoring', {:sc => nil, :sid => nil, :controller => :exam, :action => :scoring, :id => (params[:sid] || params[:id])}, {:id2 => 'exam'}, :class => 'tab-applicant' %>
+	<%= tab 'Assign Sites', {:sc => nil, :sid => nil, :controller => :exam, :action => :assign_sites, :id => (params[:sid] || params[:id])}, {:id2 => 'bulk'}, :class => 'tab-exam_site' %>
+  <%= tab 'Documents', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>
+   <%= tab 'Letters', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :bulk_message}, {:action => :index, :id => nil}, {:class => 'tab-letter'} %>
+<% end %>
+<%= tab 'List Notes', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :list_note}, {:action => :index}, :class => 'tab-list_note' %>

@@ -1,0 +1,6 @@
+<%= f.tr_text_field :code, :label => 'Code', :req => false, :class => 'ucase' %>
+<%= f.tr_text_field :label, :label => 'Label', :req => false, :class => 'ucase' %>
+<%= f.tr_text_field :description, :label => 'Description', :req => false, :class => 'ucase' %>
+<%= f.tr_check :archived, :label => 'Archived?', :text => 'If check his certification action option will not be useable.' %>
+<%= f.tr_check :agency_option, :label => 'Agency Use?', :text => 'If checked this option will be available to agencies.' %>
+<%= f.tr_check :exclude, :label => 'Exclude?', :text => 'Check if use of this option should exclude the candidate from the eligible list.' %>

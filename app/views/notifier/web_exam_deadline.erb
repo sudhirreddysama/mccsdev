@@ -1,0 +1,8 @@
+The following web posts have a deadline of today:
+
+<% @web_exams.each { |e| -%>
+<%= e.no.blank? ? '' : "#{e.no}, " %><%= e.name %>:
+https://www.monroecounty.gov/mccs/web_exam/view/<%= e.id %>
+
+<% } -%>
+

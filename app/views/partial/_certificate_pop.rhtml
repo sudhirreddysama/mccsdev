@@ -1,0 +1,107 @@
+<tr>
+	<th>Type: <span class="req">*</span></th>
+	<td>
+		<label><%= f.radio_button :typ, 'birth' %> Birth</label><br />
+		<label><%= f.radio_button :typ, 'death' %> Death</label><br />
+	</td>
+</tr>
+<tr>
+	<th>Certificate:</th>
+	<td>
+		<%= text_field_tag 'certificate_text', (@obj.certificate ? @obj.certificate.name : ''), :size => 60, :class => 'popup-field' %>
+		<%= f.hidden_field :certificate_id %>&nbsp;&nbsp;
+		<a href="#" id="certificate_clear">clear</a>
+	</td>
+</tr>
+<script type="text/javascript">
+	
+	(function($) {		
+		var id = $('#obj_certificate_id');
+		var typb = $('#obj_typ_birth');
+		var typd = $('#obj_typ_death');
+		var txt = $('#certificate_text');
+		var pop;
+		
+		$('#certificate_clear').click(function(e) {
+			clear();
+			e.preventDefault();
+		});
+		
+		var clear = function() {
+			txt.val('');
+			id.val('')
+		}
+		
+		typb.change(clear)
+		typd.change(clear);
+		
+		txt.focus(function() {
+			if(!typb.attr('checked') && !typd.attr('checked')) {
+				txt.blur();
+				alert('Please choose a certificate type first.');
+				return;
+			}
+		
+			if(pop) {
+				return;
+			}
+			
+			var isb = typb[0].checked;
+			
+			window.cb = function(val, text) { 
+				$(pop).dialog('close');
+				id.val(val);
+				$('#certificate_text').val(text);
+				if($('#obj_first_name')[0]) {
+					$('#certificate_text').addClass('busy-bg');
+					$.ajax({
+						url: '<%= url_for :controller => :record, :action => :certificate_data %>/' + val,
+						data: {typ: (isb ? 'birth' : 'death')},
+						complete: function(xhr, status) {
+							$('#certificate_text').removeClass('busy-bg');					
+						},
+						dataType: 'json',
+						success: function(data, xhr, status) {
+							$('#obj_first_name').val(data.first_name);
+							$('#obj_middle_name').val(data.middle_name);
+							$('#obj_last_name').val(data.last_name);
+							var d = (isb ? data.date_and_time_of_birth : data.date_and_time_of_death);
+							if(d) {
+								d = d.split('T')[0].split('-');
+								$('#obj_date').val(d[1] + '/' + d[2] + '/' + d[0]);
+							}
+							$('#obj_mothers_first_name').val(data.mother_first_name);
+							$('#obj_mothers_middle_name').val(data.mother_middle_name);
+							$('#obj_mothers_last_name').val(data.mother_last_name);
+							$('#obj_fathers_first_name').val(data.father_first_name);
+							$('#obj_fathers_middle_name').val(data.father_middle_name);
+							$('#obj_fathers_last_name').val(data.father_last_name);
+						}
+					});
+				}
+			}
+			var w = 800;
+			var h = 500;
+			
+			var url = '<%= popup_url :controller => :birth_certificate, :sc => nil, :sid => nil %>';
+			if(!isb) {
+				url = '<%= popup_url :controller => :death_certificate, :sc => nil, :sid => nil %>';
+			}
+			
+			pop = $('<iframe src="' + url + '" />').dialog({
+				title: 'Select Record',
+				width: w,
+				height:h,
+				modal: true,
+				overlay: {
+					opacity: 0.8,
+					background: 'black'
+				},
+				close: function() {
+					pop = null;
+				}
+			}).width(w).height(h);
+		});
+	})(jQuery);
+	
+</script>

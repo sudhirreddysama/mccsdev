@@ -1,0 +1,447 @@
+<html>
+<% totalpaid=0;examsheld=0;tested=0;xapplied=0; approved=0; fee=0; collected=0;disapproved=0;passed=0;perf_passed=0;fta=0;withdrew=0;failed=0;perf_failed=0;perf_waived=0;inactive=0;appointed=0;%>
+
+<head>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th { font: 11px/13px Trebuchet MS, Verdana, Arial, sans-serif; }
+			table { border-collapse: collapse; }
+			td, th { text-align: left; padding: 3px 5px; vertical-align: top; border-bottom: 1px solid #888; }
+			th { font-weight: bold; white-space: nowrap; border-top: 1px solid #888; vertical-align: bottom; }
+			h1 { text-align: center; font-size: 100%; }
+			tr.small th { font-size: 8px; border-top: none; }
+		</style>
+	</head>
+	<body>
+		<% first = true %>
+		<% if params[:veterans] %>
+			<h1>Veterans Information For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %></h1>
+			<table>
+				<tr>
+					<th class="nobr">Name<br />Enlisted Date</th>
+					<th class="nobr">Served From<br />Served To</th>
+					<th class="nobr">Hon. Discharge<br />Reason</th>
+					<th class="nobr">VC Type<br />Dis. Claim No.</th>
+					<th class="nobr">Dis. Auth. Date<br />DD214 Inc.</th>
+					<th class="nobr">VS Used<br />Where Used</th>
+				</tr>
+				<% @objs.each { |o| %>
+					<tr>
+						<td>
+							<%= h o.person.last_name %> <%= h o.person.first_name %>&nbsp;<br />
+							<%= o.army_enlisted.d0? %>&nbsp;
+						</td>
+						<td>
+							<%= o.army_from.d0? %>&nbsp;<br />
+							<%= o.army_to.d0? %>
+						</td>
+						<td>
+							<%= o.army_discharge_honorable.nil? ? '' : o.army_discharge_honorable ? 'YES' : '**NO**' %>&nbsp;<br />
+							<%= h o.army_discharge_reason %>
+						</td>
+						<td>
+							<%= o.vc_type %>&nbsp;<br />
+							<%= h o.vc_disabled_claim_no %>
+						</td>
+						<td>
+							<%= o.vc_disabled_auth_date.d0? %>&nbsp;<br />
+							<%= o.dd214_included.nil? ? '' : o.dd214_included ? 'YES' : 'NO'  %>
+						</td>
+						<td>
+							<%= o.vc_used.nil? ? '' : o.vc_used ? 'YES' : 'NO' %>&nbsp;<br />
+							<%= h o.vc_used_agency %>
+						</td>
+					</tr>
+				<% } %>
+			</table>
+		<% elsif params[:contact_preference] %>
+			<h1>Contact Preference Totals For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %></h1>
+			<table>
+				<tr>
+					<th>Postal</th>
+					<th>Email</th>
+					<th>Both</th>
+				</tr>
+				<tr>
+					<td><%= nwp @objs.postal_count, 0 %></td>
+					<td><%= nwp @objs.email_count, 0 %></td>
+					<td><%= nwp @objs.both_count, 0 %></td>
+				</tr>
+			</table>
+		<% elsif params[:cross_filing] %>
+			<h1>Cross Filing For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %></h1>
+			<table>
+				<tr>
+					<th>Name</th>
+					<th>Exam</th>
+					<th>Cross Filing At</th>
+					<th>Other Exams</th>
+				</tr>
+				<% @objs.each { |o| %>
+					<tr>
+						<td><%= h o.person.last_name %>, <%= h o.person.first_name %></td>
+						<td><%= h o.exam.exam_no %> - <%= h o.exam.title %></td>
+						<td><%= h o.cross_filing_at %></td>
+						<td>
+							<% if o.web_applicant %>
+								<%= o.web_applicant.web_other_exams.collect { |oe| h("#{oe.no} #{oe.name} (#{oe.agency == 'other' ? oe.other : oe.agency})") }.join('<br />') %>
+							<% end %>
+						</td>
+					</tr>
+				<% } %>
+			</table>
+		
+		
+		<% elsif params[:exam_sites] %>
+		
+			<% room_totals = {} %>
+			<% @objs.each { |o| %>
+				<%
+					grouped = {}
+					o.applicants.each { |a|
+						site_name = a.exam_site ? a.exam_site.name : 'UNKNOWN SITE'
+						grouped[site_name] ||= []
+						grouped[site_name] << a
+						room_totals[site_name] ||= 0
+						room_totals[site_name] += 1
+					}
+				%>
+				<% grouped.keys.sort.each { |k| objs = grouped[k] %>
+					
+					<h1<% unless first %> style="page-break-before: always;"<% end %>>
+						Exams/Sites For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %><br />
+						Exam: <%= h o.exam_no %> <%= h o.title %><br />
+						Site: <%= h k %>
+					</h1>
+					<% first = false %>
+					<table>
+						<tr>
+							<th width="48%">Applicant</th>
+							<th width="1">Present</th>
+							<th width="1">FTA</th>
+							<th width="48%">Applicant</th>
+							<th width="1">Present</th>
+							<th width="1">FTA</th>
+						</tr>
+					</table>
+					<% tfirst = true %>
+					<% sgrps = objs.in_groups_of(48, false) { |sgrp| %>
+						<table<% if !tfirst %> style="page-break-before: always;"<% end %> width="100%">
+							<% tfirst = false %>
+							<% grps = sgrp.in_groups(2) %>
+							<% 0.upto(grps[0].size - 1) { |j| %>
+								<tr>
+									<% 0.upto(1) { |i| %>
+										<% a = grps[i][j] %>
+										<% if a %>
+											<td width="50%">
+												<%= h a.person.last_name %>, <%= h a.person.first_name %><br />
+												xxxx-xx-<%= h a.person.ssn_last4 %>
+											</td>
+										<% else %>
+											<td width="50%"></td>
+										<% end %>
+									<% } %>
+								</tr>
+							<% } %>
+						</table>
+					<% } %>
+					<p>
+						<%= h o.exam_no %> <%= h o.title %> / <%= h k %> TOTAL: <%= objs.size %><br />
+						<%= h o.exam_no %> <%= h o.title %> TOTAL: <%= o.applicants.size %><br />
+						<%= h k %> TOTAL: <%= room_totals[k] %>
+					</p>
+					
+				<% } %>
+			<% } %>
+		
+		<% elsif params[:statistics] %>
+		
+			<h1>Exam Totals and Statistics<br />For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %></h1>
+		
+		
+			<table width="100%">
+				<thead>
+					<tr>
+						<th style="border-bottom: none;">Exam&nbsp;Date</th>
+						<th style="border-bottom: none;" colspan="15">Title and Number</th>
+					</tr>
+					<tr class="small">
+						<th>Fee</th>
+						<!--<th>Total<br />Collected</th>-->
+						<th>Type</th>
+						<th>List<br />Established</th>
+						<th>Applied</th>
+						<th>Approved</th>
+						<th>Disapproved</th>
+						<th>Pass<br />Writ.</th>
+						<th>Pass<br />Perf.</th>
+						<th>FTA</th>
+						<th>Withdrew</th>
+						<th>Fail<br />Writ.</th>
+						<th>Fail<br />Perf.</th>
+						<th>Perf.<br />Waiv.</th
+						<th>Inactive</th>
+						<th>Appt'd</th>
+					</tr>
+				</thead>
+				<tbody>
+            		<% @objs.each { |o| %>
+						<tr>
+							<td style="border-bottom: none;"><%= Date.parse(o.given_at).d0? %></td>
+							<td style="border-bottom: none;" colspan="16"><%= h o.title %>: <%= h o.exam_no %></td>
+						</tr>
+						<tr>
+                          <% examsheld+=1 %>
+							<td><%= o.fee%>/<%= o.paid_by.to_i %>/<%= number_to_currency(o.total_paid.to_i) %><% fee +=o.paid_by.to_i %></td>
+                          <% totalpaid +=o.total_paid.to_i %>
+							<!--<td><%= o.collected;collected+=o.collected.to_i; %></td>-->
+							<td><%= o.exam_type %></td>
+							<td><%= Date.parse(o.established_date).d0? rescue nil %></td>
+							<td><%= o.applied %><% xapplied+=o.applied.to_i%></td>
+							<td><%= o.approved %><% approved+=o.approved.to_i%></td>
+							<td><%= o.disapproved %><% disapproved+=o.disapproved.to_i %></td>
+							<td><%= o.passed %><% passed+=o.passed.to_i %></td>
+							<td><%= o.perf_passed%><% perf_passed+=o.perf_passed.to_i %></td>
+							<td><%= o.fta %><% fta+=o.fta.to_i %></td>
+							<td><%= o.withdrew %> <% withdrew+=o.widthdrew.to_i %></td>
+							<td><%= o.failed %><% failed+=o.failed.to_i %></td>
+							<td><%= o.perf_failed%> <% perf_failed+=o.perf_failed.to_i %></td>
+							<td><%= o.perf_waived%> <% perf_waived+=o.perf_waived.to_i %></td>
+							<td><%= o.inactive%> <% inactive+=o.inactive.to_i %></td>
+							<td><%= o.appointed%> <% appointed+=o.appointed.to_i %></td>
+						</tr>
+					<% } %>
+                    <tr>
+                      <td>Total # Fees <%= fee %><br><%= number_to_currency(totalpaid) %></td>
+                      <!--<td></td>-->
+                      <td>***TOTALS *** <%=examsheld %> Exams Held</td>
+                      <td></td>
+                      <td><%= xapplied %></td>
+                      <td><%= approved %></td>
+                      <td><%= disapproved %></td>
+                      <td><%= passed %></td>
+                      <td><%= perf_passed %></td>
+                      <td><%= fta %></td>
+                      <td><%= withdrew %></td>
+                      <td><%= failed %></td>
+                      <td><%= perf_failed %></td>
+                      <td><%= perf_waived %></td>
+                      <td><%= inactive %></td>
+                      <td><%= appointed %></td>
+                    </tr>
+                <tr><td colspan="16" align="center" width="100%"><br>Total Tested <%= approved - fta %></td></tr>
+				</tbody>
+				
+			</table>
+		
+		<% elsif @report[:separate_exams] == '1' %>
+			
+			<% @objs.each_with_index { |e, i| %>
+				
+				<h1<% if i > 0 %> style="page-break-before: always;"<% end %>>Attendance list for <%= e.exam_no %> <%= e.title %>, <%= e.given_at.d0? %>
+				
+				<% if params[:performance] %>
+					<% exam_perfs = e.exam_perfs.find(:all, :include => :perf_test, :order => 'perf_tests.name') %>
+				<% end %>
+				
+				<table width="100%">
+					<thead>
+						<tr>
+							<th width="25%">Name</th>
+							<th width="15%">SSN</th>
+							<th width="60%"><div style="float: right;">Status</div>Exams Attending</th>
+						</tr>
+					</thead>
+					<tbody>
+						<%
+						
+						no_present = 0
+						no_withdrew = 0
+						no_fta = 0
+						
+						%>
+						<% e.applicants.each { |a| p = a.person %>
+							<%
+							
+							if a.app_status
+								if a.app_status.code == '-'
+									no_fta += 1
+								elsif no_withdrew == 'W'
+									no_withdrew += 1
+								else
+									no_present += 1
+								end
+							end
+							
+							
+							%>
+							<tr>
+								<td>
+									<%= h p.last_name %>, <%= h p.first_name %>
+									<% if p.sabbath_observer %>
+										<strong>
+											**SABBATH OBS.
+											<% if !p.sabbath_observer_docs %>
+												(NO DOC.)
+											<% end %>
+										</strong>
+									<% end %>
+									<% if !p.special_accommodations.blank? %>
+										<br />
+										<strong>
+											**<%= h p.special_accommodations %>
+											<% if !p.special_accommodations_docs %>
+												(NO DOC.)
+											<% end %>
+										</strong>
+									<% end %>
+								</td>
+								<td>
+									<% if @report[:full_ssn] == '1' %>
+										<%= h p.ssn %>
+									<% else %>
+										xxx-xx-<%= h p.ssn_last4 %>
+									<% end %>
+								</td>
+								<td>
+									<div>
+										<div style="float: right;"><%= a.app_status ? a.app_status.name : '' %></div>
+										<% if params[:performance] %>
+											<% exam_perfs.each { |ep| %>
+												<% taken_perf = p.taken_perfs.find(:first, :include => :perf_code, :conditions => ['taken_perfs.exam_id = ? and taken_perfs.perf_test_id = ?', e.id, ep.perf_test_id]) %>
+												<div>
+													<%= ep.perf_test.name %>: 
+													<% if taken_perf %>
+														<% if taken_perf.perf_code %>
+															<%= taken_perf.perf_code.label %>
+														<% end %>
+														<%= taken_perf.date_taken.d0? %>
+														<%= h taken_perf.time_taken %>
+														<%= h taken_perf.notes %>
+													<% end %>
+												</div>
+											<% } %>
+										<% else %>
+											<%= h a.exam.title %>: <%= h a.exam.exam_no %><br />
+											Exam Site: <%= h a.exam_site.name if a.exam_site %>
+										<% end %>
+									</div>
+								</td>
+							</tr>
+						<% } %>
+					</tbody>
+				</table>
+				<p style="text-align: left;">TOTAL FOR EXAM: <%= e.applicants.size %><br />
+				TOTAL PRESENT: <%= no_present %><br />
+				TOTAL WITHDREW: <%= no_withdrew %><br />
+				TOTAL FTA: <%= no_fta %></p>
+			<% } %>
+					
+		<% else %>
+			
+			<%
+			
+			no_total = 0
+			no_present = 0
+			no_withdrew = 0
+			no_fta = 0
+			
+			%>
+			
+			<h1>Attendance list for all applicants taking exams on 
+			<%= @report.from_date.d0? %><% if @report.from_date != @report.to_date %> - <%= @report.to_date.d0? %><% end %></h1>
+			<table width="100%">
+				<thead>
+					<tr>
+						<th width="25%">Name</th>
+						<th width="15%">SSN</th>
+						<th width="60%"><div style="float: right;">Status</div>Exams Attending</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @objs.each { |p| %>
+						<tr>
+							<td>
+								<%= h p.last_name %>, <%= h p.first_name %>
+								<% if p.sabbath_observer %>
+									<strong>
+										**SABBATH OBS.
+										<% if !p.sabbath_observer_docs %>
+											(NO DOC.)
+										<% end %>
+									</strong>
+								<% end %>
+								<% if !p.special_accommodations.blank? %>
+									<br />
+									<strong>
+										**<%= h p.special_accommodations %>
+										<% if !p.special_accommodations_docs %>
+											(NO DOC.)
+										<% end %>
+									</strong>
+								<% end %>
+							</td>
+							<td>
+								<% if @report[:full_ssn] == '1' %>
+									<%= h p.ssn %>
+								<% else %>
+									xxx-xx-<%= h p.ssn_last4 %>
+								<% end %>
+							</td>
+							<td>
+								<% p.applicants.each { |a| %>
+
+									<%
+									
+									no_total += 1
+									
+									if a.app_status
+										if a.app_status.code == '-'
+											no_fta += 1
+										elsif no_withdrew == 'W'
+											no_withdrew += 1
+										else
+											no_present += 1
+										end
+									end
+									
+									%>
+								
+									<div>
+										<div style="float: right;"><%= a.app_status ? a.app_status.name : '' %></div>
+										<%= h a.exam.title %>: <%= h a.exam.exam_no %><br />
+										<% if params[:performance] %>
+											<% a.exam.exam_perfs.find(:all, :include => :perf_test, :order => 'perf_tests.name').each { |ep| %>
+												<% taken_perf = p.taken_perfs.find(:first, :include => :perf_code, :conditions => ['taken_perfs.exam_id = ? and taken_perfs.perf_test_id = ?', a.exam_id, ep.perf_test_id]) %>
+												<div>
+													<%= ep.perf_test.name %>: 
+													<% if taken_perf %>
+														<% if taken_perf.perf_code %>
+															<%= taken_perf.perf_code.label %>
+														<% end %>
+														<%= taken_perf.date_taken.d0? %>
+														<%= h taken_perf.time_taken %>
+														<%= h taken_perf.notes %>
+													<% end %>
+												</div>
+											<% } %>
+										<% else %>
+											Exam Site: <%= h a.exam_site.name if a.exam_site %>
+										<% end %>
+									<div>
+								<% } %>
+							</td>
+						</tr>
+					<% } %>
+				</tbody>
+			</table>
+			<p style="text-align: left;">TOTAL: <%= no_total %><br />
+			TOTAL PRESENT: <%= no_present %><br />
+			TOTAL WITHDREW: <%= no_withdrew %><br />
+			TOTAL FTA: <%= no_fta %></p>
+		<% end %>
+	
+	</body>
+</html>

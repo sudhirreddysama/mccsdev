@@ -1,0 +1,114 @@
+<%
+
+t_clas = 0
+t_comp = 0
+t_comp_perm = 0
+t_comp_prov = 0
+t_comp_cp = 0
+t_comp_temp = 0
+t_non_comp = 0
+t_non_comp55 = 0
+t_exempt = 0
+t_labor = 0
+
+
+
+%><html>
+	<head>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th { font: 11px/16px Trebuchet MS, Verdana, Arial, sans-serif; }
+			
+			table { border-collapse: collapse; width: 100%; }
+			td, th { vertical-align: top; text-align: right; padding: 2px; }
+			
+			.l { text-align: left; }
+			.c { text-align: center; }
+			.r { text-align: right; }
+			
+			th { font-weight: bold; }
+			
+			thead th { border: 1px solid #000; text-align: center; }
+			tbody th, tbody td { border-left: 1px solid #000; border-right: 1px solid #000; }
+			
+			tbody { border-top: 1px solid #000; border-bottom: 1px solid #000; }
+			
+		</style>
+	</head>
+	<body>
+		<h3>
+			Annual Report For <%= Time.now.year %>
+		</h3>
+		<table>
+			<thead>
+				<tr>
+					<th rowspan="3" style="vertical-align: bottom; text-align: right;">CIVIL SERVICE AGENCIES</th>
+					<th rowspan="3">TOTAL<br />NUMBER OF<br />CLASSI-<br />FIED<br />POSITIONS</th>
+					<th rowspan="3">TOTAL<br />NUMBER OF<br />COMPETI<br />-TIVE<br />POSITIONS</th>
+					<th colspan="4">COMPETITIVE</th>
+					<th colspan="2">NON-COMPETITIVE</th>
+					<th rowspan="3">EXEMPT</th>
+					<th rowspan="3">LABOR</th>
+				</tr>
+				<tr>
+					<th rowspan="2">PERM</th>
+					<th colspan="3">NON-<br />PERMANENT</th>
+					<th rowspan="2">SECT<br />42</th>
+					<th rowspan="2">SECT<br />55a</th>
+				</tr>
+				<tr>
+					<th>PROV</th>
+					<th>CONT-PERM</th>
+					<th>TEMP</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% Const::AGENCY_TYPES.each { |t| o = @objs[t] || {} %>
+					<tr>
+						<th class="r"><%= h t %></th>
+						<td><%= nwp o.clas %></td>
+						<td><%= nwp o.comp %></td>
+						<td><%= nwp o.comp_perm %></td>
+						<td><%= nwp o.comp_prov %></td>
+						<td><%= nwp o.comp_cp %></td>
+						<td><%= nwp o.comp_temp %></td>
+						<td><%= nwp o.non_comp %></td>
+						<td><%= nwp o.non_comp55 %></td>
+						<td><%= nwp o.exempt %></td>
+						<td><%= nwp o.labor %></td>
+					</tr>
+					<%
+					
+						t_clas += o.clas.to_i
+						t_comp += o.comp.to_i
+						t_comp_perm += o.comp_perm.to_i
+						t_comp_prov += o.comp_prov.to_i
+						t_comp_cp += o.comp_cp.to_i
+						t_comp_temp += o.comp_temp.to_i
+						t_non_comp += o.non_comp.to_i
+						t_non_comp55 += o.non_comp55.to_i
+						t_exempt += o.exempt.to_i
+						t_labor += o.labor.to_i
+					
+					%>
+				<% } %>
+			</tbody>
+			<tbody>
+				<tr>
+					<th class="r">TOTALS</th>
+					<td><%= nwp t_clas %></td>
+					<td><%= nwp t_comp %></td>
+					<td><%= nwp t_comp_perm %></td>
+					<td><%= nwp t_comp_prov %></td>
+					<td><%= nwp t_comp_cp %></td>
+					<td><%= nwp t_comp_temp %></td>
+					<td><%= nwp t_non_comp %></td>
+					<td><%= nwp t_non_comp55 %></td>
+					<td><%= nwp t_exempt %></td>
+					<td><%= nwp t_labor %></td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>

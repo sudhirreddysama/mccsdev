@@ -1,0 +1,3 @@
+<% if @obj.txt_file? %>
+	<%= tab 'Import Scores', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :document, :action => :scores, :id => @obj.id} %>
+<% end %>

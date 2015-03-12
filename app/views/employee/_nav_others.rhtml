@@ -1,0 +1,8 @@
+<div class="tabs">
+	<%= tab 'List', :controller => 'employee', :action => :index, :id => nil, :sc => nil, :sid => nil %>
+	<% if @current_user.staff_level? || @allow_liaison %>
+		<%= tab 'New', :controller => 'employee', :action => :new, :id => nil, :sc => nil, :sid => nil %>
+	<% end %>
+	<%= partial 'employee/nav1' %>
+	<div class="clear"></div>
+</div>

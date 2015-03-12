@@ -1,0 +1,422 @@
+<div id="res_print" style="display: none;">
+<% table_form_for(:print, :url => {:action => :print, :id => @obj.id}, :html => {:target => '_blank'}) { |f| %>
+	<tr>
+		<td width="25%"><strong>Town</strong></th>
+		<td width="25%"><strong>Village</strong></th>
+		<td width="25%"><strong>Fire Department</strong></th>
+		<td width="25%"><strong>School District</strong></th>
+	</tr>
+	<tr>
+		<td><%= f.select :town_ids, Town.find(:all, :order => 'name').collect { |t| [t.name, t.id] }, {}, :multiple => true, :style => 'width: 150px; height: 150px;' %></td>
+		<td><%= f.select :village_ids, Village.find(:all, :order => 'name').collect { |t| [t.name, t.id] }, {}, :multiple => true, :style => 'width: 150px; height: 150px;' %></td>
+		<td><%= f.select :fire_district_ids, FireDistrict.find(:all, :order => 'name').collect { |t| [t.name, t.id] }, {}, :multiple => true, :style => 'width: 150px; height: 150px;' %></td>
+		<td><%= f.select :school_district_ids, SchoolDistrict.find(:all, :order => 'name').collect { |t| [t.name, t.id] }, {}, :multiple => true, :style => 'width: 150px; height: 150px;' %></td>
+	</tr>
+	<tr>
+		<td colspan="4">
+			<%= submit_tag 'Print Short List', :name => 'short' %>
+			<%= submit_tag 'Print Long List', :name => 'long' %>
+		</td>
+	</tr>
+<% } %>
+</div>
+<div class="tabs buttons">
+	<% if @current_user.staff_level? %>
+		<%= tab 'Post to Web', {:controller => :web_exam, :action => :new, :exam_id => @obj.id}, {}, :class => 'tab-web' %>
+	<% end %>
+	<% if @current_user.staff_level? || (@obj.established_date && @obj.established_date >= Time.now.to_date)%>
+		<%= tab 'Print Long list', {:action => :print, :id => @obj.id, :id2 => 'long'}, {}, :target => '_blank' %>
+		<%= tab 'Print Short list', {:action => :print, :id => @obj.id, :id2 => 'short'}, {}, :target => '_blank' %>
+		<a href="#" onclick="jQuery('#res_print').toggle(); return false;" class="tab-print"><span>Print Res. List</span></a>
+	<% end %>
+	<% if @current_user.staff_level? %>
+		<%= tab 'Refresh', {:action => :rerank, :id => @obj.id}, {}, :confirm => 'Are you sure you want to refresh/rerank candidates?' %>
+	<% end %>
+	<div class="clear"></div>
+</div>
+<div class="viewer">
+	<div class="header">Review Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<% if @current_user.liaison_level? || @current_user.staff_level? %>
+					<td style="padding-top: 3px;">
+						<%= form_tag :action => :set_review, :id => @obj.id %>
+							Reviewed By: <%= text_field_tag :reviewed_by, @obj.reviewed_by, :size => 30 %>
+							Review Complete: <%= check_box_tag :review_complete, 1, @obj.review_complete %>
+							<%= submit_tag 'Update' %>
+						</form>
+					</td>
+				<% else %>
+					<td>
+						<label>Reviewed By</label>
+						<%= h o.reviewed_by %>
+					</td>
+					<td>
+						<label>Review Complete:</label>
+						<%= yn o.review_complete %>
+				<% end %>
+			</tr>
+		</table>
+	</div>
+</div>
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Exam No.:</label>
+					<%= h o.exam_no %>
+				</td>
+				<td>
+					<label>Type:</label>
+					<%= o.exam_type %><% if o.continuous %> CR<% end %>
+				</td>
+				<td>
+					<label>Title:</label>
+					<%= h o.title %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Requested:</label>
+					<%= o.requested_at.d0? %>
+				</td>
+				<td>
+					<label>Published:</label>
+					<%= h o.publish_at.d0? %>
+				</td>
+				<td>
+					<label>Deadline:</label>
+					<%= h o.deadline.d0? %>
+				</td>
+				<td>
+					<label>Given:</label>
+					<%= h o.given_at.d0? %>
+				</td>
+				<td>
+					<label>Scores Date:</label>
+					<%= h o.scores_date.d0? %>
+				</td>
+				<td>
+					<label>Established:</label>
+					<%= h o.established_date.d0? %>
+				</td>
+				<td>
+					<label>Expires:</label>
+					<%= h o.valid_until.d0? %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Calculator:</label>
+					<%= h o.calculator %>
+				</td>
+				<td>
+					<label>Fee:</label>
+					<%= h o.fee %>
+				</td>
+				<td>
+					<label>State/Local:</label>
+					<%= Const::GIVEN_BY.rassoc(o.given_by)[0] rescue nil %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Comments:</label>
+					<%= h o.comments %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Salary:</label>
+					<%= h o.salary %>
+				</td>
+				<td>
+					<label>Exam Length:</label>
+					<%= h o.exam_length %>
+				</td>
+				<td>
+					<label>Bandscored:</label>
+					<%= yn o.bandscored %>
+				</td>
+				<td>
+					<label>Sort By Dept.:</label>
+					<%= yn o.sort_by_department %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Performance Tests:</label>
+					<% if o.exam_perfs.to_a.empty? %>
+						&nbsp;
+					<% else %>
+						<%= o.exam_perfs.collect { |p| p.perf_test ? h(p.perf_test.name) : nil }.reject(&:nil?).join(', ') %>
+					<% end %>
+				</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Exam Sites:</label>
+					<% if o.exam_site_assignments.to_a.empty? %>
+						&nbsp;
+					<% else %>
+						<%= o.exam_site_assignments.collect { |s| s.exam_site ? h(s.exam_site.name) : 'UNKNOWN' }.join(', ') %>
+					<% end %>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Master List?</label>
+					<%= yn o.include_on_master %>
+				</td>
+				<td>
+					<label>Ordered Date:</label>
+					<%= h o.ordered_date %>
+				</td>
+				<td>
+					<label>Master Notes:</label>
+					<%= h o.master_notes %>
+				</td>
+			</tr>
+		</table>
+	</div>	
+</div>
+
+<div class="viewer">
+	<div class="header">Applicant Statistics</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Total:</label>
+					<%= nwp @stats.total %>
+				</td>
+				<td>
+					<label>Approved:</label>
+					<%= nwp @stats.approved %>
+				</td>
+				<td>
+					<label>Disapproved:</label>
+					<%= nwp @stats.disapproved %>
+				</td>
+				<td>
+					<label>No Action:</label>
+					<%= nwp @stats.no_action %>
+				</td>
+				<td>
+					<label>Passed:</label>
+					<%= nwp @stats.passed %>
+				</td>
+				<td>
+					<label>Failed:</label>
+					<%= nwp @stats.failed %>
+				</td>
+				<td>
+					<label>FTA:</label>
+					<%= nwp @stats.fta %>
+				</td>
+				<td>
+					<label>Withdrew:</label>
+					<%= nwp @stats.withdrew %>
+				</td>
+				<td>
+					<label>Inactive:</label>
+					<%= nwp @stats.inactive %>
+				</td>
+				<td>
+					<label>Appointed:</label>
+					<%= nwp @stats.appointed %>
+				</td>
+				<td>
+					<label>Active:</label>
+					<%= nwp @stats.active %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<% @perf_stats.each_hash { |ps| %>
+	<div class="viewer">
+		<div class="header"><%= ps.name %></div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Tested (P,T,S,F):</label>
+						<%= nwp(ps.passed.to_i + ps.failed.to_i) %>
+					</td>
+					<td>
+						<label>Passed (P):</label>
+						<%= nwp(ps.passed || 0) %>
+					</td>
+					<td>
+						<label>Failed (T,S,F):</label>
+						<%= nwp(ps.failed || 0) %>
+					</td>
+					<td>
+						<label>FTA (N,-):</label>
+						<%= nwp(ps.fta || 0) %>
+					</td>
+					<td>
+						<label>Waived (W,C):</label>
+						<%= nwp(ps.waived || 0) %>
+					</td>					
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<% } %>
+
+
+
+
+
+
+
+
+
+<% if false %>
+<h2>Applications</h2>
+
+<% apps = o.applicants.find(:all, :order => 'applicants.submitted_at desc', :include => [:exam_site, :person]) %>
+
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">View</th>
+			<th width="1%">ID</th>
+			<th width="1%">Submitted</th>
+			<th width="1%">Status</th>
+			<th width="1%">SSN</th>
+			<th width="40%">Name</th>
+			<th width="45%">Exam Site</th>
+			</tr>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% apps.each { |a| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr">
+					<%= link_to 'Application', :controller => :applicant, :action => :view, :id => a.id %> &bull;
+					<%= link_to 'Person', :controller => :person, :action => :view, :id => a.person_id if a.person %>
+				</td>
+				<td><%= a.id %></td>
+				<td class="nobr"><%= a.submitted_at.d0? %></td>
+				<td class="nobr"><%= h a.app_status.name if a.app_status %></td>
+				<td class="nobr"><%= h a.person.ssn if a.person %></td>
+				<td><%= h a.person.label if a.person %></td>
+				<td>
+					<% if a.exam_site %>
+						<%= h a.exam_site.name %>
+					<% elsif o.exam_site %>
+						<%= h o.exam.exam_site.name %>
+					<% end %>
+				</td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
+
+<h2>Performance Tests Taken</h2>
+
+<% ptaken = o.taken_perfs.find(:all, :order => 'taken_perfs.date_taken desc', :include => [:applicant, :person, :perf_code, :perf_test]) %>
+
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">View</th>
+			<th width="1%">ID</th>
+			<th width="1%">Status</th>
+			<th width="1%">Taken</th>
+			<th width="47%">Test</th>
+			<th width="1%">SSN</th>
+			<th width="47%">Name</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% ptaken.each { |pt| %>
+			<% p = pt.perf_test %>
+			<% pc = pt.perf_code %>
+			<% a = pt.applicant %>
+			<% pe = pt.person %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= pt.id %>">
+				<td class="nobr">
+					<%= link_to 'Application', :controller => :applicant, :action => :view, :id => a.id %> &bull;
+					<%= link_to 'Person', :controller => :person, :action => :view, :id => pe.id if pe %>
+				</td>
+				<td><%= pt.id %></td>
+				<td class="nobr"><%= h pc.label if pc %></td>
+				<td class="nobr"><%= pt.date_taken.d0? %></td>
+				<td><%= p.name if p %></td>
+				<td class="nobr"><%= h pe.ssn if pe %></td>
+				<td><%= pe.label if pe %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
+
+
+<h2>Certifications</h2>
+
+<% certs = o.certs.find(:all, :order => 'certs.certification_date desc') %>
+
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">ID</th>
+			<th width="1%" class="nobr">Cert. Date</th>
+			<th width="1%" class="nobr"># Pos.</th>
+			<th width="1%">Salary</th>
+			<th width="95%">Title (click to view)</th>
+			</tr>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% certs.each { |c| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td><%= o.id %></td>
+				<td class="nobr"><%= c.certification_date.d0? %></td>
+				<td class="nobr"><%= h c.number_of_positions %></td>
+				<td class="nobr"><%= h c.salary_range %></td>
+				<td class="nobr"><%= link_to c.title, :controller => :cert, :action => :view, :id => c.id %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
+<% end %>

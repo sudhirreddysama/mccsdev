@@ -1,0 +1,50 @@
+<%= partial 'errors', :errors => @pc.errors.full_messages %>
+<% table_form_for(:pc, :html => {:multipart => true}) { |f| %>
+	<tr>
+		<th>Name: <span class="req">*</span></th>
+		<td class="subform">
+			<table>
+				<tr>
+					<th>First: <span class="req">*</span></th>
+					<th>Last: <span class="req">*</span></th>
+				</tr>
+				<tr>
+					<td><%= f.text_field :first_name, :req => true, :size => '40', :class => 'ucase' %></td>
+					<td><%= f.text_field :last_name, :req => true, :size => '40', :class => 'ucase' %></td>
+			</table>		
+		</tr>
+	</tr>
+	<tr>
+		<th>Sort:</th>
+		<td>
+			<%= f.text_field :sort, :size => 4 %>&nbsp;&nbsp;&nbsp;Candidates with the same seniority date will be sorted by this number.
+		</td>
+	</tr>	
+	<%= f.tr_text_field :address, :label => 'Address', :class => 'ucase' %>
+	<%= f.tr_text_field :address2, :label => 'Address Line 2', :class => 'ucase' %>
+	<tr>
+		<th>City, State, Zip:</th>
+		<td class="subform">
+			<table>
+				<tr>
+					<td><%= f.text_field :city, :size => '40', :class => 'ucase' %></td>
+					<td><%= f.select :state, USState::UNAMES %></td>
+					<td><%= f.text_field :zip_code, :size => '10', :class => 'ucase' %></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<%= f.tr_calendar_date_select :seniority_date, :label => 'Seniority Date' %>
+	<%= f.tr_calendar_date_select :layoff_date, :label => 'Layoff Date' %>
+	<%= f.tr_text_field :salary_group, :size => 30, :label => 'Salary Group', :class => 'ucase' %>
+	<tr>
+		<th>Salary/Wage:</th>
+		<td>
+			<%= f.text_field :wage, :size => 10, :class => 'ucase nocomma' %> / <%= f.select :wage_per, Const::WAGE_UNITS, :include_blank => true %>
+		</td>
+	</tr>	
+	<%= f.tr_check :removed, :label => 'Removed?', :text => 'Check here to remove candidate from preferred list.' %>
+	<%= f.tr_text_area :activity, :label => 'Activity', :size => '60x6', :class => 'ucase' %>
+	<%= f.tr_text_area :notes, :label => 'Notes', :size => '60x6', :class => 'ucase' %>
+	<%= f.tr_submit 'Submit' %>
+<% } %>

@@ -1,0 +1,6 @@
+<% unless o.documents.empty? && o.person.documents.empty? %>
+	<%= link_to image_tag('icons/page_attach.png', :size => '16x16'), {:sc => :applicant, :sid => o.id, :controller => :document, :action => :index}, :target => '_blank' %>
+<% end %>
+<% unless o.notes.blank? && o.list_note.blank? %>
+	<a href="#" onclick="alert(<%= h "NOTES: #{o.notes}\r\rLIST NOTES: #{o.list_note}".to_json %>); return false;"><%= image_tag 'icons/note.png', :size => '16x16' %></a>
+<% end %>

@@ -1,0 +1,8 @@
+<%= tab 'Documents', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>
+<%= tab 'Letters', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :message}, {:action => :index, :id => nil}, {:class => 'tab-letter'} %>
+<%= tab 'List Notes', {:sc => nil, :sid => nil, :controller => :person, :action => :list_notes, :id => (params[:id] || params[:sid])}, {}, {:class => 'tab-list_note'} %>
+<%= tab 'Update Residency', {:sc => nil, :sid => nil, :controller => :person, :action => :update_residency, :id => (params[:id] || params[:sid])}, {}, {:class => 'tab-update_residency'} %>
+
+<% if false %>
+	<%= tab 'Merge Applicants', {:sc => nil, :sid => nil, :controller => :person, :action => :merge_applicants, :id => (params[:id] || params[:sid])}, {}, {:class => 'tab-applicant'} %>
+<% end %>

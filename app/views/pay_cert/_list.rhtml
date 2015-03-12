@@ -1,0 +1,24 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">As&nbsp;Of&nbsp;Date</th>
+			<th width="1%">User</th>
+			<th width="46%">Agency</th>
+			<th width="50%">Notes</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td><%= o.id %></td>
+				<td class="nobr"><%= o.as_of_date.d0? %></td>
+				<td class="nobr"><%= o.user.username if o.user %></td>
+				<td><%= link_to o.agency ? o.agency.name : 'UNKOWN', :action => :view, :id => o.id %></td>
+				<td><%= h o.notes %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

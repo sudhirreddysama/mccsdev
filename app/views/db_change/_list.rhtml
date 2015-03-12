@@ -1,0 +1,46 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">When</th>
+			<th width="1%">User</th>
+			<th width="1%">Action</th>
+			<% if params[:controller] == 'db_change' %>
+				<th width="1%">Object</th>
+				<th width="1%">ID</th>
+			<% end %>
+			<th width="1%">Field</th>
+			<th width="50%">Before</th>
+			<th width="50%">After</th>
+		</tr>
+	</thead>
+	<% @objs.each { |o| %>
+		<% changes = [] %>		
+		<% JSON.parse(o.changes_json).each { |f, v| %>
+			<% changes << capture { %>
+				<td class="nobr"><%= h f %></td>
+				<% if v.is_a? Array %>
+					<td><%= h truncate(v[0].to_s, :length => 200) %></td>
+					<td><%= h truncate(v[1].to_s, :length => 200) %></td>
+				<% else %>
+					<td></td>
+					<td><%= h truncate(v.to_s, :length => 200) %></td>
+				<% end %>
+			<% } %>
+		<% } %>
+		<tbody class="<%= cycle 'odd', 'even' %>">
+			<tr>
+				<td rowspan="<%= changes.size %>" class="nobr"><%= o.created_at.dt0? %></td>
+				<td rowspan="<%= changes.size %>" class="nobr"><%= o.user %></td>
+				<td rowspan="<%= changes.size %>" class="nobr"><%= o.action %></td>
+				<% if params[:controller] == 'db_change' %>
+					<td rowspan="<%= changes.size %>" class="nobr"><%= h o.record_type %></td>
+					<td rowspan="<%= changes.size %>" class="nobr"><%= h o.record_id %></td>
+				<% end %>
+				<%= changes.shift %>
+			</tr>
+			<% changes.each { |c| %>
+				<tr><%= c %></tr>
+			<% } %>
+		</tbody>
+	<% } %>
+</table>

@@ -1,0 +1,71 @@
+<%
+
+	wge = params[:action] == 'view' && error == 'salary_wage'
+
+%>
+
+<% if objs.empty? %>
+	<p class="marg">No Records to Display</p>
+<% else %>
+	<table class="dg" style="margin-bottom: 0;">
+		<thead>
+			<tr>
+				<% if @current_user.staff_level? || @allow_liaison %>
+					<% if wge %>
+						<th>
+							<%= check_box_tag 'select_all', 1, false %>
+						</th>
+					<% end %>
+				<% end %>
+				<th>Name</th>
+				<th>SSN</th>
+				<th>Title</th>
+				<th>Salary&nbsp;Wage</th>
+				<th>Retirement&nbsp;No</th>
+				<% if error %>
+					<th>Error</th>
+				<% end %>
+			</tr>
+		</thead>
+		<tbody>
+			<% objs.each { |o| %>
+				<% e = o.employee %>
+				<tr class="<%= cycle 'odd', 'even' %>">
+					<% if @current_user.staff_level? || @allow_liaison %>
+						<% if wge %>
+							<td><%= check_box_tag "wage_changes[]", o.id, false, :class => 'wage_change' + (e.leave_date ? '' : ' empl-active') %></td>
+						<% end %>
+					<% end %>
+					<td>
+						<% if params[:action] == 'view' && error != 'employee' %>
+							<%= link_to "#{o.last_name}, #{o.first_name}", {:controller => :employee, :action => :view, :id => o.employee_id}, :target => '_blank' %>
+							<% if e && e.leave_date %>
+								<span class="req">* <%= e.leave_date.d0? %></span>
+							<% end %>
+							<% if o.has_future_actions %>
+								<span class="req">* hist. after as-of</span>
+							<% end %>
+						<% else %>
+							<%= h o.last_name %>, <%= h o.first_name %>
+						<% end %>
+					</td>
+					<td><%= h o.ssn %></td>
+					<td><%= h o.title %></td>
+					<td style="text-align: right;"><%= h o.salary_wage.n2? %></td>
+					<td><%= h o.retirement_no %></td>
+					<% if error %>
+						<td><% 
+						
+						t = o.error_text error 
+						
+						if error == 'salary_wage' && !t.blank?
+							t = nwp(t, 2)
+						end
+						
+						%><%= h t %></td>
+					<% end %>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+<% end %>

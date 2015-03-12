@@ -1,0 +1,101 @@
+/* .calendar_date_select {
+  display:block;
+  width:195px;
+  background-color:white;
+}
+.calendar_date_select thead th {
+  font-weight:bold;
+}
+
+.calendar_date_select .cds_buttons {
+  text-align:center;
+  padding:5px 0px;
+}
+
+.calendar_date_select .cds_footer {
+  padding:3px;
+  font-size:10px;
+  text-align:center;
+}
+
+.calendar_date_select table {
+  margin: 0px;
+  padding: 0px;
+}
+
+
+.calendar_date_select .cds_header {
+  text-align:center;
+}
+
+.calendar_date_select .cds_header * {
+  border:0px;
+  background-color:white;  
+}
+
+.calendar_date_select .cds_header span {
+  font-size:15px;
+  color: black;
+  font-weight: bold;
+}
+
+.calendar_date_select select { font-size:11px;}
+
+.calendar_date_select .cds_header a:hover {
+  color: white;
+}
+.calendar_date_select .cds_header a {
+  width:22px;
+  height:20px;
+  text-decoration: none;
+  font-size:14px;
+  color:black !important;
+}
+
+.cds_header a.prev { float:left; }
+.cds_header a.next { float:right; }
+.cds_header select.month { width:90px;
+.cds_header select.year { width:61px; }
+
+.calendar_date_select .cds_buttons a {
+  color: black;
+  font-size: 9px;
+}
+.calendar_date_select td,
+.calendar_date_select th { font-size:12px; width: 24px; height: 21px; vertical-align: middle; }
+.calendar_date_select td div { color: #000; }
+.calendar_date_select td div.other { color: #ccc; }
+.calendar_date_select td.selected div { color:white; }
+.calendar_date_select td.selected { background-color:#777; }
+.calendar_date_select td:hover { background-color:#ccc; }
+.calendar_date_select td.today { border: 1px dashed #999; }
+.calendar_date_select td.disabled div { color: #e6e6e6; }
+*/
+
+.calendar_date_select { background-color: #0f2c15; }
+.cds_header, .cds_footer { text-align: center; line-height: 20px; } 
+.cds_header select.month { width: 60px; }
+.cds_body { border-spacing: 0; border-collapse: collapse; }
+.cds_body th, .cds_body td { width: 20px; vertical-align: middle; text-align: center; line-height: 20px; }
+
+.cds_body td:hover { background-color: #153C1D; }
+
+.cds_body div.other { color: #819084; }
+
+.cds_body td.disabled,
+.cds_body td.disabled:hover,
+.cds_body td.disabled  div.other,
+.cds_body td.disabled:hover div.other { color: #374f3c; background: transparent; }
+
+.cds_body td.selected { color: #0E2C14; background-color: #fff; }
+
+.cds_body td.unavailable,
+.cds_body td.unavailable div.other { color: #374f3c; }
+
+.cds_body td.unavailable.selected,
+.cds_body td.unavailable.selected div.other { background-color: #c5cdc7; }
+
+.cds_header a.prev { float:left; text-decoration: none; width: 20px; text-align: center; }
+.cds_header a.next { float:right; text-decoration: none; width: 20px; text-align: center; }
+.cds_header .close { display: none; }
+.cds_footer { font-size: 14px; height: 4em; }

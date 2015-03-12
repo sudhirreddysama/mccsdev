@@ -1,0 +1,90 @@
+<%= partial 'nav' %>
+<script type="text/javascript">
+	
+	var date_change;	
+	
+	(function($) {
+	
+		date_change = function(e) {
+			from = $('#report_from_date').val();
+			to = $('#report_to_date').val();
+			given_by = []
+			
+			if($('#given_by_1:checked')[0]) given_by.push(1)
+			if($('#given_by_2:checked')[0]) given_by.push(2)
+			if($('#given_by_3:checked')[0]) given_by.push(3)
+			
+			if(from && !to) {
+				to = from;
+				$('#report_to_date').val(from);
+			}
+			if(from && to) {
+				$('#report_exam_ids').addClass('busy-bg');
+				$.ajax({
+					url: <%= url_for(:action => :attendance_autocomplete).to_json %>,
+					data: {
+						from_date: from,
+						to_date: to,
+						given_by: given_by
+					},
+					complete: function() {
+						$('#report_exam_ids').removeClass('busy-bg');
+					},
+					success: function(data, status, xhr) {
+						$('#report_exam_ids').replaceWith(data);
+					},
+					error: function() {
+						alert('Error loading exam options.');
+					}
+				});
+			}
+		}
+	
+	})(jQuery);
+
+</script>
+<%= partial 'errors', :errors => @errors %>
+<% table_form_for(:report) { |f| %>
+	<%= f.tr_calendar_date_select :from_date, :label => 'From Date', :onchange => 'date_change()', :req => true %>
+	<%= f.tr_calendar_date_select :to_date, :label => 'To Date', :onchange => 'date_change()', :help => 'Select a from and to date to view available exams.', :req => true %>
+	<tr>
+		<th>State/Local:</th>
+		<td>
+			<% Const::GIVEN_BY.each { |g| %>
+				<label style="display: block;"><%= check_box_tag 'report[given_by][]', g[1], @report.given_by.include?(g[1]), :id => "given_by_#{g[1]}", :onchange => 'date_change()' %> <%= h g[0] %></label>
+			<% } %>
+		</td>
+	</tr>
+	<tr>
+		<th>Exams: <span class="req">*</span></th>
+		<td>
+			<%= partial 'attendance_exam_ids' %>
+			<div>Ctrl/Shift click to select multiple. If no exam is selected, all will be included.</div>
+		</td>
+	</tr>
+	<%= f.tr_submit 'Generate Statistics Report', :name => 'statistics' %>
+	<%= f.tr_submit 'Generate Exams/Exam Sites Report', :name => 'exam_sites' %>
+	<%= f.tr_submit 'Generate Cross Filing Report', :name => 'cross_filing' %>
+	<%= f.tr_submit 'Generate Contact Preference Report', :name => 'contact_preference' %>
+	<%= f.tr_submit 'Generate Veterans Credit Report', :name => 'veterans' %>
+	<tr>
+		<th></th>
+		<td>
+			<label style="display: block;"><%= f.check_box :separate_exams %> Separate list for each exam?</label>
+			<label style="display: block;"><%= f.check_box :only_attended %> Include only people that took the exam?</label>
+			<label style="display: block;"><%= f.check_box :full_ssn %> Include full SSN? If left unchecked only last 4 digits are displayed.</label>
+			<label style="display: block;"><%= f.check_box :only_active %> Only show &quot;ACTIVE&quot; applicants?</label>
+            <label style="display: block;"><%= f.check_box :only_multiple %> Only show Candidates that took multiple tests?</label>
+
+        </td>
+	</tr>
+	<%= f.tr_submit 'Generate Attendance Report', :name => 'attendance' %>
+	<%= f.tr_submit 'Generate Performance Test Report (PDF)', :name => 'performance' %>
+	<%= f.tr_submit 'Generate Performance Test Report (EXCEL)', :name => 'performance_excel' %>	
+<% } %>
+
+<script type="text/javascript">
+	
+	date_change();
+	
+</script>

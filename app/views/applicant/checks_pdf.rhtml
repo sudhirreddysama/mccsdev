@@ -1,0 +1,56 @@
+<html>
+	<head>
+	<style type="text/css">
+		html, body { padding: 0; margin: 0; height: 100%; width: 100%; }
+		body, td, th, input, select, textarea { font: 13px/1.1 sans-serif; }	
+		table { border-collapse: collapse; width: 100%; }
+		th, td { text-align: left; padding: 3px; }
+		th { border-top: 1px solid #000; border-bottom: 1px solid #000; font-weight: bold; }
+	</style>
+	</head>
+	<body>
+		<h3>
+			<% if @mode == 'paid' %>
+				Deposit Slip
+				<% @objs = @paid %>
+			<% else %>
+				List of Unapproved Payments
+				<% @objs = @unpaid %>
+			<% end %>
+			<%= @report.created_at.dt0? %>
+		</h3>
+		<% tot = 0 %>
+		<table width="100%">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>SSN</th>
+					<th>Exam</th>
+					<th>Cost</th>
+					<th>Date</th>
+					<th>Paid&nbsp;By</th>
+					<th>Check&nbsp;#</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @objs.each { |o| %>
+					<% tot += o.exam.fee %>
+					<tr>
+						<td><%= h o.person.last_name %>, <%= h o.person.first_name %></td>
+						<td><%= h o.person.ssn %></td>
+						<td><%= h o.exam.exam_no %></td>
+						<td>$<%= h o.exam.fee.n2? %></td>
+						<td><%= o.submitted_at.d0? %></td>
+						<td><%= Const::PAID_BY.rassoc(o.paid_by)[0] rescue nil %></td>
+						<td><%= h o.check_no %></td>
+					</tr>
+				<% } %>
+				<tr>
+					<td colspan="3" style="text-align: right; font-weight: bold;">TOTAL:&nbsp;&nbsp;</td>
+					<td colspan="4">$<%= tot.n2? %> (<%= @objs.size %>)</td>
+				</tr>
+			</tbody>
+		</table>
+		<p style="font-weight: bold;">*** END OF REPORT ***</p>
+	</body>
+</html>

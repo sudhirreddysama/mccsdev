@@ -1,0 +1,131 @@
+<%
+
+keys = %w{w_t w_a w_d w_e w_i w_m w_f w_p w_z w_u a_t a_a a_d a_e a_i a_m a_f a_p a_z a_u b_t b_a b_d b_e b_i b_m b_f b_p b_z b_u i_t i_a i_d i_e i_i i_m i_f i_p i_z i_u h_t h_a h_d h_e h_i h_m h_f h_p h_z h_u}
+
+tot = {}
+keys.each { |k| tot[k] = 0 }
+
+
+%>
+<html>
+	<head>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th { font: 10px/14px Trebuchet MS, Verdana, Arial, sans-serif; }
+			
+			table { border-collapse: collapse; width: 100%; }
+			td, th { vertical-align: top; text-align: center; padding: 2px; border: 1px solid #aaa; }
+			
+			th { font-weight: bold; }
+			
+		</style>
+	</head>
+	<body>
+		<div style="float: right;"><%= Time.now.d0? %></div>
+		<h3>
+			Demographics Report<br />
+			From <%= @from_date.d0? %> to <%= @to_date.d0? %>
+		</h3>
+		<p>
+			Key: T: Total, A: Approved, D: Disapproved, E: Eligible, I: Ineligible, M: Male, F: Female, P: Pass, X: Fail
+		</p>
+		<table>
+			<% @objs.each_hash { |o| %>
+				<%
+				
+					keys.each { |k| o[k] = o[k].to_i;  }
+					
+					#o.w_t = o.w_a + o.w_d + o.w_e + o.w_i
+					#o.a_t = o.a_a + o.a_d + o.a_e + o.a_i
+					#o.b_t = o.b_a + o.b_d + o.b_e + o.b_i
+					#o.i_t = o.i_a + o.i_d + o.i_e + o.i_i
+					#o.h_t = o.h_a + o.h_d + o.h_e + o.h_i
+					
+					keys.each { |k| tot[k] += o[k] }
+				
+				%>
+				<tr>
+					<th colspan="35"><%= h o.job_name %></th>
+				</tr>
+					<tr>
+						<td colspan="7">White</td>
+						<td colspan="7">Asian</td>
+						<td colspan="7">Black</td>
+						<td colspan="7">American Indian</td>
+						<td colspan="7">Hispanic</td>
+					</tr>
+				</tr>
+				<tr>
+					<% %w{w a b i h}.each { |r| %>
+						<% %w{t a d e i p z}.each { |s| %>
+                          <% if s.upcase!="Z" %>
+							<td width="3%"><%= s.upcase %></td>
+                          <% else %>
+                              <td width="3%">X</td>
+
+                         <% end %>
+						<% } %>
+					<% } %>
+				</tr>
+				<tr>
+					<% %w{w a b i h}.each { |r| %>
+						<% %w{t a d e i p z}.each { |s| v = o["#{r}_#{s}"] %>
+							<td><%= v > 0 ? nwp(v) : '&nbsp;' %></td>
+						<% } %>
+					<% } %>
+				</tr>
+				<tr>
+					<% %w{w a b i h}.each { |r| %>
+						<td colspan="7">
+							<% m = o["#{r}_m"]; f = o["#{r}_f"]; u = o["#{r}_u"]; %>
+							M: <%= m > 0 ? nwp(m) : '&nbsp;' %>&nbsp;&nbsp;&nbsp;
+							F: <%= f > 0 ? nwp(f) : '&nbsp;' %>&nbsp;&nbsp;&nbsp;
+							<% if false %>U: <%= u > 0 ? nwp(u) : '&nbsp;' %><% end %>
+						</td>
+					<% } %>
+				</tr>
+			<% } %>
+			<tr>
+				<th colspan="35">GRAND TOTALS</th>
+			</tr>
+				<tr>
+					<td colspan="7">White</td>
+					<td colspan="7">Asian</td>
+					<td colspan="7">Black</td>
+					<td colspan="7">American Indian</td>
+					<td colspan="7">Hispanic</td>
+				</tr>
+			</tr>
+			<tr>
+				<% %w{w a b i h}.each { |r| %>
+					<% %w{t a d e i p z}.each { |s| %>
+                      <% if s.upcase!="Z" %>
+                          <td width="3%"><%= s.upcase %></td>
+                      <% else %>
+                          <td width="3%">X</td>
+
+                      <% end %>
+					<% } %>
+				<% } %>
+			</tr>
+			<tr>
+				<% %w{w a b i h}.each { |r| %>
+					<% %w{t a d e i p z}.each { |s| v = tot["#{r}_#{s}"] %>
+                           <td width="3%"><%=v %></td>
+                     	<% } %>
+				<% } %>
+			</tr>
+			<tr>
+				<% %w{w a b i h}.each { |r| %>
+					<td colspan="7">
+						<% m = tot["#{r}_m"]; f = tot["#{r}_f"]; u = tot["#{r}_u"]; %>
+						M: <%= m > 0 ? nwp(m) : '&nbsp;' %>&nbsp;&nbsp;&nbsp;
+						F: <%= f > 0 ? nwp(f) : '&nbsp;' %>&nbsp;&nbsp;&nbsp;
+						<% if false %>U: <%= u > 0 ? nwp(u) : '&nbsp;' %><% end %>
+					</td>
+				<% } %>
+			</tr>
+		</table>
+	</body>
+</html>

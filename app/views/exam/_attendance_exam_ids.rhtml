@@ -1,0 +1,3 @@
+<% fields_for(:report) { |f| %>
+	<%= f.select :exam_ids, @options || [], {}, :multiple => true, :style => 'width: 600px; height: 100px;' %>
+<% } %>

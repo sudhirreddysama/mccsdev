@@ -1,0 +1,27 @@
+<%= partial 'nav' %>
+<%= partial 'errors', :errors => @errors %>
+<% if @objs.empty? %>
+	<div class="marg">All applications submitted for this web post have been assigned to an exam.</div>
+<% else %>
+	<div class="marg">This web post has applications that have not yet been assigned to an exam. Review the applications below then
+	specify an exam no. to assign them.</div>
+	<%= form_tag %>
+	<table class="form">
+		<tr>
+			<th>Applicants:</th>
+			<td>
+				<% @objs.each { |o| %>
+					<div><%= link_to "#{o.person.last_name}, #{o.person.first_name}", {:controller => :applicant, :action => :view, :id => o.id}, :target => '_blank' %></div>
+				<% } %>
+			</td>
+		</tr>
+		<tr>
+			<th>Exam No.:<span class="req">*</span></th>
+			<td><%= text_field_tag :exam_no %></td>
+		</tr>
+		<tr>
+			<th></th>
+			<td><%= submit_tag 'Move Applications To Exam' %></td>
+		</tr>
+	</table>
+<% end %>

@@ -1,0 +1,359 @@
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>SSN:</label>
+					<%= h o.ssn %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.label %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Town:</label>
+					<%= h o.town.name if o.town %>
+				</td>
+				<td>
+					<label>Village:</label>
+					<%= h o.village.name if o.village %>
+				</td>
+				<td>
+					<label>County:</label>
+					<%= h o.county.name if o.county %>
+				</td>
+				<td>
+					<label>School District:</label>
+					<%= h o.school_district.name if o.school_district %>
+				</td>
+				<td>
+					<label>Fire District:</label>
+					<%= h o.fire_district.name if o.fire_district %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Home Phone:</label>
+					<%= h phone_format(o.home_phone) %>
+				</td>
+				<td>
+					<label>Work Phone:</label>
+					<%= h phone_format(o.work_phone) %>
+				</td>
+				<td>
+					<label>Cell Phone:</label>
+					<%= h phone_format(o.cell_phone) %>
+				</td>
+				<td>
+					<label>Fax:</label>
+					<%= h phone_format(o.fax) %>
+				</td>
+				<td>
+					<label>Email:</label>
+					<%= mail_to o.email unless o.email.blank? %>
+				</td>
+				<td>
+					<label>Contact Via:</label>
+					<%= o.contact_via %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+		
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>DOB:</label>
+					<%= o.date_of_birth.d0? %>
+				</td>
+				<td>
+					<label>Gender:</label>
+					<%= h o.gender %>
+				</td>
+				<td>
+					<label>Race:</label>
+					<%= h o.race %>
+				</td>
+				<td>
+					<label>Veteran:</label>
+					<%= h o.veteran %>
+					<% if o.veteran == 'VETERAN' || o.veteran == 'DISABLED VET' %>
+						- <%= o.veteran_verified ? 'VERIFIED' : 'UNVERIFIED' %>
+						- <%= o.veteran_used ? 'USED' : 'UNUSED' %>
+					<% end %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>		
+
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Mailing Address:</label>
+					<%= h o.full_mailing_address(', ') %>
+				</td>
+				<td>
+					<label>Mailing County:</label>
+					<%= h o.mailing_county %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>			
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Res. Diff.?</label>
+					<%= yn o.residence_different %>
+				</td>
+				<td>
+					<label>Residence Address:</label>
+					<%= h o.full_residence_address(', ') %>
+				</td>
+				<td>
+					<label>Residence County:</label>
+					<%= h o.residence_county %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>			
+
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Comments:</label>
+					<%= nl2br_h o.comments %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Special Accommodations:</label>
+					<% if o.sabbath_observer %>
+						SABBATH OBSERVER
+						<% if !o.sabbath_observer_docs %>
+							(NO DOC.)
+						<% end %>&nbsp;&nbsp;&nbsp;&nbsp;
+					<% end %>
+					<% if !o.special_accommodations.blank? %>
+						<%= h o.special_accommodations %>
+						<% if !o.special_accommodations_docs %>
+							(NO DOC.)
+						<% end %>
+					<% end %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Other:</label>
+					<%= h o.other %>
+				</td>
+				<td>
+					<label>Print Other on List:</label>
+					<%= yn o.print_other_on_list %>
+				&nbsp;</td>				
+			</tr>
+		</table>
+	</div>	
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Additional Info:</label>
+					<% infos = o.app_infos.to_a %>
+					<% if infos.empty? %>
+						&nbsp;
+					<% else %>
+						<% infos.each { |i| %>
+							<div>
+								<% if i.app_info_type %>
+									<%= h i.app_info_type.description %>&nbsp;&nbsp;&bull;&nbsp;&nbsp;
+								<% end %>
+								<%= h i.info %>
+							</div>
+						<% } %>
+					<% end %>
+				</td>
+			</tr>
+		</table>
+	</div>	
+
+	
+</div>
+
+<h2>Applications</h2>
+
+<% apps = o.applicants.find(:all, :order => 'applicants.submitted_at desc') %>
+
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">View</th>
+			<th width="1%">ID</th>
+			<th width="1%">Submitted</th>
+			<th width="1%">Status</th>
+			<th width="1%">Exam No.</th>
+      <th width="1%">Exam Date</th>
+      <th width="1%">Est. Date</th>
+      <th width="1%">Exp. Date</th>
+			<th width="92%">Title</th>
+			</tr>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% apps.each { |a| %>
+			<% exam = a.exam(:include => :applicants) %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= a.id %>">
+				<td class="nobr">
+					<%= link_to 'Application', :controller => :applicant, :action => :view, :id => a.id %>
+					<% if a.web_applicant_id %>
+						<a href="https://www.monroecounty.gov/hrapply/applications/general/<%= a.web_applicant_id %>" target="_blank">(web)</a>
+					<% end %> &bull;
+					<%= link_to 'Exam', :controller => :exam, :action => :view, :id => a.exam_id if a.exam %>
+				</td>
+				<td><%= a.id %></td>
+				<td class="nobr"><%= a.submitted_at.d0? %></td>
+				<td class="nobr"><% if a.app_status %><span class="<% if a.app_status.eligible == 'N' %>req<% end %>"><%= h a.app_status.name %></span><% end %></td>
+				<td class="nobr"><%= h exam.exam_no if exam %></td>
+        <td class="nobr"><%= exam.given_at.d0? if exam %></td>
+        <td class="nobr"><%= exam.established_date.d0? if exam %></td>
+        <td class="nobr">
+					<% if exam %>
+						<% if exam.valid_until %>
+			        <span class="<% if exam.valid_until < Time.now.to_date %>req<% end %>"><%= exam.valid_until.d0? %></span>
+			      <% else %>
+			      	<% if exam.given_at && exam.given_at < Time.now.to_date && !exam.applicants.to_a.find { |a| a.app_status && a.app_status.eligible != 'N' } %> <span class="req">(NO LIST)</span><% end %>
+			      <% end %>
+			    <% end %>
+			  </td>
+				<td><%= h a.exam.title if a.exam %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
+
+<h2>Performance Tests</h2>
+
+<% ptaken = o.taken_perfs.find(:all, :order => 'taken_perfs.date_taken desc', :include => [:exam, :perf_code, :perf_test]) %>
+
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">ID</th>
+			<th width="1%">Status</th>
+			<th width="1%">Taken</th>
+			<th width="32%">Test</th>
+			<th width="31%">Note</th>
+			<th width="1%">Exam&nbsp;No.</th>
+			<th width="31%">Exam Title (click to view exam)</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% ptaken.each { |pt| %>
+			<% p = pt.perf_test %>
+			<% pc = pt.perf_code %>
+			<% e = pt.exam %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= pt.id %>">
+				<td><%= pt.id %></td>
+				<td class="nobr"><%= h pc.label if pc %></td>
+				<td class="nobr"><%= pt.date_taken.d0? %></td>
+				<td><%= p.name if p %></td>
+				<td><%= h pt.notes %></td>
+				<td class="nobr"><%= h e.exam_no if e %></td>
+				<td><%= link_to(e.title, :controller => :exam, :action => :view, :id => e.id) if e %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
+
+<h2>Certifications</h2>
+
+<% certs = o.cert_applicants.find(:all, :order => 'certs.certification_date desc', :include => [:cert, :cert_code]) %>
+
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">ID</th>
+			<th width="1%" class="nobr">Cert. Date</th>
+			<th width="1%">Action</th>
+			<th width="38%">Title (click to view)</th>
+			<th width="1%">Exam&nbsp;No.</th>
+			<th width="29%">Exam Title</th>
+			<th width="29%">Comment</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% certs.each { |ca| %>
+			<% c = ca.cert %>
+			<% co = ca.cert_code %>
+			<% e = c.exam %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= ca.id %></td>
+				<td class="nobr"><%= c.certification_date.d0? if c %></td>
+				<td class="nobr"><%= co.label if co %></td>
+				<td><%= link_to(c.title, :controller => :cert, :action => :view, :id => c.id) %></td>
+				<td class="nobr"><%= h e.exam_no if e %></td>
+				<td><%= h e.title if e %></td>
+				<td><%= h ca.comments %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
+
+
+
+
+
+
+<h2>Change Log</h2>
+<% if @obj.person_updates.empty? %>
+	<div class="marg">Nothing found.</div>
+<% else %>
+	<table class="dg">
+		<thead>
+			<tr>
+				<th width="1%">Timestamp</th>
+				<th width="1%">User</th>
+				<th>Activity</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @obj.person_updates.each { |u| %>
+				<tr class="<%= cycle 'odd', 'even' %>">
+					<td class="nobr"><%= u.created_at.dt0? %></td>
+					<td class="nobr"><%= u.user ? u.user.username : '---' %></td>
+					<td><%= u.text %></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+<% end %>

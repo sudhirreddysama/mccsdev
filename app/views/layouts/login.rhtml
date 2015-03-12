@@ -1,0 +1,16 @@
+<html>
+	<head>
+		<title>Please Login</title>
+		<%= stylesheet_link_tag 'style' %>
+	</head>
+	<body id="login-body">
+		<div id="login">
+			<% if flash[:notice] %>
+				<div class="notice">
+					<%= flash[:notice] %>
+				</div>
+			<% end %>
+			<%= yield %>
+		</div>
+	</body>
+</html>

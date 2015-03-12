@@ -1,0 +1,421 @@
+<% @job_opts = Job.find(:all, :order => 'jobs.name').collect { |j| [j.name, j.id] } %>
+<% if !@current_user.agency_level? || !@current_user.agency %>
+	<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name').collect { |a| [a.name, a.id] }, :label => 'Agency', :req => true, :include_blank => true %>
+<% end %>
+<% if !@current_user.agency_level? || !@current_user.department %>
+	<%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name').collect { |a| [a.name, a.id] }, :label => 'Department', :req => true, :include_blank => true %>
+<% end %>
+<tr>
+	<th>Employee: <span class="req">*</span></th>
+	<td>
+		<%= partial 'pop_field', :id => 'obj_employee_label', :text => (@obj.employee ? @obj.employee.label : ''), :name => 'obj[employee_id]', :id => 'obj_employee_id', :url => popup_url({:controller => :employee}), :value => @obj.employee_id %>
+		<div>Click the field above to open a popup where you can select an existing employee/position. This will autofill the information below.</div>
+	</td>
+</tr>
+<tr>
+	<th>Name: <span class="req">*</span></th>
+	<td class="subform" style="padding-bottom: 5px;">
+		<table>
+			<tr>
+				<th>First: <span class="req">*</span></th>
+				<th>Last: <span class="req">*</span></th>
+			</tr>
+			<tr>
+				<td><%= f.text_field :first_name, :size => '30', :class => 'ucase' %></td>
+				<td><%= f.text_field :last_name, :size => '30', :class => 'ucase' %></td>
+			</tr>
+		</table>
+	</td>
+</tr><%= f.tr_text_field :retirement_no, :label => 'Retirement No.', :size => '30', :class => 'ucase' %>
+<%= f.tr_select :present_title_id, @job_opts, :include_blank => true, :label => 'Present Title' %>
+<%= f.tr_check :present_provisional, :label => 'Provisional?', :text => 'Check here if current title is provisional' %>
+<%= f.tr_calendar_date_select :effective_date, :label => 'Effective Date', :class => 'ucase' %>
+<tr>
+	<th>Certified List:</th>
+	<td>
+		<%= partial 'pop_field', :id => 'obj_cert_label', :text => (@obj.cert ? @obj.cert.label : ''), :name => 'obj[cert_id]', :id => 'obj_cert_id', :url => popup_url({:controller => :cert}), :value => @obj.cert_id %>
+		<div>If this employment change is the result of a certified list, Click the field above to open a popup where you can select the certified list.</div>
+	</td>
+</tr>
+<tr>
+	<th colspan="2" style="font-size: 110%; padding-top: 10px; padding-bottom: 10px;">CHECK ALL APPROPRIATE CHANGES:</th>
+</tr>
+<tr style="border-top: 1px solid #888;">
+	<th><label><%= f.check_box :change_demotion %> Demotion:</label></th>
+	<td class="subform" style="padding-bottom: 5px;">
+		<div id="demotion">
+			<table>
+				<tr>
+					<th>New Title:</th>
+				</tr>
+				<tr>
+					<td><%= f.select :demotion_title_id, @job_opts, :include_blank => true %></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<th>Salary:</th>
+					<th>Per:</th>
+				</tr>
+				<tr>
+					<td><%= f.text_field :demotion_salary, :size => '20', :class => 'ucase' %></td>
+					<td><%= f.select :demotion_salary_per, Const::WAGE_UNITS, :include_blank => true %></td>
+				</tr>
+			</table>
+		</div>
+	</td>
+</tr>
+<tr style="border-top: 1px solid #888;">
+	<th><label><%= f.check_box :change_loa %> Leave of Absence:</label></th>
+	<td class="subform" style="padding-bottom: 5px;">
+		<div id="loa">
+			<table>
+				<tr>
+					<th>Reason:</th>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr>
+					<td><%= f.text_field :loa_reason, :size => '50', :class => 'ucase' %></td>
+					<td><label><%= f.radio_button :loa_with_pay, true %> With Pay</label></td>
+					<td><label><%= f.radio_button :loa_with_pay, false %> Without Pay</label></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<th>From:</th>
+					<th>To:</th>
+				</tr>
+				<tr>
+					<td><%= f.calendar_date_select :loa_date_from, :class => 'ucase' %></td>
+					<td><%= f.calendar_date_select :loa_date_to, :class => 'ucase' %></td>
+				</tr>
+			</table>		
+		</div>
+	</td>
+</tr>
+<tr style="border-top: 1px solid #888;">
+	<th><label><%= f.check_box :change_name %> Name Change:</label></th>
+	<td class="subform" style="padding-bottom: 5px;">
+		<div id="name">
+			<table>
+				<tr>
+					<th>From:</th>
+					<th>To:</th>
+				</tr>
+				<tr>
+					<td><%= f.text_field :name_change_from, :size => '50', :class => 'ucase' %></td>
+					<td><%= f.text_field :name_change_to, :size => '50', :class => 'ucase' %></td>
+				</tr>
+			</table>
+		</div>
+	</td>
+</tr>
+<tr style="border-top: 1px solid #888;">
+	<th><label><%= f.check_box :change_perm_appt %> Perm. CS Appt.:</label></th>
+	<td class="subform" style="padding-bottom: 5px;">
+		<div id="perm_appt">
+			<table>
+				<tr>
+					<th>List No.:</th>
+				</tr>
+				<tr>
+					<td><%= f.text_field :perm_appt_list_no, :size => '20', :class => 'ucase' %></td>
+				</tr>
+				<tr>
+					<th>Link to the certified list at the top of this form &amp; attach all supporting documentation**</th>
+				</tr>
+			</table>
+		</div>
+	</td>
+</tr>
+<tr style="border-top: 1px solid #888;">
+	<th><label><%= f.check_box :change_promotion %> Promotion:</label></th>
+	<td class="subform" style="padding-bottom: 5px;">
+		<div id="promotion">
+			<table>
+				<tr>
+					<th>New Title:</th>
+				</tr>
+				<tr>
+					<td><%= f.select :promotion_new_title_id, @job_opts, :include_blank => true %></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<th>Salary/Wage:</th>
+					<th>Per:</th>
+					<th>List No.:</th>
+				</tr>
+				<tr>
+					<td><%= f.text_field :promotion_salary, :size => '20', :class => 'ucase' %></td>
+					<td><%= f.select :promotion_salary_per, Const::WAGE_UNITS, :include_blank => true %></td>
+					<td><%= f.text_field :promotion_list_no, :size => '20', :class => 'ucase' %></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<th colspan="5">Class:</th>
+				</tr>
+				<tr>
+					<td><label><%= f.radio_button :promotion_class, 'Competitive' %> Competitive</label></td>
+					<td><label><%= f.radio_button :promotion_class, 'Non-Competitive' %> Non-Competitive</label></td>
+					<td><label><%= f.radio_button :promotion_class, 'Labor' %> Labor</label></td>
+					<td><label><%= f.radio_button :promotion_class, 'Exempt' %> Exempt</label></td>
+					<td><label><%= f.radio_button :promotion_class, 'Unclassified' %> Unclassified</label></td>
+				</tr>
+			</table>		
+			<table>
+				<tr><th>Link to the certified list at the top of this form &amp; attach all supporting documentation**</th></tr>
+			</table>
+		</div>
+	</td>
+</tr>
+<tr style="border-top: 1px solid #888;">
+	<th><label><%= f.check_box :change_salary %> Salary Change:</label></th>
+	<td class="subform" style="padding-bottom: 5px;">
+		<div id="salary">
+			<table>
+				<tr>
+					<th>From:</th>
+					<th>Per:</th>
+					<th>To:</th>
+					<th>Per:</th>
+				</tr>
+				<tr>
+					<td><%= f.text_field :salary_change_from, :size => '20', :class => 'ucase' %></td>
+					<td><%= f.select :salary_change_from_per, Const::WAGE_UNITS, :include_blank => true %></td>
+					<td><%= f.text_field :salary_change_to, :size => '20', :class => 'ucase' %></td>
+					<td><%= f.select :salary_change_to_per, Const::WAGE_UNITS, :include_blank => true %></td>
+				</tr>
+			</table>
+		</div>
+	</td>
+</tr>
+<tr style="border-top: 1px solid #888;">
+	<th><label><%= f.check_box :change_second_provisional %> 2nd Prov. Appt.:</label></th>
+	<td class="subform" style="padding-bottom: 5px;">
+		<div id="second_provisional">
+			<table>
+				<tr>
+					<th>Date:</th>
+				</tr>
+				<tr>
+					<td><%= f.calendar_date_select :second_provisional_date, :class => 'ucase' %></td>
+				</tr>
+				<tr>
+					<th>Attach an updated, current CS Application**</th>
+				</tr>
+			</table>
+		</div>
+	</td>
+</tr>
+<tr style="border-top: 1px solid #888;">
+	<th><label><%= f.check_box :change_separation %> Separation:</label></th>
+	<td class="subform" style="padding-bottom: 5px;">
+		<div id="separation">
+			<table>
+				<tr>
+					<th>Date:</th>
+				</tr>
+				<tr>
+					<td><%= f.calendar_date_select :separation_date, :class => 'ucase' %></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<th colspan="6">Reason:</th>
+				<tr>
+					<td><label><%= f.radio_button :separation_reason, 'Deceased' %> Deceased</label></td>
+					<td><label><%= f.radio_button :separation_reason, 'Layoff' %> Layoff</label></td>
+					<td><label><%= f.radio_button :separation_reason, 'Program Ended' %> Program Ended</label></td>
+					<td><label><%= f.radio_button :separation_reason, 'Resignation' %> Resignation</label></td>
+					<td><label><%= f.radio_button :separation_reason, 'Retirement' %> Retirement</label></td>
+					<td><label><%= f.radio_button :separation_reason, 'Termination' %> Termination</label></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td><label><%= f.check_box :separation_provisional %> Check here if separating employee is currently provisional</label></td>
+				</tr>
+			</table>
+		</div>
+	</td>
+</tr>
+<tr style="border-top: 1px solid #888;">
+	<th><label><%= f.check_box :change_status %> Status Change:</label></th>
+	<td class="subform" style="padding-bottom: 5px;">
+		<div id="status">
+			<table>
+				<tr>
+					<th colspan="6">New Status:</th>
+				</tr>
+				<tr>
+					<td><label><%= f.radio_button :status_type, 'Permanent' %> Permanent</label></td>
+					<td><label><%= f.radio_button :status_type, 'Contigent-Permanent' %> Contigent-Permanent</label></td>
+					<td><label><%= f.radio_button :status_type, 'Provisional' %> Provisional</label></td>
+					<td><label><%= f.radio_button :status_type, 'Temporary' %> Temporary*</label></td>
+					<td><label><%= f.radio_button :status_type, 'PT to FT' %> PT to FT</label></td>
+					<td><label><%= f.radio_button :status_type, 'FT to PT' %> FT to PT</label></td>
+					<td><label><%= f.radio_button :status_type, 'Pending NYS Approval' %> Pending NYS Approval</label></td>
+				</tr>
+				<tr>
+					<th colspan="6">
+						If provisional, attach a CS Application**
+					</th>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<th colspan="4">*If Temporary, Select One:</th>
+				</tr>
+				<tr>
+					<td><label><%= f.radio_button :status_temporary_type, 'Sub' %> Sub</label></td>
+					<td><label><%= f.radio_button :status_temporary_type, 'On-Call' %> On-Call</label></td>
+					<td><label><%= f.radio_button :status_temporary_type, 'Seasonal' %> Seasonal</label></td>
+					<td><label><%= f.radio_button :status_temporary_type, 'Filling in for Leave of Absence' %> Filling in for Leave of Absence</label></td>
+				</tr>
+			</table>		
+		</div>
+	</td>
+</tr>
+<tr style="border-top: 1px solid #888;">
+	<th><label><%= f.check_box :change_suspension %> Suspension:</label></th>
+	<td class="subform" style="padding-bottom: 5px;">
+		<div id="suspension">
+			<table>
+				<tr>
+					<th>Reason:</th>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr>
+					<td><%= f.text_field :suspension_reason, :size => '50', :class => 'ucase' %></td>
+					<td><label><%= f.radio_button :suspension_with_pay, true %> With Pay</label></td>
+					<td><label><%= f.radio_button :suspension_with_pay, false %> Without Pay</label></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<th>From Date:</th>
+					<th>To Date:</th>
+				</tr>
+				<tr>
+					<td><%= f.calendar_date_select :suspension_from, :class => 'ucase' %></td>
+					<td><%= f.calendar_date_select :suspension_to, :class => 'ucase' %></td>
+				</tr>
+			</table>
+		</div>
+	</td>
+</tr>
+<tr style="border-top: 1px solid #888; border-bottom: 1px solid #888;">
+	<th><label><%= f.check_box :change_title %> Title Change:</label></th>
+	<td class="subform" style="padding-bottom: 5px;">
+		<div id="title">
+			<table>
+				<tr>
+					<th>New Title:</th>
+				</tr>
+				<tr>
+					<td><%= f.select :title_change_new_title_id, @job_opts, :include_blank => true %></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<th>List No.:</th>
+				</tr>
+				<tr>
+					<td><%= f.text_field :title_change_list_no, :size => '20', :class => 'ucase' %></td>
+				</tr>
+				<tr>
+					<th>Link to the certified list at the top of this form &amp; attach all supporting documentation**</th>
+				</tr>
+			</table>		
+			<table>
+				<tr>
+					<th colspan="">Class:</th>
+				</tr>
+				<tr>
+					<td><label><%= f.radio_button :title_change_class, 'Competitive' %> Competitive</label></td>
+					<td><label><%= f.radio_button :title_change_class, 'Non-Competitive' %> Non-Competitive</label></td>
+					<td><label><%= f.radio_button :title_change_class, 'Labor' %> Labor</label></td>
+					<td><label><%= f.radio_button :title_change_class, 'Exempt' %> Exempt</label></td>
+					<td><label><%= f.radio_button :title_change_class, 'Unclassified' %> Unclassified</label></td>
+				</tr>
+			</table>
+		</div>
+	</td>
+</tr>
+<tr>
+	<th>Comments:</th>
+	<td>
+		<div>Use this field to add any additional comments to this form:</div>
+		<%= f.text_area :comments, :size => '60x5' %>
+	</td>
+</tr>
+<tr>
+	<th>**Attachments:</th>
+	<td>If you have selected a change which requires supporting documentation<br />
+	submit this form then use the documents tab to upload the documents.
+</tr>
+
+<script type="text/javascript">
+
+	(function($) {
+		var sections = [
+			'demotion',
+			'loa',
+			'name',
+			'perm_appt',
+			'promotion',
+			'salary',
+			'second_provisional',
+			'separation',
+			'status',
+			'suspension',
+			'title'
+		]
+		for(var i = 0; i < sections.length; i++) {
+			var s = sections[i];
+			var tgl = function(check, section) {
+				section[check.is(':checked') ? 'show' : 'hide']();
+			}
+			var c = $('#obj_change_' + s);
+			c[0]._section = '#' + s;
+			c.change(function(e) {
+				tgl($(this), $(this._section));
+			});
+			tgl(c, $(c[0]._section));
+		}
+		var employee_id = $('#obj_employee_id');
+		var employee_id_text = $('#obj_employee_id_text');
+		employee_id.change(function(e) {
+			var v = employee_id.val();
+			if(v) {
+				employee_id_text.addClass('busy-bg');
+				$.ajax({
+					url: '<%= url_for :controller => "employee", :action => "employee_data" %>/' + v,
+					data: {id: v},
+					dataType: 'json',
+					complete: function() {
+						employee_id_text.removeClass('busy-bg');
+					},
+                    success: function(data, status, xhr) {
+						if(data) {
+							$('#obj_first_name').val(data.first_name);
+							$('#obj_last_name').val(data.last_name);
+							$('#obj_present_title').val(data.job_name);
+							$('#obj_present_provisional')[0].checked = data.provisional;
+							$('#obj_name_change_from').val(data.last_name + ', ' + data.first_name);
+							$('#obj_salary_change_from').val(data.wage);
+                            $('#obj_retirement_no').val(data.pension_no);
+							set_select_value(data.wage_per, $('#obj_salary_change_from_per')[0]);
+							set_select_value(data.job_id, $('#obj_present_title_id')[0]);
+						}
+					}
+				});
+			}
+		});
+	})(jQuery);
+
+</script>

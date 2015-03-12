@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th { font: 11px/16px Trebuchet MS, Verdana, Arial, sans-serif; }
+			
+			table { border-collapse: collapse; width: 100%; }
+			td, th { vertical-align: top; text-align: left; padding: 2px; }
+			
+			.r { text-align: right; }
+			
+			th { font-weight: bold; border-top: 1px solid #000; border-bottom: 1px solid #000; }
+			
+		</style>
+	</head>
+	<body>
+		<h3>
+			Employee Listing as of <%= Time.now.d0? %>
+		</h3>
+		<table>
+			<tr style="border-top: 1px solid #000; border-bottom: 1px solid #000;">
+				<% @indent.times { %>
+					<td></td>
+				<% } %>
+				<th>Name</th>
+				<% unless @jobs %>
+					<th>Title</th>
+				<% end %>
+				<% unless @agencies %>
+					<th>Agency</th>
+				<% end %>
+				<% unless @departments%>
+					<th>Department</th>
+				<% end %>
+				<th>Cl</th>
+				<th>St</th>
+				<th>Tm</th>
+				<% if params[:show_ssn] %>
+					<th>SSN</th>
+				<% end %>
+				<% if params[:show_seniority_date] %>
+					<th>Sen.&nbsp;Date</th>
+				<% end %>
+				<% if params[:show_salary] %>
+					<th>Salary</th>
+				<% end %>
+				<% if params[:show_veteran] %>
+					<th>Veteran</th>
+				<% end %>
+				<% if params[:show_pension_no] %>
+					<th>Retirement&nbsp;No</th>
+				<% end %>
+			</tr>
+			<%= partial 'employees', :objs => @objs, :depth => 0, :labels => [] %>
+		</table>
+	</body>
+</html>

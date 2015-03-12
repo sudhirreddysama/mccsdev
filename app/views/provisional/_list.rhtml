@@ -1,0 +1,34 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%" class="nobr">ID</th>
+			<th width="31%">Name</th>
+			<th width="1%" class="nobr">2nd Prov.</th>
+			<th width="31%">Title</th>
+			<th width="1%" class="nobr">Exam Req.</th>
+			<th width="1%" class="nobr">Orig. Apt.</th>
+			<th width="1%" class="nobr">Exam Date</th>
+			<th width="1%" class="nobr">Ref. Date</th>
+			<th width="30%">Jurisdiction</th>
+			<th width="1%" class="nobr">P/F</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td class="nobr"><%= o.id %></td>
+				<td><%= link_to o.name, :action => :view, :id => o.id %></td>
+				<td class="nobr"><%= h o.second_provisional %></td>
+				<td><%= h o.title %></td>
+				<td class="nobr"><%= h o.exam_requested %></td>
+				<td class="nobr"><%= h o.original_appointment %></td>
+				<td class="nobr"><%= h o.exam_date %></td>
+				<td class="nobr"><%= h o.reference_date.d0? %></td>
+				<td><%= h o.jurisdiction %></td>
+				<td class="nobr"><%= h o.pass_fail %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

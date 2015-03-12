@@ -1,0 +1,12 @@
+<%= f.tr_calendar_date_select :as_of_date, :label => 'As Of Date', :req => true %>
+<% if !@current_user.agency_level? %>
+	<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name').collect { |a| [a.name, a.id] }, :include_blank => true, :req => true, :label => 'Agency' %>
+<% end %>
+<%= f.tr_text_area :notes, :label => 'Notes', :size => '60x5' %>
+<%= f.tr_file_field(
+	:file, 
+	:label => 'File', 
+	:req => @obj.new_record?, 
+	:help => link_to('Click here to download an example file in the correct format.', {:action => :example_file}, :target => '_blank') + 
+		' Include the column headers in the uploaded file. ' + 
+		(@obj.new_record? ? '' : ' Uploading a new file will overwrite the previously uploaded file.')) %>

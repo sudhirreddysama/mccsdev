@@ -1,0 +1,52 @@
+<%
+
+@exam_sites = ExamSite.find(:all, :order => 'name')
+@exam_site_options = @exam_sites.collect { |s| [s.name, s.id] }
+
+@exam_site_capacities = {}
+@exam_sites.each { |s|
+	@exam_site_capacities[s.id] = s.capacity
+}
+
+%>
+<%= hidden_field_tag 'obj[save_new_exam_sites]', 1 %>
+<thead>
+	<tr>
+		<th>Site Name</th>
+		<th>Capacity</th>
+		<th># To Assign</th>
+		<th>Zip Codes (comma separated, leave blank for all zip codes)</th>
+	</tr>
+</thead>
+<% @obj.new_exam_sites.each { |s| %>
+	<%= partial 'exam_site', :s => s %>
+<% } %>
+<% 3.times { %>
+	<%= partial 'exam_site', :s => {} %>
+<% } %>
+<tbody id="add-exam-site">
+	<td colspan="4">
+		<a href="#" onclick="add_exam_site(); return false;">Add Exam Site</a>
+	</td>
+</tbody>
+
+<script type="text/javascript">
+	
+	var exam_site_capacities = <%= @exam_site_capacities.to_json %>;
+	
+	var exam_site_html = <%= partial('exam_site', :s => {}).to_json %>;
+	
+	function add_exam_site() {
+		$('add-exam-site').insert({before: exam_site_html});
+	}
+	
+	function exam_site_change(select) {
+		var exam_site_id = $F(select);
+		var capacity = exam_site_capacities[exam_site_id];
+		if(capacity == undefined) capacity = '';
+		var tbody = $(select.parentNode.parentNode.parentNode);
+		tbody.down('td.capacity').innerHTML = capacity;
+		tbody.down('td.number-to-assign input').value = capacity;
+	}
+
+</script>

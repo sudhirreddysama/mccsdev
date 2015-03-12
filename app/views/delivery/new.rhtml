@@ -1,0 +1,16 @@
+<%= partial 'nav' %>
+<%= form_tag %>
+<table class="form">
+	<tr><th>Messages: <%= @messages.size %> ready to be delivered.</th></tr>
+	<tr>
+		<th>Only Deliver Letters Created By (select none to deliver all):</th>
+	</tr>
+	<tr>
+		<td><%= select_tag 'user_ids', options_for_select(User.find(:all, :order => 'name', :conditions => 'level in ("staff", "admin")').collect { |u| [u.name, u.id] }, [@current_user.id]), :multiple => true, :style => 'width: 200px; height: 100px;' %></td>
+	</tr>
+	<% if @messages.size > 0 %>
+		<tr><th><%= submit_tag 'Deliver Messages' %></th></tr>
+	<% end %>
+</table>
+</form>
+<%= partial 'message_list' %>

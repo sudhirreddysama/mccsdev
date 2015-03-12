@@ -1,0 +1,9 @@
+<% unless @current_user.agency_level? %>
+    <%= tab 'Attendance/Statistics', {:sc => nil, :sid => nil, :controller => :exam, :action => :attendance, :id => (params[:sid] || params[:id])} %>
+    <%= tab 'Provisionals', {:controller => :provisional}, {:action => :index, :id => nil, :sc => nil, :sid => nil}, :class => 'tab-provisional' %>
+<% end %>
+<%= tab 'Preferred/Military Lists', {:controller => :preferred_list}, {:action => :index, :id => nil, :sc => nil, :sid => nil}, :class => 'tab-preferred' %>
+
+
+
+

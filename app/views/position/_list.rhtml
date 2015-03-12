@@ -1,0 +1,28 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">Cl/Ty/Tm</th>
+			<th width="1%">Job&nbsp;No</th>
+			<th width="24%">Title</th>
+			<th width="23%">Name</th>
+			<th width="23%">Department</th>
+			<th width="24%">Agency</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td><%= o.id %></td>
+				<td class="nobr"><%= h o.job_class.code if o.job_class %>/<%= h o.job_type.code if o.job_type %>/<%= h o.full_or_part_time %></td>
+				<td class="nobr"><%= h o.job_no %></td>
+				<td><%= link_to o.title, :action => :view, :id => o.id %></td>
+				<td><%= h o.name %></td>
+				<td><%= h o.department.name if o.department %></td>
+				<td><%= h o.agency.name if o.agency %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th { font: 10px/15px Trebuchet MS, Verdana, Arial, sans-serif; }
+			
+			table { border-collapse: collapse; width: 100%; }
+			td, th { vertical-align: top; text-align: left; padding: 3px; }
+			
+			th { font-weight: bold; border-top: 1px solid #000; border-bottom: 1px solid #000; vertical-align: bottom;}
+			
+			.nobr { white-space: nowrap; }
+			
+		</style>
+	</head>
+	<body>
+		<div style="float: right;"><%= Time.now.d0? %></div>
+		<h3>
+			Non-Competitive Appointments Received Date From <%= @from_date.d0? %> to <%= @to_date.d0? %>
+		</h3>
+		<table>
+			<tr>
+				<th></th>
+				<th>Name</th>
+				<th>Title</th>
+				<th>Appointment<br />Date</th>
+				<th>Received<br />Date</th>
+				<th>Days</th>
+			</tr>
+			<% @objs.keys.sort.each { |agen| objs = @objs[agen] %>
+				<tr><td colspan="6"><%= agen %></td></tr>
+				<% objs.each { |o| %>
+					<% o.empl_actions.each { |a| %>
+						<tr>
+							<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td><%= h o.last_name %>, <%= h o.first_name %></td>
+							<td><%= h a.job.name if a.job %></td>
+							<td class="nobr"><%= a.action_date.d0? %></td>
+							<td class="nobr"><%= a.received_date.d0? %></td>
+							<td class="nobr"><%= a.received_date - a.action_date rescue nil %></td>
+						</tr>
+					<% } %>
+				<% } %>
+				<tr><td colspan="6">&nbsp;</td></tr>
+			<% } %>
+		</table>		
+	</body>
+</html>

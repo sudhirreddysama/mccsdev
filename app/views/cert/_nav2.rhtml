@@ -1,0 +1,7 @@
+<% if @current_user.staff_level? %>
+	<%= tab 'Import Applicants', {:sc => nil, :sid => nil, :controller => :cert, :action => :import_applicants, :id => (params[:sid] || params[:id])}, {}, {:class => 'tab-import_applicants'} %>
+<% end %>
+<%= tab 'Documents', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>
+<% unless @current_user.agency_level? %>
+	<%= tab 'Letters', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :bulk_message}, {:action => :index, :id => nil}, {:class => 'tab-letter'} %>
+<% end %>

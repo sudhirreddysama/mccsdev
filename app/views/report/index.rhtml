@@ -1,0 +1,349 @@
+<%
+
+if @current_user.agency_level? && @current_user.agency
+	@agencies = [@current_user.agency]
+else
+	@agencies = Agency.find(:all, :order => 'agencies.name')
+end
+if @current_user.agency_level? && @current_user.department
+	@departments = [@current_user.department]
+else
+	@departments = Department.find(:all, :order => 'departments.name')
+end
+
+@jobs = Job.find(:all, :order => 'jobs.name')
+
+%>
+
+<div id="all-reports" style="display: none;">
+
+	<% if !@current_user.agency_level? %>
+	
+		<%= form_tag({:action => 'expiring_lists'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Expiring Eligible Lists</legend>
+				<div class="fs">
+					<table class="form">
+						<th>Expiring From Date:</th>
+						<td><%= calendar_date_select_tag :from_date %></td>
+						<th>To Date:</th>
+						<td><%= calendar_date_select_tag :to_date %></td>
+						<td><%= submit_tag 'Run Report' %></td>
+						<td><%= submit_tag 'Export to Excel', :name => 'export' %></td>
+					</table>
+				</div>
+			</fieldset>
+		</form>
+		
+		<%= form_tag({:action => 'fees_paid'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Application Fees Paid</legend>
+				<div class="fs">
+					<table class="form">
+						<th>Exam From Date:</th>
+						<td><%= calendar_date_select_tag :from_date %></td>
+						<th>To Date:</th>
+						<td><%= calendar_date_select_tag :to_date %></td>
+						<td><%= submit_tag 'Run Report' %></td>
+					</table>
+				</div>
+			</fieldset>
+		</form>
+	
+	<% end %>
+	
+	<%= form_tag({:action => 'employees'}, :target => '_blank') %>
+		<fieldset <% if !@current_user.agency_level? %>class="coolfieldset"<% end %>>
+			<legend>Current Employees by Agency, Agency Type, Title &amp; Department</legend>
+			<div class="fs">
+				<table class="form">
+					<tr>
+						<th colspan="2">Agency:</th>
+						<th colspan="2">Agency Type:</th>
+						<th>Breakdown 1:</th>
+						<th>Breakdown 2:</th>
+						<th>Breakdown 3:</th>
+					</tr>
+					<tr>
+						<td colspan="2"><%= select_tag 'agency_ids', options_for_select(@agencies.collect { |a| [a.name, a.id] }), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>
+						<td colspan="2"><%= select_tag 'agency_types', options_for_select(Const::AGENCY_TYPES), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>
+						<% 3.times { |i| %>
+							<td rowspan="3">
+								<label style="display: block;"><%= radio_button_tag "bd#{i}", '' %> None</label>
+								<% @employee_bd.each { |bd| %>
+									<label style="display: block; white-space: nowrap;"><%= radio_button_tag "bd#{i}", bd[1] %> <%= h bd[0] %></label>
+								<% } %>
+							</td>
+						<% } %>
+					</tr>
+					<tr>
+						<th colspan="2">Department:</th>
+						<th colspan="2">Title:</th>				
+					</tr>
+					<tr>
+						<td colspan="2"><%= select_tag 'department_ids', options_for_select(@departments.collect { |a| [a.name, a.id] }), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>
+						<td colspan="2"><%= select_tag 'job_ids', options_for_select(@jobs.collect { |a| [a.name, a.id] }), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>				
+					</tr>
+					<tr>
+						<th>Class:</th>
+						<th>Status:</th>
+						<th>Time:</th>
+						<th>Show:</th>
+						<th>Sort:</th>
+					<tr>
+						<td><%= select_tag 'classes', options_for_select(Const::JOB_CLASSES), :multiple => true, :style => 'width: 150px; height: 150px;' %></td>
+						<td><%= select_tag 'statuses', options_for_select(Const::JOB_STATUSES), :multiple => true, :style => 'width: 150px; height: 150px;' %></td>
+						<td>
+							<label style="display: block;"><%= radio_button_tag 'time', '' %> ALL</label>
+							<label style="display: block;"><%= radio_button_tag 'time', 'F' %> FULL TIME</label>
+							<label style="display: block;"><%= radio_button_tag 'time', 'P' %> PART TIME</label>
+						</td>
+						<td>
+							<label style="display: block;"><%= check_box_tag 'show_ssn' %> SSN</label>
+							<label style="display: block;"><%= check_box_tag 'show_seniority_date' %> Seniority Date</label>
+							<label style="display: block;"><%= check_box_tag 'show_salary' %> Salary</label>
+							<label style="display: block;"><%= check_box_tag 'show_veteran' %> Vet. Status</label>
+							<label style="display: block;"><%= check_box_tag 'show_pension_no' %> Retirement No.</label>
+						</td>
+						<td colspan="4">
+							<div style="margin-bottom: 5px;"><%= select_tag :sort1, options_for_select([['Sort 1', '']] + @employee_orders, 'e.last_name'), :style => 'width: 100px;' %>
+							<%= select_tag :dir1, options_for_select([['Asc.', 'asc'], ['Desc.', 'desc']]) %></div>
+							<div style="margin-bottom: 5px;"><%= select_tag :sort2, options_for_select([['Sort 2', '']] + @employee_orders, 'e.first_name'), :style => 'width: 100px;' %>
+							<%= select_tag :dir2, options_for_select([['Asc.', 'asc'], ['Desc.', 'desc']]) %></div>
+							<div style="margin-bottom: 5px;"><%= select_tag :sort3, options_for_select([['Sort 3', '']] + @employee_orders), :style => 'width: 100px;' %>
+							<%= select_tag :dir3, options_for_select([['Asc.', 'asc'], ['Desc.', 'desc']]) %></div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="7">
+							<%= submit_tag 'Run Report' %>
+							<%= submit_tag 'Export to Excel', :name => 'export' %>
+							<input type="reset" value="Clear Filter" />
+						</td>
+					</tr>
+				</table>
+			</div>
+		</fieldset>
+	</form>
+	
+	<% if !@current_user.agency_level? %>
+	
+		<% if false %>
+			<%= form_tag({:action => 'seniority'}, :target => '_blank') %>
+				<fieldset class="coolfieldset">
+					<legend>Seniority List</legend>
+					<div class="fs">
+						<table class="form">
+							<th>Agency:</th>
+							<td><%= select_tag :agency_id, options_for_select(@agencies.collect { |a| [a.name, a.id] }) %></td>
+							<td><%= submit_tag 'Run Report' %></td>
+						</table>
+					</div>
+				</fieldset>
+			</form>
+		<% end %>
+		
+		<%= form_tag({:action => 'applications_log'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Applications Log</legend>
+				<div class="fs">
+					<div style="float: left;">
+						<table class="form">
+							<tr>
+								<th>Title:</th>
+							</tr>
+								<td colspan="5">
+									<%= select_tag 'job_ids', options_for_select(@jobs.collect { |j| [j.name, j.id] }), :multiple => true, :style => 'height: 150px;' %>
+									<div>If no titles are selected, all will be used.
+								</td>
+							</tr>
+							<tr>
+								<td><%= submit_tag 'Run Report' %></td>
+							</tr>
+						</table>
+					</div>
+					<div style="float: left;">
+						<table class="form">
+							<tr><th>Submitted From Date:</th></tr>
+							<tr><td><%= calendar_date_select_tag :from_date %></td></tr>
+							<tr><th>To Date:</th></tr>
+							<tr><td><%= calendar_date_select_tag :to_date %></td></tr>
+						</table>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</fieldset>
+		</form>
+		
+		<%= form_tag({:action => 'loans_default'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Student Loans in Default</legend>
+				<div class="fs">
+					<table class="form">
+						<th>Submitted From Date:</th>
+						<td><%= calendar_date_select_tag :from_date %></td>
+						<th>To Date:</th>
+						<td><%= calendar_date_select_tag :to_date %></td>
+						<td><%= submit_tag 'Run Report' %></td>
+					</table>
+				</div>
+			</fieldset>
+		</form>
+		
+		<%= form_tag({:action => 'demographics'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Demographics</legend>
+					<div class="fs">
+					<div style="float: left;">
+						<table class="form">
+							<tr>
+								<th>Title:</th>
+							</tr>
+								<td colspan="5">
+									<%= select_tag 'job_ids', options_for_select(@jobs.collect { |j| [j.name, j.id] }), :multiple => true, :style => 'height: 150px;' %>
+									<div>If no titles are selected, all will be used.
+								</td>
+							</tr>
+							<tr>
+								<td><%= submit_tag 'Run Report' %></td>
+							</tr>
+						</table>
+					</div>
+					<div style="float: left;">
+						<table class="form">
+							<tr><th>Exam Given From Date:</th></tr>
+							<tr><td><%= calendar_date_select_tag :from_date %></td></tr>
+							<tr><th>To Date:</th></tr>
+							<tr><td><%= calendar_date_select_tag :to_date %></td></tr>
+						</table>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</fieldset>
+		</form>
+		
+		<%= form_tag({:action => 'annual'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Annual Report</legend>
+				<div class="fs">
+					<table class="form">
+						<tr>
+							<th>As Of Date:</th>
+							<td><%= calendar_date_select_tag :date, Date.civil(Time.now.year - 1, 12, 31) %>
+							<td>
+								<%= submit_tag 'Get Overview PDF', :name => 'overview' %>
+								<%= submit_tag 'Get Excel Spreadsheets', :name => 'excel' %>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</fieldset>
+		</form>
+		
+		
+		<%= form_tag({:action => 'veterans'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Veterans Credits</legend>
+				<div class="fs">
+					<table class="form">
+						<td><%= submit_tag 'Run Report' %></td>
+					</table>
+				</div>
+			</fieldset>
+		</form>
+		
+		<%= form_tag({:action => 'noncompetitive'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Non-Competitive Hires</legend>
+				<div class="fs">
+					<table class="form">
+						<tr>
+							<th>From Reference Date:</th>
+							<td><%= calendar_date_select_tag :from_date %></td>
+							<th>To Date:</th>
+							<th><%= calendar_date_select_tag :to_date %></th>					
+							<th><%= submit_tag 'Run Report' %></th>
+							<th><%= submit_tag 'Excel Export', :name => 'excel' %></th>
+						</tr>
+					</table>
+				</div>
+			</fieldset>
+		</form>
+		
+		<%= form_tag({:action => 'provisionals'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Commission Provisionals</legend>
+				<div class="fs">
+					<table class="form">
+						<tr>
+							<th>Jurisdictions (optional, select none for all):</th>
+							<th>Reference Date Range</th>
+						<tr>
+							<td>
+								<%
+								
+									juris = []
+									r = DB.query('select distinct jurisdiction j from provisionals order by jurisdiction asc')
+									r.each_hash { |h|
+										juris << h.j
+									}
+								
+								%>
+								<%= select_tag 'jurisdictions', options_for_select(juris), :multiple => true, :style => 'width: 310px; height: 100px;' %>
+							</td>
+							<td class="subform">
+								<table>
+									<tr><th>From:</th></tr>
+									<tr><td><%= calendar_date_select_tag :from_date %></td></tr>
+									<tr><th>To:</th></tr>
+									<tr><td><%= calendar_date_select_tag :to_date %></td></tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2"><%= submit_tag 'Run Report' %></td>
+						</tr>
+					</table>
+				</div>
+			</fieldset>
+		</form>
+		
+		<%= form_tag({:action => 'master'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Exam Master List</legend>
+				<div class="fs">
+					<table class="form">
+						<tr>
+							<td><%= submit_tag 'Run Report (XLS)' %></td>
+							<% if @current_user.admin_level? %>
+								<td><%= submit_tag 'Run Report (HTML)', :name => 'html' %></td>
+							<% end %>
+						</tr>
+					</table>
+				</div>
+			</fieldset>
+		</form>
+		
+		<%= form_tag({:action => 'layoff'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Layoff/Bump Report</legend>
+				<div class="fs">
+					<table class="form">
+						<th>From Date:</th>
+						<td><%= calendar_date_select_tag :from_date %></td>
+						<th>To Date:</th>
+						<td><%= calendar_date_select_tag :to_date %></td>
+						<td><%= submit_tag 'Run Report' %></td>
+					</table>
+				</div>
+			</fieldset>
+		</form>
+		
+	<% end %>
+
+</div>
+
+<script type="text/javascript">
+	$('all-reports').show();
+</script>
+

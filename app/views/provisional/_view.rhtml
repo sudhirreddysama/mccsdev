@@ -1,0 +1,55 @@
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.name %>
+				</td>
+				<td>
+					<label>Title:</label>
+					<%= h o.title %>
+				</td>
+				<td>
+					<label>Jurisdiction:</label>
+					<%= h o.jurisdiction %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>2nd Provisional:</label>
+					<%= h o.second_provisional %>
+				</td>
+				<td>
+					<label>Exam Requested:</label>
+					<%= h o.exam_requested %>
+				</td>
+				<td>
+					<label>Original Appointment:</label>
+					<%= h o.original_appointment %>
+				</td>
+				<td>
+					<label>Exam Date:</label>
+					<%= h o.exam_date %>
+				</td>
+				<td>
+					<label>Pass/Fail:</label>
+					<%= h o.pass_fail %>
+				</td>
+				<td>
+					<label>Reference Date:</label>
+					<%= h o.reference_date.d0? %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>

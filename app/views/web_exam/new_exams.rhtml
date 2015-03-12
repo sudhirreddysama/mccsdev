@@ -1,0 +1,112 @@
+<%
+
+@public = []
+@promo = []
+
+@objs.each { |o|
+
+	is_promo = false
+	exam = Exam.find_by_exam_no(o.no.to_s)
+	if exam
+		if exam.exam_type == 'PROM'
+			is_promo = true
+		end
+	elsif o.no.to_s[0, 2].upcase == 'P-'
+		is_promo = true
+	end
+	
+	if is_promo
+		@promo << o
+	else
+		@public << o
+	end
+}
+
+
+%><html>
+	<head>
+		<style type="text/css">
+			body { margin: 0; padding: 0; font: 13px/1.2 sans-serif; }
+			.head { overflow: auto; }
+			.left { float: left; }
+			.right { float: right; }
+			h1 { font-size: 180%; font-weight: bold; margin: 0; text-align: center; }
+			h2 { font-size: 180%; font-weight: normal; margin: 0; margin-bottom: 10px; text-align: center; }
+			h3 { font-size: 100%; font-weight: bold; text-decoration: underline; text-align: center; margin: 1em 0; }
+			table { border-collapse: collapse; font-size: 1em; width: 100%; }
+			th, td { font-weight: bold; text-align: left; padding: 5px; font-size: 1em; vertical-align: top; }
+			th:first-child, td:first-child { padding-left: 0; }
+			th:last-child, td:last-child { padding-right: 0; }
+			th { text-decoration: underline; vertical-align: bottom; }
+			th.c, td.c { text-align: center; }
+			th.r, td.r { text-align: right; }
+			.nobr { white-space: nowrap; }
+		</style>
+	</head>
+	<body>
+		<% head = capture { %>
+			<div class="head">
+				<img class="left" style="padding-right: 10px; " src="/home/rails/mccs/public/images/mclogo.gif" width="120" height="120" />
+				<h1>Department of Human Resources &amp; Civil Service</h1>
+				<h2>Please Post Conspicuously</h2>
+				<div class="left">Maggie Brooks<br />County Executive</div>
+				<div class="right" style="text-align: right;">Brayton McK. Connard<br />SPHR Director</div>
+			</div>
+			<p style="text-align: justify;">Applications are now being accepted for the following examinations. Exam announcements for each title are 
+			available online at <a href="http://www.monroecounty.gov/hrapply">http://www.monroecounty.gov/hrapply</a> or at the Department of Human Resources. The announcement 
+			provides important information for candidates such as minimum qualifications, job duties, exam scope (areas 
+			covered on the exam), fees, residency requirements and other information.  It is imperative that candidates 
+			check the information on the exam announcement before applying. Please take note of the exam date and closing 
+			date listed below.</p>
+		<% } %>
+		<% if !@public.empty? %>
+			<%= head %>
+			<h3>EXAMINATIONS OPEN TO THE PUBLIC</h3>
+			<table>
+				<tr>
+					<th>Exam Title</th>
+					<th class="nobr">Exam<br />Number</th>
+					<th class="c nobr">Exam<br />Date</th>
+					<th class="c nobr">Closing<br />Date</th>
+					<th class="r nobr">Fee</th>
+				</tr>
+				<% @public.each { |o| %>
+					<tr>
+						<td><%= h o.name %></td>
+						<td><%= h o.no %></td>
+						<td class="c nobr"><%= h o.exam_date.strftime '%B %d' rescue nil %></td>
+						<td class="c nobr"><%= h o.deadline.strftime '%B %d' rescue nil %></td>
+						<td class="r nobr"><% if o.price.to_f > 0 %>$<%= nwp o.price, 0 %><% else %>None<% end %></td>
+					</tr>
+				<% } %>
+			</table>
+		<% end %>
+		<% if !@public.empty? %>
+			<div style="page-break-before: always; height: 0; overflow: hidden;">&nbsp;</div>
+		<% end %>
+		<% if !@promo.empty? %>
+			<%= head %>
+			<h3>EXAMINATIONS OPEN TO EMPLOYEES OF THE FOLLOWING JURISDICTIONS</h3>
+			<table>
+				<tr>
+					<th>Open To:</th>
+					<th>Exam Title</th>
+					<th>Exam<br />Number</th>
+					<th class="c">Exam<br />Date</th>
+					<th class="c">Closing<br />Date</th>
+					<th class="r">Fee</th>
+				</tr>
+				<% @promo.each { |o| %>
+					<tr>
+						<td><%= h o.who_may_apply %></td>
+						<td><%= h o.name %></td>
+						<td class="nobr"><%= h o.no %></td>
+						<td class="c nobr"><%= h o.exam_date.strftime '%B %d' rescue nil %></td>
+						<td class="c nobr"><%= h o.deadline.strftime '%B %d' rescue nil %></td>
+						<td class="r nobr"><% if o.price.to_f > 0 %>$<%= nwp o.price, 0 %><% else %>None<% end %></td>
+					</tr>
+				<% } %>
+			</table>
+		<% end %>
+	</body>
+</html>

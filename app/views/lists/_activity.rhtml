@@ -1,0 +1,52 @@
+<% unless acts.empty? %>
+	<tr id="obj-<%= id %>-activity" class="list-extra" style="display: none;">
+		<td colspan="10" style="padding: 0;">
+			<table width="100%">
+				<tr>
+					<th width="1%">Cert.</th>
+					<th width="32%">Agency</th>
+					<th width="32%">Dept.</th>
+					<th width="1%">Type</th>
+					<th width="1%">Info</th>
+					<th width="33%">Response</th>
+				</tr>
+				<% acts.each { |a| %>
+					<tr>
+						<% if a.is_a? PublicListNote %>
+							<td class="nobr"><%= a.note_date.d0? %></td>
+							<td colspan="6"><%= h a.note %></td>
+						<% else %>
+							<%
+							
+							c = a.cert
+							cc = a.cert_code
+							
+							%>
+							<td class="nobr"><%= c.certification_date.d0? %></td>
+							<td><%= h c.agency.name if c.agency %></td>
+							<td><%= h c.department.name if c.department && (!c.agency || (c.agency.name != c.department.name)) %></td>
+							<td class="nobr">
+								<% if c.job_time == 'P' %>
+									PART TIME
+								<% elsif c.job_time == 'F' %>
+									FULL TIME
+								<% end %>
+							</td>
+							<td class="nobr"><%= h c.additional %></td>
+							<td>
+								<% if c.show_actions %>
+									<% t1 = cc ? cc.label : '' %>
+									<% unless t1.blank? || a.comments.to_s.include?(t1.to_s) %>
+										<%= h cc.description %>
+									<% end %>
+									<%= h a.comments %>
+									<%= a.action_date.d0? %>
+								<% end %>
+							</td>
+						<% end %>
+					</tr>
+				<% } %>
+			</table>
+		</td>
+	</tr>
+<% end %>

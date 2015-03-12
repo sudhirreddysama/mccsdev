@@ -1,0 +1,39 @@
+<%= f.tr_select :letter_id, Letter.find(:all, :order => 'letters.name asc').collect { |l| [l.name, l.id] }, :include_blank => 'Blank Template', :label => 'Letter Template' %>
+<%= f.tr_text_field :subject, :label => 'Subject', :style => 'width: 400px;', :req => true, :class => 'ucase' %>
+<%= f.tr_text_field :email_from, :label => 'From/Reply To', :style => 'width: 400px;', :req => false %>
+<%= f.tr_text_area :body, :label => 'Body', :style => 'width: 400px; height: 500px;', :req => true %>
+
+<script type="text/javascript">
+
+
+	(function($){
+		
+		var ck = CKEDITOR.replace('obj_body', {
+		 	filebrowserBrowseUrl: 'https://cs.monroecounty.gov/hrapply/javascripts/fckeditor/editor/filemanager/browser/default/browser.html?Connector=/hrapply/fckeditor/command',
+		 	customConfig: '/mccs/javascripts/ckeditor/config_custom.js'
+		});
+		
+		$('#obj_letter_id').change(function(e) {
+			
+			var letter_id = $(this).val();
+			$('#obj_subject, #obj_body').addClass('busy-bg');			
+			$.ajax({
+				url: root_url + 'letter/apply/' + letter_id,
+				data: {obj_type: super_c, obj_id: super_id},
+				dataType: 'json',
+				success: function(data, status, xhr) {
+					$('#obj_subject, #obj_body').removeClass('busy-bg');
+					$('#obj_subject').val(data.subject);
+					$('#obj_body').val(data.body);
+					ck.setData(data.body);
+				},
+				complete: function(xhr, status) {
+					$('#obj_subject, #obj_body').removeClass('busy-bg');
+				}
+			});
+			
+		});
+		
+	})(jQuery);
+
+</script>

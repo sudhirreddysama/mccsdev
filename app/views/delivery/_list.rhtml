@@ -1,0 +1,30 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">Actions</th>
+			<th width="1%">ID</th>
+			<th width="1%">Created</th>
+			<th width="20%">User</th>
+			<th width="19%">Total Messages</th>
+			<th width="19%">Total Postal</th>
+			<th width="19%">Total Email</th>
+			<th width="19%">Total Both</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td>
+					<a href="<%= url_for :action => :view, :id => o.id %>"><img src="/mccs/images/icons/zoom.png" width="16" height="16" /></a>
+				</td>
+				<td><%= o.id %></td>
+				<td class="nobr"><%= link_to o.created_at.dt0?, :action => :view, :id => o.id %></td>
+				<td><%= o.user.username if o.user %></td>
+				<td><%= o.message_count %></td>
+				<td><%= o.postal_count %></td>
+				<td><%= o.email_count %></td>
+				<td><%= o.both_count %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

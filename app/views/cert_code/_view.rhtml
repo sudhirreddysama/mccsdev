@@ -1,0 +1,37 @@
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Code:</label>
+					<%= h o.code %>
+				</td>
+				<td>
+					<label>Label:</label>
+					<%= h o.label %>
+				</td>
+				<td>
+					<label>Description:</label>
+					<%= h o.description %>
+				</td>
+				<td>
+					<label>Archived?:</label>
+					<%= yn o.archived %>
+				</td>
+				<td>
+					<label>Agency Use?:</label>
+					<%= yn o.agency_option %>
+				</td>
+				<td>
+					<label>Exclude?:</label>
+					<%= yn o.exclude %>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

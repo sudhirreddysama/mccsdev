@@ -1,0 +1,130 @@
+
+
+<%= partial 'nav' %>
+
+<% form_for(:select) { |f| %>
+	<table class="form">
+		<tr>
+			<td class="subform">
+				<table>
+					<tr>
+                      <th>School:</th>
+                      <th>Town:</th>
+						<th>Village:</th>
+						<th>Fire:</th>
+					</tr>
+					<tr>
+                      <td><%= f.select :school_ids, SchoolDistrict.find(:all, :order => 'name').collect { |s| [s.name, s.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %></td>
+                      <td><%= f.select :town_ids, Town.find(:all, :order => 'name').collect { |s| [s.name, s.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %></td>
+						<td><%= f.select :village_ids, Village.find(:all, :order => 'name').collect { |s| [s.name, s.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %></td>
+						<td><%= f.select :fire_ids, FireDistrict.find(:all, :order => 'name').collect { |s| [s.name, s.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="subform">
+				<table>
+					<tr>
+						<th>Limit To:</th>
+						<td><%= f.text_field :limit, :size => 3 %></td>
+						<th>Top Applicants</th>
+						<th><label><%= f.check_box :only_active %> Only Select Active</label></th>
+						<th><label><%= f.radio_button :gender, '' %> Male &amp; Female</label></th>
+						<th><label><%= f.radio_button :gender, 'M' %> Male Only</label></th>
+						<th><label><%= f.radio_button :gender, 'F' %> Female Only</label></th>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<%= f.submit 'Select Applicants', :name => 'do_select' %>
+				<%= f.submit 'Reset Selection', :name => 'do_reset' %> 
+				<%= f.submit 'Import Applicants', :name => 'do_import' %></td>
+		</tr>
+	</table>
+	
+	<% 
+	
+	no_selected = 0
+	
+	%>
+	<table class="dg">
+		<thead>
+			<tr>
+				<th width="1"><%= check_box_tag 'select_all' %></th>
+				<th width="1">#</th>
+				<th width="1">Score</th>
+				<th width="1">Status</th>
+				<th width="1">SSN</th>
+				<th width="1">M/F</th>
+				<th width="1">Name</th>
+				<th>Residency</th>
+			</tr>
+		</thead>
+		<% @objs.each_with_index { |a, i| p = a.person; s = a.app_status %>
+			<tbody class="<%= cycle 'odd', 'even' %><% if s.eligible == "I" %> red<% end %>">
+				<tr>
+					<%
+					
+					if @applicant_ids && !@applicant_ids.empty?
+					
+						selected = @applicant_ids.include?(a.id)
+					
+					elsif @select[:limit].to_i == 0 || no_selected < @select[:limit].to_i
+					
+						selected = @select[:only_active] != '1' || s.eligible == 'A'
+						
+						selected &&= p.town && @select[:town_ids].include?(p.town_id) if @select[:town_ids]
+						selected &&= p.village && @select[:village_ids].include?(p.village_id) if @select[:village_ids]
+						selected &&= p.school_district && @select[:school_ids].include?(p.school_district_id) if @select[:school_ids]
+						selected &&= p.fire_district && @select[:fire_ids].include?(p.fire_district_id) if @select[:fire_ids]
+						
+						selected &&= p.gender == @select[:gender] if !@select[:gender].blank?
+						
+						no_selected += 1 if selected
+					end
+					
+					%>
+					<td><%= check_box_tag "applicant_ids[]", a.id, selected, :class => 'chk' %></td>
+					<td><%= i + 1 %></td>
+					<td class="nobr"><%= a.final_score %></td>
+					<td class="nobr"><%= s.name %></td>
+					<td class="nobr"><%= p.ssn %></td>
+					<td class="nobr"><%= p.gender %></td>
+					<td class="nobr"><%= link_to "#{p.last_name}, #{p.first_name}", {:action => :view, :controller => :applicant, :id => a.id}, :target => '_blank' %></td>
+					<td>
+						<% if p.town %><span class="dim">Town: </span><%= h p.town.name %><% end %>
+						<% if p.village %><span class="dim">Vill: </span><%= h p.village.name %><% end %>
+						<% if p.school_district %><span class="dim">Schl: </span><%= h p.school_district.name %><% end %>
+						<% if p.fire_district %><span class="dim">Fire: </span><%= h p.fire_district.name %><% end %>
+						<%
+						
+							exclude_action = a.cert_applicants.find(:first, :include => [{:cert => :agency}, :cert_code], :order => 'certs.certification_date desc', :conditions => ['cert_codes.exclude = 1 and certs.agency_id = ? and certs.department_id = ?', @obj.agency_id, @obj.department_id])
+						
+						%>
+						<% if a.agency_residency %>
+							<span style="color: #a0a;">&nbsp;&nbsp;&nbsp;BOCES RES.</span>
+						<% end %>
+						<% if exclude_action %>&nbsp;<br />
+							<span class="dim">Previous Agency Declination:</span> <%= h exclude_action.cert_code.label %> <%= link_to 'View Cert', {:action => :view, :id => exclude_action.cert_id}, :target => '_blank' %>
+						<% end %>
+					</td>
+				</tr>
+			</tbody>
+		<% } %>
+	</table>
+<% } %>
+
+<script type="text/javascript">
+
+	(function($) {
+		all = $('#select_all');
+		all.click(function(e) {
+			$('.chk').attr('checked', this.checked);
+		});
+		
+	})(jQuery);
+
+</script>

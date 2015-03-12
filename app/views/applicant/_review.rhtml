@@ -1,0 +1,121 @@
+
+<% fields_for("applicant[#{o.id}]", o) { |f| %>
+	
+	<table id="user-<%= o.id %>" style="display: none;">
+		<tr>
+			<td>U1:</td>
+			<td><%= f.text_field :user1, :size => 20, :class => 'ucase user-var' %></td>
+			<td>U2:</td>
+			<td><%= f.text_field :user2, :size => 20, :class => 'ucase user-var' %></td>
+			<td>U3:</td>
+			<td><%= f.text_field :user3, :size => 20, :class => 'ucase user-var' %></td>
+			<td>U4:</td>
+			<td><%= f.text_field :user4, :size => 20, :class => 'ucase user-var' %></td>
+			<td>U5:</td>
+			<td><%= f.text_field :user5, :size => 20, :class => 'ucase user-var' %></td>
+		</tr>
+	</table>
+	<table id="agency-<%= o.id %>" style="display: none;">
+		<tr>
+			<td>Agency:</td>
+			<td><%= f.select :agency_id, @agency_opts, {:include_blank => true}, :class => 'agency' %></td>
+			<td>Department:</td>
+			<td><%= f.select :department_id, @department_opts, {:include_blank => true}, :class => 'department' %></td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<td><%= f.radio_button :approved, '', :class => 'app_nil' %>
+			<td><label for="applicant_<%= o.id %>_approved"> NA</label></td>
+			<td><%= f.radio_button :approved, 'Y', :class => 'app_dis' %>
+			<td><label for="applicant_<%= o.id %>_approved_y"> Approved</label></td>
+			<td><%= f.radio_button :approved, 'N', :class => 'app_dis' %>
+			<td><label for="applicant_<%= o.id %>_approved_n"> Disapproved</label></td>
+			<td>Reason:</td>
+			<td><%= f.select :disapproval_id, @disapprovals, {:include_blank => true}, :style => 'width: 200px;' %></td>
+			<td>Alt. Exam Date:</td>
+			<td><%= f.calendar_date_select :alternate_exam_date, :style => 'width: 80px;' %>
+			<td><%= f.check_box :agency_residency %></td>			
+			<td><label for="applicant_<%= o.id %>_agency_residency"> BOCES Res.</label></td>			
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<td>Status:</td>
+			<td>LScore:</td>
+			<td>Base:</td>
+			<td>VC:</td>
+			<td>OC:</td>
+			<td>Score:</td>
+			<% if false %><td>Exam Site:</td><% end %>
+			<td>Paid By:</td>
+			<td>Check #:</td>
+			<td colspan="2"></td>
+		</tr>
+		<tr>
+			<td><%= f.select :app_status_id, @app_statuses, {:include_blank => true} %></td>
+			<td><%= f.text_field :raw_score, :size => 6, :id => "cell-#{i}-1", :class => "cell row-#{i} col-1 ucase" %></td>
+			<td><%= f.text_field :base_score, :size => 6, :id => "cell-#{i}-2", :class => "cell row-#{i} col-2 ucase" %></td>
+			<td><%= f.text_field :veterans_credits, :size => 6, :id => "cell-#{i}-3", :class => "cell row-#{i} col-3 ucase" %></td>
+			<td><%= f.text_field :other_credits, :size => 6, :id => "cell-#{i}-4", :class => "cell row-#{i} col-4 ucase" %></td>
+			<td><%= f.text_field :final_score, :size => 6, :id => "cell-#{i}-5", :class => "cell row-#{i} col-5 ucase" %></td>
+			<% if false %><td><%= f.select :exam_site_id, @exam_sites, {:include_blank => true}, :style => 'width: 180px;' %></td><% end %>
+			<td><%= f.select :paid_by, Const::PAID_BY, {:include_blank => true}, :style => 'width: 100px;' %></td>
+			<td><%= f.text_field :check_no, :size => 15 %></td>
+			<td><%= f.check_box :check_confirmed %></td>
+			<td><label for="applicant_<%= o.id %>_check_confirmed">Confirmed</label></td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<th>Last letter Sent:</th>
+			<% l = o.messages.find(:first, :order => 'created_at desc') %>
+			<td>
+				<% if l %>
+					<%= link_to l.subject, {:controller => :message, :action => :print_pdf, :id => l.id}, :target => '_blank' %>
+				<% else %>
+					NONE
+				<% end %>
+			</td>
+		</tr>
+	</table>
+	
+	<% if false %>
+	
+	<table>
+		<thead>
+			<tr>
+				<td>Performance Test:</td>
+				<td>Status:</td>
+				<td colspan="3">Taken:</td>
+			</tr>
+		</thead>
+		<% o.new_taken_perfs.each { |tp| %>
+			<%= partial 'applicant/review_taken_perf', :o => o, :tp => tp %>
+		<% } %>
+		<tbody id="add_taken_perf_<%= o.id %>">
+			<tr>
+				<td colspan="5">
+					<a href="#" onclick="add_taken_perf(<%= o.id %>); return false;">Add Performance Test</a>&nbsp;&nbsp;&nbsp;
+					Previous Taken Tests Listed Below:
+				</td>
+			</tr>
+		</tbody>
+		<% other_taken_perfs = o.person.taken_perfs.find(:all, :conditions => ['exam_id != ?', o.exam_id], :order => 'taken_perfs.date_taken desc') %>
+		<% other_taken_perfs.each { |tp| %>
+			<tr>
+				<td><%= h tp.perf_test.name if tp.perf_test %></td>
+				<td><%= h tp.perf_code.label if tp.perf_code %></td>
+				<td><%= tp.date_taken.d0? %></td>
+				<td colspan="2">
+					<% if tp.exam %>
+						Taken For Exam: <%= link_to tp.exam.exam_no, :controller => :exam, :action => :view, :id => tp.exam_id %>
+					<% end %>
+				</td>
+			</tr>
+		<% } %>
+	</table>
+	
+	<% end %>
+	
+<% } %>

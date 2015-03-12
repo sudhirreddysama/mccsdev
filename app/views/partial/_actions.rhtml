@@ -1,0 +1,16 @@
+<% 
+
+opt = {:id => o.id, :action => :view, :controller => o.class.to_s.underscore} 
+if params[:sc]
+	opt[:sc] = params[:sc]
+	opt[:sid] = params[:sid]
+end
+
+%>
+<%= link_to image_tag('icons/zoom.png', :size => '16x16', :alt => 'view', :title => 'View'), opt %>
+<% if @current_user.staff_level? || @allow_liaison %>
+	<%= link_to image_tag('icons/pencil.png', :size => '16x16', :alt => 'edit', :title => 'Edit'), opt.merge(:action => :edit) %>
+<% end %>
+<% if params[:popup] %>
+	<%= link_to_function image_tag('icons/tick.png', :size => '16x16', :alt => 'select'), "window.parent.cb(#{o.id}, #{o.label.to_json});" %>
+<% end %>

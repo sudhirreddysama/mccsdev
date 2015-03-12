@@ -1,0 +1,31 @@
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Date:</label>
+					<%= o.note_date.d0? %>
+				</td>
+				<td>
+					<label>Note:</label>
+					<%= h o.note %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Name (link goes to applicant):</label>
+					<%= link_to o.applicant.person.label, :sc => nil, :sid => nil, :controller => :applicant, :action => :view, :id => o.applicant_id if o.applicant && o.applicant.person %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>

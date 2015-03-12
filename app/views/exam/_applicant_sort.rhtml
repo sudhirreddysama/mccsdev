@@ -1,0 +1,55 @@
+<% form_for(:filter) { |f| %>
+	<table class="form">
+		<tr>
+			<th>Status</th>
+			<th>Sort</th>
+		</tr>
+		<tr>
+			<td>
+				<%= f.select :statuses, [['NO STATUS', 'NONE']] + @statuses.collect { |s| [s.name, s.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %>
+			</td>
+			<td class="subform">
+				<table>
+					<tr>
+						<tr>
+							<td>
+								<%= f.select :sort1, @orders, :include_blank => 'Sort 1' %>
+								&nbsp;&nbsp;<%= f.select :dir1, [['Asc', 'asc'], ['Desc', 'desc']] %>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<%= f.select :sort2, @orders, :include_blank => 'Sort 2' %>
+								&nbsp;&nbsp;<%= f.select :dir2, [['Asc', 'asc'], ['Desc', 'desc']] %>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<%= f.select :sort3, @orders, :include_blank => 'Sort 3' %>
+								&nbsp;&nbsp;<%= f.select :dir3, [['Asc', 'asc'], ['Desc', 'desc']] %>
+							</td>
+						</tr>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<%= f.submit 'Filter' %>
+				<%= f.submit 'Clear Filter', :name => 'filter[clear]' %>
+				<% if params[:action] == 'applicants' %>
+					<%= f.submit 'Export to Excel', :name => 'export' %>
+				<% end %>
+			</td>
+		</tr>
+		<% if @obj.continuous && params[:action] == 'applicants' %>
+			<tr>
+				<td colspan="2">
+					<label>
+						<%= f.check_box 'cr' %> Include All CR Candidates in Export
+					</label>
+				</td>
+			</tr>
+		<% end %>
+	</table>
+<% } %>

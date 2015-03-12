@@ -1,0 +1,48 @@
+<html>
+<head>
+	<style type="text/css">
+		html, body { padding: 0; margin: 0; border: 0; }
+		body, td, th { font: 12px/16px  Verdana, Arial, sans-serif; }
+		#head { font-weight: bold; text-align: center; }
+		table { border-collapse: collapse; }
+		th { font-weight: bold;	 }
+		td, th { padding: 3px 5px; border-bottom: 1px solid #888; text-align: left; margin: 0; }
+		.nobr { white-space: nowrap; }
+	</style>
+</head>
+<body>
+	<% actions = @obj.empl_actions.find(:all, :order => 'empl_actions.action_date desc, empl_actions.id desc').to_a %>
+		
+	<p id="head">
+		EMPLOYEE'S HISTORY OVERVIEW<br />
+		<%= @obj.label %> <%= @obj.ssn %>
+	</p>
+	<table width="100%">
+		<tr>
+			<th>No.</th>
+			<th>Effective&nbsp;Date</th>
+			<th>Action</th>
+			<th>Leave&nbsp;Date</th>
+			<th>Status</th>
+			<th>Class</th>
+			<th>Time</th>
+			<th>Salary</th>
+			<th>Title</th>
+		</tr>
+		<% actions.each_with_index { |a, i| %>
+			<tr>
+				<td><%= i + 1 %></td>
+				<td><%= h a.action_date.d0? %></td>
+				<td><%= h a.empl_action_type.name if a.empl_action_type %></td>
+				<td><%= h a.leave_date.d0? %></td>
+				<td><%= h Const::JOB_STATUSES[a.status] %></td>
+				<td><%= h Const::JOB_CLASSES[a.classification] %></td>
+				<td><%= h Const::JOB_TIMES[a.job_time] %></td>
+				<td><%= a.wage.n2? %><% unless a.wage_per.blank? %>/<%= h(Const::WAGE_UNITS[a.wage_per] ? Const::WAGE_UNITS[a.wage_per] : a.wage_per) %><% end %></td>
+				<td><%= h a.job.name if a.job %></td>
+			</tr>
+		<% } %>
+	</table>
+		
+</body>
+</html>

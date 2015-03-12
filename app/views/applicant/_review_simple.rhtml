@@ -1,0 +1,38 @@
+
+<% fields_for("applicant[#{o.id}]", o) { |f| %>
+	
+	<table>
+		<tr>
+		<td colspan="20">
+			<label>County:
+				<% wa = o.web_applicant %>
+				<% if wa %>
+					<%= wa.residence_different ? wa.res_county : wa.county %>
+					<% if @seasonal %>
+						&nbsp;&nbsp;&nbsp;Over 18? <%= yn wa.over_18 %>
+					<% end %>
+				<% else %>
+					(not entered online)
+				<% end %>
+			</label>
+		</td>
+		</tr>
+		<tr>
+			<td><%= f.radio_button :approved, '', :class => 'app_nil' %>
+			<td><label for="applicant_<%= o.id %>_approved"> NA</label></td>
+			<td><%= f.radio_button :approved, 'Y', :class => 'app_dis' %>
+			<td><label for="applicant_<%= o.id %>_approved_y"> Approved</label></td>
+			<td><%= f.radio_button :approved, 'N', :class => 'app_dis' %>
+			<td><label for="applicant_<%= o.id %>_approved_n"> Disapproved</label></td>
+			<td>Reason:</td>
+			<td><%= f.select :disapproval_id, @disapprovals, {:include_blank => true}, :style => 'width: 200px;' %></td>
+			<td>Status:</td>
+			<td><%= f.select :app_status_id, @app_statuses, {:include_blank => true} %></td>
+			<td><label for="applicant_<%= o.id %>_conditional">Conditional:</label></td>
+			<td><%= f.check_box :conditional %>
+			<td><label for="applicant_<%= o.id %>_conditional_reason">Reason:</label></td>
+			<td><%= f.text_field :conditional_reason, :class => 'ucase' %></td>
+		</tr>
+	</table>
+		
+<% } %>

@@ -1,0 +1,120 @@
+<tr>
+	<th>Name: <span class="req">*</span></th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>First: <span class="req">*</span></th>
+				<th>Last: <span class="req">*</span></th>
+			</tr>
+			<tr>
+				<td><%= f.text_field :first_name, :req => true, :size => '40', :class => 'ucase' %></td>
+				<td><%= f.text_field :last_name, :req => true, :size => '40', :class => 'ucase' %></td>
+		</table>		
+	</tr>
+</tr>
+<%= f.tr_text_field :ssn, :label => 'SSN', :req => true, :size => 20, :class => 'ucase' %>
+<%= f.tr_text_field :address, :label => 'Address', :class => 'ucase' %>
+<%= f.tr_text_field :address2, :label => 'Address Line 2', :class => 'ucase' %>
+<tr>
+	<th>City, State, Zip:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<td><%= f.text_field :city, :size => '40', :class => 'ucase' %></td>
+				<td><%= f.select :state, USState::UNAMES %></td>
+				<td><%= f.text_field :zip, :size => '10', :class => 'ucase' %></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<%= f.tr_text_field :phone, :label => 'Phone', :class => 'ucase' %>
+<%= f.tr_text_field :work_phone, :label => 'Work Phone', :class => 'ucase' %>
+<%= f.tr_text_field :email, :label => 'Email', :class => 'ucase' %>
+<%= f.tr_calendar_date_select :date_of_birth, :label => 'Date of Birth', :class => 'ucase' %>
+<%= f.tr_calendar_date_select :seniority_date, :label => 'Seniority Date', :class => 'ucase' %>
+<%= f.tr_text_field :pension_no, :label => 'Pension No.', :class => 'ucase' %>
+<tr>
+	<th>Veteran:</th>
+	<td>
+		<% Const::VETERAN_TYPES.each { |v| %>
+			<label><%= f.radio_button :veteran, v[1] %> <%= h v[0] %></label>&nbsp;&nbsp;
+		<% } %>
+	</td>
+</tr>
+<%= f.tr_check :exempt_vol_fire, :text => 'EXEMPT VOL FIRE' %>
+<%= f.tr_text_area :notes, :label => 'Notes', :size => '60x8', :class => 'ucase' %>
+<tr>
+	<th>Rehire Dates:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>1st Rehire:</th>
+				<th>2nd Rehire:</th>
+				<th>3rd Rehire:</th>
+			</tr>
+			<tr>
+				<td><%= f.calendar_date_select :date_rehired, :size => 16 %></td>
+				<td><%= f.calendar_date_select :date_rehired2, :size => 16 %></td>
+				<td><%= f.calendar_date_select :date_rehired3, :size => 16 %></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<%= f.tr_calendar_date_select :leave_date, :label => 'Leave Date', :help => 'Leave date will automatically be updated from the last history item when it is entered/edited, but can be overridden here.' %>
+<% if @obj.new_record? %>
+	<tr>
+		<th colspan="2" style="border-bottom: 1px solid #000; padding-top: 5px;">First History Item:</th>
+	</tr>
+	<% @act = @obj.new_empl_action %>
+	<% f.fields_for(:new_empl_action, @act) { |f2| %>		
+		<%= partial 'action_fields', {:f => f2} %>
+	<% } %>
+<% end %>
+
+<% 
+
+city_zips = {} 
+CityZip.find(:all).each { |cz| 
+	city_zips[cz.city] = cz.zip
+} 
+
+%>
+
+<script type="text/javascript">
+	
+	(function($){
+	
+		var ssn = $('#obj_ssn');
+		ssn.change(function(e) {
+			var val = ssn.val();
+			if(val.toString().length == 9) {
+				ssn.val(val.substr(0, 3) + '-' + val.substr(3, 2) + '-' + val.substr(5, 4));
+			}
+		});
+		
+		var city_zips = <%= city_zips.to_json %>;
+	
+		$('#obj_city').change(function(e) {
+			cz = city_zips[$(this).val().toUpperCase()];
+			if(cz) {
+				$('#obj_zip').val(cz);
+			}
+		});
+	
+	})(jQuery);
+	
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

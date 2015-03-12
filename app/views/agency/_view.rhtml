@@ -1,0 +1,116 @@
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Abbr.:</label>
+					<%= h o.abbreviation %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.name %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+  <div class="row">
+    <table>
+      <tr>
+        <td>
+          <label>Address:</label>
+          <%= o.address1 if o.address1%>
+        </td>
+        <td>
+          <label>City:</label>
+          <%=  o.city if o.city%>
+        </td>
+        <td>
+          <label>State:</label>
+          <%= o.state if o.state%>
+          </td>
+        <td>
+          <label>Zip:</label>
+          <%= o.zip if o.zip%>
+        </td>
+        <td>
+          <label>Phone:</label>
+          <%= o.phone if o.phone%>
+        </td>
+        <td>
+          <label>Fax:</label>
+          <%= o.fax if o.fax%>
+        </td>
+      </tr>
+    </table>
+  </div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Type:</label>
+					<%= h o.agency_type %>
+				</td>
+				<td>
+					<label>Liaison:</label>
+					<%= h o.liaison.name if o.liaison %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+  <div class="row">
+    <table>
+      <tr>
+        <td>
+          <label>Notes:</label>
+          <%= h o.notes %>
+        </td>
+
+      </tr>
+    </table>
+  </div>
+  <% o.contacts.each { |d| %>
+      <div class="header">Contact</div>
+      <div class="row">
+        <table>
+          <tr>
+            <td>
+              <label>ID:</label>
+              <%= d.id %><% if d.primary %><b>(Primary)</b><% end %>
+            </td>
+            <td>
+              <label>Name:</label>
+              <%= d.lastname %>, <%=d.firstname%>
+            </td>
+            <td>
+              <label>Title:</label>
+              <%= d.title %>
+            </td>
+            <td>
+              <label>Email:</label>
+              <%= d.email %>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="row">
+        <table>
+          <tr>
+
+            <td>
+              <label>Phone:</label>
+              <%= d.phone %>
+            </td>
+            <td>
+              <label>Fax:</label>
+              <%= d.fax %>
+            </td>
+
+          </tr>
+        </table>
+      </div>  <% } %>
+</div>

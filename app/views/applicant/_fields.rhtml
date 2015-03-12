@@ -1,0 +1,116 @@
+<%= f.tr_calendar_date_select :submitted_at, :label => 'Submitted Date', :class => 'ucase' %>
+<tr>
+	<th>Applicant: <span class="req">*</span></th>
+	<td>
+		<%= partial 'pop_field', :id => 'obj_person_label', :text => (@obj.person ? @obj.person.label : ''), :name => 'obj[person_id]', :id => 'obj_user_id', :url => popup_url({:controller => :person}), :value => @obj.person_id %>
+		<div>Click the field above to open a popup where you can select an existing applicant or create a new one.</div>
+	</td>
+</tr>
+<tr>
+	<th>Exam: </th>
+	<td>
+		<%= partial 'pop_field', :id => 'obj_exam_label', :text => (@obj.exam ? @obj.exam.label : ''), :name => 'obj[exam_id]', :id => 'obj_exam_id', :url => popup_url({:controller => :exam}), :value => @obj.exam_id %>
+		<div>Click the field above to open a popup where you can select an existing exam or create a new one.</div>
+	</td>
+</tr>
+<tr>
+	<th>Web Post: </th>
+	<td>
+		<%= partial 'pop_field', :id => 'obj_web_exam_label', :text => (@obj.web_exam ? @obj.web_exam.label : ''), :name => 'obj[web_exam_id]', :id => 'obj_web_exam_id', :url => popup_url({:controller => :web_exam}), :value => @obj.web_exam_id %>
+		<div>Click the field above to open a popup where you can select an existing web post or create a new one.</div>
+	</td>
+</tr>
+<tr>
+	<th>Approved?</th>
+	<td id="approved">
+		<label><%= f.radio_button :approved, '' %> NA</label>&nbsp;&nbsp;
+		<label><%= f.radio_button :approved, 'Y' %> Approved</label>&nbsp;&nbsp;
+		<label><%= f.radio_button :approved, 'N' %> Disapproved</label>
+	</td>
+</tr>
+<%= f.tr_select :app_status_id, AppStatus.find(:all, :order => 'app_statuses.name').collect { |s| [s.name, s.id] }, :include_blank => true, :label => 'Status' %>
+<%= f.tr_select :disapproval_id, Disapproval.find(:all, :order => 'reason').collect { |d| [d.reason, d.id] }, :include_blank => true, :label => 'Disapproval' %>
+<tr>
+	<th>Score:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<td>Raw:</td>
+				<td>Base:</td>
+				<td>VC:</td>
+				<td>OC:</td>
+				<td>Final:</td>
+			</tr>
+			<tr>
+				<td><%= f.text_field :raw_score, :size => 6 %></td>
+				<td><%= f.text_field :base_score, :size => 6 %></td>
+				<td><%= f.text_field :veterans_credits, :size => 6 %></td>
+				<td><%= f.text_field :other_credits, :size => 6 %></td>
+				<td><%= f.text_field :final_score, :size => 6 %></td>
+			</tr>
+		</table>	
+	</td>
+</tr>
+<%= f.tr_text_field :notes, :label => 'Notes' %>
+<%= f.tr_select :paid_by, Const::PAID_BY, :include_blank => true, :label => 'Paid By' %>
+<%= f.tr_text_field :check_no, :label => 'Check No.' %>
+<%= f.tr_select :agency_id, Agency.find(:all, :order => 'name').collect { |c| [c.name, c.id] }, :label => 'Agency', :include_blank => true %>
+<%= f.tr_select :department_id, Department.find(:all, :order => 'name').collect { |c| [c.name, c.id] }, :label => 'Department', :include_blank => true %>
+<tr>
+	<th>Student Loans:</th>
+	<td>
+		<label><%= f.check_box :loans_outstanding %> Outstanding</label>&nbsp;&nbsp;&nbsp;
+		<label><%= f.check_box :loans_default %> In Default</label>
+	</td>
+</tr>
+<%= f.tr_check :cross_filing, :label => 'Cross Filing?', :text => 'Check here if this applicant is cross filing exams.' %>
+<%= f.tr_text_field :cross_filing_at, :label => 'Cross Filing At', :help => 'Location applicant is taking cross filed exams.', :class => 'ucase' %>
+<%= f.tr_check :army_served, :label => 'Veteran?', :text => 'Check here if applicant served in the armed forces.' %>
+<tbody id="veteran-fields">
+	<%= f.tr_calendar_date_select :army_from, :label => 'Enlisted From' %>
+	<%= f.tr_calendar_date_select :army_from, :label => 'Enlisted To' %>
+	<%= f.tr_check :army_discharge_honorable, :label => 'Honorable Discharge?', :text => 'Check here if discharge was honorable' %>
+	<%= f.tr_text_field :army_discharge_reason, :label => 'Discharge Reason' %>
+	<%= f.tr_select :vc_type, %w{none nondisabled disabled}, :label => 'VC Type', :include_blank => true %>
+	<%= f.tr_check :vc_used, :label => 'VC Used Before?', :text => 'Check here if veterans credits have been used before, then enter the agency used for below.' %>
+	<%= f.tr_text_field :vc_used_agency, :label => 'VC Used Agency' %>
+	<%= f.tr_text_field :vc_disabled_claim_no, :label => 'Disabled VC Claim No.' %>
+	<%= f.tr_calendar_date_select :vc_disabled_auth_date, :label => 'VC-4 Sent Date' %>
+	<%= f.tr_check :dd214_included, :label => 'DD-214 Included?', :text => 'Check here if DD-214 is included' %>
+</tbody>
+
+<script type="text/javascript">
+	
+	(function($) {
+		
+		var army_served = $('#obj_army_served');
+		var toggle_veterans = function(e) {
+			$('#veteran-fields')[army_served.is(':checked') ? 'show' : 'hide']();
+		}
+		army_served.change(toggle_veterans);
+		toggle_veterans();
+		
+		$('#approved input').change(function(e) {
+			var c = $(this);
+			if(c.is(':checked')) {
+				var v = c.attr('value');
+				var sel = $('#obj_app_status_id');
+				var s = sel[0];
+				var sv = sel.val();
+				if(sv == '5' || sv == '3' || !sv) {
+					if(v == 'Y') {
+						set_select_value('5', s);
+					}
+					else if(v == 'N') {
+						set_select_value('3', s);
+					}
+					else {
+						set_select_value('', s);
+					}
+				}
+			}		
+		});
+		
+	})(jQuery);
+
+</script>

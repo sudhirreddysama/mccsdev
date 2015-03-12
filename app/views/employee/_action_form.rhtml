@@ -1,0 +1,5 @@
+<%= partial 'errors', :errors => @act.errors.full_messages %>
+<% table_form_for(:act, :html => {:multipart => true}) { |f| %>
+	<%= partial 'action_fields', :f => f %>
+	<%= f.tr_submit 'Submit' %>
+<% } %>

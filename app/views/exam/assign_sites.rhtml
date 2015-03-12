@@ -1,0 +1,135 @@
+<%= partial 'nav' %>
+<%= partial 'sites_nav' %>
+
+<% if params[:id2] == 'detail' %>
+	<%= partial 'applicant_sort' %>
+	<% exam_site_opts = ExamSite.find(:all, :order => 'exam_sites.name asc').collect { |s| [s.name, s.id] } %>
+	<%= partial 'save_bar', {:url => url_for(:action => :sites_save, :id => @obj.id)} %>
+	<form id="review-form" onsubmit="return false;">
+		
+		<table class="dg">
+			<thead>
+				<tr>
+					<th colspan="4">
+						Site Numbers:
+						<%= h @sites.collect { |s| "#{s.sort + 1}: #{s.exam_site.name}" }.join(', ') %>
+					</th>
+				</tr>
+				<tr>
+					<th width="1%">SSN</th>
+					<th width="1%">Name</th>
+					<th width="1%">Zip</th>
+					<th width="1%">Site</td>
+					<th width="97%">Other Site</td>
+				</tr>
+			</thead>
+			<tbody>
+				<% @objs.each_with_index { |o, i| %>
+					<tr class="<%= cycle 'odd', 'even' %>">
+						<td class="nobr"><%= h o.person.ssn %></td>
+						<td class="nobr"><%= partial 'notes', {:o => o} %><%= link_to "#{o.person.last_name}, #{o.person.first_name}", {:action => :view, :controller => :applicant, :id => o.id}, :target => '_blank' %>
+						<td><%= o.person.residence_different ? o.person.residence_zip : o.person.mailing_zip %></td>
+						<td><%= text_field_tag "sites[#{o.id}][no]", @sites_indexed[o.exam_site_id], :size => 3, :id => "cell-#{i}-1", :class => "cell col-1 row-#{i}" %></td>
+						<td><%= select_tag "sites[#{o.id}][id]", options_for_select([['', '']] + exam_site_opts, o.exam_site_id), :id => "sel-#{i}", :class => 'sel' %></td>
+					</tr>
+				<% } %>
+			</tbody>
+		</table>
+	
+	</form>
+	
+	<script type="text/javascript">
+		
+		enable_arrow_keys_for_table_inputs(1);
+		
+		(function($) {
+			
+			var sites_indexed = <%= @sites_indexed.to_json %>;
+			var sites_indexed2 = <%= @sites_indexed2.to_json %>;
+			
+			$('.cell').change(function() {
+				var input = $(this);
+				var val = input.val();
+				var id = input.attr('id');
+				var select = $('#sel-' + id.split('-')[1]);
+				set_select_value(sites_indexed2[val] ? sites_indexed2[val] : '', select[0]);
+				window.input_dirty = true;
+			});
+			
+			$('.sel').change(function() {
+				var select = $(this);
+				var val = select.val();
+				var id = select.attr('id');
+				var input = $('#cell-' + id.split('-')[1] + '-1');
+				input.val(sites_indexed[val] ? sites_indexed[val] : '');
+				window.input_dirty = true;
+			});
+			
+		})(jQuery);
+		
+	</script>
+
+<% else %>
+
+	<h2>Pick Exam Sites</h2>
+	<% table_form_for(:obj) { |f| %>
+		<%= partial 'exam_sites', :f => f %>
+		<tr><td colspan="4"><%= submit_tag 'Save & Continue' %></td></tr>
+	<% } %>
+	
+	<h2>Applicant Zip Code Counts:</h2>
+	<table class="form">
+		<tr>
+			<% 4.times { |i| %>
+				<th>Zip</th><th>Count</th><th>Municipality</th>
+			<% } %>
+		</tr>
+		<% @zips.in_groups_of(4).each { |zips| %>
+			<tr>
+				<% zips.each { |z| %>
+					<% if z %>
+						<td><%= h z.zip_code %></td>
+						<td><%= h z.c %></td>
+						<td><%= h z.name %></td>
+					<% end %>
+				<% } %>
+			</tr>
+		<% } %>
+	</table>
+	
+	<h2>Assign Exam Sites</h2>
+	<%= form_tag %>
+		<div class="marg">Click the button below to assign exam sites to all applicants, even if they've already been assigned a site. This will clear previous assignments.</div>
+		<div class="marg"><%= submit_tag 'Assign Exam Sites to All Approved Applicants', :name => 'all' %></div>
+		<div class="marg">Click the button below to assign exam sites to only applicants not yet assigned to a site. This will NOT clear previous assignments.</div>
+		<div class="marg"><%= submit_tag 'Assign Exam Sites to Applicants Not Yet Assigned', :name => 'unassigned' %></div>
+	</form>
+	<h2>Current Assignment Counts</h2>
+	<table class="dg">
+		<thead>
+			<tr>
+				<th width="1%" class="nobr">Capacity</th>
+				<th width="1%" class="nobr"># To Assign</th>
+				<th width="1%" class="nobr">Assigned</th>
+				<th width="97%">Site</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @site_stats.each { |s| %>
+				<tr class="<%= cycle 'odd', 'even' %>">
+					<td style="text-align: center;"><%= s.site_capacity.to_i %></td>
+					<td style="text-align: center;"><%= s.number_to_assign.to_i %></td>
+					<td style="text-align: center;"><%= s.site_count.to_i %></td>
+					<td><%= h s.site_name %></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+	<h2>Bulk Reassign Sites</h2>
+	<% @bulk = {} %>
+	<% table_form_for(:bulk) { |f| %>
+		<%= f.tr_select :from_id, @site_stats.collect { |s| [s.site_name, s.site_id] }, :label => 'From Site', :req => true %>
+		<%= f.tr_select :to_id, ExamSite.find(:all, :order => 'exam_sites.name asc').collect { |s| [s.name, s.id] }, :include_blank => true, :label => 'To Site', :req => true %>
+		<%= f.tr_submit 'Bulk Reassign' %>
+	<% } %>
+<% end %>

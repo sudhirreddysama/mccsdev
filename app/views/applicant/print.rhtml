@@ -1,0 +1,614 @@
+<% ep = {:exam => @obj.web_exam} %>
+<% @obj = @obj.web_applicant %>
+<div style="font-size: 8pt;">
+<!-- FOOTER RIGHT "$PAGE of $PAGES" -->
+<!-- HEADER RIGHT "<%= @obj.first_name %> <%= @obj.last_name %>" -->
+<% s = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' %>
+<% b = '<tr><td colspan="4">&nbsp;</td></td></tr>' %>
+<% chk = '<img src="checked.gif" width="8" height="8" />' %>
+<% uchk = '<img src="unchecked.gif" width="8" height="8" />' %>
+
+
+				<% seasonal = ep.exam.web_exam_type.seasonal %>
+				<table width="100%" cellspacing="0" cellpadding="0">
+					<tr>
+						<td>
+							<img src="mcseal.gif" width="80" height="80" align="left" />
+						</td>
+						<td align="center">
+							<h1>Department of Human Resources</h1>
+							<p>Maggie Brooks, County Executive&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brayton McK. Connard, SPHR, Director</p>
+							<% if seasonal %>
+								<h2>Seasonal Employment Application</h2>
+							<% else %>
+								<h2>Employment/Civil Service Exam Application</h2>
+							<% end %>
+						</td>
+						<td>
+							<img src="t.gif" width="80" height="80" align="left" />
+						</td>
+					</tr>
+				</table>
+				<p>&nbsp;</p>
+				<table width="100%" cellspacing="0" cellpadding="8" border="1">
+					<% if seasonal %>
+						<tr>
+							<td><h3>Position: <%= ep.exam.name %></h3></td>
+						</tr>
+					<% else %>
+						<tr>
+							<td bgcolor="#f8f8f8" align="center">
+								<b>For Office Use Only</b>
+							</td>
+						</tr>
+						<tr>
+							<td bgcolor="#f8f8f8">
+								<table width="100%" cellspacing="4" cellpadding="0" border="0">
+									<tr>
+										<td width="33%">
+											<p><b>Qualifying Title: <u><%= s * 2 %></u></b></p>
+											<p><b>Qualifying Date: <u><%= s * 2 %></u></b></p>
+											<p><b>Qualifying Dept/Jurisdiction: <u><%= s * 2 %></u></b></p>
+											<p><b>Seniority Date: <u><%= s * 2 %></u></b></p>
+										</td>
+										<td width="33%">
+											<p><b>Qualified:</b></p>
+											<p><b><%= uchk %> Yes</b></p>
+											<p><b><%= uchk %> No</b></p>
+											<p><b>Reviewer's Initials: <u><%= s  * 2 %></u></b></p>
+										</td>
+										<td width="33%">
+											<p><b>Check # and Bank: <u><%= s * 2 %></u></b></p>
+											<% if ep.exam.price.to_f == 0 %>
+												<p><b><%= uchk %> Waiver&nbsp;&nbsp;&nbsp;&nbsp;<%= uchk %> Waiver-e</b></p>
+												<p><b><%= chk %> No Fee</b></p>
+											<% else %>
+												<% if @obj.waiver_requested %>
+													<% if @obj.waiver_county %>
+														<p><b><%= uchk %> Waiver&nbsp;&nbsp;&nbsp;&nbsp;<%= chk %> Waiver-e</b></p>
+													<% else %>
+														<p><b><%= chk %> Waiver&nbsp;&nbsp;&nbsp;&nbsp;<%= uchk %> Waiver-e</b></p>
+													<% end %>
+												<% else %>
+													<p><b><%= uchk %> Waiver&nbsp;&nbsp;&nbsp;&nbsp;<%= uchk %> Waiver-e</b></p>
+												<% end %>
+												<p><b><%= uchk %> No Fee</b></p>
+											<% end %>
+											<p><b>Exam Series: <u><%= s * 2 %></u></b></p>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<table width="100%" cellspacing="4" cellpadding="0" border="0">
+									<tr>
+										<td><b>Exam/Job No.</b></td>
+										<td><b>Name</b></td>
+										<td><b>Application Deadline</b></td>
+										<td><b>Exam Date</b></td>
+										<td align="right"><b>Fee</b></td>
+									</tr>
+									<tr>
+										<td><h3><%= h ep.exam.no %></h3></td>
+										<td><h3><%= h ep.exam.name %></h3></td>
+										<td><h3><%= ep.exam.deadline.dt0? %></h3></td>
+										<td><h3><%= ep.exam.exam_date.dt0? %></h3></td>
+										<td align="right"><h3><%= ep.price.to_f > 0 ? m(ep.price) : 'NA' %></h3></td>
+									</tr>
+								</table>
+							</td>
+						</tr>						
+					<% end %>
+					<tr>
+						<td>
+							<p>Full Name: <b><%= h "#{@obj.last_name}, #{@obj.first_name} #{@obj.middle_name}" %></b></p>
+							<p>Any other name, assumed name or nickname, by which you are/have been known: <b><%= h @obj.nickname %></b></p>
+							<p>Mailing Address: <b><%= comma_h @obj.address, @obj.address2, @obj.city, "#{@obj.state} #{@obj.zip}", @obj.county %></b></p>
+							<p>Residence Address: <b><% if @obj.residence_different %><%= comma_h @obj.res_address, @obj.res_city, "#{@obj.res_state} #{@obj.res_zip}", @obj.res_county %><% else %>Same as mailing address<% end %></b></p>
+							<% if !seasonal %>
+								<p>Have you been a resident of Monroe County for the past four months? <b><%= @obj.county_resident_4_mo ? 'YES' : 'NO' %></b></p>
+							<% end %>
+							<table width="100%" cellspacing="0" cellpadding="0" border="0">
+								<tr>
+									<td width="50%">
+										<p>Home Telephone Number: <b><%= h @obj.home_phone %></b></p>
+										<p>Work Telephone Number: <b><%= h @obj.work_phone %></b></p>
+									</td>
+									<td width="50%">
+										<p>Social Security Number: <b><%= h @obj.ssn %></b></p>
+										<p>E-mail address: <b><%= h @obj.web_user.email if @obj.web_user %></b></p>
+									</td>
+								</tr>
+							</table>
+							<% if !seasonal %>
+								<p>&nbsp;<br />If applying for Police Officer, Deputy Sheriff or Firefighter positions, please indicate date of birth: <b><%= h @obj.dob.strftime('%m/%d/%Y') if @obj.dob %></b></p>
+							<% end %>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table cellspacing="0" cellpadding="0" border="0" width="100%">
+								<tr>
+									<td width="50%">
+										<% if seasonal %>
+											<p>Are you at least 18 years old? <b><%= @obj.over_18 ? 'YES' : 'NO' %></b></p>
+											<p>When can you begin to work? <b><%= @obj.begin_work %></b></p>
+											<p>Need to end work? <b><%= @obj.end_work %></b></p>
+											<p>Can you work weekends? <b><%= @obj.work_weekends ? 'YES' : 'NO' %></b></p>
+										<% else %>
+											<p>Are you a citizen of the United States? <b><%= @obj.us_citizen ? 'YES' : 'NO' %></b></p>
+											<p>Do you have a valid New York State Driver's license? <b><%= @obj.state_drivers_license ? 'YES' : 'NO' %></b></p>
+											<p>Will you accept part-time work? <b><%= @obj.accept_part_time_work ? 'YES' : 'NO' %></b></p>
+										<% end %>
+									</td>
+									<td width="50%">
+										<% if seasonal %>
+											<p>Do you have a valid NYS drivers license? <b><%= @obj.state_drivers_license ? 'YES' : 'NO' %></b></p>
+											<p>If so what class? <b><%= @obj.drivers_license_class %></b></p>
+											<p>Can you obtain daily transportation to any work site in Monroe County? <b><%= @obj.has_transportation ? 'YES' : 'NO' %></b></p>
+										<% else %>
+											<p>If no, do you have a legal right to work in the US? <b><%= @obj.us_citizen ? 'NA' : @obj.us_right_to_work ? 'YES' : 'NO' %></b></p>
+											<p>If yes, what class? <b><%= @obj.us_right_to_work_class %></b></p>
+											<p>Will you accept temporary work? <b><%= @obj.accept_temp_work ? 'YES' : 'NO' %></b></p>
+										<% end %>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<% if !seasonal %>
+						<tr>
+							<td>
+								<p>Have you served in the Armed Forces of the U.S.A.? <b><%= @obj.army_served ? 'YES' : 'NO' %></b></p>
+								<p>Dates of active service: From: <b><%= @obj.army_from ? @obj.army_from.strftime('%m/%d/%Y') : s %></b> To: <b><%= @obj.army_to ? @obj.army_to.strftime('%m/%d/%Y') : s %></b>
+								<p>Veterans of the Armed Forces and Active Duty members soon to be discharged wishing to claim additional examination credits as veterans or disabled veterans 
+									must submit a form VC-1 and/or form VC-4 and a copy of their discharge papers (form DD-214) with our office.</p>
+								<p>Have you ever, since January 1, 1951, been permanently appointed or promoted in the service of NY State or any of its civil divisions from an eligible list as a result 
+									of additional veterans credits granted you on such list? <b><%= @obj.vc_used ? 'YES' : 'NO' %></b></p>
+								<p>If yes, name agency that established the eligible list: <b><%= @obj.vc_used_agency %></b></p>
+							</td>
+						</tr>
+					<% end %>
+					<tr>
+						<td>
+							<p>An answer of YES to any of the following questions does not represent an automatic bar to employment. Each case is considered and evaluated in relation to the duties and responsibilities of the position for which you are applying:</p>
+							<p>Were you ever convicted of any violation of law other than a minor traffic violation?* <b><%= @obj.law_violation ? 'YES' : 'NO' %></b></p>
+							<p>Do you currently have any criminal charges pending against you? <b><%= @obj.pending_criminal_charges ? 'YES' : 'NO' %></b></p>
+							<% if !seasonal %>
+								<p>Were you ever removed from any type of employment? <b><%= @obj.removed_employment ? 'YES' : 'NO' %></b></p>
+							<% end %>
+							<p>* This question refers to all crimes, violations or offenses in any jurisdiction, including Federal and military offenses, except minor traffic infractions. It also includes Juvenile Offender status convictions. You do not need to include adjudications of Juvenile Delinquency or Youthful Offender status or arrests that did not lead to a conviction.</p>							
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h2>License/Certification</h2>
+							<% if @obj.web_certifications.empty? %>
+								<p><b>None specified.</b></p>
+							<% else %>
+								<% first = true %>
+								<% @obj.web_certifications.each_with_index { |c, i| %>
+									<% unless first %><hr /><% end; first = false %>
+									<table width="100%" cellspacing="0" cellpadding="0" border="0">
+										<tr>
+											<td width="50%" valign="top">
+												<p>Name of trade or profession: <b><%= h c.name %></b></p>
+												<p>Licensing Agency: <b><%= h c.agency %></b></p>
+												<p>Is this certification permanent? <b><%= c.permanent ? 'YES' : 'NO' %></b></p>
+											</td>
+											<td width="50%" valign="top">
+												<p>License/Certificate Number: <b><%= h c.no %></b></p>
+												<p>Licensed From: <b><%= c.from_date ? h(c.from_date.strftime('%m/%d/%Y')) : s %></b> To: <b><%= c.to_date ? h(c.to_date.strftime('%m/%d/%Y')) : s %></b></p>
+											</td>
+										</tr>
+									</table>
+								<% } %>
+							<% end %>
+						<td>
+					</tr>
+					<tr>
+						<td>
+							<h2>Education</h2>
+							<table width="100%" cellspacing="0" cellpadding="0" border="0">
+								<tr>
+									<td width="50%" valign="top">
+										<p>Have you received a High School Diploma? <b><%= ['', 'lths', 'ged'].include?(@obj.education) ? 'NO' : 'YES' %></b></p>
+										<p>Highest grade completed: <b><%= h @obj.education_grade %></b></p>
+									</td>
+									<td width="50%" valign="top">
+										<p> If no, have you received a General Equivalency Diploma (G.E.D.)? <b><%= @obj.education == 'ged' ? 'YES' : @obj.education == 'lths' ? 'NO' : '' %></b></p>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h2>Education Above High School</h2>
+							<table width="100%" cellspacing="4" cellpadding="0" border="0">
+								<tr>
+									<td rowspan="2"><b>Name of School</b></td>
+									<td rowspan="2"><b>Location (State)</b></td>
+									<td rowspan="2"><b>Course or Major</b></td>
+									<td colspan="2"><b>Credits Completed</b></td>
+									<td rowspan="2"><b>Type of Degree/Certificate Received</b></td>
+								</tr>
+								<tr><td><b>Sem. Hrs.</b></td><td><b>Qtr. Hrs.</b></td></tr>
+								<% @obj.web_educations.each { |e| %>
+									<tr>
+										<td><%= h e.school_name %></td>
+										<td><%= h e.state %></td>
+										<td><%= h e.major %></td>
+										<td><%= h e.credits_semester %></td>
+										<td><%= h e.credits_quarter %></td>
+										<td><%= h e.degree %></td>
+									</tr>
+								<% } %>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h2>Training</h2>
+							<p>Other training you received (i.e., work training programs, Armed Forces training).  Please estimate training hours received:</p>
+							<table width="100%" cellspacing="4" cellpadding="0" border="0">
+								<tr>
+									<td><b>Course/Program</b></td>
+									<td align="right"><b>Hours</b></td>
+								</tr>
+								<% @obj.web_trainings.each { |t| %>
+									<tr>
+										<td><%= h t.description %></td>
+										<td align="right"><%= h t.hours %></td>
+									</tr>
+								<% } %>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h2>Work Experience</h2>
+								<p>Describe your employment, including military experience, beginning with your current or most recent employment. Submission of a resume does not relieve you of the 
+								responsibility for completing all sections of this application. The resume is a supplement to the application, and not a substitute for it.  To receive credit for a job, basic 
+								employment information such as address, name and title of supervisor, average number of hours in the workweek, final salary, reason for leaving, specific job duties, your job 
+								title, etc. must be shown.</p>
+								<% if @obj.web_employments.empty? %>
+									<p><b>None specified</b></p>
+								<% else %>
+									<% first = true %>
+									<% @obj.web_employments.each { |e| %>
+										<% unless first %><hr /><% end; first = false %>
+										<p>Starting Date: <b><%= e.start_date ? e.start_date.strftime('%m/%d/%Y') : s %></b> Ending Date: <b><%= e.end_date ? e.end_date.strftime('%m/%d/%Y') : s %></b></p>
+										<p>Name &amp; address of employer: <b><%= comma_h e.name, e.address, e.address2, e.city, "#{e.state} #{e.zip}" %></b></p>
+										<p>Salary: <b><%= e.salary.blank? ? s : h(e.salary) %></b> Hours worked per week: <b><%= h e.hours %></b></p>
+										<p>Reason for leaving: <b><%= h e.reason_left %></b></p>
+										<h3>Your Job Title: <b><%= h e.title %></b></h3>
+										<p>Immediate Supervisors Name, Title & Phone number: <b><%= comma_h e.supervisor_name, e.supervisor_title, e.supervisor_phone %></b></p>
+										<p>Description of duties: <b><%= nl2br_h e.description %></b></p>
+									<% } %>
+								<% end %>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<h2>Additional Information / Comments</h2>
+							<p><%= nl2br_h @obj.info %></p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p><b><%= @obj.confirmed ? chk : uchk %> I declare that the statements made in this application (including statements made in my accompanying papers) have been examined by me and to the best of my 
+							knowledge and belief are true and correct. Any false statements made may result in termination of employment or removal from Civil Service eligibility. 
+							I further understand, and will otherwise submit thereto, that in accordance with the County's pre-employment drug testing policy, I may be required to submit 
+							to a urinalysis test as a condition for employment. Applicants may also be required to undergo a State and national criminal history background investigation, 
+							which will include a fingerprint check, to determine suitability for appointment. Failure to meet the standards for the background investigation may result in disqualification.						
+		</b></p>
+							<p>
+						<strong>Candidate Name:</strong> <%= @obj.first_name %> <%= @obj.last_name %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Online Account:</strong> <%= @obj.web_user.username %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<strong>Submission Date:</strong> <%= @obj.submitted_at ? @obj.submitted_at.strftime('%m/%d/%Y %I:%M%p') : '' %></p>
+						</td>
+					</tr>
+				</table>
+				<p>&nbsp;</p>
+				<center><p>210 County Office Building * 39 West Main Street * Rochester, NY 14614-1471<br />
+				Phone: (585) 753-1700 * TTY: (585) 753-1091 * WEB SITE: www.monroecounty.gov<br />
+				Monroe County government prohibits discrimination in employment, program activities, procurement and contracting against any person due to such<br />
+				person's age,  marital status, disability, genetic predisposition or carrier status, race, color, creed, sexual orientation or national origin.<br />  
+				An Equal Opportunity Employer</p></center>
+<% if ep.exam.price.to_f > 0 %>
+    <!-- NEW PAGE -->
+    <h2>Special Arrangements for Examination</h2>
+
+    <p>If you need special arrangements because you are a Religious Observer [for religious reasons, cannot be tested on date of examination(s)], or
+      if you have a disability that requires you to have special accommodations or assistance for the completion of this application or for you to
+      participate in an examination, you must notify this Department at 585-753-1700 or 585-753-1091 (TDD) no later than the last date of filing
+      for this (these) examination(s).  Your request must include examination number(s) and title(s) and the type of special arrangements required
+      accompanied by all supporting documentation.</p>
+
+    <p>Monroe County, as an employer, does not discriminate on the basis of a disability and will make reasonable accommodations for employees
+      with special needs, due to a disability.  It is the responsibility of the applicant or employee to voluntarily disclose that they require an
+      accommodation based on their disability.</p>
+
+
+
+    <h2>Application Fee for Examination</h2>
+
+    <p>If the examination announcement indicates that an application fee is required for the examination(s) for which you are applying, you must
+      submit the required fee for each separate examination.  The required fee amount for each examination will be listed on the announcement.
+      Enclose a check or money order payable to the Monroe County Director of Finance with this application.  WE DO NOT ACCEPT
+      CASH.</p>
+
+    <p>Your application fee will not be refunded if you do not meet the requirements for admission to the examination.  Compare your
+      qualifications carefully to the requirements stated on the announcement and file only for those examinations for which you are
+      clearly qualified.</p>
+
+    <h2>Application Fee Waiver Request and Certification</h2>
+
+    <p>Civil Service Law Section 50.5(b): &quot;...fees shall be waived for candidates who certify to the state civil service department, a
+      municipal commission or regional commission that they are unemployed and primarily responsible for the support of a household, or are
+      receiving public assistance.&quot;</p>
+
+    <p><%= @obj.waiver_requested ? chk : uchk %> I request that my application fee(s) be waived in accordance with Section 50.5(b) of the State Civil Service Law for the following reason(s):</p>
+
+    <table width="100%" cellspacing="4" cellpadding="0" border="0">
+      <tr>
+        <td valign="top" align="center" width="1%"><%= @obj.waiver_unemployed ? chk : uchk %></td>
+        <td width="99%" valign="top"> I am totally unemployed <strong><em>and</em></strong> I am primarily responsible for the support of my household.
+          <strong>NOTE: Individuals who can be claimed as a dependent on any other person's tax return ARE NOT eligible for application fee waiver
+            as head of household.</strong><br />&nbsp;</td>
+      </tr>
+      <td valign="top" align="center" width="1%"><%= @obj.waiver_medicaid ? chk : uchk %></td>
+      <td width="99%" valign="top"> I am currently eligible for medicaid.<br />&nbsp;</td>
+      </tr>
+      <tr>
+        <td valign="top" align="center"><%= @obj.waiver_ssi ? chk : uchk %></td>
+        <td valign="top">I am currently receiving Supplemental Security Income (SSI) payments<br />&nbsp;</td>
+      </tr>
+      <tr>
+        <td valign="top" align="center"><%= @obj.waiver_public_assistance ? chk : uchk %></td>
+        <td valign="top"> I am currently receiving public assistance (Temporary Assistance for Needy Families/Family Assistance or Safety Net Assistance).<br />
+          &nbsp;<br />
+          <% if false %>
+              <%= @obj.waiver_safety_net ? chk : uchk %> Safety Net<br />
+              <%= @obj.waiver_family_assistance ? chk : uchk %> Family Assistance<br />
+          <% end %>
+          Public Assistance Case Number: <b><%= h @obj.waiver_case_number %></b><br />
+          &nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td valign="top" align="center"><%= @obj.waiver_wia ? chk : uchk %></td>
+        <td valign="top"> I am currently Certified Job Training Partnership Act/Workforce Investment Act eligible through a state or local social service agency (e.g. Rochester Works!).<br />
+          <% if false %>
+              &nbsp;<br />
+              Name of caseworker: <b><%= h @obj.waiver_wia_caseworker %></b><br />
+              Caseworker phone number: <b><%= h @obj.waiver_wia_phone %></b><br />
+          <% end %>
+          &nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td valign="top" align="center"><%= @obj.waiver_county ? chk : uchk %></td>
+        <td valign="top">I am a full-time employee of Monroe County represented by CSEA Local 828, Unit 7400 at pay group 10 or below.<br />
+          &nbsp;<br />
+          Job title and grade: <b><%= h @obj.waiver_county_job %></b><br />
+          &nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td valign="top" align="center"><%= @obj.waiver_social_workers ? chk : uchk %></td>
+        <td valign="top"> I am represented by the Federation of Social Workers. I am employed at grade 52 or below or this exam is in my career path.<br />
+          &nbsp;<br />
+          Job title and grade: <b><%= h @obj.waiver_social_workers_job %></b><br />
+          &nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td align="center" colspan="2"><h3>All Fee Waiver Requests are Subject to Verification by Submission of Documentation</h3></td>
+      </tr>
+      <tr>
+        <td valign="top" align="center"><%= @obj.waiver_legal ? chk : uchk %></td>
+        <td valign="top">I affirm that the information given above is true and correct and that I qualify to receive an application fee waiver for the reasons indicated
+          above. I understand that my claim for an application fee waiver may be investigated and I may be disqualified from the listed civil service
+          examination(s) if I make any false statement regarding my eligibility for application fee waiver.<br />&nbsp;<br />
+          <strong>Candidate Name:</strong> <%= @obj.name %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Online Account:</strong> <%= @obj.web_user.username %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <strong>Submission Date:</strong> <%= @obj.submitted_at ? @obj.submitted_at.strftime('%m/%d/%Y %I:%M%p') : '' %>
+        </td>
+      </tr>
+    </table>
+
+<% end %>
+
+    <% unless @obj.race.blank? %>
+    <!-- NEW PAGE -->
+        <table width="100%" cellspacing="0" cellpadding="0">
+          <tr>
+            <td>
+              <img src="mcseal.gif" width="80" height="80" align="left" />
+            </td>
+            <td align="center">
+              <h1>Department of Human Resources</h1>
+              <p>Maggie Brookes, County Executive&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brayton M. Connard, Director</p>
+              <h2>EQUAL EMPLOYMENT OPPORTUNITY DATA COLLECTION FORM</h2>
+            </td>
+            <td>
+              <img src="t.gif" width="80" height="80" align="left" />
+            </td>
+          </tr>
+        </table>
+        <p>&nbsp;</p>
+        <p>Completion of this form is voluntary for all applicants for positions within the Monroe County system.  The
+          information provided is filled with the County's Equal Employment Opportunity Unit and will be kept <em>confidential</em>.
+          The information is not for selection purpose, but only to assist in the evaluation of the County's efforts relative to the
+          Equal Employment Opportunity Program. Please return this form with your application after completion.</p>
+
+        <ol>
+          <li>Name: <strong><%= h @obj.name %></strong><br />&nbsp;</li>
+          <li>Position/Exam Title applying for: <b><%= comma_h *@obj.web_exam_prices.collect { |e| "#{e.web_exam.no} #{e.web_exam.name}" } %></b><br />&nbsp;</li>
+          <% if false %>
+              <li>Date of Birth: <b><%= @obj.dob.strftime('%m/%d/%Y') if @obj.dob %></b><br />&nbsp;</li>
+              <li>Gender: Male <%= @obj.gender == 'M' ? chk : uchk %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Female <%= @obj.gender == 'F' ? chk : uchk %><br />&nbsp;</li>
+              <li>Education: <br />&nbsp;
+                <table>
+                  <tr>
+                    <td><%= @obj.education == 'lths' ? chk : uchk %> Less than high school graduation</td>
+                    <td><%= @obj.education == 'hsd' or @obj.education == 'ged' ? chk : uchk %> High school or equivalency diploma</td>
+                    <td><%= @obj.education == '2yc' ? chk : uchk %> 2-year college (no degree)</td>
+                  </tr>
+                  <tr>
+                    <td><%= @obj.education == 'assoc' ? chk : uchk %> Associate's degree</td>
+                    <td><%= @obj.education == '4yc' ? chk : uchk %> 4-year college (no degree)</td>
+                    <td><%= @obj.education == 'bach' ? chk : uchk %> Bachelor's degree</td>
+                  </tr>
+                  <tr>
+                    <td><%= @obj.education == 'bgrad' ? chk : uchk %> Graduate study beyond Bachelor's</td>
+                    <td><%= @obj.education == 'master' ? chk : uchk %> Master's Degree</td>
+                    <td><%= @obj.education == 'mgrad' ? chk : uchk %> Graduate study beyond Masters</td>
+                  </tr>
+                  <tr>
+                    <td><%= @obj.education == 'doc' ? chk : uchk %> Doctorate</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table><br />&nbsp;
+              </li>
+          <% end %>
+
+          <li>Race/Ethnicity*:<br />&nbsp;<br />
+            <%= @obj.race == 'white' ? chk : uchk %><strong>White (Not of Hispanic origin):</strong>
+            All persons having origins in any of the original peoples of European, North African or the Middle East.<br />&nbsp;<br />
+            <%= @obj.race == 'black' ? chk : uchk %><strong>Black (Not of Hispanic origin):</strong>
+            All persons having origins in any of the Black racial groups of Africa.<br />&nbsp;<br />
+            <%= @obj.race == 'hispanic' ? chk : uchk %><strong>Hispanic:</strong>
+            All persons of Mexican, Puerto Rican, Cuban, Central or South America or other Spanish culture or origin regardless of race.<br />&nbsp;<br />
+            <%= @obj.race == 'asian' ? chk : uchk %><strong>Asian or Pacific Islander:</strong>
+            All persons having origins in any of the original people of the Far East, Southeast Asia, the Indian subcontinent, or the Pacific
+            Islands.  This area includes, for example, China, India, Japan, Korea, the Philippine Islands, and Samoa.<br />&nbsp;<br />
+            <%= @obj.race == 'americanindian' ? chk : uchk %><strong>American Indian or Alaskan Native:</strong>
+            All persons having origin in any of the original people of North America, and who maintains cultural identification through
+            tribal affiliation or community recognition.<br />&nbsp;<br />
+            <% if false %><%= @obj.race == 'other' ? chk : uchk %> Other <br />&nbsp;<% end %>
+          </li>
+
+
+          <% if false %>
+              <li>Have a Disability: <b><%= @obj.disabled ? 'YES' : 'NO' %></b>
+                <br />(Definition - Have a physical or mental impairment which substantially limits one or more major life activities or have a record of such impairment or agency.)<br />&nbsp;
+              </li>
+              <li>Vietnam Era Veteran: <b><%= @obj.army_vietnam ? 'YES' : 'NO' %></b>
+                <br />(Definition - A person who served as a member of the Armed Forces of the United States on full-time active duty other than for training, any part of which occurred between  January, 1, 1963 and May 7, 1975, and was honorably or released under honorable circumstances.) <br />&nbsp;
+              </li>
+              <li>List below where you learned about the exam (example: newspaper, radio (name station) a friend, etc.)<br />
+                <b><%= nl2br_h @obj.heard_from %></b><br />&nbsp;</li>
+          <% end %>
+        </ol>
+
+        <p>* The concept of race as used by the U.S. Equal Employment Opportunity Commission does not denote clear-cut scientific definitions of anthropological origins. For the purposes of the required EEO-4 report, an employee may be included in the group to which he or she appears to belong, identifies with, or is regarded in the community as belonging. However, no person may be counted in more than one race/ethnic category.</p>
+        <p>NOTE: The category &quot;HISPANIC&quot;, while not a race identification, is included as a separate race/ethnic category because of the employment discrimination often encountered by this group; for this reason do not include HISPANIC under either &quot;white&quot; or &quot;black&quot;.</p>
+
+    <% end %>
+
+    <% if @obj.vc_type.nil? or @obj.vc_type != 'none' %>
+    <!-- NEW PAGE -->
+    <center><h2>APPLICATION FOR VETERAN'S CREDITS (VC-1)</h2>
+
+      <p><b>Monroe County Department of Human Resources<br />
+        210 County Office Building<br />
+        39 West Main Street<br />
+        Rochester, New York 14614</b></p></center>
+
+    <p>Candidates must file a separate &quot;Application for Veteran's Credits&quot; form for each examination for which they wish to file. A copy of Applicant's
+      separation papers (form DD-214) must be filed with this form at the Commission address above by the date specified on the examination announcement.</p>
+
+    <ol>
+      <li>I wish to claim&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Disabled Veteran's Credits <%= @obj.vc_type == 'disabled' ? chk : uchk %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Non-Disabled Veteran's Credits <%= @obj.vc_type == 'nondisabled' ? chk : uchk %></li>
+      <li>Job / Exam Announcement(s): <b><%= comma_h *@obj.web_exam_prices.collect { |e| "#{e.web_exam.no} #{e.web_exam.name}" } %></b></li>
+      <li>Full Name: <b><%= h @obj.first_name %> <%= h @obj.middle_name %> <%= h @obj.last_name %></b></li>
+      <li>Address: <b><%= h @obj.address %> <%= h @obj.address2 %> <%= h @obj.city %> <%= h @obj.state %> <%= h @obj.zip %></b></li>
+      <li>Date of Enlistment or Induction: <b><%= @obj.army_enlisted.strftime '%m/%d/%Y' if @obj.army_enlisted %></b></li>
+      <% if false %>
+          <li>Address at time of entrance into Forces: <b><%= h @obj.army_address %>, <% unless @obj.army_address2.blank? %><%= h @obj.address2 %>, <% end %><%= h @obj.army_city %>, <%= h @obj.army_state %> <%= h @obj.army_zip %></b></li>
+      <% end %><li>Dates of Active Service: From <b><%= @obj.army_from ? @obj.army_from.strftime('%m/%d/%Y') : s %></b> To <b><%= @obj.army_to ? @obj.army_to.strftime('%m/%d/%Y') : s %></b></li>
+      <li>Were you discharged under honorable conditions? <b><%= @obj.army_discharge_honorable ? 'YES' : 'NO' %></b></li>
+      <li>Reason for discharge or release as stated on certificate: <b><%= @obj.army_discharge_reason %></b></li>
+      <li>Have you ever been appointed through the use of Veteran's Credits to any position in the State Civil Service or any City or Civil Division of New York State? <b><%= @obj.vc_used ? 'YES' : 'NO' %></b></li>
+    </ol>
+
+    <h2>APPLICANTS FOR DISABLED VETERAN'S CREDITS MUST COMPLETE THE FOLLOWING:</h2>
+
+    <p>Applicants for Disabled Veterans credits must also complete and forward two copies of &quot;Authorization for Disability Form&quot; (VC-4), which is available at
+      the Commission address above, to the regional office of the Veteran's Administration where claim is now on file.  This form should be forwarded in
+      sufficient time so that the Commission will receive verification of your disability before the date specified on the examination announcement.</p>
+
+    <ol>
+      <li>U.S. Veteran's Administration Claim No: <b><%= h @obj.vc_disabled_claim_no %></b></li>
+      <li>Date on which two copies of &quot;Authorization for Disability Record&quot; (VC-4) were sent to Veteran's Administration: <b><%= @obj.vc_disabled_auth_date.strftime('%m/%d/%Y') if @obj.vc_disabled_auth_date %></b></li>
+    </ol>
+
+    <h2>THE USE OF VETERAN'S CREDITS</h2>
+
+    <p>New York State Civil Service law allows additional credits in examinations to successful candidates who have filed for and established their
+      status as disabled veterans or non-disabled veterans.  These credits are granted at the time of establishment of the eligible list on the
+      following basis:</p>
+
+    <table cellspacing="8" border="0" cellpadding="0">
+      <tr>
+        <td></td>
+        <td><b>Open-Competitive<br />Exams</b></td>
+        <td><b>Promotional<br />Exams</b></td>
+      </tr>
+      <tr>
+        <td>Disabled Veteran</td>
+        <td>10 pts.</td>
+        <td>5 pts.</td>
+      </tr>
+      <tr>
+        <td>Non-Disabled Veteran</td>
+        <td>5 pts.</td>
+        <td>2.5 pts.</td>
+      </tr>
+    </table>
+    <p>&nbsp;</p>
+    <p>In order to be considered for veterans credits, candidates must furnish proof (by this form and copy of separation papers) that they:</p>
+
+    <ol>
+      <li>Have served on active duty with the Armed Forces in a time of war, as defined in Section 85 of the State Civil Service Law.</li>
+      <li>Were honorably discharged or released under honorable circumstances from such services.</li>
+      <li>Are a resident of New York State at the time of the establishment of the eligible list.</li>
+    </ol>
+
+    <p>Disabled Veteran's Credits applicants must show in addition to the three factors listed above that they have a war-incurred disability of at
+      least 10% which is certified by (VC-4 form) to be in existence at the time of application for additional credits.</p>
+
+    <p>The mere application for Veteran's credits does not obligate applicant to the use of such credits.  Candidates who pass the examination will
+      be notified of their standing on the eligible list with or without these additional credits.  At the time of appointment eligible candidates will
+      be asked to sign forms using or relinquishing these additional credits.</p>
+
+    <p>Candidates may use their veteran's or disabled credits to gain appointment only once in the civil service of the State or of any City or Civil
+      Division thereof.</p>
+
+    <h2>TIME OF WAR IS DEFINED AS FOLLOWS:</h2>
+
+    <p>All service in the United States armed forces during:</p>
+
+    <p>World War I April 6, 1917 - November 11, 1918<br />
+      World War II December 7, 1941 - December 31, 1946<br />
+      Korean Conflict June 27, 1950 - January 31, 1955<br />
+      Viet Nam Conflict February 28, 1961 - May 7, 1975<br />
+      Persian Gulf Conflict August 2, 1990 - the date upon which such hostilities end</p>
+
+    <p>Service for which a veteran received the armed forces expeditionary medal, the navy expeditionary medal, or the marine corps
+      expeditionary medal for:</p>
+
+    <p>Hostilities in Lebanon June 1, 1983 - December 1, 1987<br />
+      Hostilities in Grenada October 23, 1983 - November 21, 1983<br />
+      Hostilities in Panama December 20, 1989 - January 31, 1990</p>
+
+<% end %>
+
+
+
+
+</div>

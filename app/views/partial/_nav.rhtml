@@ -1,0 +1,113 @@
+<%
+
+empl_controllers = %w{employee pay_cert form_change form_hire}
+cert_controllers = %w{cert}
+@allow_liaison = @current_user.liaison_level? && (empl_controllers.include?(params[:controller]) || empl_controllers.include?(params[:sc]) )
+@allow_cert = @current_user.liaison_level? && cert_controllers.include?(params[:controller])
+agency_controllers = %w{cert form_change form_hire}
+
+@allow_agency = @current_user.agency_level? && (agency_controllers.include?(params[:controller]) || agency_controllers.include?(params[:sc]))
+
+addtest = request.url
+
+@allow_add = @current_user.agency_level? && addtest.include?('web_exam') && addtest.include?('document')
+%>
+
+<% if params[:sc] %>
+	<% if false && File.exists?("app/views/#{params[:sc]}/_nav.rhtml") %>
+		<%= partial "#{params[:sc]}/nav" %>
+
+	<% else %>
+		<%= partial "#{params[:sc]}/snav" if File.exists? "app/views/#{params[:sc]}/_snav.rhtml" %>
+		<div class="tabs">
+			<%= tab 'List', :controller => params[:sc], :action => :index, :sc => nil %>
+			<% if @current_user.staff_level? || @allow_liaison || @allow_agency %>
+				<%= tab 'New', :controller => params[:sc], :action => :new, :sc => nil %>
+			<% end %>
+			<%= partial "#{params[:sc]}/nav1" if File.exists? "app/views/#{params[:sc]}/_nav1.rhtml" %>
+			<% unless params[:popup] %>
+				<%= tab truncate(@sobj.label.to_s), {:controller => params[:sc], :action => :view, :id => @sobj.id, :sc => nil}, {}, :class => 'tab-obj active' %>
+			<% end %>
+			<div class="clear"></div>
+		</div>
+		<div class="tabs">
+			<%= tab 'View', :controller => params[:sc], :action => :view, :id => @sobj.id, :sc => nil %>
+			<% if @current_user.staff_level? || @allow_liaison || @allow_agency %>
+				<%= tab 'Edit', :controller => params[:sc], :action => :edit, :id => @sobj.id, :sc => nil %>
+				<% if !@current_user.agency_level? %>
+					<%= tab 'Clone', :controller => params[:sc], :action => :duplicate, :id => @sobj.id, :sc => nil %>
+				<% end %>
+			<% end %>
+			<% unless params[:popup] %>
+				<%= partial "#{params[:sc]}/nav2" if File.exists? "app/views/#{params[:sc]}/_nav2.rhtml" %>
+			<% end %>
+			<% if false %> Disabled so people stop deleting wrong thing...
+				<% unless @current_user.view_only? %>
+					<%= tab 'Delete', :controller => params[:sc], :action => :delete, :id => @sobj.id, :sc => nil %>
+				<% end %>
+			<% end %>
+			<div class="clear"></div>
+		</div>
+	<% end %>
+<% end %>
+<% unless @notabs %>
+	<% unless params[:popup] %>
+		<%= partial 'snav' %>
+	<% end %>
+	<div id="<%= params[:controller] %>-tabs" class="active-<%= params[:action] %>">
+		<% @obj, @original = @original, @obj if @original %>
+		<div class="tabs">
+			<%= tab 'List', :controller => params[:controller], :action => :index %>	
+			<% unless (@view_only || @no_create) && (!@allow_new) %>
+				<% if @current_user.staff_level? || @allow_liaison || @allow_agency || @allow_add || @allow_cert %>
+					<%= tab 'New', :controller => params[:controller], :action => :new %>
+				<% end %>
+			<% end %>
+			<%= tab truncate(@obj.label), {:controller => params[:controller]}, {:action => :view, :id => @obj.id}, {:class => 'tab-obj'} if @obj and !@obj.new_record? %>
+			<% unless params[:popup] %>
+				<%= partial 'nav1' %>
+			<% end %>
+			<div class="clear"></div>
+		</div>
+		<% unless params[:popup] %>
+			<%= partial 'nav3' %>
+		<% end %>
+		<% if @obj and !@obj.new_record? %>
+			<div class="tabs">
+			<% unless params[:popup] %>
+				<% if @current_user.staff_level? %>
+					<div class="right"><%=tab 'Log', :controller => params[:controller], :action => :change_log, :id => @obj.id %></div>
+				<% end %>
+			<% end %>			
+				<%= tab 'View', :controller => params[:controller], :action => :view, :id => @obj.id %>
+				<% if !@view_only || @allow_agency %>
+					<% if @current_user.staff_level? || @allow_liaison || @allow_agency %>
+						<%= tab 'Edit', :controller => params[:controller], :action => :edit, :id => @obj.id %>
+						<% unless @no_create || @no_clone %>
+							<% if !@current_user.agency_level? %>
+								<%= tab 'Clone', :controller => params[:controller], :action => :duplicate, :id => @obj.id %>
+							<% end %>
+						<% end %>
+					<% end %>
+					<% unless params[:popup] %>
+						<%= partial 'nav2' %>
+					<% end %>
+					<% if @current_user.staff_level? || @allow_liaison %>
+						<% unless @no_destroy %>
+							<%= tab 'Delete', :controller => params[:controller], :action => :delete, :id => @obj.id %>
+						<% end %>
+					<% end %>
+				<% else %>
+					<% unless params[:popup] %>
+						<%= partial 'nav2' %>
+					<% end %>
+				<% end %>
+				<div class="clear"></div>
+			</div>
+		<% end %>
+		<% @obj, @original = @original, @obj if @original %>
+	<% end %>
+</div>
+<% if params[:popup] and @obj and !@obj.new_record? %>
+	<%= link_to_function '<span>Select This Record</span>', "window.parent.cb(#{@obj.id}, #{@obj.label.to_json});", {:class => 'bigbtn'} %>
+<% end %>

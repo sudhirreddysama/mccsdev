@@ -1,0 +1,36 @@
+<div class="viewer">
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Initials:</label>
+					<%= h o.initials %>
+				</td>
+				<td>
+					<label>Username:</label>
+					<%= h o.username %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.name %>
+				</td>
+				<td>
+					<label>Email:</label>
+					<%= mail_to o.email %>
+				</td>
+				<td>
+					<label>Fax:</label>
+					<%= h o.fax %>
+				</td>
+				<td>
+					<label>Level:</label>
+					<%= h o.level %>
+				</td>
+				<td>
+					<label>Agency:</label>
+					<%= h o.agency.name if o.agency %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+</div>

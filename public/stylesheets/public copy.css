@@ -1,0 +1,57 @@
+html, body { padding: 0; margin: 0; border: 0; }
+body, td, th, input, select, textarea { font: 12px/16px Trebuchet MS, Verdana, Arial, sans-serif; text-align: left; }
+
+h1, h2, h3, h4, h5, h6 { font-weight: normal; padding: 0; margin: 1em 0; }
+h1 { font-size: 160%; }
+h2 { font-size: 150%; }
+h3 { font-size: 140%; }
+h4 { font-size: 130%; }
+h5 { font-size: 120%; }
+h6 { font-size: 110%; }
+
+a { color: #003366; }
+
+.left { float: left; }
+.right { float: right; }
+
+table { border-collapse: collapse; }
+th { font-weight: bold; }
+th, td { margin: 0; padding: 0; vertical-align: top; }
+
+input, textarea, select, form { margin: 0; }
+
+input[type=text], input[type=password], textarea, select { background-color: #ffe; border: 1px solid #404040; }
+
+#head1 { background: #003366 url(../images/h2.jpg) left top repeat-x; }
+#head2 { background: transparent url(../images/h1.jpg) left top no-repeat; }
+#head3 { background: transparent url(../images/h3.jpg) right top no-repeat; height: 70px; }
+#head3 h1 { margin: 0; padding: 0; }
+#head3 h1 a { display: block; height: 43px; width: 400px; }
+#head3 h1 span { display: none; }
+
+#tabs a { font-weight: bold; display: block; float: left; border: 1px solid #000; border-width: 1px 2px 0 0; margin-right: 3px; padding: 0px 5px 0px 5px; background: #ccd6e0; color: #003366; text-decoration: none; line-height: 26px; }
+#tabs a:hover { background-color: #fff; }
+#tabs a.active { color: #000; background-color: #fff; }
+
+#body { padding: 5px; }
+
+#tabs .right a { border-width: 1px 0 0 2px; margin: 0 0 0 3px; }
+
+#user { float: right; padding: 5px; color: #fff; }
+
+.form th { white-space: nowrap; }
+.form th, .form td { padding: 3px 5px 2px 5px; }
+.form td.subform, .form  th.subform { padding: 0; }
+td.subform table td, td.subform table th { padding: 3px 5px 2px 5px; }
+
+/*.addlink { padding: 2px 5px 2px 22px; background: #eee url(../images/icons/add.png) 2px center no-repeat; display: block; float: left; text-decoration: none; font-weight: bold;  border: 2px solid #888;  }
+.dellink { padding: 2px 5px 2px 22px; background: #eee url(../images/icons/cross.png) 2px center no-repeat; display: block; float: left; text-decoration: none; font-weight: bold; border: 2px solid #888; }
+*/
+.dots { background: transparent url(../images/dots.gif) left bottom repeat-x; padding-right: 5px; }
+.dots span { background: #fff; padding-right: 4px; }
+
+/* #appl h2 { margin: 0; padding: 0; font-size: 100%; border: none; }
+#appl h2 a { display: block; padding: 2px 5px 2px 5px; font-weight: bold; border-bottom: 1px solid #888; border-top: 1px solid #fff; background: #e0e0e0; font-size: 100%; text-decoration: none; }
+#appl h2 a:hover { background: #f0f0f0; } */
+
+#appl h2 { padding: 0; font-size: 100%; }

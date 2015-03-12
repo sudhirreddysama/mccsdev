@@ -1,0 +1,7 @@
+<%= partial 'errors', :errors => errors %>
+<div class="marg">Are you sure you want to delete &quot;<%= h label %>?&quot; This action is irreversible!</div>
+<%= form_tag %>
+	<div class="marg">
+		<%= submit_tag 'Yes, Delete' %> <%= link_to 'No, don\'t delete!', :back %>
+	</div>
+</form>

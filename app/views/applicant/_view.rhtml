@@ -1,0 +1,1194 @@
+<% 
+
+wa = o.web_applicant 
+
+is_agency = @current_user.agency_level?
+is_staff = @current_user.staff_level?
+is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type.seasonal
+
+%>
+
+<% if is_staff %>
+	<script type="text/javascript">
+		
+		var admin_notes;
+		
+		(function($) {
+		
+			$(window).bind('beforeunload', function(){
+				$('input').blur();
+				if(window.notes_dirty) {
+					return 'Notes haven\'t finished saving. Leave page anyway?';
+				}
+			});
+			
+			admin_notes = function(t) {
+				t = $(t);
+				t.addClass('busy-bg');
+				var split = t.attr('name').split('-');
+				var typ = split[0];
+				var id = split[1];
+				var val = t.val();
+				var d = {}
+				d[typ] = val;
+				window.notes_dirty = true;
+				$.ajax({
+					url: root_url + 'applicant/admin_notes/<%= @obj.id %>/'+ id,
+					data: d,
+					complete: function(xhr, status) {
+						t.removeClass('busy-bg');
+					},
+					success: function(data, status, xhr) {
+						new Effect.Highlight(t.attr('id'), {
+							startcolor: '#ddffdd',
+							endcolor: '#ffffee'
+						});
+						window.notes_dirty = false;
+					},
+					error: function(xhr, status, error) {
+						if(confirm('Error updating notes. Try again?')) {
+							admin_notes(t)
+						}
+					}			
+				});
+			}
+			
+		})(jQuery);
+		
+	</script>
+<% end %>
+
+
+	<div class="tabs buttons">
+		<%= tab 'Printable Version', {:controller => :applicant, :action => :print, :id => @obj.id}, {}, :target => '_blank' %>
+		<div class="clear"></div>
+	</div>
+
+<div class="viewer">
+	<div class="header">General Info.</div>
+
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Status:</label>
+					<%= h o.app_status.name if o.app_status %>
+				</td>
+				<td>
+					<label>Submitted:</label>
+					<%= h o.submitted_at.d0? %>
+				</td>
+				<td>
+					<label>SSN:</label>
+					<%= h o.person.ssn if o.person %>
+				</td>
+				<td>
+					<% if is_agency %>
+						<label>Name:</label>
+						<%= h o.person.label if o.person %>
+					<% else %>
+						<label>Name (links to person):</label>
+						<%= link_to(o.person.label, :controller => :person, :action => :view, :id => o.person_id) if o.person %>
+					<% end %>
+				&nbsp;</td>
+				<td>
+					<label>Paid By:</label>
+					<%= o.paid_by %>
+				</td>				
+				<td>
+					<label>Check No.:</label>
+					<%= o.check_no %>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Mailing Address:</label>
+					<%= h o.person.full_mailing_address(', ') %>
+				</td>
+				<td>
+					<label>Mailing County:</label>
+					<%= h o.person.mailing_county %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>			
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Res. Diff.?</label>
+					<%= yn o.person.residence_different %>
+				</td>
+				<td>
+					<label>Residence Address:</label>
+					<% if o.person.residence_different %>
+						<%= h o.person.full_residence_address(', ') %>
+					<% else %>
+						Same as Mailing Address
+					<% end %>
+				</td>
+				<td>
+					<label>Residence County:</label>
+					<% if o.person.residence_different %>
+						<%= h o.person.residence_county %>
+					<% end %>
+				&nbsp;</td>				
+			</tr>
+		</table>
+	</div>	
+	
+
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Home Phone:</label>
+					<%= h phone_format(o.person.home_phone) %>
+				</td>
+				<td>
+					<label>Work Phone:</label>
+					<%= h phone_format(o.person.work_phone) %>
+				</td>
+				<td>
+					<label>Cell Phone:</label>
+					<%= h phone_format(o.person.cell_phone) %>
+				</td>
+				<td>
+					<label>Fax:</label>
+					<%= h phone_format(o.person.fax) %>
+				</td>
+				<td>
+					<label>Email:</label>
+					<%= mail_to o.person.email unless o.person.email.blank? %>
+				</td>
+				<td>
+					<label>Contact Via:</label>
+					<%= o.person.contact_via %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Exam No.:</label>
+					<%= o.exam.exam_no if o.exam %>
+				</td>
+				<td>
+					<label>Exam Title (links to exam):</label>
+					<%= link_to o.exam.title, :controller => :exam, :action => :view, :id => o.exam_id if o.exam %>
+				</td>
+				<td>
+					<label>Approved?:</label>
+					<%= o.approved.blank? ? '' : yn(o.approved == 'Y') %>
+				</td>
+				<td>
+					<label>If No, Reason:</label>
+					<%= h(o.disapproval ? o.disapproval.reason : o.disapproval_reason) %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="row">
+		<table>
+			<tr>
+				<% if !is_seasonal %>
+					<td>
+						<label>Raw:</label>
+						<%= o.base_score.n2? %>
+					</td>
+					<td>
+						<label>Base:</label>
+						<%= h o.raw_score.n2? %>
+					</td>
+					<td>
+						<label>Vet:</label>
+						<%= h o.veterans_credits.n2? %>
+					</td>
+					<td>
+						<label>Oth:</label>
+						<%= o.other_credits.n2? %>
+					</td>
+					<td>
+						<label>Final:</label>
+						<%= o.final_score.n2? %>
+					</td>
+				<% end %>
+				<td>
+					<label>Agency:</label>
+					<%= h o.agency.name if o.agency %>
+				</td>
+				<td>
+					<label>Department:</label>
+					<%= h o.department.name if o.department %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<% if !is_seasonal %>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Cross Filing?</label>
+						<%= yn o.cross_filing %>
+					</td>
+					<td>
+						<label>Cross Filing At:</label>
+						<%= h o.cross_filing_at %>
+					</td>
+					<td>
+						<label>Cross Filing Exams:</label>
+						<% if wa %>
+							<%= h wa.web_other_exams.collect { |oe| "#{oe.no} #{oe.name} (#{oe.agency == 'other' ? oe.other : oe.agency})" }.join(', ') %>
+						<% end %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Exam Site:</label>
+						<% if o.exam_site %>
+							<%= h o.exam_site.name %>
+						<% elsif o.exam && o.exam.exam_site %>
+							<%= h o.exam.exam_site.name %>
+						<% end %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+		
+		<% if false %>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Student Loans Outstanding?</label>
+							<%= yn? o.loans_outstanding %>&nbsp;
+						</td>
+						<td>
+							<label>Student Loans in Default?</label>
+							<%= yn? o.loans_default %>&nbsp;
+						</td>
+					</tr>
+				</table>
+			</div>
+		<% end %>
+	<% end %>
+	
+	<div class="row">
+		<table width="100%">
+			<tr>
+				<td>
+					<label>Admin Notes:</label>
+					<% if @current_user.staff_level? %>
+						<%= text_area_tag "applicant-#{@obj.id}", @obj.notes, :onchange => 'admin_notes(this);', :style => 'height: 30px; width: 95%;' %>
+					<% else %>
+						<%= nl2br_h @obj.notes %>&nbsp;
+					<% end %>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<% if !is_seasonal %>
+		<div class="row">
+			<table width="100%">
+				<tr>
+					<td>
+						<label>List Notes (will appear on eligible list):</label>
+						<% if @current_user.staff_level? %>
+							<%= text_area_tag "list-#{@obj.id}", @obj.list_note, :onchange => 'admin_notes(this);', :style => 'height: 30px; width: 95%;' %>
+						<% else %>
+							<%= nl2br_h @obj.list_note %>&nbsp;
+						<% end %>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<% end %>
+		
+</div>
+
+<% if !is_seasonal %>
+	<div class="viewer">
+		<div class="header">Veterans Info</div>
+		<% if o.army_served %>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Enlisted From:</label>
+							<%= o.army_from.d0? %>
+						</td>
+						<td>
+							<label>Enlisted To:</label>
+							<%= o.army_to.d0? %>
+						</td>
+						<td>
+							<label>Honorable Discharge?</label>
+							<%= yn o.army_discharge_honorable %>
+						</td>
+						<td>
+							<label>Discharge Reason:</label>
+							<%= h o.army_discharge_reason %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>VC Claim:</label>
+							<%= o.vc_type %>
+						</td>
+						<td>
+							<label>VC Used?</label>
+							<%= yn o.vc_used %>
+						</td>
+						<td>
+							<label>VC Used Agency:</label>
+							<%= h o.vc_used_agency %>
+						</td>
+						<td>
+							<label>VC Disabled Claim No:</label>
+							<%= h o.vc_disabled_claim_no %>
+						</td>
+						<td>
+							<label>VC-4 Sent:</label>
+							<%= o.vc_disabled_auth_date.d0? %>
+						</td>
+						<td>
+							<label>DD-214 Included?</label>
+							<%= yn o.dd214_included %>
+						</td>
+					</tr>
+				</table>
+			</div>
+		<% else %>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>&nbsp;</label>
+							No Veterans Info Provided
+						<td>	
+					</tr>
+				</table>
+			</div>
+		<% end %>
+	</div>
+<% end %>
+
+<div class="viewer">
+	<div class="header">Documents (uploaded by staff)</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<% if o.documents.empty? %>
+						<label>&nbsp;</label>
+						No Documents
+					<% else %>
+						<label>Click to Download/View:</label>
+						<% o.documents.each { |d| %>
+							<div><%= link_to d.filename, :sc => :applicant, :sid => o.id, :controller => :document, :action => :download, :id => d.id %></div>
+						<% } %>
+					<% end %>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+
+
+<% if wa %>
+	
+	<% if o.web_exam %>
+		<div class="viewer">
+			<div class="header">Web Post Description/Minimum Requirements</div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<%= o.web_exam.description %>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	
+	<% end %>
+	
+	<div class="viewer">
+		<div class="header">Web Data</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Web Id:</label>
+						<% if is_agency %>
+							<%= wa.id %>
+						<% else %>
+							<a href="https://www.monroecounty.gov/hrapply/applications/view/<%= wa.id %>"><%= wa.id %></a>
+						<% end %>
+					</td>
+					<td>
+						<label>Name:</label>
+						<%= wa.label %>
+					&nbsp;<td>	
+				</tr>
+			</table>
+		</div>
+		
+		<% if is_seasonal %>
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Are you 18 years of age or older?</label><%= yn? wa.over_18 %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>When can you begin work?</label><%= h wa.begin_work %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>	
+					
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>When do you need to end work?</label><%= h wa.end_work %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>			
+			
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Can you work weekends?</label><%= yn? wa.work_weekends %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>			
+		<% end %>
+		
+		<% if !is_seasonal %>
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Have you been a resident of Monroe County for the past four months?</label><%= yn? wa.county_resident_4_mo %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+			
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Are you a citizen of the united states?</label><%= yn? wa.us_citizen %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+	
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>If no, do you have a legal right</label>
+							<%= yn? wa.us_right_to_work %>
+							<% unless wa.us_right_to_work_class.blank? %>
+								class: <%= h wa.us_right_to_work_class %>
+							<% end %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		<% end %>
+	
+		<div class="row">
+			<table>
+				<tr>
+					<td><label>Do you have a valid New York State Driver's license?</label><%= yn? wa.state_drivers_license %>&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+		
+		<% if is_seasonal %>
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Drivers license class:</label><%= h wa.drivers_license_class %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>			
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Can you obtain daily transportation to any work site in Monroe County?</label><%= yn wa.has_transportation %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>			
+		<% end %>
+	
+		<% if !is_seasonal %>
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Will you accept part-time work?</label><%= yn? wa.accept_part_time_work %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Will you accept temporary work?</label><%= yn? wa.accept_temp_work %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		<% end %>
+		
+		<div class="row">
+			<table>
+				<tr>
+					<td><label>Have you applied for a position/exam at Monroe County before?</label><%= yn? wa.applied_before %>&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	
+		<div class="row">
+			<table>
+				<tr>
+					<td><label>Has your first or last name changed since your last application?</label><%= yn? wa.name_changed %>&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	
+		<div class="row">
+			<table>
+				<tr>
+					<td><label>Previous Name:</label><%= h [wa.last_name, wa.first_name].reject(&:blank?).join(', ') %>&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	
+		<div class="row">
+			<table>
+				<tr>
+					<td><label>Were you ever convicted of any violation of law other than a minor traffic violation?</label><%= yn? wa.law_violation %>&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+		
+		<div class="row">
+			<table>
+				<tr>
+					<td><label>Do you currently have any criminal charges pending against you?</label><%= yn? wa.pending_criminal_charges %>&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+		
+		<% if !is_seasonal %>
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Were you ever removed from any type of employment?</label><%= yn? wa.removed_employment %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Requested Typing Waiver?</label>
+							<%= yn wa.typing_waiver %>
+							<% if wa.typing_waiver %>
+								<%
+								reas = []
+								reas << 'Previously Tested' if wa.typing_waiver_1
+								reas << "County Employee (#{wa.typing_waiver_2_dept} #{wa.typing_waiver_2_title})" if wa.typing_waiver_2
+								%>
+								- <%= reas.join(', ') %>
+							<% end %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>		
+		<% end %>
+		
+		<div class="row">
+			<table>
+				<tr>
+					<td><label>Additional Info/Comments</label><%= nl2br_h wa.info %>&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+		
+		<div class="row">
+			<table>
+				<tr>
+					<td><label>Date of Birth</label><%= wa.dob.d0? %>&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+		
+	</div>
+	
+	<% if !is_seasonal && is_staff %>
+		<div class="viewer">
+			<div class="header">Equal Employment Opportunity Data Collection Form</div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Race:</label>
+							<%= h wa.race %>&nbsp;
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	<% end %>
+	
+
+	
+	<div class="viewer">
+		<div class="header">Fee Waiver Information</div>
+		<% if wa.total.to_f > 0 %>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Waiver?</label>
+							<%= yn wa.waiver_requested %>
+						</td>
+						<td>
+							<label>Reason:</label>
+							<% if wa.waiver_requested %>
+								<%
+								
+								reasons = []
+								reasons << 'Unemployed & Household Primary' if wa.waiver_unemployed
+								reasons << 'Medicaid Eligible' if wa.waiver_medicaid
+								reasons << 'SSI Payments' if wa.waiver_ssi
+								reasons << "Receiving Public Assistance (#{wa.waiver_case_number})" if wa.waiver_public_assistance
+								reasons << 'Job Training Partnership Act/Workforce Investment' if wa.waiver_wia
+								reasons << "County Employee (#{wa.waiver_county_job})" if wa.waiver_county
+								reasons << "Federation of Social Workers (#{wa.waiver_social_workers_job})" if wa.waiver_social_workers
+								
+								
+								%>
+								<%= h reasons.join(', ') %>
+							<% end %>
+						</td>
+					</tr>
+				</table>
+			</div>
+		<% else %>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>&nbsp;</label>
+							No Application Fees
+						</td>
+					</tr>
+				</table>
+			</div>
+		<% end %>
+	</div>
+	
+	<div class="viewer">
+		<div class="header">Attachments</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<% if wa.web_attachments.empty? %>
+							<label>&nbsp;</label>
+							No Attachments
+						<% else %>
+							<label>Click to Download/View:</label>
+							<% wa.web_attachments.each { |a| %>
+								<div><%= link_to a.name, {:action => :web_attachment, :id => o.id, :id2 => a.id} %></div>
+							<% } %>
+						<% end %>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+
+	
+	<% employments = wa.web_employments.find(:all, :order => 'ifnull(end_date, now()) asc') %>
+	<div class="viewer">
+		<div class="header">Employment Timeline</div>
+		<div class="row">
+			<table width="100%">
+				<tr>
+					<td>
+						<% if employments.empty? %>
+							<label>&nbsp;</label>
+							No Employment
+						<% else %>
+							<%
+							
+							min = nil
+							max = nil
+							employments.each { |e|
+								if min.nil? || (e.start_date && e.start_date < min)
+									min = e.start_date
+								end
+								if e.currently_employed && e.end_date.nil? && o.submitted_at
+									e.end_date = o.submitted_at.to_date
+								end
+								if max.nil? || (e.end_date && e.end_date > max)
+									max = e.end_date
+								end
+							}
+							
+							%>
+							<% if min.nil? || max.nil? || min == max %>
+								<label>&nbsp;</label>
+								Not Enough Data to Map
+							<% else %>
+								<div style="font-weight: bold;">
+									<div class="left"><%= min.d0? %></div>
+									<div class="right"><%= max.d0? %></div>
+									<div class="clear"></div>
+								</div>
+								<% range = max - min %>
+								<% employments.each_with_index { |e, i| %>
+									<% if e.start_date && e.end_date %>
+										<%
+											w = ((e.end_date - e.start_date) / range * 100).to_f
+											m = ((e.start_date - min) / range * 100).to_f
+										%>
+										<div class="empl-time" style="width: <%= w %>%; margin-left: <%= m %>%"><%= h e.name %></div>
+										<% 
+									
+											n = nil
+											(i + 1).upto(employments.length - 1) { |k|
+												n2 = employments[k]
+												if !n || (n2 && n2.start_date && n.start_date && n.start_date > n2.start_date)
+													n = n2
+												end
+											} 
+										%>
+										<% if n && n.start_date && n.start_date > e.end_date %>												
+											<%
+												t = n.start_date - e.end_date
+												w = (t / range * 100).to_f
+											%>
+											<% if t > 7 %>
+												<div class="empl-time-gap" style="width: <%= w %>%;"><%= t.to_i %> days</div>
+											<% end %>
+										<% end %>
+									<% end %>
+								<% } %>
+							<% end %>
+						<% end %>
+					</td>
+				</tr>
+			</table>
+		</div>
+	
+		<% employments.reverse.each_with_index { |e, i| %>
+			<div class="header">Employment #<%= i + 1 %></div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Employer:</label>
+							<%= h e.name %>
+						</td>
+						<td>
+							<label>Address:</label>
+							<%= h e.full_address(', ') %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Start:</label>
+							<%= h e.start_date.d0? %>
+						</td>
+						<td>
+							<label>End:</label>
+							<%= h e.end_date.d0? %>
+						</td>
+						<td>
+							<label>Salary:</label>
+							<%= h e.salary %>
+						</td>
+						<td>
+							<label>Hours:</label>
+							<%= h e.hours %>
+						</td>
+						<td>
+							<label>Title:</label>
+							<%= h e.title %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Currently Employed?</label>
+							<%= yn e.currently_employed %>
+						</td>
+						<td>
+							<label>Reason Left:</label>
+							<%= e.reason_left %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Supervisor Name:</label>
+							<%= h e.supervisor_name %>
+						</td>
+						<td>
+							<label>Supervisor Title:</label>
+							<%= h e.supervisor_title %>
+						</td>
+						<td>
+							<label>Supervisor Phone:</label>
+							<%= h e.supervisor_phone %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>		
+			
+			<% y = e.calculate_years %>
+			
+			<% if !is_seasonal && is_staff %>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Years:</label>
+								<%= y.years_raw.n2? %><% if e.currently_employed %>+<% end %>
+							</td>
+							<td>
+								<label>Years For Min Qual.:</label>
+								<%= y.years_min.n2? %>
+							</td>
+							<td>
+								<label>Years For T&amp;E:</label>
+								<%= y.years_te.n2? %>
+							</td>
+							<td>
+								<label>Years T&amp;E Minus Min. Qual.:</label><%= y.years_te_minus_min.n2? %>
+							&nbsp;</td>		
+						</tr>			
+					</table>
+				</div>
+			<% end %>
+			
+			
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Description of Duties:</label>
+							<%= nl2br_h e.description %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>	
+			<div class="row">
+				<table width="100%">
+					<tr>
+						<td style="padding-right: 5px; padding-bottom: 5px;">
+							<label>Admin Notes:</label>
+							<% n = @obj.applicant_notes.find_by_object_type_and_object_id 'employment', e.id %>
+							<% if @current_user.staff_level? %>
+								<%= text_area_tag "employments-#{e.id}", n ? n.notes : '', :onchange => 'admin_notes(this);', :style => 'height: 30px; width: 95%;' %>
+							<% else %>
+								<%= nl2br_h n ? n.notes : '' %>&nbsp;
+							<% end %>
+						</td>
+					</tr>
+				</table>
+			</div>			
+			
+		<% } %>
+	</div>
+
+
+
+
+
+
+	<div class="viewer">
+		<div class="header">Education</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Education Level</label>
+						<%= WebApplicant::EDUCATION_LEVELS.rassoc(wa.education)[0] rescue nil %>
+					</td>
+					<td>
+						<label>Highest Grade Completed:</label>
+						<%= wa.education_grade %>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<% wa.web_educations.each_with_index { |e, i| %>
+			<div class="header">College/School #<%= i + 1 %></div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>School:</label>
+							<%= h e.school_name %>
+						</td>
+						<td>
+							<label>State:</label>
+							<%= h e.state %>
+						</td>
+						<td>
+							<label>Major:</label>
+							<%= h e.major %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Degree Received:</label>
+							<%= h e.degree %>
+						</td>
+						<td>
+							<label>Graduation Date:</label>
+							<%= e.graduation_date.d0? %>
+						</td>
+						<td>
+							<label>Semester Credits:</label>
+							<%= h e.credits_semester %>
+						</td>
+						<td>
+							<label>Quarter Credits:</label>
+							<%= h e.credits_quarter %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+			<div class="row">
+				<table width="100%">
+					<tr>
+						<td style="padding-right: 5px; padding-bottom: 5px;"><%= e.id %>
+							<label>Admin Notes:</label>
+							<% n = @obj.applicant_notes.find_by_object_type_and_object_id 'education', e.id %>
+							<% if @current_user.staff_level? %>
+								<%= text_area_tag "educations-#{e.id}", n ? n.notes : '', :onchange => 'admin_notes(this);', :style => 'height: 30px; width: 95%;' %>
+							<% else %>
+								<%= nl2br_h n ? n.notes : '' %>&nbsp;
+							<% end %>
+						</td>
+					</tr>
+				</table>
+			</div>							
+		<% } %>
+	</div>
+
+
+	
+	<div class="viewer">
+		<% if wa.web_certifications.empty? %>
+			<div class="header">Certifications</div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>&nbsp;</label>
+							No Certifications
+						</td>
+					</tr>
+				</table>
+			</div>
+		<% else %>
+			<% wa.web_certifications.each_with_index { |c, i| %>
+				<div class="header">Certification #<%= i + 1 %></div>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Name:</label>
+								<%= h c.name %>
+							</td>
+							<td>
+								<label>Agency:</label>
+								&nbsp;<%= h c.agency %>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>No.:</label>
+								<%= h c.no %>
+							</td>
+							<td>
+								<label>From Date:</label>
+								<%= c.from_date.d0? %>
+							</td>
+							<td>
+								<label>To Date:</label>
+								<%= c.to_date.d0? %>
+							</td>
+							<td>
+								<label>Permanent?</label>
+								<%= yn c.permanent %>
+							&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+				<div class="row">
+					<table width="100%">
+						<tr>
+							<td style="padding-right: 5px; padding-bottom: 5px;">
+								<label>Admin Notes:</label>
+								<% n = @obj.applicant_notes.find_by_object_type_and_object_id 'certification', c.id %>
+								<% if @current_user.staff_level? %>
+									<%= text_area_tag "certifications-#{c.id}", n ? n.notes : '', :onchange => 'admin_notes(this);', :style => 'height: 30px; width: 95%;' %>
+								<% else %>
+									<%= nl2br_h n ? n.notes : '' %>&nbsp;
+								<% end %>
+							</td>
+						</tr>
+					</table>
+				</div>			
+
+			<% } %>
+		<% end %>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="viewer">
+		<% if wa.web_trainings.empty? %>
+			<div class="header">Training Courses/Programs</div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>&nbsp;</label>
+							No Training Courses/Programs
+						</td>
+					</tr>
+				</table>
+			</div>
+		<% else %>
+			<% wa.web_trainings.each_with_index { |t, i| %>
+				<div class="header">Course/Program #<%= i + 1 %></div>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Description:</label>
+								<%= h t.description %>
+							</td>
+							<td>
+								<label>Hours:</label>
+								&nbsp;<%= t t.hours %>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="row">
+					<table width="100%">
+						<tr>
+							<td style="padding-right: 5px; padding-bottom: 5px;">
+								<label>Admin Notes:</label>
+								<% n = @obj.applicant_notes.find_by_object_type_and_object_id 'training', t.id %>
+								<% if @current_user.staff_level? %>
+									<%= text_area_tag "trainings-#{t.id}", n ? n.notes : '', :onchange => 'admin_notes(this);', :style => 'height: 30px; width: 95%;' %>
+								<% else %>
+									<%= nl2br_h n ? n.notes : '' %>&nbsp;
+								<% end %>
+							</td>
+						</tr>
+					</table>
+				</div>			
+
+			<% } %>
+		<% end %>
+	</div>
+	
+	
+
+
+
+		
+<% end %>
+
+
+<% unless @obj.app_updates.empty? %>
+	<table class="dg">
+		<thead>
+			<tr>
+				<th width="1%">Timestamp</th>
+				<th width="1%">User</th>
+				<th>Activity</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @obj.app_updates.each { |u| %>
+				<tr class="<%= cycle 'odd', 'even' %>">
+					<td class="nobr"><%= u.created_at.dt0? %></td>
+					<td class="nobr"><%= u.user ? u.user.username : '---' %></td>
+					<td><%= u.text %></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+<% end %>

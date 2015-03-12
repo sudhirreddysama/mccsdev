@@ -1,0 +1,229 @@
+<div class="tabs buttons">
+	<%= tab 'History Details', {:action => :print, :id => @obj.id}, {}, :target => '_blank' %>
+	<div class="clear"></div>
+</div>
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= h o.id %>
+				</td>
+				<td>
+					<label>SSN:</label>
+					<%= h o.ssn %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.last_name %>, <%= h o.first_name %>
+				</td>
+				<td>
+					<label>Title:</label>
+					<%= h o.job.name if o.job %>
+				</td>
+				<td>
+					<label>Agency:</label>
+					<%= h o.agency.name if o.agency %>
+				</td>
+				<td>
+					<label>Department:</label>
+					<%= h o.department.name if o.department %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Address:</label>
+					<%= h o.full_address(',') %>
+				</td>
+				<td>
+					<label>Phone:</label>
+					<%= h o.phone %>
+				</td>
+				<td>
+					<label>Work Phone:</label>
+					<%= h o.work_phone %>
+				</td>
+				<td>
+					<label>Email:</label>
+					<%= mail_to o.email %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Hire Date:</label>
+					<%= o.date_hired.d0? %>
+				</td>
+				<td>
+					<label>Leave Date:</label>
+					<%= o.leave_date.d0? %>
+				</td>
+				<td>
+					<label>Seniority Date:</label>
+					<%= h o.seniority_date.d0? %>
+				</td>
+				<td>
+					<label>DOB:</label>
+					<%= h o.date_of_birth.d0? %>
+				</td>
+				<td>
+					<label>Veteran:</label>
+					<%= h o.veteran %>
+				</td>
+				<td>
+					<label>Exmpt Vol Fire:</label>
+					<%= yn o.exempt_vol_fire %>
+				</td>
+				<td>
+					<label>Pension No.:</label>
+					<%= h o.pension_no %>
+				</td>
+				<td>
+					<label>Rehire Dates:</label>
+					<%= [@obj.date_rehired.d0?, @obj.date_rehired2.d0?, @obj.date_rehired3.d0?].reject(&:blank?).join(', ') %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Notes:</label>
+					<%= nl2br_h o.notes %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+</div>
+<% actions = @obj.empl_actions.find(:all, :include => :empl_action_type, :order => 'empl_actions.action_date desc, empl_action_types.absent desc, empl_actions.id desc').to_a %>
+<% actions.each_with_index { |a, i| %>
+	<div class="viewer">
+		<div class="header">
+			<div class="right">
+				<% if @current_user.staff_level? || @allow_liaison %>
+					<%= link_to 'Edit', :action => :action_edit, :id => @obj.id, :id2 => a.id %>&nbsp;&nbsp;&nbsp;
+					<%= link_to 'Delete', :action => :action_delete, :id => @obj.id, :id2 => a.id %>
+				<% end %>
+			</div>
+			History #<%= i + 1 %>
+		</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Date:</label>
+						<%= a.action_date.d0? %>
+					</td>
+					<td>
+						<label>Action:</label>
+						<%= h a.empl_action_type.name if a.empl_action_type %>
+					</td>
+					<td>
+						<label>Authorization:</label>
+						<%= h a.authorization %>
+					</td>
+					<td>
+						<label>Wage:</label>
+						<%= h a.wage.n2? %><% unless a.wage_per.blank? %>/<%= h(Const::WAGE_UNITS.rassoc(a.wage_per) ? Const::WAGE_UNITS.rassoc(a.wage_per)[0] : a.wage_per) %><% end %>
+					</td>					
+					<td>
+						<label>Reference Date:</label>
+						<%= a.reference_date.d0? %>
+					</td>	
+					<td>
+						<label>Leave Date:</label>
+						<%= a.leave_date.d0? %>
+					</td>		
+					<td>
+						<label>Received Date:</label>
+						<%= a.received_date.d0? %>
+					</td>		
+					<% if false %>
+						<td>
+							<label>Absent:</label>
+							<%= yn a.absent %>
+						</td>		
+					<% end %>
+				</tr>
+			</table>
+		</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Class:</label>
+						<%= h Const::JOB_CLASSES.rassoc(a.classification)[0] rescue nil %>
+					</td>					
+					<td>
+						<label>Status:</label>
+						<%= h Const::JOB_STATUSES.rassoc(a.status)[0] rescue nil %>
+					</td>		
+					<td>
+						<label>Time:</label>
+						<%= h Const::JOB_TIMES.rassoc(a.job_time)[0] rescue nil %>
+					</td>								
+					<td>
+						<label>Title:</label>
+						<%= h a.job.name if a.job %>
+					</td>
+					<td>
+						<label>Agency:</label>
+						<%= h a.agency.name if a.agency %>
+					</td>
+					<td>
+						<label>Department:</label>
+						<%= h a.department.name if a.department %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Info:</label>
+						<%= h a.info %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>				
+		
+		<% if false %>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Cert Info:</label>
+							<%= h a.cert_info %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>		
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Leave Date:</label>
+							<%= a.leave_date.d0? %>
+						</td>
+						<td>
+							<label>Leave Reason:</label>
+							<%= h a.leave_reason %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>		
+		<% end %>
+	</div>
+<% } %>

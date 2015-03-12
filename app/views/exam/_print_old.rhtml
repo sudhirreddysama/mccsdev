@@ -1,0 +1,150 @@
+<% apps.each_with_index { |a, i| %>
+	<% p = a.person %>
+	<tbody>
+		<tr>
+			<td rowspan="3"><%= i + 1 %></td>
+			<td rowspan="2">
+				<div class="nobreak">
+					<%= h a.person.last_name %>, <%= h a.person.first_name %>&nbsp;<br />
+					<% if params[:id2] == 'long' %>
+						<%= nl2br_h a.person.full_mailing_address %>&nbsp;<br />
+						<% unless a.person.home_phone.blank? %>
+							<%= phone_format a.person.home_phone %> (H)<br />
+						<% end %>
+						<% unless a.person.work_phone.blank? %>
+							<%= phone_format a.person.work_phone %> (W)<br />
+						<% end %>
+						<% unless a.person.cell_phone.blank? %>
+							<%= phone_format a.person.cell_phone %> (C)<br />
+						<% end %>
+						<% unless a.person.fax.blank? %>
+							<%= phone_format a.person.fax %> (F)<br />
+						<% end %>
+					<% end %>
+					<% if @obj.continuous %>
+						Valid Until: <%= a.exam.valid_until.fmt %><br />
+					<% end %>
+				</div>
+			</td>
+			<td><%= a.base_score %></td>
+			<td><%= a.veterans_credits %></td>
+			<td><%= a.other_credits %></td>
+			<td><%= a.final_score %></td>
+			<td rowspan="3">
+				<div class="nobreak">
+					<% @actions = a.cert_applicants.find(:all, {
+						:order => 'cert_applicants.action_date desc',
+						:include => [{:cert => :agency}, :cert_code]
+					}) %>
+					<% @list_notes = a.list_notes.find(:all, {
+						:order => 'list_notes.note_date desc'
+					}) %>
+					<% actions = (@actions.to_a + @list_notes.to_a).sort { |a1,b1| b1.date <=> a1.date } %>
+					<% actions.each { |ac| %>
+						<% if ac.class == CertApplicant %>
+							<div>
+								<% if ac.cert %>
+									<div style="float: left; padding-right: 10px;">
+										<%= h ac.cert.certification_date.d0? %>
+									</div>
+								<% end %>
+								<% if ac.cert && ac.cert.agency %>
+									<div style="float: left; padding-right: 10px;">
+										<%= h ac.cert.agency.abbreviation %>
+									</div>
+								<% end %>
+								<% if ac.cert && ac.cert.department && !ac.cert.department.blank? %>
+									<div style="float: left; padding-right: 10px;">
+										<%= h ac.cert.department.abbreviation %>
+									</div>						
+								<% end %>
+								<% if ac.cert && !ac.cert.additional.blank? %>
+									<div style="float: left; padding-right: 10px;">
+										<%= h ac.cert.additional %>
+									</div>
+								<% end %>
+								<% if ac.cert_code %>
+									<div style="float: left; padding-right: 10px;">
+										<%= h ac.cert_code.label %>
+									</div>
+								<% end %>
+								<% if !ac.comments.blank? %>
+									<div style="float: left; padding-right: 10px;">
+										<%= h ac.comments %>					
+									</div>
+								<% end %>
+								<% if ac.action_date %>
+									<div style="float: left;">
+										<%= ac.action_date.d0? %>
+									</div>
+								<% end %>
+								<div style="clear: both;"></div>
+							</div>
+						<% else %>
+							<div>
+								<% if ac.note_date %>
+									<div style="float: left; padding-right: 10px;">
+										<%= ac.note_date.d0? %>
+									</div>
+								<% end %>
+								<div style="float: left;">
+									<%= h ac.note %>
+								</div>
+								<div style="clear: both;"></div>
+							</div>
+						<% end %>
+					<% } %>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" style="border-top: none;">
+				<div class="nobreak">
+					<% if a.app_status.appointed %>
+						<div>* APPOINTED *</div>
+					<% elsif a.app_status.eligible == 'I' %>
+						<div>* INACTIVE *</div>
+					<% end %>
+					<%
+						restricted = false
+						@obj.exam_perfs.each { |ep|
+							taken_perf = a.taken_perfs.to_a.find { |tp| tp.perf_test_id == ep.perf_test_id }
+							if !taken_perf || !taken_perf.perf_code || !taken_perf.perf_code.pass_fail == 1
+								restricted = true
+							end
+						}
+					%>
+					<% if restricted %>
+						<div>* RESTRICTED *</div>
+					<% end %>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="5" style="font-size: 0.7em; border-top: none;">
+				<div class="nobreak">
+					<% if params[:id2] == 'long' %>
+						<% if p.school_district || p.village || p.fire_district || p.town %>
+							<% if p.town %>
+								Town <%= p.town.name %>
+							<% end %>
+							<% if p.village %>
+								Village <%= p.village.name %>
+							<% end %>
+							<% if p.school_district %>
+								School: <%= p.school_district.name %>
+							<% end %>
+							<% if p.fire_district %>
+								Fire: <%= p.fire_district.name %>
+							<% end %>
+							<br />
+						<% end %>					
+					<% end %>
+					<% unless a.list_note.blank? %>
+						Notes: <%= h a.list_note %><br />
+					<% end %>					
+				</div>
+			</td>
+		</tr>
+	</tbody>
+<% } %>

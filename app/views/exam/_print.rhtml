@@ -1,0 +1,140 @@
+<% apps.each_with_index { |a, i| %>
+	<% p = a.person %>
+	<div class="cols">
+		<div class="col-app">
+			<div class="col-pos"><div class="pad"><%= i + 1 %></div></div>
+			<div class="col-name"><div class="pad">
+				<%= h a.person.last_name %>, <%= h a.person.first_name %>&nbsp;<br />
+				<% if params[:id2] == 'long' %>
+					<%= nl2br_h a.person.full_mailing_address %>&nbsp;<br />
+					<% unless a.person.home_phone.blank? %>
+						<%= phone_format a.person.home_phone %> (H)<br />
+					<% end %>
+					<% unless a.person.work_phone.blank? %>
+						<%= phone_format a.person.work_phone %> (W)<br />
+					<% end %>
+					<% unless a.person.cell_phone.blank? %>
+						<%= phone_format a.person.cell_phone %> (C)<br />
+					<% end %>
+					<% unless a.person.fax.blank? %>
+						<%= phone_format a.person.fax %> (F)<br />
+					<% end %>
+				<% end %>
+				<% if @obj.continuous %>
+					Valid Until: <%= a.exam.valid_until.fmt %><br />
+				<% end %>
+			</div></div>
+			<div class="col-score1"><div class="pad"><%= a.base_score %></div></div>
+			<div class="col-score2"><div class="pad"><%= a.veterans_credits %></div></div>
+			<div class="col-score3"><div class="pad"><%= a.other_credits %></div></div>
+			<div class="col-score4"><div class="pad"><%= a.final_score %></div></div>
+			
+			
+			<div class="col-stat"><div class="pad">
+				<% if a.app_status.appointed %>
+					<div>* APPOINTED *</div>
+				<% elsif a.app_status.eligible == 'I' %>
+					<div>* INACTIVE *</div>
+				<% end %>
+				<%
+					restricted = false
+					a.exam.exam_perfs.each { |ep|
+						taken_perf = a.taken_perfs.to_a.find { |tp| tp.perf_test_id == ep.perf_test_id }
+						if !taken_perf || !taken_perf.perf_code || !taken_perf.perf_code.pass_fail == 1
+							restricted = true
+						end
+					}
+				%>
+				<% if restricted %>
+					<div>* RESTRICTED *</div>
+				<% end %>
+			</div></div>
+			<div class="col-extra"><div class="pad">
+				<% if params[:id2] == 'long' %>
+					<% if p.school_district || p.village || p.fire_district || p.town %>
+						<% if p.town %>
+							Town <%= p.town.name %>
+						<% end %>
+						<% if p.village %>
+							Village <%= p.village.name %>
+						<% end %>
+						<% if p.school_district %>
+							School: <%= p.school_district.name %>
+						<% end %>
+						<% if p.fire_district %>
+							Fire: <%= p.fire_district.name %>
+						<% end %>
+						<br />
+					<% end %>					
+				<% end %>
+				<% unless a.list_note.blank? %>
+					Notes: <%= h a.list_note %><br />
+				<% end %>					
+			</div></div>
+		</div>	
+		<div class="col-act"><div class="pad">
+			<% @actions = a.cert_applicants.find(:all, {
+				:order => 'cert_applicants.action_date desc',
+				:include => [{:cert => :agency}, :cert_code],
+				:conditions => 'certs.certification_date is not null'
+			}) %>
+			<% @list_notes = a.list_notes.find(:all, {
+				:order => 'list_notes.note_date desc',
+				:conditions => 'list_notes.note_date is not null'
+			}) %>
+			<% actions = (@actions.to_a + @list_notes.to_a).sort { |a1,b1| b1.date <=> a1.date } %>
+			<% actions.each { |ac| %>
+				<% if ac.class == CertApplicant %>
+					<div>
+						
+						<div class="col-date">
+							<%= h ac.cert.certification_date.d0? if ac.cert %>&nbsp;
+						</div>
+						<div class="col-agency">
+							<%= h ac.cert.agency.abbreviation if ac.cert && ac.cert.agency %>&nbsp;
+						</div>
+
+						<div class="col-dept">
+							<%= h ac.cert.department.abbreviation if ac.cert && ac.cert.department && !ac.cert.department.blank? %>&nbsp;
+						</div>						
+						<div class="col-add">
+                          <%= h ac.cert.additional if ac.cert && !ac.cert.additional.blank? %>
+                          <% if ac.cert.job_type == 'T' %>T,<%=ac.cert.temp_duration%><% end %>
+                          <% if ac.cert.job_time == 'P' %>PT<% end %>
+							<% if ac.cert.job_type == 'C' %>CP<% end %>
+							&nbsp;
+						</div>
+						<div class="col-code">
+                          <%  if ac.cert.show_actions %>
+
+                        <% if ac.cert_code and !ac.comments.to_s.include?(ac.cert_code.label.to_s) %>
+								<%= h ac.cert_code.description  %>&nbsp;&nbsp;&nbsp;
+							<% end %>
+							<% unless ac.comments.blank? %>
+								<%= h ac.comments %>&nbsp;&nbsp;&nbsp;
+							<% end %>
+							<% if ac.action_date %>
+								<%= ac.action_date.d0?  %>
+							<% end %>
+                              <% end %>
+						</div>
+						<div style="clear: both;"></div>
+					</div>
+				<% else %>
+					<div>
+						<% if ac.note_date %>
+							<div class="col-date">
+								<%= ac.note_date.d0? %>&nbsp;
+							</div>
+						<% end %>
+						<div class="col-note">
+							<%= h ac.note %>
+						</div>
+						<div style="clear: both;"></div>
+					</div>
+				<% end %>
+			<% } %>
+		</div></div>
+		<div class="clear"></div>
+	</div>
+<% } %>

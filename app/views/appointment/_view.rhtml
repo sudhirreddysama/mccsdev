@@ -1,0 +1,86 @@
+<div class="viewer">
+	<div class="header">General Info.</div>
+
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>App't Date:</label>
+					<%= o.appointed_date.d0? %>
+				</td>
+				<td>
+					<label>Time:</label>
+					<%= h o.job_time %>
+				</td>
+				<td>
+					<label>Type:</label>
+					<%= h o.job_type %>
+				</td>
+				<td>
+					<label>Stat:</label>
+					<%= h o.job_stat %>
+				</td>
+				<td>
+					<label>Salary:</label>
+					<%= h o.salary.n2? %><% unless o.salary_per.blank? %>/<%= o.salary_per %><% end %>
+				</td>
+				<td>
+					<label>Exam No.:</label>
+					<%= h o.exam.exam_no if o.exam %>&nbsp;&nbsp;&nbsp;
+					<%= link_to 'view exam', :controller => :exam, :action => :view, :id => o.exam_id if o.exam %>&nbsp;&nbsp;&nbsp;
+					<%= link_to 'view application', :controller => :applicant, :action => :view, :id => o.applicant_id if o.applicant %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Name (links to person):</label>
+					<%= link_to o.person.label, :controller => :person, :action => :view, :id => o.person_id %>
+				</td>
+				<td>
+					<label>Department:</label>
+					<%= h o.department.name if o.department %>
+				</td>
+				<td>
+					<label>Agency:</label>
+					<%= h o.agency.name if o.agency %>
+				</td>
+				<td>
+					<label>Title (links to title record):</label>
+					<%= link_to o.job.name, :controller => :job, :action => :view, :id => o.job_id %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Cert. Title (links to cert. record):</label>
+					<%= link_to o.cert.title, :controller => :cert, :action => :view, :id => o.cert_id %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Comments:</label>
+					<%= h o.comments %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+
+</div>

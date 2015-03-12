@@ -1,0 +1,5 @@
+#head, #doneicon img { display: none; }
+.permit-disc { padding: 16px 0 0 0; background: none; border: none; }
+#rp { color: #000; }
+#rp a { color: #000; text-decoration: underline; }
+button { display: none; }

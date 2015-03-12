@@ -1,0 +1,37 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">SSN</th>
+			<th width="1%">Hire</th>
+			<th width="1%">Leave</th>
+			<% if @current_user.agency_level? %>
+				<th width="48%">Name</th>
+				<th width="47%">Title</th>
+			<% else %>
+				<th width="24%">Name</th>
+				<th width="24%">Title</th>
+				<th width="24%">Agency</th>
+				<th width="24%">Department</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td><%= o.id %></td>
+				<td class="nobr"><%= h o.ssn %></td>
+				<td class="nobr"><%= o.date_hired.d0? %></td>
+				<td class="nobr"><%= o.leave_date.d0? %></td>
+				<td><%= link_to "#{o.last_name}, #{o.first_name}", :action => :view, :id => o.id %></td>
+				<td><%= h o.job.name if o.job %></td>
+				<% if !@current_user.agency_level? %>
+					<td><%= h o.agency.name if o.agency %></td>
+					<td><%= h o.department.name if o.department %></td>
+				<% end %>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

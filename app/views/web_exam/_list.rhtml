@@ -1,0 +1,42 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">Type</th>
+			<th width="1%">Publish</th>
+			<th width="1%">Deadline</th>
+			<th width="1%">Exam&nbsp;Date</th>
+			<th width="1%">Exam&nbsp;No.</th>
+			<% if @current_user.staff_level? || @current_user.liaison_level? || @current_user.agency_level? %>
+				<th width="1%" class="nobr">New/Total</th>
+			<% end %>
+			<th width="98%">Name</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td class="nobr"><%= o.id %></td>
+				<td class="nobr"><%= o.web_exam_type.short_name if o.web_exam_type %></td>
+				<td class="nobr"><%= o.publish.d0? %></td>
+				<td class="nobr"><%= o.deadline.d0? %></td>
+				<td class="nobr"><%= o.exam_date.d0? %></td>
+				<td class="nobr"><%= o.no %></td>				
+				<% if @current_user.staff_level? || @current_user.liaison_level? || @current_user.agency_level? %>
+					<td class="nobr r">
+						<% if o.web_exam_total %>
+							<span class="<% if o.web_exam_total.app_new_count > 0 %>req<% end %>">
+								<%= o.web_exam_total.app_new_count %>/<%= o.web_exam_total.app_count %>
+							</span>
+						<% else %>
+							0/0
+						<% end %>
+					</td>				
+				<% end %>
+				<td><%= link_to o.name, :action => :view, :id => o.id %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

@@ -1,0 +1,66 @@
+<html>
+<head>
+	<style type="text/css">
+		html, body { padding: 0; margin: 0; height: 100%; width: 100%; }
+		body, td, th, input, select, textarea { font: 10px/1.5 sans-serif; }	
+		table { border-collapse: collapse; width: 100%; }
+		th, td { text-align: left; padding: 3px; vertical-align: top; }
+		th { font-weight: bold; }
+		
+		#colh { border-top: 1px solid #888; font-weight: bold; }
+		.cols { border-bottom: 1px solid #888; page-break-inside: avoid; }
+		.col1 { float: left; width: 2%; }
+		.col2 { float: left; width: 20%; }
+		.col3 { float: left; width: 10%; }		
+		.col4 { float: left; width: 10%; }
+		.col5 { float: left; width: 58%; }
+		
+		.pad { padding: 3px; }
+		
+		.clear { clear: both; }
+		
+	</style>
+</head>
+<body>
+	<h3>Preferred List</h3>
+	<p>
+		<strong>Title:</strong> <%= h @obj.job.name if @obj.job %><br />
+		<strong>Agency:</strong> <%= h @obj.agency.name if @obj.agency %>
+		<% if @obj.department && (!@obj.agency || @obj.department.name != @obj.agency.name) %>
+			- <%= h @obj.department.name %>
+		<% end %><br />
+		<strong>Established:</strong> <%= @obj.established_date.d0? %><br />
+		<strong>Expires:</strong> <%= @obj.valid_until.d0? %>
+	</p>
+	<div class="cols" id="colh">
+		<div class="col1"><div class="pad">#</div></div>
+		<div class="col2"><div class="pad">Name<br />Address</div></div>
+		<div class="col3"><div class="pad">Seniority Date<br />Layoff Date</div></div>
+		<div class="col4"><div class="pad">Salary/Wage<br />Salary Group</div></div>
+		<div class="col5"><div class="pad">Activity</div></div>
+		<div class="clear"></div>
+	</div>
+	<% @objs.each_with_index { |o, i| %>
+		<div class="cols">
+			<div class="col1"><div class="pad"><%= h i + 1 %></div></div>
+			<div class="col2"><div class="pad">
+				<%= h o.last_name %>, <%= o.first_name %><br />
+				<%= nl2br_h o.full_address %>
+				<% unless o.notes.blank? %>
+					<br /><strong>Notes: </strong><%= nl2br_h o.notes %>
+				<% end %>
+			</div></div>
+			<div class="col3"><div class="pad">
+				<%= o.seniority_date.d0? %>&nbsp;<br />
+				<%= o.layoff_date.d0? %>
+			</div></div>
+			<div class="col4"><div class="pad">
+				<%= nwp o.wage, 2 if o.wage %>/<%= o.wage_per %>&nbsp;<br />
+				<%= h o.salary_group %>
+			</div></div>
+			<div class="col5"><div class="pad"><%= nl2br_h o.activity %></div></div>
+			<div class="clear"></div>
+		</div>
+	<% } %>
+	
+</body>

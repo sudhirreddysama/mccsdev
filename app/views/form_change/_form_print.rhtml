@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<style type="text/css">
+			body, td, th, input, select, textarea { font: 12px/1.5 Trebuchet MS, Verdana, Arial, sans-serif; }
+			h1, h2, h3, h4, h5, h6 { font-weight: normal; padding: 0; margin: 1em 0; }
+			h1 { font-size: 160%; }
+			h2 { font-size: 150%; }
+			h3 { font-size: 140%; }
+			h4 { font-size: 130%; }
+			h5 { font-size: 120%; }
+			h6 { font-size: 110%; }			
+			.viewer { border: 1px solid #888; border-width: 0 1px 1px 0; margin: 5px; }
+			body.pop .viewer { margin: 5px 0; }
+			.viewer .row { clear: both; border-top: 1px solid #888; }
+			.viewer .header { font-weight: bold; padding: 2px 5px; clear: both; border: 1px solid #888; border-width: 1px 0 0 1px; background: white url(../images/tab-inactive-bg.gif) left -1px repeat-x; }
+			.viewer table { border-collapse: collapse; }
+			.viewer td { padding: 0 20px 2px 5px; border-left: 1px solid #888; vertical-align: top; }
+			.viewer td label { display: block; }		
+		</style>
+	</head>
+	<body>
+		<% if params[:controller] == 'form_change' %>
+			<h1>Form 105 Employment Change</h1>
+		<% elsif params[:controller] == 'form_hire' %>
+			<h1>Form 330 New Hire</h1>
+		<% else %>
+			<h1>Form 220 New Position Duties Statement</h1>
+		<% end %>
+		<%= partial 'view', :o => @obj %>
+	</body>
+</html>

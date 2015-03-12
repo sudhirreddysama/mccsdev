@@ -1,0 +1,5 @@
+<%= partial 'errors', :errors => @act.errors.full_messages %>
+<% table_form_for(:act, :url => {:action => :action_new, :id => @obj.id}) { |f| %>
+	<%= partial 'employee/action_fields', :f => f %>
+	<%= f.tr_submit 'Submit' %>
+<% } %>

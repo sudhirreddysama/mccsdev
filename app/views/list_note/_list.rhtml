@@ -1,0 +1,46 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">Date</th>
+			<% if params[:sc] == 'exam' %>
+				<th width="48%">Name</th>
+				<th width="49%">Note</th>
+			<% else %>
+				<th width="97%">Note</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td><%= o.id %></td>
+				<td class="nobr"><%= o.note_date.d0? %></td>
+				<% if params[:sc] == 'exam' %>
+					<td><%= o.applicant.person.label if o.applicant && o.applicant.person %></td>
+				<% end %>
+				<td><%= link_to o.note, :action => :view, :id => o.id %></td>
+			</tr>
+		<% } %>
+    <% x=DB.query("select a.submitted_at,a.id,a.list_note,p.first_name,p.last_name from applicants a inner join people p on a.person_id=p.id where list_note is not null and exam_id="+params[:sid])
+       x.each_hash { |n|
+        if !n.list_note.blank?
+    %>
+        <tr class="<%= cycle 'odd', 'even' %>">
+          <td class="nobr"></td>
+          <td>	<%= link_to n.id, {:controller => :applicant, :action => :view, :id => n.id}, :target => '_blank' %>&nbsp;&nbsp;
+          </td>
+          <td class="nobr"><%= n.submitted_at.to_date.d0? %></td>
+          <% if params[:sc] == 'exam' %>
+              <td><%= n.first_name+" "+n.last_name %></td>
+          <% end %>
+          <td><%= n.list_note %></td>
+        </tr>
+
+        <%
+           end
+           } %>
+     </tbody>
+</table>

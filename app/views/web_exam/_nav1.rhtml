@@ -1,0 +1,7 @@
+<% if @current_user.agency_level? %>
+	<%= tab 'All Applicants', {:action => :all_applicants, :id => nil, :controller => :web_exam}, {}, :class => 'tab-applicant' %>
+<% end %>
+
+<% if @current_user.admin_level? || @current_user.allow_edit_notice_emails %>
+	<%= tab 'Exam Notice Emails', {:action => :exam_emails, :id => nil, :controller => :web_exam} %>
+<% end %>

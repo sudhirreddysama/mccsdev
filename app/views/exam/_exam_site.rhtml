@@ -1,0 +1,11 @@
+<tbody>
+	<tr>
+		<td><%= select_tag 'obj[new_exam_sites][][exam_site_id]', options_for_select([[]] + @exam_site_options, s.exam_site_id),
+			{:onchange => 'exam_site_change(this);'}
+		%></td>
+		<td class="capacity" style="text-align: right;"><%= s.exam_site.capacity if s.exam_site %></td>
+		<td class="number-to-assign"><%= text_field_tag 'obj[new_exam_sites][][number_to_assign]', s.number_to_assign, :size => 5, :style => 'text-align: right;' %></td>
+		<td class="zip-codes"><%= text_field_tag 'obj[new_exam_sites][][zip_codes]', s.zip_codes, :size => 50 %></td>
+		<td><a href="#" onclick="$(this.parentNode.parentNode.parentNode).remove(); return false;">remove</a></td>
+	</tr>
+</tbody>

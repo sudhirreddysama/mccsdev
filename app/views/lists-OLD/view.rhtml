@@ -1,0 +1,82 @@
+<h1><%= h @obj.title %></h1>
+<h2>Exam Information</h2>
+<p>
+	<strong>Title:</strong> <%= h @obj.title %><br />
+	<strong>Exam #:</strong> <%= h @obj.exam_no %><br />
+	<strong>Salary:</strong> <%= h @obj.salary %><br />
+	<strong>Most Recent Test Date:</strong> <%= h @obj.given_at.fmt %><br />
+	<strong>Date Established:</strong> <%= h @obj.established_date.fmt %><br />
+	<% unless @obj.continuous %>
+		<% unless @obj.comments == 'EXTENDED UNTIL A NEW LIST IS ESTABLISHED' %>
+			<strong>Valid Until:</strong> <%= h @obj.valid_until.fmt %><br />
+		<% end %>
+	<% end %>
+	<% unless @obj.comments.blank? %>
+		<strong><%= h @obj.comments %></strong>
+	<% end %>
+</p>
+<% if @obj.exam_type == 'PROM' && @obj.sort_by_department %>
+	<p>This is a promotional exam. Positions are per department.</p>
+<% end %>
+<% if @obj.bandscored %>
+	<p>This exam is band scored. &quot;other credits&quot; are included in the initial &quot;exam score.&quot;</p>
+<% end %>
+<h2>Applicants</h2>
+<p>Click on an applicant's name to view more information. Click on "Filter Applicants" to restrict the list to particular villages, towns, school districts or fire departments. Candidate residency 
+is reviewed at the time a residential certification is requested.</p>
+<% form_for(:filter) { |f| %>
+	<fieldset id="filter-applicants" class="coolfieldset">
+		<legend>Filter Applicants</legend>
+		<div>
+			<table width="100%">
+				<tr>
+					<td width="25%"><strong>Town</strong></th>
+					<td width="25%"><strong>Village</strong></th>
+					<td width="25%"><strong>Fire Department</strong></th>
+					<td width="25%"><strong>School District</strong></th>
+				</tr>
+				<tr>
+					<td><%= f.select :town_ids, Town.find(:all, :order => 'name').collect { |t| [t.name, t.id] }, {}, :multiple => true, :style => 'width: 95%; height: 150px;' %></td>
+					<td><%= f.select :village_ids, Village.find(:all, :order => 'name').collect { |t| [t.name, t.id] }, {}, :multiple => true, :style => 'width: 95%; height: 150px;' %></td>
+					<td><%= f.select :fire_district_ids, FireDistrict.find(:all, :order => 'name').collect { |t| [t.name, t.id] }, {}, :multiple => true, :style => 'width: 95%; height: 150px;' %></td>
+					<td><%= f.select :school_district_ids, SchoolDistrict.find(:all, :order => 'name').collect { |t| [t.name, t.id] }, {}, :multiple => true, :style => 'width: 95%; height: 150px;' %></td>
+				</tr>
+				<tr>
+					<td colspan="4"><%= submit_tag 'Apply Filter' %> <%= submit_tag 'Clear Filter', :name => 'clear' %></td>
+				</tr>
+				<tr>
+					<td colspan="4">Select as many items as you want from the lists above, then hit &quot;Apply Filter&quot; to reload the list with your criteria.</td>
+				</tr>
+			</table>
+		</div>
+	</fieldset>
+<% } %>
+
+<script type="text/javascript">
+
+	// Auto enable "coolfieldset"
+	jQuery(function($) {
+		$('#filter-applicants').coolfieldset({collapsed: <% if request.post? %>false<% else %>true<% end %>, animation: false});
+	});
+
+</script>
+
+<% if @obj.exam_type == 'PROM' %>
+	<%
+	
+		grp = {}
+		@objs.each { |o|
+			t = o.department ? o.department.name : ''
+			grp[t] ||= []
+			grp[t] << o
+		}
+	
+	%>
+	<% grp.keys.sort.each { |k| objs = grp[k] %>
+		<h2><%= h k %>&nbsp;</h2>
+		<% reset_cycle %>
+		<%= partial 'applicants', :objs => objs %>
+	<% } %>
+<% else %>
+	<%= partial 'applicants', :objs => @objs %>
+<% end %>

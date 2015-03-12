@@ -1,0 +1,4 @@
+<div id="cadoc-<%= d.id %>">
+	<%= link_to d.filename, {:action => :ca_download, :id => @obj.id, :id2 => @ca.id, :id3 => d.id}, :target => '_blank' %> 
+	<a href="#" onclick="doc_delete(<%= @ca.id %>, <%= d.id %>); return false;" class="dim">delete</a>
+</div>

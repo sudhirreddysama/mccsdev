@@ -1,0 +1,36 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">Status</th>
+			<th width="1%">Exam&nbsp;No.</th>
+			<th width="1%">Cert.&nbsp;Date</th>
+			<th width="1%">Return</th>
+			<th width="40%">Cert. Title</th>
+          <th width="30%">Type</th>
+
+
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td><%= o.id %></td>
+				<td><%= cert_status o.status %></td>
+				<td class="nobr"><%= h o.exam.exam_no if o.exam %></td>
+				<td class="nobr"><%= o.certification_date.d0? %></td>
+				<td class="nobr"><%= o.return_date.d0? %></td>
+				<td><%= link_to o.set_title, :action => :view, :id => o.id %></td>
+              <% if o.general_or_residential and o.months then%>
+              <td><%=o.general_or_residential%>/<%=o.months%></td>
+                  <% else %>
+                  <td><%=o.general_or_residential%> <%=o.months%></td>
+
+            <% end  %>
+
+			</tr>
+		<% } %>
+	</tbody>
+</table>

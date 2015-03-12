@@ -1,0 +1,46 @@
+<html>
+	<head>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th { font: 11px/16px Trebuchet MS, Verdana, Arial, sans-serif; }
+			
+			table { border-collapse: collapse; }
+			td, th { vertical-align: top; text-align: left; padding: 2px; }
+			
+			.r { text-align: right; }
+			
+		</style>
+	</head>
+	<body>
+		<div style="float: right;"><%= Time.now.d0? %></div>
+		<h3>
+			Layoff/Bump Report<br />
+			From <%= @from_date.d0? %> to <%= @to_date.d0? %>
+		</h3>
+		<table>
+			<tr style="border-top: 1px solid #000; border-bottom: 1px solid #000;">
+				<th>Last Name</th>
+				<th>First Name</th>
+				<th>Action Date</th>
+				<th>Action</th>
+				<th>Title</th>
+				<th>Agency</th>
+				<th>Department</th>
+				<th>Class</th>
+			</tr>
+			<% @objs.each_hash { |o| %>
+				<tr style="border-bottom: 1px solid #ccc;">
+					<td><%= h o.last_name %></td>
+					<td><%= h o.first_name %></td>
+					<td><%= Date.parse(o.action_date).d0? rescue nil %></td>
+					<td><%= h o.name %></td>
+					<td><%= h o.job_name %></td>
+					<td><%= h o.agency_name %></td>
+					<td><%= h o.department_name %></td>
+					<td><%= h o.classification %></td>
+				</tr>
+			<% } %>
+		</table>
+	</body>
+</html>

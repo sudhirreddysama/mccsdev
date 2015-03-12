@@ -1,0 +1,50 @@
+<% if @filter %>
+	<% form_for(:filter, @filter, :builder => TableFormBuilder) { |f| %>
+		<table class="form">
+			<tr>
+				<th>Search / Sort:</th>
+				<td class="nobr">
+					<%= f.text_field :search %>
+					<% if @orders %>					
+						&nbsp;&nbsp;<%= f.select :sort1, @orders, :include_blank => 'Sort 1' %>
+						&nbsp;&nbsp;<%= f.select :dir1, [['Asc', 'asc'], ['Desc', 'desc']] %> 
+						&nbsp;&nbsp;<%= f.select :sort2, @orders, :include_blank => 'Sort 2' %>
+						&nbsp;&nbsp;<%= f.select :dir2, [['Asc', 'asc'], ['Desc', 'desc']] %>
+						&nbsp;&nbsp;<%= f.select :sort3, @orders, :include_blank => 'Sort 3' %>
+						&nbsp;&nbsp;<%= f.select :dir3, [['Asc', 'asc'], ['Desc', 'desc']] %>
+					<% end %>
+				</td>
+			</tr>
+			<% if @date_types %>
+				<tr>
+					<th>Date Range:</th>
+					<td class="nobr">
+						<%= f.select :date_type, @date_types %>
+						&nbsp;&nbsp;From: 
+						&nbsp;&nbsp;<%= f.calendar_date_select :from_date, :size => 20 %>
+						&nbsp;&nbsp;To:
+						&nbsp;&nbsp;<%= f.calendar_date_select :to_date, :size => 20 %>
+					</td>
+				</tr>
+			<% end %>
+			<% if @no_types %>
+				<tr>
+					<th>Numeric Range:</th>
+					<td class="nobr">
+						<%= f.select :no_type, @no_types %>
+						&nbsp;&nbsp;Min: 
+						&nbsp;&nbsp;<%= f.text_field :no_min, :size => 4 %>
+						&nbsp;&nbsp;Max:
+						&nbsp;&nbsp;<%= f.text_field :no_max, :size => 4 %>
+					</td>			
+				</tr>
+			<% end %>
+			<%= partial 'filter2', :f => f %>
+			<tr>
+				<th></th>
+				<td><%= f.submit 'Apply Filter' %> <%= f.submit 'Clear Filter', :name => 'filter[clear]' %>
+				<% if @export_fields %><%= f.submit 'Export (xls)', :name => 'export[xls]' %></td><% end %>
+			</tr>
+		</table>
+	<% } %>
+<% end %>

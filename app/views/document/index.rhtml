@@ -1,0 +1,12 @@
+<% if params[:sc] == 'applicant' %>
+	<%= partial 'nav' %>
+	<h2>Application Documents</h2>
+	<%= partial 'list', :objs => @objs %>
+	<h2>Applicant (Person) Documents</h2>
+	<%	params[:sc] = 'person' %>
+	<%	params[:sid] = @sobj.person_id %>
+	<%= partial 'list', :objs => @objs2 %>
+<% else %>
+	<%= partial 'nav' %>
+	<%= partial 'list', :objs => @objs %>
+<% end %>

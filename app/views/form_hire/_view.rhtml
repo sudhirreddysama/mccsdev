@@ -1,0 +1,197 @@
+<%= partial 'form_change/status', :o => @obj %>
+
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Type:</label>
+					<%= h o.hire_type %>
+				</td>
+				<td>
+					<label>Effective Date:</label>
+					<%= h o.effective_date.d0? %>
+				</td>
+				<td>
+					<label>Created By:</label>
+					<%= h o.user.name if o.user %>
+				</td>
+				<td>
+					<label>Created At:</label>
+					<%= h o.created_at.d0? %>
+				</td>
+				<td>
+					<label>Submitted By:</label>
+					<%= h o.submitter.name if o.submitter %>
+				</td>
+				<td>
+					<label>Submitted At:</label>
+					<%= h o.submitted_at.d0? %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Agency:</label>
+					<%= h o.agency.name if o.agency %>
+				</td>
+				<td>
+					<label>Department:</label>
+					<%= h o.department.name if o.department %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Name:</label>
+						<% n = "#{o.last_name}, #{o.first_name} #{o.middle_name}" %>
+						<% if @obj.employee && !(params[:action] == 'print') %>
+							<%= link_to n, :controller => :employee, :action => :view, :id => o.employee_id %>
+						<% else %>
+							<%= h n %>
+						<% end %>
+				</td>
+				<td>
+					<label>SSN:</label>
+					<%= h o.ssn %>
+				</td>
+				<td>
+					<label>Date of Birth:</label>
+					<%= h o.date_of_birth.d0? %>
+				</td>
+				<td>
+					<label>Retirement No.:</label>
+					&nbsp;<%= h o.retirement_no %>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Address:</label>
+					<%= h o.full_address(', ') %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Exempt Vol. Fire.?</label>
+					<%= yn o.exempt_vol_firefighter %>
+				</td>
+				<td>
+					<label>Veteran?</label>
+					<%= yn o.veteran %>
+				</td>
+				<td>
+					<label>Held CS Position Last 4 Years?</label>
+					<%= yn o.employed_4years %>
+					<% if o.employed_4years %> - <%= h o.employed_4years_year_location %><% end %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Certified List:</label>
+					<% if @obj.cert %>
+						<% if params[:action] != 'print' %>
+							<%= link_to @obj.cert.label, :controller => :cert, :action => :view, :id => @obj.cert_id %>
+						<% else %>
+							<%= h @obj.cert.label %>
+						<% end %>
+					<% end %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Comments:</label>
+					<%= nl2br_h o.comments %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<%= partial 'form_change/documents' %>
+	
+</div>
+
+
+<div class="viewer">
+	<div class="header">Title Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Title:</label>
+					<%= h o.title %>
+				</td>
+				<td>
+					<label>Salary:</label>
+					<%= h o.salary %>
+					<% unless o.salary_per.blank? %> per <%= o.salary_per %><% end %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Full/Part Time:</label>
+					<%= h o.full_or_part_time %>
+				</td>
+				<td>
+					<label>Hours/Week:</label>
+					<%= h o.hours_per_week %>
+				</td>
+				<td>
+					<label>Class:</label>
+					<%= h o.classification %>
+				</td>
+				<td>
+					<label>Status:</label>
+					<%= h o.civil_service_status %>
+					<% if o.civil_service_status == 'Temporary' && !o.temporary_type.blank? %>
+						- <%= h o.temporary_type %>
+					<% end %>
+				</td>
+				<td>
+					<label>List No.:</label>
+					<%= h o.eligible_list_no %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+</div>
+
+<%= partial 'form_change/view_action_form' %>

@@ -1,0 +1,154 @@
+<% if @obj.new_record? %>
+	<tr>
+		<th>Select Via:</th>
+		<td id="select_via">
+			<label><%= f.radio_button :select_via, 'status' %> Status</label>&nbsp;&nbsp;&nbsp;
+			<label><%= f.radio_button :select_via, 'disapproval' %> Disapproval</label>&nbsp;&nbsp;&nbsp;
+			<label><%= f.radio_button :select_via, 'agency' %> Agency</label>
+		</td>
+	</tr>
+	<tr id="select-status" class="selects">
+		<th>Statuses:</th>
+		<td>
+			<%= hidden_field_tag 'obj[save_new_app_status_ids]', 1  %>
+			<%= f.select :new_app_status_ids, AppStatus.find(:all, :order => 'app_statuses.name').collect { |s| [s.name, s.id] }, {}, {:multiple => true, :style => 'width: 100px; height: 100px;'} %>
+		</td>		
+	</tr>
+	<tr id="select-disapproval" class="selects">
+		<th>Disapproval:</th>
+		<td>
+			<%= hidden_field_tag 'obj[save_new_disapproval_ids]', 1  %>
+			<%= f.select :new_disapproval_ids, Disapproval.find(:all, :order => 'disapprovals.reason').collect { |s| [s.reason, s.id] }, {}, {:multiple => true, :style => 'width: 400px; height: 100px;'} %>		
+		</td>
+	</tr>
+	<tr id="select-agency" class="selects">
+		<th>Agency:</th>
+		<td>
+			<%= hidden_field_tag 'obj[save_new_agency_ids]', 1  %>
+			<%= f.select :new_agency_ids, Agency.find(:all, :order => 'agencies.name').collect { |s| [s.name, s.id] }, {}, {:multiple => true, :style => 'width: 300px; height: 100px;'} %>		
+			<div class="req">NOTE: Selecting by agency will ONLY select ACTIVE candidates.</div>
+		</td>
+	</tr>
+	<tr>
+		<th></th>
+		<td>						
+			Select from the statuses/disapprovals above to auto select the applicants below.<br />
+			Use shift/ctrl click to select multiple.
+		</td>
+	</tr>
+	<tr>
+		<th>Recipients:</th>
+		<td>
+			<%= hidden_field_tag 'obj[save_new_applicant_ids]', 1  %>
+			<% apps = @sobj.applicants.find(:all, {
+				:order => 'people.last_name, people.first_name',
+				:include => [:app_status, :person]
+			}) %>
+			<div style="height: 200px; width: 500px; overflow-y: scroll; border: 1px solid #888; background-color: #ffe" id="apps">
+				<% apps.in_groups(2, false).each { |grp| %>
+					<div style="width: 235px; float: left;">
+						<% grp.each { |a| %>
+							<% 
+							
+							tp_class = []
+							a.taken_perfs.each { |tp|
+								if tp.perf_code_id == 3
+									tp_class << "waived-#{tp.perf_test_id}"
+								end	
+							} 
+							
+							%>
+							<label style="display: block;" class="status-<%= a.app_status_id %> reason-<%= a.disapproval_id %> perf-test-status-<%= a.perf_test_status %> agency-<%= a.agency_id %> <%= tp_class.join(' ') %>">
+								<%= check_box_tag "obj[new_applicant_ids][]", a.id, @obj.new_applicant_ids.include?(a.id) %>
+								<%= h a.person.last_name %>, <%= h a.person.first_name %>
+								<% if a.app_status %> (<%= h a.app_status.code %>)<% end %>
+								<% if a.perf_test_status == 'R' %>
+									*R
+								<% elsif a.perf_test_status == 'F' %>
+									*F
+								<% end %>
+								<% if(!tp_class.empty?) %>
+									*W
+								<% end %>
+								<% if a.agency %>
+									<span style="color: #888; font-size: 80%;">(<%= a.agency.abbreviation %>)</span>
+								<% end %>
+							</label>
+						<% } %>
+					</div>
+				<% } %>
+				<div class="clear"></div>
+			</div>
+			*F - Failed Perf. Test&nbsp;&nbsp;&nbsp;*R - Hasn't Taken Perf. Test&nbsp;&nbsp;*W - Waived at Least One Perf. Test<br />
+			<a href="#" onclick="uncheck_f(); return false">Uncheck *F</a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="uncheck_r(); return false">Uncheck *R</a><br />
+			<% if @sobj.class == Exam %>
+				<% @sobj.exam_perfs.each { |pt| %>
+					<a href="#" onclick="uncheck_w(<%= pt.perf_test_id %>); return false">Uncheck *W <%= pt.perf_test.name %></a><br />
+				<% } %>
+			<% end %>
+		</td>
+	</tr>
+	<script type="text/javascript">
+		
+		var uncheck_r;
+		var uncheck_f;
+		var uncheck_w;
+		
+		(function($){
+			
+			uncheck_r = function() {
+				$('label.perf-test-status-R input').attr('checked', false);
+			}
+			
+			uncheck_f = function() {
+				$('label.perf-test-status-F input').attr('checked', false);
+			}
+			
+			uncheck_w = function(id) {
+				$('label.waived-' + id + ' input').attr('checked', false);
+			}
+			
+			var app_status_ids = $('#obj_new_app_status_ids');
+			var disapproval_ids = $('#obj_new_disapproval_ids');
+			var agency_ids = $('#obj_new_agency_ids');
+			
+			var select_applicant_ids = function(e) {
+				var sids = $(app_status_ids.val());
+				var dids = $(disapproval_ids.val());
+				var tids = $(agency_ids.val());
+				var via = $('#select_via input:checked').val();
+				$('#apps input').attr('checked', false);
+				if(via == 'status') {
+					sids.each(function(i, v) {
+						$('label.status-' + v + ' input').attr('checked', true);
+					});
+				}
+				else if(via == 'disapproval') {
+					dids.each(function(i, v) {
+						$('label.reason-' + v + ' input').attr('checked', true);
+					});
+				}
+				else if(via == 'agency')
+					tids.each(function(i, v) {
+					$('label.status-5.agency-' + v + ' input').attr('checked', true);
+				});
+			}
+			
+			app_status_ids.change(select_applicant_ids);
+			disapproval_ids.change(select_applicant_ids);
+			agency_ids.change(select_applicant_ids);
+			
+			var toggle_selects = function() {
+				$('.selects').hide();
+				var via = $('#select_via input:checked').val();
+				$('#select-' + via).show();
+			}
+			toggle_selects();
+			
+			$('#select_via input').click(toggle_selects);
+			
+		})(jQuery);
+		
+	</script>
+<% end %>
+<%= partial 'message/fields', :f => f, :o => o %>

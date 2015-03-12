@@ -1,0 +1,89 @@
+<h1><%= @obj.last_name %>, <%= @obj.first_name %></h1>
+<h2>Applicant Info</h2>
+<p>
+	<strong>Name:</strong> <%= @obj.last_name %>, <%= @obj.first_name %><br />
+	<%	
+		t = @obj.town
+		v = @obj.village
+		f = @obj.fire_district
+		s = @obj.school_district
+	%>
+	<% if t %>
+		<strong>Town:</strong> <%= h t.name %><br />
+	<% end %>
+	<% if v %>
+		<strong>Village:</strong> <%= h v.name %><br />
+	<% end %>
+	<% if f %>
+		<strong>Fire:</strong> <%= h f.name %><br />
+	<% end %>
+	<% if s %>
+		<strong>School:</strong> <%= h s.name %><br />
+	<% end %>
+</p>
+<h2>Exams Taken</h2>
+<p>Expired exams are greyed out.</p>
+<table class="dg4">
+	<thead>
+		<tr>
+			<th>Title, Exam Number</th>
+			<th width="1%">Pos.</th>
+			<th width="1%">Exam<br />Score</th>
+			<th width="1%">Vet.<br />Cred.</th>
+			<th width="1%">Other<br />Cred.</th>
+			<th width="1%">Final<br />Score</th>
+			<th width="1%" style="text-align: right;">Info</th>
+			<th width="1%" style="text-align: right;">Activity</th>
+		</tr>
+	</thead>
+	<% @obj.applicants.each_with_index { |o, i| %>
+		<tbody class="<%= cycle 'odd', 'even' %>" id="obj-<%= o.id %>">
+			<%
+			
+				e = o.exam
+			
+				actions = o.cert_applicants.find(:all, {
+					:include => [{:cert => :agency}, :cert_code],
+					:conditions => 'certs.id is not null'
+				})
+				
+				list_notes = o.list_notes.find(:all)
+				
+				activity = (actions.to_a + list_notes.to_a).sort_by(&:date).reverse
+			
+			%>
+			<tr>
+				<td class="nobr">
+					<% if e.valid_until && e.valid_until >= Time.now.to_date %>
+						<%= link_to(e.exam_no.to_s + ', ' + e.title.to_s, :action => :view, :id => (e.continuous ? e.current_exam_id : e.id)) %>
+					<% else %>
+						<div style="color: #888;">
+							<%= h e.exam_no.to_s %>, <%= e.title.to_s %>
+						</div>
+					<% end %>
+				</td>
+				<td class="nobr"><%= o.pos %></td>
+				<td class="nobr"><%= nwp o.base_score, 2 %></td>
+				<td class="nobr"><%= nwp o.veterans_credits, 2 %></td>
+				<td class="nobr"><% if e.bandscored %>(<%= nwp o.other_credits, 2 %>)<% else %><%= nwp o.other_credits, 2 %><% end %></td>
+				<td class="nobr"><%= nwp o.final_score, 2 %></td>
+				<td class="info-links"><a href="#" id="link-<%= o.id %>-info" onclick="toggle_info(this); return false;">info</a></d>
+				<td class="info-links">
+					<% unless activity.empty? %>
+						<a href="#" id="link-<%= o.id %>-activity" onclick="toggle_info(this); return false;">activity</a>
+					<% end %>
+				</td>
+			</tr> 
+			<tr>
+			<tr id="obj-<%= o.id %>-info" class="list-extra" style="display: none;">
+				<td colspan="10">
+					<span class="dim-label">Salary:</span> <%= e.salary %>&nbsp;&nbsp;&nbsp;
+					<span class="dim-label">Established:</span> <%= e.established_date.d0? %>&nbsp;&nbsp;&nbsp;
+					<span class="dim-label">Test Date:</span> <%= e.given_at.d0? %>&nbsp;&nbsp;&nbsp;
+					<span class="dim-label">Valid Until:</span> <%= e.valid_until.d0? %>&nbsp;&nbsp;&nbsp;
+				</td>
+			</tr>
+			<%= partial 'activity', :acts => activity, :id => o.id %>
+		</tbody>
+	<% } %>
+</table>

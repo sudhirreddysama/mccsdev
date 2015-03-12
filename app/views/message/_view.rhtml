@@ -1,0 +1,63 @@
+<div class="tabs buttons">
+	<%= tab 'Print PDF', {:action => :print_pdf, :id => @obj.id}, {}, :target => '_blank', :class => 'tab-print' %>
+	<div class="clear"></div>
+</div>
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Subject:</label>
+					<%= h o.subject %>
+				</td>
+				<td>
+					<label>Created:</label>
+					<%= o.created_at.dt0? %>
+				</td>
+				<td>
+					<label>Created By:</label>
+					<%= o.user.username if o.user %>
+				</td>
+				<td>
+					<label>From/Reply To:</label>
+					<%= h o.email_from %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Delivery:</label>
+					<%= link_to o.delivery.created_at.dt0?, :sc => nil, :sid => nil, :controller => :delivery, :action => :view, :id => o.delivery_id if o.delivery %>
+				</td>
+				<td>
+					<label>Email/Postal:</label>
+					<%= o.delivered_via %>
+				</td>
+				<td>
+					<label>Bulk Message:</label>
+					<% if o.bulk_message && o.bulk_message.bulk_object %>
+						<%= link_to o.bulk_message.bulk_object.label, :sc => o.bulk_message.bulk_object.class.to_s.downcase, :sid => o.bulk_message.bulk_object.id, :controller => :bulk_message, :action => :view, :id => o.bulk_message.id %>
+					<% end %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Body Preview:</label>
+					<%= o.body %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+</div>

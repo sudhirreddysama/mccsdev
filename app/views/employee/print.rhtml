@@ -1,0 +1,140 @@
+<html>
+<head>
+	<style type="text/css">
+		html, body { padding: 0; margin: 0; border: 0; }
+		body, td, th { font: 12px/1.3 Trebuchet MS, Verdana, Arial, sans-serif; }
+		#head { font-weight: bold; text-align: center; font-size: 130%; }
+		#end { font-weight: bold; text-align: center; }
+		table { border-collapse: collapse; }
+		td, th { text-align: left; padding: 3px 5px; vertical-align: top; }
+		th { font-weight: bold; white-space: nowrap; }
+		.hist-head { border-top: 1px solid #888; }
+		.hist-head, .hist-body { border-bottom: 1px solid #888; }
+		.nobreak { page-break-inside: avoid; }
+		
+	</style>
+</head>
+<body>
+	<% actions = @obj.empl_actions.find(:all, :include => :empl_action_type, :order => 'empl_actions.action_date desc, empl_action_types.absent desc, empl_actions.id desc').to_a %>
+	<div style="position: absolute; left: 0; top: 0;"><em>Print Date: <%= Time.now.to_date.fmt %></em></div>
+	<p id="head">
+		MONROE COUNTY<br />
+		Employee Roster Card: <%= h @obj.last_name %>, <%= h @obj.first_name %><br />
+		SS#: <%= h @obj.ssn %>
+	</p>
+	<table id="info" width="100%">
+		<tr>
+			<th>Address:</th>
+			<td colspan="3"><%= h @obj.full_address(', ') %></td>
+			<th>Hire Date</th>
+			<td><%= @obj.date_hired.d0? %></td>
+			<th>Leave Date:</th>
+			<td><%= h @obj.leave_date.d0? %></td>
+		</tr>
+		<tr>
+			<th>Email:</th>
+			<td colspan="3"><%= h @obj.email %></td>
+			<th>Phone:</th>
+			<td><%= h @obj.phone %></td>
+			<th>Work Phone:</th>
+			<td><%= h @obj.work_phone %></td>
+		</tr>
+		<tr>
+			<th width="1%">Seniority Date:</th>
+			<td width="24%"><%= @obj.seniority_date.d0? %></td>
+			<th width="1%">Veteran:</th>
+			<td width="24%"><%= @obj.veteran == 'disabled' ? 'Disabled Vet' : @obj.veteran == 'veteran' ? 'Non-Disabled Vet' : 'No'  %></td>
+			<th width="1%">Pension No.:</th>
+			<td width="24%"><%= h @obj.pension_no %></td>
+		</tr>
+		<tr>
+			<th>Exempt Vol Fire:</th>
+			<td><%= yn @obj.exempt_vol_fire %></td>
+			<th>Rehire&nbsp;Dates:</th>
+			<td colspan="3">
+				<%= [@obj.date_rehired.d0?, @obj.date_rehired2.d0?, @obj.date_rehired3.d0?].reject(&:blank?).join(', ') %>
+			</td>
+		</tr>
+	</table>
+	
+	<table class="hist-head" width="100%">
+			
+		<thead>				
+			<tr>
+				<th width="15%">
+					#<br />
+					Date<br />
+					Action
+				</th>
+
+				<th width="30%">
+					Info<br />
+					Authorization<br />
+					Ref. Date
+				</th>
+				
+				<th width="25%">
+					Title<br />
+					Agency<br />
+					Department
+				</th>
+				
+				<th width="15%">
+					Class<br />
+					Status<br />
+				</th>
+				
+				<th width="15%">
+					Time<br />
+					Wage
+				</th>
+				
+
+				
+			</tr>
+		</thead>
+	</table>
+		
+	<% actions.each_with_index { |a, i| %>
+		<div class="nobreak">
+			<table class="hist-body" width="100%">
+				<tbody>
+					<tr>
+					
+						<td width="15%">
+							<%= i + 1 %>&nbsp;<br />
+							<%= h a.action_date.d0? %>&nbsp;<br />
+							<%= h a.empl_action_type.name if a.empl_action_type %>
+						</td>
+						
+						<td width="30%">
+							<%= h a.info %>&nbsp;<br />
+							<%= h a.authorization %>&nbsp;<br />
+							<%= a.reference_date.d0? %>
+						</td>
+					
+						<td width="25%">
+							<%= h a.job.name if a.job %>&nbsp;<br />
+							<%= h a.agency.name if a.agency %>&nbsp;<br />
+							<%= h a.department.name if a.department %>
+						</td>
+						
+						<td width="15%">
+							<%= h Const::JOB_CLASSES.rassoc(a.classification)[0] rescue nil %>&nbsp;<br />
+							<%= h Const::JOB_STATUSES.rassoc(a.status)[0] rescue nil %>
+						</td>
+					
+						<td width="15%">
+							<%= h Const::JOB_TIMES.rassoc(a.job_time)[0] rescue nil %>&nbsp;<br />
+							<%= a.wage.n2? %><% unless a.wage_per.blank? %>/<%= h(Const::WAGE_UNITS.rassoc(a.wage_per) ? Const::WAGE_UNITS.rassoc(a.wage_per)[0] : a.wage_per) %><% end %>
+						</td>
+						
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	<% } %>
+		
+	<p id="end">* END OF REPORT *</p>
+</body>
+</html>

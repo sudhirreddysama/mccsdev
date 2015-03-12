@@ -1,0 +1,136 @@
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Active:</label>
+					<%= yn !o.inactive %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.name %>
+				</td>
+				<td>
+					<label>Ordered Date:</label>
+					<%= h o.ordered_date %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+
+
+
+
+
+<h2>Exams</h2>
+
+<% exams = o.exams.find(:all, :order => 'exams.exam_no asc') %>
+
+<% if exams.empty? %>
+	<div class="marg">None Found</div>
+<% else %>
+
+	<table class="dg">
+		<thead>
+			<tr>
+				<th width="1%">ID</th>
+				<th width="1%">No.</th>
+				<th width="1%">Type</th>
+				<th width="93%">Title (click to view)</th>
+				<th width="1%">Given</th>
+				<th width="1%">Est.</th>
+				<th width="1%">Expire</th>
+			</tr>
+		</thead>
+		<tbody id="objs">
+			<% exams.each { |e| %>
+				<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+					<td><%= o.id %></td>
+					<td class="nobr"><%= h e.exam_no %></td>
+					<td class="nobr"><%= h e.exam_type %><% if e.continuous %> CR<% end %></td>
+					<td><%= link_to(e.title, :controller => :exam, :action => :view, :id => e.id) %></td>
+					<td class="nobr"><%= e.given_at.d0? %></td>
+					<td class="nobr"><%= e.established_date.d0? %></td>
+					<td class="nobr"><%= e.valid_until.d0? %></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+<% end %>
+<% unless @current_user.agency_level? %>
+<h2>Preferred Lists</h2>
+
+<% plists = o.preferred_lists.find(:all, :order => 'preferred_lists.id desc') %>
+
+<% if plists.empty? %>
+	<div class="marg">None Found</div>
+<% else %>
+
+	<table class="dg">
+		<thead>
+			<tr>
+				<th width="1%" class="nobr">ID</th>
+				<th width="1%">Established</th>
+				<th width="1%">Valid&nbsp;Until</th>
+				<th width="33%">Title</th>
+				<th width="32%">Agency</th>
+				<th width="32%">Department</th>
+			</tr>
+		</thead>
+		<tbody id="objs">
+			<% plists.each { |o| %>
+				<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+					<td class="nobr"><%= o.id %></td>
+					<td class="nobr"><%= o.established_date.d0? %></td>
+					<td class="nobr"><%= o.valid_until.d0? %></td>
+					<td><%= link_to o.job.name, :controller => :preferred_list, :action => :view, :id => o.id %></td>
+					<td><%= h o.agency.name if o.agency %></td>
+					<td><%= h o.department.name if o.department %></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+	
+<% end %>
+<% end %>
+
+
+
+
+<% if false %>
+
+<h2>Certifications</h2>
+
+<% certs = o.certs.find(:all, :order => 'certs.certification_date desc') %>
+
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">ID</th>
+			<th width="1%" class="nobr">Cert. Date</th>
+			<th width="1%" class="nobr"># Pos.</th>
+			<th width="1%">Salary</th>
+			<th width="95%">Title (click to view)</th>
+			</tr>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% certs.each { |c| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td><%= o.id %></td>
+				<td class="nobr"><%= c.certification_date.d0? %></td>
+				<td class="nobr"><%= h c.number_of_positions %></td>
+				<td class="nobr"><%= h c.salary_range %></td>
+				<td class="nobr"><%= link_to c.title, :controller => :cert, :action => :view, :id => c.id %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
+<% end %>

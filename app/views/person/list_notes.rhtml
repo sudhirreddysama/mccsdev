@@ -1,0 +1,62 @@
+<%= partial 'nav' %>
+<%= form_tag %>
+	<table class="dg">
+		<thead>
+			<tr>
+				<th colspan="4">
+				Valid Status Codes:
+				<%= AppStatus.find(:all, :order => 'app_statuses.name').collect { |s| "#{s.code}:&nbsp;#{s.name}" }.join(', ') %>
+				</th>
+			</tr>
+			<tr>
+				<th width="1%">Application</th>
+				<th width="1%">St.</th>
+				<th width="1%">Date</th>
+				<th width="97%">Note</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr><th colspan="4" style="border-bottom: 1px solid #000; background-color: #ddd; color: #444; text-align: center;">Existing List Notes:</th></tr>
+			<% if @objs.empty? %>
+				<tr><td colspan="4" style="text-align: center;">No Existing List Notes</td></tr>
+			<% end %>
+		</tbody>
+		<% @objs.each { |o| %>
+			<% 
+			a = o.applicant 
+			e = a.exam
+			%>
+			<tbody class="<%= cycle 'odd', 'even' %>">
+				<tr>
+					<td class="nobr"><%= link_to("#{e.exam_no} #{e.title}", {:controller => :applicant, :action => :view, :id => o.applicant_id}, {:target => '_blank'}) %></td>
+					<td class="nobr"><%= a.status_code if a.app_status %></td>
+					<td class="nobr"><%= calendar_date_select_tag "objs[#{o.id}][note_date]", o.note_date, :class => 'ucase' %></td>
+					<td><%= text_field_tag "objs[#{o.id}][note]", o.note, :class => 'ucase', :style => 'width: 90%;' %></td>
+				</tr>
+			</tbody>
+		<% } %>
+		<tbody>
+			<tr><th colspan="4" style="border-bottom: 1px solid #000; background-color: #ddd; color: #444; text-align: center;">Post New List Notes:</th></tr>
+			<% if @apps.empty? %>
+				<tr><td colspan="4" style="text-align: center;">No Applications to Post Notes</td></tr>
+			<% end %>
+		</tbody>
+		<% reset_cycle %>
+		<% @apps.each { |a| %>
+			<%
+			e = a.exam
+			%>
+			<tbody class="<%= cycle 'odd', 'even' %>">
+				<% if e %>
+					<tr>
+						<td class="nobr"><%= link_to("#{e.exam_no} #{e.title}", {:controller => :applicant, :action => :view, :id => a.id}, {:target => '_blank'}) %></td>
+						<td class="nobr"><%= text_field_tag "new_objs[#{a.id}][status_code]", a.status_code, :size => 4, :class => 'ucase' %></td>
+						<td class="nobr"><%= calendar_date_select_tag "new_objs[#{a.id}][note_date]", nil, :class => 'ucase' %></td>
+						<td><%= text_field_tag "new_objs[#{a.id}][note]", nil, :style => 'width: 90%;', :class => 'ucase' %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		<% } %>
+	</table>
+	<div class="marg" style="text-align: center;"><%= submit_tag 'Save List Notes' %></div>
+</form>

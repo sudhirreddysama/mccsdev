@@ -1,0 +1,24 @@
+<%= partial 'nav' %>
+<%= partial 'scoring_nav' %>
+<%= partial 'errors', :errors => @obj.errors.full_messages %>
+
+<% table_form_for(:bs) { |f| %>
+	<tr>
+		<th></th>
+		<th>Range</th>
+		<th>Score</th>
+	</tr>
+	<% 1.upto(12) { |i| %>
+		<tr>
+			<th><%= i %>.</th>
+			<td><%= f.text_field "rg#{i}", :size => 10 %></td>
+			<td><%= f.text_field "gd#{i}", :size => 5 %></td>
+		</tr>
+	<% } %>
+	<tr>
+		<th></th>
+		<th colspan="2">
+			<%= submit_tag 'Save & Apply' %>
+		</th>
+	</tr>
+<% } %>

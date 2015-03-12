@@ -1,0 +1,10 @@
+<%= f.tr_calendar_date_select :note_date, :label => 'Date' %>
+<% if params[:sc] == 'exam' %>
+	<%= f.tr_select(:applicant_id, 
+		@sobj.applicants.find(:all, {
+			:include => :person, 
+			:order => 'people.last_name, people.first_name'
+		}).collect { |a| ["#{a.person.last_name}, #{a.person.first_name}", a.id] }, :include_blank => true, :label => 'Application') %>
+<% end %>
+<%= f.tr_text_field :note, :label => 'Note', :class => 'ucase', :size => 80 %>
+<%= f.tr_select :app_status_id, AppStatus.find(:all, :order => 'app_statuses.name asc').collect { |s| [s.name, s.id] }, :include_blank => true %>

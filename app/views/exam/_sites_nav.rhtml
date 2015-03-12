@@ -1,0 +1,5 @@
+<div class="tabs">
+	<%= tab 'Pick Sites/Bulk Assign', {:action => 'assign_sites', :id => @obj.id, :id2 => 'bulk'} %>
+	<%= tab 'Individual Assignments', {:action => 'assign_sites', :id => @obj.id, :id2 => 'detail'}, {}, :class => 'tab-assign_sites2' %>
+	<div class="clear"></div>
+</div>

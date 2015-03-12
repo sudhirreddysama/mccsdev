@@ -1,0 +1,125 @@
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>SSN:</label>
+					<%= h o.ssn %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.name %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Email:</label>
+					<%= mail_to o.email %>
+				</td>
+				<td>
+					<label>Day Phone:</label>
+					<%= h o.phone_day %>
+				</td>
+				<td>
+					<label>Alt Phone:</label>
+					<%= h o.phone_alt %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>County:</label>
+					<%= h o.county %>
+				</td>
+				<td>
+					<label>Address:</label>
+					<%= h o.full_address(', ') %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Over 18?</label>
+					<%= yn o.older_18 %>
+				</td>
+				<td>
+					<label>HS Diploma?</label>
+					<%= yn o.hs_diploma %>
+				</td>
+				<td>
+					<label>School Above HS:</label>
+					<%= h o.school_above_hs %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Begin Work:</label>
+					<%= h o.begin_work %>
+				</td>
+				<td>
+					<label>End Work:</label>
+					<%= h o.end_work %>
+				</td>
+				<td>
+					<label>Work Weekends?</label>
+					<%= yn o.work_weekends %>
+				</td>
+				<td>
+					<label>Law Violation?</label>
+					<%= yn o.law_violation %>
+				</td>
+				<td>
+					<label>Drivers License?</label>
+					<%= yn o.drivers_license %>
+					&nbsp; <%= o.drivers_license_class %>
+				</td>
+				<td>
+					<label>Daily Transportation?</label>
+					<%= yn o.have_transportation %>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Previous Employment:</label>
+					<%
+						e = []
+						e << [o.prev_empl1, o.prev_dates1, o.prev_duties1].reject(&:blank?).join(', ')
+						e << [o.prev_empl2, o.prev_dates2, o.prev_duties2].reject(&:blank?).join(', ')
+						e << [o.prev_empl3, o.prev_dates3, o.prev_duties3].reject(&:blank?).join(', ')
+						e = e.reject(&:blank?)
+					%>
+					<% if e.empty? %>
+						&nbsp;
+					<% else %>
+						<% e.each { |i| %>
+							<div><%= i %></div>
+						<% } %>
+					<% end %>
+				</td>
+			</tr>
+		</table>
+	</div>	
+</div>

@@ -1,0 +1,41 @@
+<div id="review-save">Save Changes</div>
+<script type="text/javascript">
+	
+	window.input_dirty = false;
+	
+	(function($) {
+	
+		$('#review-save').click(function(e) {
+			$('#review-save').addClass('busy-bg-i');
+			var post_data = $('#review-form').serialize();
+			//console.log(post_data);
+			$.ajax({
+				url: '<%= url %>',
+				type: 'POST',
+				data: post_data,
+				success: function(data, status, xhr) {
+					new Effect.Highlight('review-save', {
+						startcolor: '#00aa00',
+						endcolor: '#000000'
+					});
+					window.input_dirty = false;
+				},
+				error: function(xhr, status, error) {
+					alert('Error saving data.');
+				},
+				complete: function() {
+					$('#review-save').removeClass('busy-bg-i');
+				}
+			});
+		});
+		
+		$(window).bind('beforeunload', function(){
+			if(window.input_dirty) {
+				return 'You have unsaved changes on this page. Leave anyway?';
+			}
+		});
+		
+	})(jQuery);
+
+
+</script>

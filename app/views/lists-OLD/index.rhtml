@@ -1,0 +1,51 @@
+<h1>Civil Service Test Scores</h1>
+<p>You may view any active eligible list below by clicking on a title. If you are unsure of the exact title, enter your name in the &quot;Applicant Search&quot; box.</p>
+<p>An eligible list is a ranked list of all passing candidates from a Civil Service exam. All eligible candidates are listed first in order of score, then randomly within 
+each score. An eligible list is established for a minimum of one year and can be extended to a maximum of four years. <a href="/hr-civilservice.php#EligibleLists">For more information click here.</a></p>
+<%= partial 'search' %>
+<hr />
+<h2>Active Civil Service Lists</h2>
+<p>Click on a Civil Service List’s title to view the applicants on that list.</p>
+<% ('A'..'Z').each { |l| %>
+	<% if @lists[l] %>
+		<a href="#<%= l %>"><%= l %></a>&nbsp;
+	<% else %>
+		<span class="dim"><%= l %></span>&nbsp;
+	<% end %>
+<% } %>
+<% ('A'..'Z').each { |l| %>
+	<% if @lists[l] %>
+		<% unless l == 'A' %>
+			<a class="right" href="#wrap">Back to Top</a>
+		<% end %>
+		<h2 id="<%= l %>"><%= l %></h2>
+		<table class="dg4">
+			<thead>
+				<tr>
+					<th class="nobr" width="49%">Title, Exam Number</th>
+					<th class="nobr" width="48%">Salary</th>
+					<th class="nobr" width="1%">Most Recent<br />Test Date</th>
+					<th class="nobr" width="1%">Established</th>
+					<th class="nobr" width="1%">Valid<br />Until</th>
+				</tr>
+			</thead>
+			<% @lists[l].each { |e| %>
+				<% past = @past_exams[e.id] %>
+					<tbody class="<%= cycle 'odd', 'even' %>">
+						<tr>
+							<td>
+								<div><%= link_to e.title + (e.continuous ? ': CR' : ''), :action => :view, :id => e.id %></div>
+								<%= h e.exam_no %><% unless past.blank? %>, 
+									<%= past.collect(&:exam_no) * ', ' %>
+								<% end %>
+							</td>
+							<td><%= h e.salary %></td>
+							<td class="nobr"><%= h e.given_at.d0? %></td>
+							<td class="nobr"><%= h e.established_date.d0? %></td>
+							<td class="nobr"><%= h e.valid_until.d0? %></td>
+						</tr>
+					</tbody>
+			<% } %>
+		</table>
+	<% end %>
+<% } %>

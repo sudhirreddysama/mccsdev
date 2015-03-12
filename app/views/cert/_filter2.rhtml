@@ -1,0 +1,11 @@
+<tr>
+	<th>Statuses:</th>
+	<td>
+		<label><%= check_box_tag 'filter[statuses][]', 'requested', @filter.statuses.include?('requested') %> requested</label>
+		<label><%= check_box_tag 'filter[statuses][]', 'pending', @filter.statuses.include?('pending') %> pending</label>
+		<label><%= check_box_tag 'filter[statuses][]', 'certified', @filter.statuses.include?('certified') %> certified</label>
+		<label><%= check_box_tag 'filter[statuses][]', 'completed', @filter.statuses.include?('completed') %> completed</label>
+		<label><%= check_box_tag 'filter[statuses][]', 'expired', @filter.statuses.include?('expired') %> expired</label>
+		<label><%= check_box_tag 'filter[statuses][]', 'overdue', @filter.statuses.include?('overdue') %> overdue</label>
+	</td>
+</tr>

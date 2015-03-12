@@ -1,0 +1,5 @@
+<% unless errors.nil? or errors.empty? or errors.all?(&:blank?) %>
+	<div class="errors">
+		<%= errors.join '<br />' %>
+	</div>
+<% end %>

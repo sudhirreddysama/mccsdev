@@ -1,0 +1,22 @@
+<%= partial 'nav' %>
+<%= form_tag %>
+	<table class="form">
+		<tr>
+			<th colspan="3">Select what agency users should have direct access to the applications on this web post.</th>
+		</tr>
+		<% @grouped_users.keys.sort.each { |k| %>
+			<tr><th colspan="3"><%= h k %></th></tr>
+			<% users = @grouped_users[k] %>
+			<% users.in_groups(3, false).each { |grp| %>
+				<td>
+					<% grp.each { |u| %>
+						<label style="display: block;"><%= check_box_tag 'user_ids[]', u.id, @obj.user_ids.include?(u.id) %> <%= h u.name %></label>
+					<% } %>
+				</td>
+			<% } %>
+		<% } %>
+		<tr>
+			<td colspan="3" style="text-align: center;"><%= submit_tag 'Update Access' %></td>
+		</tr>
+	</table>
+</form>

@@ -1,0 +1,206 @@
+<html>
+<head>
+	<style type="text/css">
+		html, body { padding: 0; margin: 0; height: 100%; width: 100%; }
+		body, td, th, input, select, textarea { font: 12px/1.5 sans-serif; }	
+		table { border-collapse: collapse; width: 100%; }
+		th, td { text-align: left; padding: 3px; vertical-align: top; }
+		th { font-weight: bold; }
+		#head { border-top: 1px solid #888; border-bottom: 1px solid #888; }
+		#list tr td { border-top: 1px solid #888; }
+		#list { border-bottom: 1px solid #888; }
+		
+		
+
+		.cols { border-bottom: 1px solid #888; }
+		.col-app { float: left; width: 45%; page-break-inside: avoid; }
+		.col-act { float: right; width: 55%; }
+		.col-pos { float: left; width: 10%; }		
+		.col-name { float: left; width: 50%; }
+		.col-score1 { float: left; width: 10%; }
+		.col-score2 { float: left; width: 10%; }
+		.col-score3 { float: left; width: 10%; }				
+		.col-score4 { float: left; width: 10%; }				
+		.col-stat { float: right; width: 40%; }				
+		.col-extra { padding-left: 10%; clear: both; }
+		
+		.col-date { float: left; width: 12%; }
+		.col-agency { float: left; width: 10%; }
+		.col-dept { float: left; width: 12%; }
+		.col-add { float: left; width: 13%; }
+		.col-code { float: left; width: 53%; }
+		.col-act-date { float: left; width: 10%; }
+		.col-note { float: left; width: 88%; }
+		
+		.pad { padding: 3px; }
+		
+		.clear { clear: both; }
+		
+	</style>
+</head>
+<body>
+	<%
+	
+	apps = []
+	
+	passed = 0
+	failed = 0
+	rejected = 0
+	fta = 0
+	total = 0
+	
+	@applicants.each  { |a|
+		
+		#perf_fail = a.taken_perfs.find(:first, {
+		#	:include => :perf_code,
+		#	:conditions => 'perf_codes.pass_fail = 3'
+		#})
+		#perf_fail = false
+		
+		s = a.app_status
+		if s
+			if s.eligible != 'N'
+				if a.pos > 0
+					apps << a
+					passed += 1
+				end
+			end
+			if s.code == 'F'
+				failed += 1
+			end
+			if s.code == 'D'
+				rejected += 1
+			end
+			if s.code == '-'
+				fta += 1
+			end
+			total += 1
+		end
+	}
+	
+	by_dept = {}
+	if @obj.exam_type == 'PROM'
+		apps.each { |a|
+			n = a.department ? a.department.name : 'UNKOWN DEPT'
+			by_dept[n] ||= []
+			by_dept[n] << a
+		}
+	end
+	
+	%>
+	<em>Print Date: <%= Time.now.to_date.fmt %></em>
+	<table id="head" width="100%">
+		<tbody>
+			<tr>
+				<td>
+	
+					<table>
+						<tr>
+							<th>Exam #:</th>
+							<td>
+								<% if @obj.continuous %>
+									<%= Exam.find(:all, {
+										:conditions => ['current_exam_id = ? and valid_until >= date(now())', @obj.id],
+										:order => 'given_at desc'
+									}).collect(&:exam_no).join(', ') %>
+								<% else %>
+									<%= @obj.exam_no %>
+								<% end %>
+							</td>
+						</tr>
+						<tr>
+							<th>Title:</th>
+							<td><%= h @obj.title %><% if @obj.continuous %> :CR<% end %></td>
+						</tr>
+						<tr>
+							<th>Salary:</th>
+							<td><%= h @obj.salary %></td>
+						</tr>
+						<tr>
+							<th colspan="2">
+								PLEASE DO NOT REMOVE FROM HUMAN RESOURCES
+							</th>
+						</tr>	
+						<tr><td colspan="2"><%= h @obj.comments %></td></tr>				
+					</table>
+					
+				</td>
+				<td>
+				
+					<table>
+						<tr>
+							<th>Passed:</th>
+							<td><%= passed %></td>
+						</tr>
+						<tr>
+							<th>Failed:</th>
+							<td><%= failed %></td>
+						</tr>
+						<tr>
+							<th>Rejected:</th>
+							<td><%= rejected %></td>
+						</tr>
+						<tr>
+							<th>FTA:</th>
+							<td><%= fta %></td>
+						</tr>
+						<tr>
+							<th>Total:</th>
+							<td><%= total %></td>
+						</tr>
+					</table>
+				
+				</td>
+				<td>
+				
+					<table>
+						<tr>
+							<th>Most Recent Test Date:</th>
+							<td><%= @obj.given_at.fmt %></td>
+						</tr>
+						<tr>
+							<th>Date Established:</th>
+							<td><%= @obj.established_date.fmt %></td>
+						</tr>
+						<tr>
+							<th>Valid Until:</th>
+							<td>
+								<% if @obj.continuous %>
+									SEE BELOW
+								<% else %>
+									<%= @obj.valid_until.fmt %>
+								<% end %>
+							</td>
+						</tr>
+					</table>
+				
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div class="cols">
+		<div class="col-app">
+			<div class="col-pos"><div class="pad"><strong>Pos</strong></div></div>
+			<div class="col-name"><div class="pad"><strong>Name<br />Address</strong></div></div>
+			<div class="col-score1"><div class="pad"><strong>Exam<br />Score</strong></div></div>
+			<div class="col-score2"><div class="pad"><strong>Vet<br />Cred</strong></div></div>
+			<div class="col-score3"><div class="pad"><strong>Oth<br />Cred</strong></div></div>
+			<div class="col-score4"><div class="pad"><strong>Final<br />Score</strong></div></div>
+		</div>
+		<div class="col-act"><strong>Actions</strong></div>
+		<div class="clear"></div>
+	</div>
+		<% if @obj.exam_type == 'PROM' %>
+			<% by_dept.keys.sort.each { |k| %>
+				<div class="cols"><div class="pad"><strong><%= k %></strong></div></div>
+				<%= partial 'exam/print', :apps => by_dept[k] %>
+			<% } %>
+		<% else %>
+			<%= partial 'exam/print', :apps => apps %>
+		<% end %>
+	<strong>*** End of Report ***</strong>
+
+</body>	
+</html>
+

@@ -1,0 +1,5 @@
+<% if @obj.new_record? %>
+	<%= f.tr_file_field :uploaded_file, :label => 'Document', :req => true %>
+<% else %>
+	<%= f.tr_text_field :filename, :label => 'Filename', :req => true %>
+<% end %>

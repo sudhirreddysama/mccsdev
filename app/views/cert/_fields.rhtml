@@ -1,0 +1,183 @@
+<% if @current_user.agency_level? %>
+	<% if !@current_user.agency %>
+		<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name').collect { |a| [a.name, a.id] }, :label => 'Agency', :req => true, :include_blank => true %>
+	<% end %>
+	<% if !@current_user.department %>
+		<%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name').collect { |a| [a.name, a.id] }, :label => 'Department', :req => true, :include_blank => true %>
+	<% end %>
+	<%= f.tr_select :exam_id, Exam.find(:all, :conditions => 'valid_until >= date(now())', :order => 'exams.title').collect { |e| ["#{e.title} - #{e.exam_no}", e.id] }, :include_blank => true, :label => 'Exam', :req => true %>
+	<%= f.tr_select :job_id, Job.find(:all, :order => 'jobs.name').collect { |j| [j.name, j.id] }, :include_blank => true, :label => 'Job Title' %>	
+	<%= f.tr_text_field :requestor, :label => 'Requestor', :class => 'ucase' , :req => true%>
+	<%= f.tr_text_field :number_of_positions, :label => 'No. Positions', :class => 'ucase', :size => 10, :req => true %>
+
+
+	<tr>
+		<th>Request Type:<span class="req">*</span></th>
+		<td>
+			<label><%= f.radio_button :request_type, 'PROMOTIONAL' %> PROMOTIONAL</label>&nbsp;&nbsp;
+			<label><%= f.radio_button :request_type, 'OPEN COMPETITIVE' %> OPEN COMPETITIVE</label>&nbsp;&nbsp;
+			<label><%= f.radio_button :request_type, 'PREFERRED' %> PREFERRED</label>
+		</td>
+	</tr>
+    <tr>
+      <th>Time: <span class="req">*</span></th>
+      <td>
+        <% Const::JOB_TIMES.each_with_index { |t, i| %>
+                <label><%= f.radio_button :job_time, t[1] %> <%= h t[0] %></label>&nbsp;&nbsp;
+         <% } %>
+      </td>
+    </tr>
+	<tr>
+		<th>Job Type:<span class="req">*</span></th>
+		<td>
+			<label><%= f.radio_button :job_type, 'P' %> PERMANENT</label>&nbsp;&nbsp;
+			<label><%= f.radio_button :job_type, 'C' %> CONTINGENT-PERMANENT</label>&nbsp;&nbsp;
+			<label><%= f.radio_button :job_type, 'T' %> TEMPORARY</label>
+		</td>
+	</tr>
+
+	<%= f.tr_text_field :temp_duration, :label => 'If Temp, Duration', :class => 'ucase' %>
+    <tr>
+      <th>Gen/Dept/Res: <span class="req">*</span></th>
+      <td>
+        <label><%= f.radio_button :general_or_residential, 'N/A' %>N/A</label>&nbsp;&nbsp;
+        <label><%= f.radio_button :general_or_residential, 'General' %>General</label>&nbsp;&nbsp;
+        <label><%= f.radio_button :general_or_residential, 'Departmental' %>Departmental(MC Depts Only)</label>&nbsp;&nbsp;
+
+        <label><%= f.radio_button :general_or_residential, 'Residential' %>Residential</label>&nbsp;&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <th>Months: <span class="req">*</span></th>
+      <td>
+        <label><%= f.radio_button :months, 'N/A' %>N/A</label>&nbsp;&nbsp;
+
+        <label><%= f.radio_button :months, '10 Month' %>10 Month</label>&nbsp;&nbsp;
+        <label><%= f.radio_button :months, '11 Month' %>11 Month</label>&nbsp;&nbsp;
+        <label><%= f.radio_button :months, '12 Month' %>12 Month</label>&nbsp;&nbsp;
+      </td>
+    </tr>
+    <%= f.tr_text_field :salary_range, :label => 'Salary Range', :class => 'ucase', :req => true %>
+
+    <%= f.tr_text_area :agency_comments, :label => 'Agency Comments', :class => 'ucase', :size => '60x3' %>
+
+<% else %>
+	<tr>
+		<th>Exam: <span class="req">*</span></th>
+		<td>
+			<%= partial 'pop_field', :id => 'obj_exam_label', :text => (@obj.exam ? @obj.exam.label : ''), :name => 'obj[exam_id]', :id => 'obj_exam_id', :url => popup_url({:controller => :exam}), :value => @obj.exam_id %>
+			<div>Click the field above to open a popup where you can select an existing exam or create a new one.</div>
+		</td>
+	</tr>
+    <%= f.tr_select :job_id, Job.find(:all, :order => 'jobs.name').collect { |j| [j.name, j.id] }, :include_blank => true, :label => 'Job Title' %>
+
+    <%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Agency' %>
+	<%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name').collect { |d| [d.name, d.id] }, :include_blank => true, :label => 'Department' %>
+	<% if false %>
+		<%= f.tr_select :county_id, County.find(:all, :order => 'counties.name').collect { |c| [c.name, c.id] }, :include_blank => true, :label => 'County' %>
+		<%= f.tr_select :town_id, Town.find(:all, :order => 'towns.name').collect { |t| [t.name, t.id] }, :include_blank => true, :label => 'Town' %>
+		<%= f.tr_select :village_id, Village.find(:all, :order => 'villages.name').collect { |v| [v.name, v.id] }, :include_blank => true, :label => 'Village' %>
+		<%= f.tr_select :fire_district_id, FireDistrict.find(:all, :order => 'fire_districts.name').collect { |d| [d.name, d.id] }, :include_blank => true, :label => 'Fire District' %>
+		<%= f.tr_select :school_district_id, SchoolDistrict.find(:all, :order => 'school_districts.name').collect { |s| [s.name, s.id] }, :include_blank => true, :label => 'School District' %>
+	<% end %>
+	<%= f.tr_text_field :requestor, :label => 'Requestor', :class => 'ucase' %>
+	<%= f.tr_calendar_date_select :requested_date, :label => 'Requested Date', :class => 'ucase', :help => 'Date list is requested. If requested electronically by an agency user this will automatically be populated.' %>
+	<%= f.tr_calendar_date_select :pending_date, :label => 'Pending Date', :class => 'ucase', :help => 'Date list is forwarded from liaison to certification specialist.' %>
+	<%= f.tr_calendar_date_select :certification_date, :label => 'Certification Date', :class => 'ucase', :onchange => 'cdate_change();', :help => 'Date list is certified. Agencies will be able to enter candidate actions on/after this date.' %>
+	<%= f.tr_calendar_date_select :return_date, :label => 'Return Date', :class => 'ucase', :help => 'Date list expires and can no longer be used for hiring.' %>	
+	<%= f.tr_calendar_date_select :completed_date, :label => 'Completed Date', :class => 'ucase', :help => 'Date agency completes and returns the list. Agency will no longer be able to enter candidate actions on/after this date.' %>	
+	<%= f.tr_check :show_actions, :label => 'Show Actions?', :text => 'If checked, actions will be shown on the public website when exported.' %>
+	<%= f.tr_text_field :number_of_positions, :label => 'No. Positions', :class => 'ucase', :size => 10 %>
+
+
+	<tr>
+		<th>Request Type:</th>
+		<td>
+			<label><%= f.radio_button :request_type, 'PROMOTIONAL' %> PROMOTIONAL</label>&nbsp;&nbsp;
+			<label><%= f.radio_button :request_type, 'OPEN COMPETITIVE' %> OPEN COMPETITIVE</label>&nbsp;&nbsp;
+			<label><%= f.radio_button :request_type, 'PREFERRED' %> PREFERRED</label>
+		</td>
+	</tr>
+    <tr>
+      <th>Time:</th>
+      <td>
+        <% Const::JOB_TIMES.each { |t| %>
+            <label><%= f.radio_button :job_time, t[1] %> <%= h t[0] %></label>&nbsp;&nbsp;
+        <% } %>
+      </td>
+    </tr>
+    <tr>
+      <th>Job Type:</th>
+      <td>
+        <label><%= f.radio_button :job_type, 'P' %> PERMANENT</label>&nbsp;&nbsp;
+        <label><%= f.radio_button :job_type, 'C' %> CONTINGENT-PERMANENT</label>&nbsp;&nbsp;
+        <label><%= f.radio_button :job_type, 'T' %> TEMPORARY</label>
+      </td>
+    </tr>
+    <%= f.tr_text_field :temp_duration, :label => 'If Temp, Duration', :class => 'ucase' %>
+    <tr>
+      <th>Gen/Dept/Res:</th>
+      <td>
+        <label><%= f.radio_button :general_or_residential, 'N/A' %>N/A</label>&nbsp;&nbsp;
+        <label><%= f.radio_button :general_or_residential, 'General' %>General</label>&nbsp;&nbsp;
+        <label><%= f.radio_button :general_or_residential, 'Departmental' %>Departmental(MC Depts Only)</label>&nbsp;&nbsp;
+
+        <label><%= f.radio_button :general_or_residential, 'Residential' %>Residential</label>&nbsp;&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <th>Months:</th>
+      <td>
+        <label><%= f.radio_button :months, 'N/A' %>N/A</label>&nbsp;&nbsp;
+
+        <label><%= f.radio_button :months, '10 Month' %>10 Month</label>&nbsp;&nbsp;
+        <label><%= f.radio_button :months, '11 Month' %>11 Month</label>&nbsp;&nbsp;
+        <label><%= f.radio_button :months, '12 Month' %>12 Month</label>&nbsp;&nbsp;
+      </td>
+    </tr>
+    <%= f.tr_text_field :salary_range, :label => 'Salary Range', :class => 'ucase' %>
+
+    <%= f.tr_text_area :comments, :label => 'Note(s)', :class => 'ucase', :size => '80x4' %>
+    <%= f.tr_text_area :bottom_note, :label => 'Comments', :class => 'ucase', :size => '80x4' %>
+    <%= f.tr_text_area :end_of_list, :label => 'End of List', :class => 'ucase', :size => '80x4' %>
+
+    <%= f.tr_text_field :additional, :label => 'Additional Info', :class => 'ucase' %>
+<% end %>
+
+<script type="text/javascript">
+	
+	var cdate_change;
+	
+	(function($) {
+	
+		cdate = $('#obj_certification_date');
+		
+		cdate_change = function(e) {
+			var d = Date.parse(cdate.val()).add({days: 60});
+			$('#obj_return_date').val(d.toString('MM/dd/yyyy'));
+		}
+
+		cdate.change(cdate_change);
+	
+	})(jQuery);
+    jQuery('#obj_exam_id').change(function(e) {
+        var inp = jQuery(this);
+        var val = inp.val();
+        inp.addClass('busy-bg');
+        jQuery.ajax({
+            url: root_url + 'exam/get_job/'+ val,
+            data: {id: val},
+            complete: function(xhr, status) {
+            },
+            success: function(data, status, xhr) {
+                inp.removeClass('busy-bg');
+                jQuery('#obj_job_id').val(data.id);
+
+            },
+            error: function(xhr, status, error) {
+                alert('Error setting action.');
+            }
+        });
+    });
+
+</script>

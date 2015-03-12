@@ -1,0 +1,6 @@
+<%= form_tag :action => :search %>
+	<h2>Applicant Search</h2>
+	<%= text_field_tag 'search', @search, :size => 30, :id => 'applicant-search' %>
+	<%= submit_tag 'Search' %>
+	<div>Search by first name, last name or both.</div>
+</form>

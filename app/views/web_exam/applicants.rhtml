@@ -1,0 +1,64 @@
+<%
+
+@seasonal = @obj.web_exam_type && @obj.web_exam_type.seasonal
+
+@is_job = @obj.web_exam_type && @obj.web_exam_type.short_name == 'Jobs'
+
+@editable = @current_user.staff_level? || ((@seasonal || @is_job)  && (@current_user.liaison_level? || @current_user.allow_web_post_review))
+
+%><%= partial 'nav' %>
+<%= partial 'filter' %>
+
+<% if @editable and !@current_user.view_web_post_for_agency %>
+	<% load_applicant_review_options %>
+	<%= partial 'exam/save_bar', {:url => url_for(:action => :applicants_save, :id => @obj.id)}  %>
+	<% if @seasonal %>
+		<%= form_tag :action => 'auto_status', :id => @obj.id %>
+			<%= submit_tag 'Auto Approve Monroe/Over 18', :confirm => 'This will automatically approve/disapprove all applicants based on county and age. Only applicants that applied online and do not yet have a status will be effected. Continue?' %>
+		</form>
+	<% end %>
+	<form id="review-form" onsubmit="return false;">
+		<%= partial 'pages' %>
+		<% @objs.each_with_index { |o, i| %>
+			<div class="app-review">
+				<div class="right">
+					<%= link_to 'View Application', {:controller => :applicant, :action => :view, :id => o.id}, :target => '_blank' %>&nbsp;&nbsp;
+				</div>
+				<h2>
+					<%= h o.person.ssn %> <%= h o.person.last_name %>, <%= h o.person.first_name %>
+				</h2>
+				<%= partial 'applicant/review_simple', :o => o, :i => i %>
+			</div>
+		<% } %>
+		<%= partial 'pages' %>
+	</form>
+	<script type="text/javascript">
+
+	(function($) {
+
+		$('.app_dis').change(function(e) {
+			var c = $(this);
+			if(c.is(':checked')) {
+				var v = c.attr('value');
+				var id = c.attr('id');
+				var parts = id.split('_');
+				var s = $('#applicant_' + parts[1] + '_app_status_id')[0];
+				if(v == 'Y') {
+					set_select_value('5', s);
+				}
+				else if(v == 'N') {
+					set_select_value('3', s);
+				}
+			}
+		});
+		
+		$('#review-form input, #review-form select').change(function(e) {
+			window.input_dirty = true;
+		})		
+		
+	})(jQuery);
+	
+	</script>
+<% else %>
+	<%= partial 'applicants' %>
+<% end %>

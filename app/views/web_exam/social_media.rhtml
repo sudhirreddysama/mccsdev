@@ -1,0 +1,50 @@
+<%= partial 'nav' %>
+<%o=@obj %>
+<div class="viewer">
+  <div class="header">General Info.</div>
+  <div class="row">
+    <table>
+      <tr>
+        <td>
+          <label>ID:</label>
+          <%= o.id %>
+        </td>
+        <td>
+          <label>Exam No.:</label>
+          <%= o.no %>
+        </td>
+        <td>
+          <label>Name:</label>
+          <%= h o.name %>
+        </td>
+        <td>
+          <label>Type:</label>
+          <%= o.web_exam_type.name if o.web_exam_type %>
+          &nbsp;</td>
+      </tr>
+    </table>
+  </div>
+  </div>
+
+<% table_form_for(:obj) { |f| %>
+<%= f.tr_check :social_media_twitter, :label => 'Post to Twitter?', :text => 'Uncheck to NOT show this on Twitter' %>
+<%= f.tr_text_field :twitter_description, :label => 'Twitter Description', :size => '140' %>
+<%= f.tr_check :social_media_facebook, :label => 'Post to Facebook?', :text => 'Uncheck to NOT show this on FaceBook' %>
+<%= f.tr_text_area :facebook_description, :label => 'FaceBook Description', :size => '70x15' %>
+<%= f.tr_submit %>
+<% } %>
+<script type="text/javascript">
+
+    (function($){
+
+          var ckf = CKEDITOR.replace('obj_facebook_description', {
+            filebrowserBrowseUrl: 'https://cs.monroecounty.gov/hrapply/javascripts/fckeditor/editor/filemanager/browser/default/browser.html?Connector=/hrapply/fckeditor/command',
+            customConfig: '/mccs/javascripts/ckeditor/config_custom.js'
+        });
+
+    })(jQuery);
+    function toggle_twitter() {
+        jQuery('twitter_description')[$('obj_social_media_twitter').checked ? 'show' : 'hide']();
+    }
+
+</script>

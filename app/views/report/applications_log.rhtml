@@ -1,0 +1,79 @@
+<%
+
+f = %w(applied approved disapproved passed failed fta withdrew inactive appointed)
+t = {}
+f.each { |i| t[i] = 0.0 }
+
+t_a = 0
+
+%>
+<html>
+	<head>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th { font: 11px/16px Trebuchet MS, Verdana, Arial, sans-serif; }
+			
+			table { border-collapse: collapse; width: 100%; }
+			td, th { vertical-align: top; text-align: left; padding: 2px; }
+			
+			.r { text-align: right; }
+			
+			th { font-weight: bold; }
+			td { border-bottom: 1px solid #ccc; }
+			
+		</style>
+	</head>
+	<body>
+		<div style="float: right;"><%= Time.now.d0? %></div>
+		<h3>
+			Applications Log<br />
+			From <%= @from_date.d0? %> to <%= @to_date.d0? %>
+		</h3>
+		<table>
+			<tr style="border-top: 1px solid #000; border-bottom: 1px solid #000;">
+				<th>Title</th>
+				<th class="r">Applied</th>
+				<th class="r">Approved</th>
+				<th class="r">Disapproved</th>
+				<th class="r">Pass</th>
+				<th class="r">Fail</th>
+				<th class="r">FTA</th>
+				<th class="r">Withdrew</th>
+				<th class="r">Inactive</th>
+				<th class="r">Appt'd</th>
+			</tr>
+			<% @objs.each_hash { |o| %>
+				<%
+				
+				f.each { |i| t[i] += o[i].to_i }
+				
+				%>
+				<tr>
+					<td><%= h o.title %></td>
+					<td class="r"><%= nwp o.applied %></td>
+					<td class="r"><%= nwp o.approved %></td>
+					<td class="r"><%= nwp o.disapproved %></td>
+					<td class="r"><%= nwp o.passed %></td>
+					<td class="r"><%= nwp o.failed %></td>
+					<td class="r"><%= nwp o.fta %></td>
+					<td class="r"><%= nwp o.withdrew %></td>
+					<td class="r"><%= nwp o.inactive %></td>
+					<td class="r"><%= nwp o.appointed %></td>
+				</tr>
+			<% } %>
+			<tr>
+				<th class="r">Total:</th>
+					<th class="r"><%= nwp t.applied %></th>
+					<th class="r"><%= nwp t.approved %></th>
+					<th class="r"><%= nwp t.disapproved %></th>
+					<th class="r"><%= nwp t.passed %></th>
+					<th class="r"><%= nwp t.failed %></th>
+					<th class="r"><%= nwp t.fta %></th>
+					<th class="r"><%= nwp t.withdrew %></th>
+					<th class="r"><%= nwp t.inactive %></th>
+					<th class="r"><%= nwp t.appointed %></th>				
+			</tr>
+		</table>
+	</body>
+</html>

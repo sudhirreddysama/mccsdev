@@ -1,0 +1,5 @@
+<%= tab 'Checks Report', {:sc => nil, :sid => nil, :controller => :applicant, :action => :checks_report, :id => nil} %>
+<% if @current_user.staff_level? %>
+	<%= tab 'Web Import', {:sc => nil, :sid => nil, :controller => :applicant, :action => :web_import, :id => nil} %>
+	<%= tab 'Web Export', {:sc => nil, :sid => nil, :controller => :applicant, :action => :web_export, :id => nil}, {}, :class => 'tab-web_import' %>
+<% end %>

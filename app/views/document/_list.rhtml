@@ -1,0 +1,34 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">Created</th>
+			<th width="1%">Created&nbsp;By</th>
+			<th width="96%">Filename (click to download)</th>
+			<% if @sobj.class == Applicant %>
+				<th width="1%">Move</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td><%= o.id %></td>
+				<td class="nobr"><%= o.created_at.dt0? %></td>
+				<td class="nobr"><%= o.user.username if o.user %></td>
+				<% if @sobj.class == Applicant %>
+					<td><%= link_to o.filename, :sc => 'applicant', :sid => @sobj.id, :action => :download, :id => o.id %></td>
+					<% if params[:sc] == 'applicant' %>
+						<td class="nobr"><%= link_to 'Move to Person', {:action => :move, :id => o.id}, :confirm => 'Are you sure you want to move this document?' %></td>
+					<% else %>
+						<td class="nobr"><%= link_to 'Move to Application', {:action => :move, :id => o.id}, :confirm => 'Are you sure you want to move this document?' %></td>
+					<% end %>
+				<% else %>
+					<td><%= link_to o.filename, :action => :download, :id => o.id %></td>
+				<% end %>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

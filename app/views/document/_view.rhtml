@@ -1,0 +1,28 @@
+<div class="tabs buttons">
+	<%= tab 'Download', {:action => :download, :id => @obj.id}, {} %>
+	<div class="clear"></div>
+</div>
+<div class="viewer">
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Created:</label>
+					<%= o.created_at.dt0? %>
+				</td>
+				<td>
+					<label>Created By:</label>
+					<%= o.user.username if o.user %>
+				</td>
+				<td>
+					<label>Filename:</label>
+					<%= o.filename %>&nbsp;
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

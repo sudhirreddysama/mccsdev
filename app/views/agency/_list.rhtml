@@ -1,0 +1,40 @@
+<style>
+  .even {background-color: #d3d3d3;}
+
+</style>
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">Abbr.</th>
+			<th width="1%">Type</th>
+			<th width="24%">Name</th>
+            <td width="24%">Contact</td>
+            <th width="24%">Address</th>
+			<th width="24%">Liaison</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>" >
+				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td><%= o.id %></td>
+				<td class="nobr"><%= h o.abbreviation %></td>
+				<td class="nobr"><%= h o.agency_type %></td>
+				<td><%= link_to o.name, :action => :view, :id => o.id %></td>
+              <% i = 0 %>
+              <td>
+              <% o.contacts.each { |c| %>
+                  <% if c.primary? %>
+                  <%= c.lastname%>, <%=c.firstname%><br><%=mail_to(c.email)%>
+                  <% end %>
+          <% } %>
+              </td>
+               <td class="nobr"><% if o.address1 %><%=o.address1%>&nbsp;&nbsp;<%= o.city%>, <%=o.state%> <%=o.zip%><% end%>
+               </td>
+				<td><%= h o.liaison.name if o.liaison %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

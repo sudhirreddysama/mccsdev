@@ -1,0 +1,363 @@
+<%= partial 'form_change/status', :o => @obj %>
+
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<% if o.employee && !(params[:action] == 'print') %>
+						<%= link_to "#{o.last_name}, #{o.first_name}", :controller => :employee, :action => :view, :id => o.employee_id %>
+					<% else %>
+						<%= h "#{o.last_name}, #{o.first_name}" %>
+					<% end %>
+				</td>
+              <td>
+                <label>SSN:</label>
+                <%= h o.employee.ssn %>
+              </td>
+				<td>
+					<label>Created By:</label>
+					<%= h o.user.name if o.user %>
+				</td>
+				<td>
+					<label>Created At:</label>
+					<%= h o.created_at.d0? %>
+				</td>
+				<td>
+					<label>Submitted By:</label>
+					<%= h o.submitter.name if o.submitter %>
+				</td>
+				<td>
+					<label>Submitted At:</label>
+					<%= h o.submitted_at.d0? %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Present Title:</label>
+					<%= h o.present_title %>
+				</td>
+				<td>
+					<label>Provisional?</label>
+					<%= yn o.present_provisional %>
+				&nbsp;</td>
+              <td>
+                <label>Retirement No:</label>
+                <%= h o.retirement_no %>
+                &nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Agency:</label>
+					<%= h o.agency.name if o.agency %>
+				</td>
+				<td>
+					<label>Department:</label>
+					<%= h o.department.name if o.department %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Effective Date:</label>
+					<%= h o.effective_date.d0? %>
+				</td>
+				<td>
+					<label>Certified List:</label>
+					<% if o.cert %>
+						<% if params[:action] == 'print' %>
+							<%= h o.cert.label %>
+						<% else %>
+							<%= link_to o.cert.label, :controller => :cert, :action => :view, :id => o.cert_id %>
+						<% end %>
+					<% end %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Comments:</label>
+					<%= nl2br_h o.comments %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	
+	<%= partial 'form_change/documents' %>
+	
+</div>
+
+<% if o.change_demotion %>
+	<div class="viewer">
+		<div class="header">Demotion</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>New Title:</label>
+						<%= h o.demotion_title %>
+					</td>
+					<td>
+						<label>Salary:</label>
+						<%= h o.demotion_salary %>
+						<% unless o.demotion_salary_per.blank? %> per <%= h o.demotion_salary_per %><% end %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<% end %>
+
+<% if o.change_loa %>
+	<div class="viewer">
+		<div class="header">Leave of Absence</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Reason:</label>
+						<%= h o.loa_reason %>
+					</td>
+					<td>
+						<label>With Pay?</label>
+						<%= yn? o.loa_with_pay %>
+					</td>
+					<td>
+						<label>From:</label>
+						<%= o.loa_date_from.d0? %>
+					</td>
+					<td>
+						<label>To:</label>
+						<%= o.loa_date_to.d0? %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<% end %>
+
+<% if o.change_name %>
+	<div class="viewer">
+		<div class="header">Name Change</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>From:</label>
+						<%= h o.name_change_from %>
+					</td>
+					<td>
+						<label>To:</label>
+						<%= h o.name_change_to %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<% end %>
+
+<% if o.change_perm_appt %>
+	<div class="viewer">
+		<div class="header">Permanent Civil Service Appointment</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>List No.:</label>
+						<%= o.perm_appt_list_no %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<% end %>
+
+<% if o.change_promotion %>
+	<div class="viewer">
+		<div class="header">Promotion</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>New Title:</label>
+						<%= h o.promotion_new_title %>
+					</td>
+					<td>
+						<label>Salary:</label>
+						<%= h o.promotion_salary %>
+						<% unless o.promotion_salary_per.blank? %> per <%= h o.promotion_salary_per %><% end %>
+					</td>
+					<td>
+						<label>Class:</label>
+						<%= h o.promotion_class %>
+					</td>
+					<td>
+						<label>List No.:</label>
+						<%= h o.promotion_list_no %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<% end %>
+
+<% if o.change_salary %>
+	<div class="viewer">
+		<div class="header">Salary Change</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>From:</label>
+						<%= h o.salary_change_from %>
+						<% unless o.salary_change_from_per.blank? %> per <%= h o.salary_change_from_per %><% end %>
+					</td>
+					<td>
+						<label>To:</label>
+						<%= h o.salary_change_to %>
+						<% unless o.salary_change_to_per.blank? %> per <%= h o.salary_change_to_per %><% end %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<% end %>
+
+<% if o.change_second_provisional %>
+	<div class="viewer">
+		<div class="header">Second Provisional Appointment</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Date:</label>
+						<%= o.second_provisional_date.d0? %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<% end %>
+
+<% if o.change_separation %>
+	<div class="viewer">
+		<div class="header">Separation</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Date:</label>
+						<%= o.separation_date.d0? %>
+					</td>
+					<td>
+						<label>Reason:</label>
+						<%= h o.separation_reason %>
+					</td>
+					<td>
+						<label>Provisional?</label>
+						<%= yn o.separation_provisional %>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<% end %>
+
+<% if o.change_status %>
+	<div class="viewer">
+		<div class="header">Status Change</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Status:</label>
+						<%= o.status_type %>
+						<% if o.status_type == 'Temporary' && !o.status_temporary_type.blank? %>
+							- <%= o.status_temporary_type %>
+						<% end %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<% end %>
+
+<% if o.change_suspension %>
+	<div class="viewer">
+		<div class="header">Suspension</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Reason:</label>
+						<%= h o.suspension_reason %>
+					</td>
+					<td>
+						<label>With Pay?</label>
+						<%= yn? o.suspension_with_pay %>
+					</td>
+					<td>
+						<label>From:</label>
+						<%= o.suspension_from.d0? %>
+					</td>
+					<td>
+						<label>To:</label>
+						<%= o.suspension_to.d0? %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<% end %>
+
+<% if o.change_title %>
+	<div class="viewer">
+		<div class="header">Title Change</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>New Title:</label>
+						<%= h o.title_change_new_title %>
+					</td>
+					<td>
+						<label>Class:</label>
+						<%= h o.title_change_class %>
+					</td>
+					<td>
+						<label>List No.:</label>
+						<%= h o.title_change_list_no %>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+<% end %>
+
+
+
+<%= partial 'form_change/view_action_form' %>
