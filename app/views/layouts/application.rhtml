@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
-		<title>Admin P <%= RAILS_ENV %></title>
+		<title>Admin <%= RAILS_ENV %></title>
 		<%= javascript_include_tag :defaults, 
 			'jquery-1.6.1.js', 
 			'jquery-ui-1.8.13.custom/js/jquery-ui-1.8.13.custom.min',
@@ -31,6 +31,7 @@
 		</script>
 	</head>
 	<body class="<%= 'pop' if params[:popup] %>">
+		<% if RAILS_ENV == 'development' %><div id="dev-bar">DEVELOPMENT SITE</div><% end %>
 		<% unless @notabs or params[:popup] %>
 			<div id="tabs" class="tabs">
 				<% if @current_user.agency_level? %>

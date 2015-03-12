@@ -13,6 +13,7 @@
 		<%= stylesheet_link_tag '/javascripts/coolfieldset/css/jquery.coolfieldset.css', :media => 'all' %>
 	</head>
 	<body class="page path-hr">
+		<% if RAILS_ENV == 'development' %><div id="dev-bar">DEVELOPMENT SITE</div><% end %>
 		<div id="wrap">
 		<div id="top-nav">
 			<ul>

@@ -2,3 +2,5 @@ td.info-links a { background: url(../images/menu-collapsed.png) 0 center no-repe
 td.info-links a.open { background-image: url(../images/menu-expanded.png); }
 
 .dim-label { font-weight: bold; color: #777; }
+
+#dev-bar { color: #fff; background-color: #a00; text-align: center; padding: 2px; border-bottom: 1px solid #f00; font-weight: bold; }

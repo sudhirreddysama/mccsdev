@@ -498,3 +498,5 @@ fieldset table.form { margin: 0; }
 #tabs .tabs-menu a.active { background: transparent none; }
 #tabs .tabs-menu a.active span { color: #fff; }
 #tabs .tabs-menu a:hover { background: #333 none; }
+
+#dev-bar { color: #fff; background-color: #a00; text-align: center; padding: 2px; border-bottom: 1px solid #f00; font-weight: bold; }

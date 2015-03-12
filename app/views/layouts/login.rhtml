@@ -4,6 +4,7 @@
 		<%= stylesheet_link_tag 'style' %>
 	</head>
 	<body id="login-body">
+		<% if RAILS_ENV == 'development' %><div id="dev-bar">DEVELOPMENT SITE</div><% end %>
 		<div id="login">
 			<% if flash[:notice] %>
 				<div class="notice">
