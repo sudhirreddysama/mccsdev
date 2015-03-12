@@ -1,5 +1,5 @@
 class WebCertification < ActiveRecord::Base
 
-	set_table_name "#{HRAPPLYDB}.certifications"	
+	set_table_name 'hr_apply_online.certifications'	
 	
 end

@@ -1,5 +1,5 @@
 class WebNewCategory < ActiveRecord::Base
 
-	set_table_name "#{HRAPPLYDB}.new_categories"
+	set_table_name 'hr_apply_online.new_categories'
 	
 end

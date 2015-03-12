@@ -2,28 +2,28 @@ class WebExamController < CrudController
 
 	def index
 		@filter = get_filter({
-			:sort1 => "#{HRAPPLYDB}.exams.publish",
+			:sort1 => 'hr_apply_online.exams.publish',
 			:dir1 => 'desc'
 		})
 		@orders = [
-			['ID', "#{HRAPPLYDB}.exams.id"],
-			['Name', "#{HRAPPLYDB}.exams.name"],
-			['Publish Date', "#{HRAPPLYDB}.exams.publish"],
-			['Deadline', "#{HRAPPLYDB}.exams.deadline"],
-			['Exam Date', "#{HRAPPLYDB}.exams.exam_date"],
-			['Type', "#{HRAPPLYDB}.exam_types.short_name"]
+			['ID', 'hr_apply_online.exams.id'],
+			['Name', 'hr_apply_online.exams.name'],
+			['Publish Date', 'hr_apply_online.exams.publish'],
+			['Deadline', 'hr_apply_online.exams.deadline'],
+			['Exam Date', 'hr_apply_online.exams.exam_date'],
+			['Type', 'hr_apply_online.exam_types.short_name']
 		]
 		cond = get_search_conditions @filter[:search], {
-			"#{HRAPPLYDB}.exams.id" => :left,
-			"#{HRAPPLYDB}.exams.name" => :like,
-			"#{HRAPPLYDB}.exams.no" => :like,
-			"#{HRAPPLYDB}.exam_types.short_name" => :like
+			'hr_apply_online.exams.id' => :left,
+			'hr_apply_online.exams.name' => :like,
+			'hr_apply_online.exams.no' => :like,
+			'hr_apply_online.exam_types.short_name' => :like
 		}
 		if @current_user.agency_level? and !@current_user.view_web_post_for_agency?
 			cond << 'users_web_exams.user_id = %d' % @current_user.id
     end
     if @current_user.agency_level? and @current_user.view_web_post_for_agency?
-      cond << "#{HRAPPLYDB}.exams.exam_type_id = 4"
+      cond << 'hr_apply_online.exams.exam_type_id = 4'
     end
 		@opt = {
 			:conditions => get_where(cond),

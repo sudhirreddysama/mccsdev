@@ -42,8 +42,8 @@ class ApplicantController < CrudController
 			:order => get_order_auto,
 			:include => [:person, :exam],
 			:joins => '
-				left join ' + HRAPPLYDB + '.exams we on we.id = applicants.web_exam_id
-				left join ' + HRAPPLYDB + '.exam_types et on et.id = we.exam_type_id
+				left join hr_apply_online.exams we on we.id = applicants.web_exam_id
+				left join hr_apply_online.exam_types et on et.id = we.exam_type_id
 			'
 		}
    	super

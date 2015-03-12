@@ -1,5 +1,5 @@
 class WebTraining < ActiveRecord::Base
 
-	set_table_name "#{HRAPPLYDB}.trainings"
+	set_table_name 'hr_apply_online.trainings'	
 	
 end
