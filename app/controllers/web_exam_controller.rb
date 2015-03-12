@@ -236,17 +236,14 @@ class WebExamController < CrudController
 			f.close
 			`wkhtmltopdf9 --footer-html /home/rails/mccs/app/views/web_exam/new_exams_footer.html -s Letter -O Portrait --margin-left .5in --margin-right .5in --margin-top .5in --margin-bottom 1in --ignore-load-errors #{f.path} public/new-exams/#{@fname}`					
 			
-			if params[:id]
-				send_file "public/new-exams/#{@fname}", :filename => @fname
-			end
-			if params[:id].blank? || params[:resend]
+			if !params[:id] || params[:resend]
 				@system = System.find(:first)
 				emails = @system.exam_emails.to_s.split(/[,\r\n]/).collect(&:strip).reject(&:blank?)
 				emails.each { |e|
 					Notifier.deliver_new_exams e, @fname
 				}
-				render :inline => "<a href=\"/mccs/new-exams/#{@fname}\">#{@fname}</a>"
 			end
+			render :inline => "<a href=\"/mccs/new-exams/#{@fname}\">#{@fname}</a>"
 		end
 	end
 	skip_before_filter :authenticate, :only => :send_exam_emails
