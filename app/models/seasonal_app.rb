@@ -8,7 +8,9 @@ class SeasonalApp < ActiveRecord::Base
 		"#{created_at.d0?} #{name_was}"
 	end
 	
+	# NOT USED.
 	def self.cron
+		return false
 		apps = []
 		Mail.defaults {
 			retriever_method(:pop3, {

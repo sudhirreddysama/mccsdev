@@ -5,6 +5,8 @@
 			<th>Preview Date:</th>
 			<td><%= calendar_date_select_tag :id, Time.now.to_date %></td>
 			<td><%= submit_tag 'Preview PDF' %></td>
+			<td><label><%= check_box_tag 'resend' %> Resend Email<label></td>
+		</tr>
 	</table>
 </form>
 <div class="marg">

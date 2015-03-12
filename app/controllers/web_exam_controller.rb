@@ -218,14 +218,16 @@ class WebExamController < CrudController
 	end
 	
 	def send_exam_emails
-		if params[:id]
+		if !params[:id].blank?
 			d = Date.parse(params[:id])
 		else
 			d = Time.now.to_date
 		end
 		d2 = d.advance(:days => -1)
 		@objs = WebExam.find(:all, :conditions => "publish between '#{d2} 16:00:01' and '#{d} 16:00:00' and exam_date is not null and published = 1", :order => 'name, no')
-		unless @objs.empty?
+		if @objs.empty?
+			render :inline => 'No exams found.'
+		else
 			@fname = "#{d.to_s}.pdf"
 			html = render_to_string :action => :new_exams, :layout => false
 			
@@ -234,9 +236,10 @@ class WebExamController < CrudController
 			f.close
 			`wkhtmltopdf9 --footer-html /home/rails/mccs/app/views/web_exam/new_exams_footer.html -s Letter -O Portrait --margin-left .5in --margin-right .5in --margin-top .5in --margin-bottom 1in --ignore-load-errors #{f.path} public/new-exams/#{@fname}`					
 			
-			if params[:id]			
+			if params[:id]
 				send_file "public/new-exams/#{@fname}", :filename => @fname
-			else
+			end
+			if params[:id].blank? || params[:resend]
 				@system = System.find(:first)
 				emails = @system.exam_emails.to_s.split(/[,\r\n]/).collect(&:strip).reject(&:blank?)
 				emails.each { |e|
