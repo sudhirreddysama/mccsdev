@@ -10,7 +10,11 @@
 </style>
 </head>
 <body>
-<img id="head" src="<%= `pwd`.strip %>/public/user/letter-head2.png" width="100%" />
+	<% if @obj.class == Letter || !@obj.hr_letterhead %>
+		<img id="head" src="<%= `pwd`.strip %>/public/user/letter-head2.png" width="100%" />
+	<% else %>
+		<img id="head" src="<%= `pwd`.strip %>/public/user/letter-head3.jpg" width="100%" />
+	<% end %>
 <div id="address">
 	<% if @obj.class == Letter %>
 		Applicant Name<br />

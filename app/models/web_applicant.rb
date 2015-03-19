@@ -201,8 +201,17 @@ class WebApplicant < ActiveRecord::Base
   def name
     "#{first_name} #{last_name}"
   end
+  
   def nonseasonal_fields?
     seasonal? == 'mixed' || seasonal? == 'no'
+  end
+  
+  def minimum_age
+    web_exam_prices.collect { |e| e.web_exam.minimum_age }.reject(&:blank?).max
+  end
+  
+  def require_graduation_date
+		web_exam_prices.to_a.find { |ep| ep.web_exam.require_degree }  
   end
 
 end

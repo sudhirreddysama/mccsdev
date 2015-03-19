@@ -6,6 +6,8 @@
 	<%	params[:sc] = 'person' %>
 	<%	params[:sid] = @sobj.person_id %>
 	<%= partial 'list', :objs => @objs2 %>
+	<%	params[:sc] = 'applicant' %>
+	<%	params[:sid] = @sobj.id %>
 <% else %>
 	<%= partial 'nav' %>
 	<%= partial 'list', :objs => @objs %>

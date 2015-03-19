@@ -19,10 +19,11 @@
 				<td class="nobr"><%= o.created_at.dt0? %></td>
 				<td class="nobr"><%= o.user.username if o.user %></td>
 				<% if @sobj.class == Applicant %>
-					<td><%= link_to o.filename, :sc => 'applicant', :sid => @sobj.id, :action => :download, :id => o.id %></td>
 					<% if params[:sc] == 'applicant' %>
+						<td><%= link_to o.filename, :sc => 'applicant', :sid => @sobj.id, :action => :download, :id => o.id %></td>
 						<td class="nobr"><%= link_to 'Move to Person', {:action => :move, :id => o.id}, :confirm => 'Are you sure you want to move this document?' %></td>
 					<% else %>
+						<td><%= link_to o.filename, :sc => 'person', :sid => params[:sid], :action => :download, :id => o.id, :controller => :document %></td>
 						<td class="nobr"><%= link_to 'Move to Application', {:action => :move, :id => o.id}, :confirm => 'Are you sure you want to move this document?' %></td>
 					<% end %>
 				<% else %>

@@ -200,7 +200,15 @@ class PayCertController < CrudController
 		return l
 	end
 	
-	
+	def save_redirect
+		if @current_user.agency_level?
+			u = Agency.get_liaison(@obj.agency, @current_user.department)
+			if u
+				Notifier.deliver_pay_cert [u], @obj
+			end
+		end
+		super
+	end
 	
 	def example_file
 		send_file 'public/pay-cert-example.csv', :filename => 'pay-cert-example.csv', :type => 'application/excel'

@@ -1,6 +1,8 @@
 
-<% if @current_user.staff_level? %>
-<%= tab 'Social Media', {:id => params[:sid] || params[:id], :sc => nil, :sid => nil, :controller => params[:sc] || params[:controller], :action => :social_media}, {}, :class => 'tab-social' %>
+<% if false %>
+	<% if @current_user.staff_level? %>
+	<%= tab 'Social Media', {:id => params[:sid] || params[:id], :sc => nil, :sid => nil, :controller => params[:sc] || params[:controller], :action => :social_media}, {}, :class => 'tab-social' %>
+	<% end %>
 <% end %>
 <%= tab 'Applicants', {:id => params[:sid] || params[:id], :sc => nil, :sid => nil, :controller => params[:sc] || params[:controller], :action => :applicants}, {}, :class => 'tab-applicant' %>
 

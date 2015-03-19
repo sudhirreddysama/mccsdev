@@ -96,6 +96,13 @@ class Notifier < ActionMailer::Base
 		from DEFAULT_FROM
 		body :a => 'TEST'
 	end
+	
+	def pay_cert u, o
+		recipients u.collect { |u| u.email_with_name }
+		from Thread.current[:current_user].email_with_name
+		subject 'Payroll Certification Uploaded'
+		body :o => o
+	end
 		
 	# DEV ONLY!
 	def recipients *args

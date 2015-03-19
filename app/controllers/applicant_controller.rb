@@ -63,6 +63,19 @@ class ApplicantController < CrudController
 		send_file f.pdf_path, :filename => File.basename(f.name, File.extname(f.name)) + '.pdf'
 	end
 	
+	def web_attachment_copy
+		load_obj
+		f = @obj.web_attachments.find(params[:id2])
+		@obj.person.documents.create({
+			:uploaded_file => {
+				:original_filename => File.basename(f.name, File.extname(f.name)) + '.pdf',
+				:path => f.pdf_path
+			}
+		})
+		flash[:notice] = 'Application attachment has been copied to person record.'
+		redirect_to :sc => :applicant, :sid => @obj.id, :controller => :document, :action => :index, :id => nil
+	end
+	
 	def checks_report
 	
 		@objs = Applicant.find(:all, {
