@@ -297,6 +297,9 @@
 											<% end %>
 										</strong>
 									<% end %>
+									<% if a.web_applicant && a.web_applicant.special_accommodations %>
+										<strong>** REQ. ACC.</strong>
+									<% end %>
 								</td>
 								<td>
 									<% if @report[:full_ssn] == '1' %>
@@ -381,6 +384,9 @@
 											(NO DOC.)
 										<% end %>
 									</strong>
+								<% end %>
+								<% if p.applicants.to_a.find { |a| a.web_applicant && a.web_applicant.special_accommodations } %>
+									<strong>** REQ. ACC.</strong>
 								<% end %>
 							</td>
 							<td>

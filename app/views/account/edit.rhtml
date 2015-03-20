@@ -7,6 +7,10 @@
 	<%= f.tr_password_field :password, :label => 'Password', :req => true, :help => @obj.new_record? ? nil : 'Leave blank to keep the current password.' %>
 	<%= f.tr_password_field :password_confirmation, :label => 'Retype Password', :req => true %>
 	<%= f.tr_text_field :email, :label => 'Email', :req => true %>
+	<% if @current_user.staff_level? %>
+		<%= f.tr_text_field :email2, :label => '2nd Email', :req => false %>
+	<% end %>
+	<%= f.tr_text_field :fax, :label => 'Fax', :req => false %>
 	
 	<%= f.tr_submit %>
 <% } %>

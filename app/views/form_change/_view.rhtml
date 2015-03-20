@@ -1,5 +1,4 @@
 <%= partial 'form_change/status', :o => @obj %>
-
 <div class="viewer">
 	<div class="header">General Info.</div>
 	<div class="row">
@@ -125,6 +124,14 @@
 						<label>Salary:</label>
 						<%= h o.demotion_salary %>
 						<% unless o.demotion_salary_per.blank? %> per <%= h o.demotion_salary_per %><% end %>
+					</td>
+					<td>
+						<label>Class:</label>
+						<%= h o.demotion_class %>
+					</td>
+					<td>
+						<label>Status:</label>
+						<%= h o.demotion_status %>
 					&nbsp;</td>
 				</tr>
 			</table>
@@ -187,8 +194,12 @@
 			<table>
 				<tr>
 					<td>
-						<label>List No.:</label>
-						<%= o.perm_appt_list_no %>
+						<label>Exam No.:</label>
+						<%= h o.perm_appt_list_no %>
+					</td>
+					<td>
+						<label>Score:</label>
+						<%= h o.perm_appt_score %>
 					&nbsp;</td>
 				</tr>
 			</table>
@@ -212,12 +223,16 @@
 						<% unless o.promotion_salary_per.blank? %> per <%= h o.promotion_salary_per %><% end %>
 					</td>
 					<td>
+						<label>Exam No.:</label>
+						<%= h o.promotion_list_no %>
+					</td>
+					<td>
 						<label>Class:</label>
 						<%= h o.promotion_class %>
 					</td>
 					<td>
-						<label>List No.:</label>
-						<%= h o.promotion_list_no %>
+						<label>Status:</label>
+						<%= h o.promotion_status %>
 					&nbsp;</td>
 				</tr>
 			</table>
@@ -345,12 +360,16 @@
 						<%= h o.title_change_new_title %>
 					</td>
 					<td>
+						<label>Exam No.:</label>
+						<%= h o.title_change_list_no %>
+					</td>
+					<td>
 						<label>Class:</label>
 						<%= h o.title_change_class %>
 					</td>
 					<td>
-						<label>List No.:</label>
-						<%= h o.title_change_list_no %>
+						<label>Status:</label>
+						<%= h o.title_change_status %>
 					&nbsp;</td>
 				</tr>
 			</table>

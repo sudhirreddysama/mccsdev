@@ -80,7 +80,8 @@ class Letter < ActiveRecord::Base
 		'User' => [
 			'user.name',
 			'user.fax',
-			'user.email'
+			'user.email',
+			'user.email2'
 		]
 	}
 

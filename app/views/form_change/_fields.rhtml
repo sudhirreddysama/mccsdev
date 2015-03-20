@@ -1,4 +1,10 @@
-<% @job_opts = Job.find(:all, :order => 'jobs.name').collect { |j| [j.name, j.id] } %>
+<% 
+
+@job_opts = Job.find(:all, :order => 'jobs.name').collect { |j| [j.name, j.id] }
+@class_opts = Const::JOB_CLASSES.map { |m| m[0] }
+@status_opts = Const::JOB_STATUSES.map { |s| s[0] }
+
+%>
 <% if !@current_user.agency_level? || !@current_user.agency %>
 	<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name').collect { |a| [a.name, a.id] }, :label => 'Agency', :req => true, :include_blank => true %>
 <% end %>
@@ -27,9 +33,9 @@
 		</table>
 	</td>
 </tr><%= f.tr_text_field :retirement_no, :label => 'Retirement No.', :size => '30', :class => 'ucase' %>
-<%= f.tr_select :present_title_id, @job_opts, :include_blank => true, :label => 'Present Title' %>
+<%= f.tr_select :present_title_id, @job_opts, :include_blank => true, :label => 'Present Title', :req => true %>
 <%= f.tr_check :present_provisional, :label => 'Provisional?', :text => 'Check here if current title is provisional' %>
-<%= f.tr_calendar_date_select :effective_date, :label => 'Effective Date', :class => 'ucase' %>
+<%= f.tr_calendar_date_select :effective_date, :label => 'Effective Date', :class => 'ucase', :req => true %>
 <tr>
 	<th>Certified List:</th>
 	<td>
@@ -56,11 +62,18 @@
 				<tr>
 					<th>Salary:</th>
 					<th>Per:</th>
+					<th>Class:</th>
+					<th>Status:</th>
 				</tr>
 				<tr>
 					<td><%= f.text_field :demotion_salary, :size => '20', :class => 'ucase' %></td>
 					<td><%= f.select :demotion_salary_per, Const::WAGE_UNITS, :include_blank => true %></td>
+					<td><%= f.select :demotion_class, @class_opts, :include_blank => true %></td>
+					<td><%= f.select :demotion_status, @status_opts, :include_blank => true %></td>
 				</tr>
+			</table>
+			<table>
+				<tr><th>If voluntary, please attach employee's written request.**</th></tr>
 			</table>
 		</div>
 	</td>
@@ -117,11 +130,15 @@
 		<div id="perm_appt">
 			<table>
 				<tr>
-					<th>List No.:</th>
+					<th>Exam No.:</th>
+					<th>Score:</th>
 				</tr>
 				<tr>
 					<td><%= f.text_field :perm_appt_list_no, :size => '20', :class => 'ucase' %></td>
+					<td><%= f.text_field :perm_appt_score, :size => '20', :class => 'ucase' %></td>
 				</tr>
+			</table>
+			<table>
 				<tr>
 					<th>Link to the certified list at the top of this form &amp; attach all supporting documentation**</th>
 				</tr>
@@ -145,7 +162,7 @@
 				<tr>
 					<th>Salary/Wage:</th>
 					<th>Per:</th>
-					<th>List No.:</th>
+					<th>Exam No.:</th>
 				</tr>
 				<tr>
 					<td><%= f.text_field :promotion_salary, :size => '20', :class => 'ucase' %></td>
@@ -155,14 +172,12 @@
 			</table>
 			<table>
 				<tr>
-					<th colspan="5">Class:</th>
+					<th>Class:</th>
+					<th>Status:</th>
 				</tr>
 				<tr>
-					<td><label><%= f.radio_button :promotion_class, 'Competitive' %> Competitive</label></td>
-					<td><label><%= f.radio_button :promotion_class, 'Non-Competitive' %> Non-Competitive</label></td>
-					<td><label><%= f.radio_button :promotion_class, 'Labor' %> Labor</label></td>
-					<td><label><%= f.radio_button :promotion_class, 'Exempt' %> Exempt</label></td>
-					<td><label><%= f.radio_button :promotion_class, 'Unclassified' %> Unclassified</label></td>
+					<td><%= f.select :promotion_class, @class_opts, :include_blank => true %></td>
+					<td><%= f.select :promotion_status, @status_opts, :include_blank => true %></td>
 				</tr>
 			</table>		
 			<table>
@@ -248,19 +263,13 @@
 		<div id="status">
 			<table>
 				<tr>
-					<th colspan="6">New Status:</th>
+					<th>New Status:</th>
 				</tr>
 				<tr>
-					<td><label><%= f.radio_button :status_type, 'Permanent' %> Permanent</label></td>
-					<td><label><%= f.radio_button :status_type, 'Contigent-Permanent' %> Contigent-Permanent</label></td>
-					<td><label><%= f.radio_button :status_type, 'Provisional' %> Provisional</label></td>
-					<td><label><%= f.radio_button :status_type, 'Temporary' %> Temporary*</label></td>
-					<td><label><%= f.radio_button :status_type, 'PT to FT' %> PT to FT</label></td>
-					<td><label><%= f.radio_button :status_type, 'FT to PT' %> FT to PT</label></td>
-					<td><label><%= f.radio_button :status_type, 'Pending NYS Approval' %> Pending NYS Approval</label></td>
+					<td><%= f.select :status_type, Const::JOB_STATUSES + ['PT TO FT', 'FT TO PT'], :include_blank => true %></tr>
 				</tr>
 				<tr>
-					<th colspan="6">
+					<th>
 						If provisional, attach a CS Application**
 					</th>
 				</tr>
@@ -322,32 +331,28 @@
 			</table>
 			<table>
 				<tr>
-					<th>List No.:</th>
+					<th>Exam No.:</th>
+					<th>Score:</th>
+					<th>Class:</th>
+					<th>Status:</th>
 				</tr>
 				<tr>
 					<td><%= f.text_field :title_change_list_no, :size => '20', :class => 'ucase' %></td>
+					<td><%= f.text_field :title_change_score, :size => '20', :class => 'ucase' %></td>
+					<td><%= f.select :title_change_class, @class_opts, :include_blank => true %></td>
+					<td><%= f.select :title_change_status, @status_opts, :include_blank => true %></td>					
 				</tr>
-				<tr>
-					<th>Link to the certified list at the top of this form &amp; attach all supporting documentation**</th>
-				</tr>
-			</table>		
+			</table>
 			<table>
 				<tr>
-					<th colspan="">Class:</th>
-				</tr>
-				<tr>
-					<td><label><%= f.radio_button :title_change_class, 'Competitive' %> Competitive</label></td>
-					<td><label><%= f.radio_button :title_change_class, 'Non-Competitive' %> Non-Competitive</label></td>
-					<td><label><%= f.radio_button :title_change_class, 'Labor' %> Labor</label></td>
-					<td><label><%= f.radio_button :title_change_class, 'Exempt' %> Exempt</label></td>
-					<td><label><%= f.radio_button :title_change_class, 'Unclassified' %> Unclassified</label></td>
+					<th>Link to the certified list at the top of this form &amp; attach all supporting documentation**</th>
 				</tr>
 			</table>
 		</div>
 	</td>
 </tr>
 <tr>
-	<th>Comments:</th>
+	<th>Agency Comments:</th>
 	<td>
 		<div>Use this field to add any additional comments to this form:</div>
 		<%= f.text_area :comments, :size => '60x5' %>

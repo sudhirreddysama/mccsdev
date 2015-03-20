@@ -17,7 +17,7 @@ class FormChange  < ActiveRecord::Base
 	
 	belongs_to :submitter, :class_name => 'User', :foreign_key => 'submitter_id'
 	
-	validates_presence_of :agency, :department, :first_name, :last_name
+	validates_presence_of :agency, :department, :first_name, :last_name, :present_title_job, :effective_date, :if => :http_posted
 	
 	def label; "#105 #{last_name_was}, #{first_name_was}"; end
 	
