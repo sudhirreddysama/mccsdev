@@ -19,7 +19,13 @@
 		<tbody class="<%= cycle 'odd', 'even' %>" id="obj-<%= o.id %>">
 			<tr>
 				<td class="nobr"><%= i + 1 %></td>
-				<td><%= link_to "#{p.last_name}, #{p.first_name}", :action => :applicant, :id => p.id %></td>
+				<td>
+					<% if p %>
+						<%= link_to "#{p.last_name}, #{p.first_name}", :action => :applicant, :id => o.person_id %>
+					<% else %>
+						UNKNOWN
+					<% end %>
+				</td>
 				<% if @obj.continuous %>
 					<td><%= o.exam.valid_until.d0? %></td>
 				<% end %>
@@ -29,13 +35,12 @@
 				<td><%= nwp o.final_score, 2 %></td>
 				<%
 						
-				t = p.town
-				v = p.village
-				f = p.fire_district
-				s = p.school_district
-				
-				logger.info '?????'
-				logger.info o.class
+				if p
+					t = p.town
+					v = p.village
+					f = p.fire_district
+					s = p.school_district
+				end
 
 				actions = o.cert_applicants.find(:all, {
 					:include => [{:cert => :agency}, :cert_code],
