@@ -14,7 +14,13 @@ class FormHire  < ActiveRecord::Base
 	
 	belongs_to :submitter, :class_name => 'User', :foreign_key => 'submitter_id'	
 	
-	validates_presence_of :agency, :department, :first_name, :last_name, :hire_type
+	validates_presence_of :agency, :department, :first_name, :last_name, :hire_type,
+		:address, :address_city, :address_state, :address_zip, :ssn, 
+		:job, :salary, :salary_per, :full_or_part_time, :hours_per_week,
+		:classification, :civil_service_status, :if => :http_posted
+	
+	validates_inclusion_of :exempt_vol_firefighter,
+		:veteran, :employed_4years, :in => [true, false], :message => 'is required', :if => :http_posted
 	
 	def label; "#330 #{last_name_was}, #{first_name_was}"; end
 	

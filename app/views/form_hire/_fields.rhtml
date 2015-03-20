@@ -70,10 +70,10 @@
 		</table>
 	</td>
 </tr>
-<%= f.tr_text_field :address, :label => 'Address', :class => 'ucase' %>
+<%= f.tr_text_field :address, :label => 'Address', :class => 'ucase', :req => true %>
 <%= f.tr_text_field :address2, :label => 'Address (line 2)', :class => 'ucase' %>
 <tr>
-	<th>City, State, Zip:</th>
+	<th>City, State, Zip: <span class="req">*</span></th>
 	<td class="subform">
 		<table>
 			<tr>
@@ -83,7 +83,7 @@
 		</table>
 	</td>
 </tr>
-<%= f.tr_text_field :ssn, :label => 'SSN', :size => '30', :class => 'ucase' %>
+<%= f.tr_text_field :ssn, :label => 'SSN', :size => '30', :class => 'ucase', :req => true %>
 <%= f.tr_calendar_date_select :date_of_birth, :label => 'Date of Birth', :class => 'ucase' %>
 <%= f.tr_text_field :retirement_no, :label => 'Retirement No.', :size => '30', :class => 'ucase' %>
 <tr>
@@ -97,10 +97,10 @@
 	<td class="subform" colspan="2">
 		<table>
 			<tr>
-				<th style="vertical-align: middle;">Exempt Volunteer Firefighter?</th>
+				<th style="vertical-align: middle;">Exempt Volunteer Firefighter? <span class="req">*</span></th>
 				<th><label><%= f.radio_button :exempt_vol_firefighter, true %> Yes</label></th>
 				<th><label><%= f.radio_button :exempt_vol_firefighter, false %> No</label></th>
-				<th style="padding-left: 10px; vertical-align: middle;">Veteran?</th>
+				<th style="padding-left: 10px; vertical-align: middle;">Veteran? <span class="req">*</span></th>
 				<th><label><%= f.radio_button :veteran, true %> Yes</label></th>
 				<th><label><%= f.radio_button :veteran, false %> No</label></th>
 			</tr>
@@ -109,7 +109,7 @@
 </tr>
 <tr>
 	<th colspan="2">Within the past four years has the nominee held a Civil Service position, other than<br /> seasonal, by this or
-	any other municipality (County, City, Town, Village, School District)?</th>
+	any other municipality (County, City, Town, Village, School District)? <span class="req">*</span></th>
 </tr>
 <tr>
 	<td class="subform" colspan="2">
@@ -124,7 +124,7 @@
 	</td>
 </tr>
 <tr id="title">
-	<th>Title:</th>
+	<th>Title: <span class="req">*</span></th>
 	<td class="subform">
 		<table>
 			<tr>
@@ -134,19 +134,19 @@
 	</td>
 </tr>
 <tr>
-	<th>Salary:</th>
+	<th>Salary: <span class="req">*</span></th>
 	<td class="subform">
 		<table>
 			<tr>
 				<td><%= f.text_field :salary, :size => '20', :class => 'ucase' %></td>
-				<th>Per:</th>
+				<th>Per: <span class="req">*</span></th>
 				<td><%= f.select :salary_per, Const::WAGE_UNITS, :include_blank => true %></td>
 			</tr>
 		</table>
 	</td>
 </tr>
 <tr>
-	<th>FT/PT:</th>
+	<th>FT/PT: <span class="req">*</span></th>
 	<td class="subform">
 		<table>
 			<tr>
@@ -156,9 +156,9 @@
 		</table>
 	</td>
 </tr>
-<%= f.tr_text_field :hours_per_week, :label => 'Hours Per Week', :size => '5', :class => 'ucase' %>
+<%= f.tr_text_field :hours_per_week, :label => 'Hours Per Week', :size => '5', :class => 'ucase', :req => true %>
 <tr>
-	<th>Class:</th>
+	<th>Class: <span class="req">*</span></th>
 	<td class="subform">
 		<table>
 			<tr>
@@ -172,7 +172,7 @@
 	</td>
 </tr>
 <tr>
-	<th>Status:</th>
+	<th>Status: <span class="req">*</span></th>
 	<td class="subform">
 		<table>
 			<tr>
