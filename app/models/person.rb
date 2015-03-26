@@ -22,6 +22,14 @@ class Person < ActiveRecord::Base
 	
 	validates_format_of :ssn, :with => /\d\d\d-\d\d-\d\d\d\d/
 	
+	def validate
+		if http_posted
+			if email.blank? && (contact_via == 'email' || contact_via == 'both')
+				errors.add_to_base 'Contact preference includes email but no email is specified.'
+			end
+		end
+	end
+	
 	def label; "#{last_name_was}, #{first_name_was}"; end
 	
 	def full_name; "#{first_name} #{last_name}"; end
