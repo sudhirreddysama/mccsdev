@@ -100,7 +100,7 @@ class Const
 	]
 	
 	VETERAN_TYPES = [
-		['UNKNOWN', nil],
+		['UNKNOWN', ''],
 		['NON-VET', 'NON-VET'],
 		['VETERAN', 'VETERAN'],
 		['DISABLED VET', 'DISABLED VET']
