@@ -52,7 +52,7 @@ class Document < ActiveRecord::Base
 	def handle_after_create
 		`mkdir documents/#{created_at.year}`
 		`mkdir documents/#{created_at.year}/#{created_at.month}`
-		`cp "#{uploaded_file.path}" "#{path}"`
+		`cp #{Shellwords.escape(uploaded_file.path)} #{Shellwords.escape(path)}`
 	end
 	after_create :handle_after_create
 	
