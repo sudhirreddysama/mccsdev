@@ -107,8 +107,12 @@ class ListsController < ApplicationController
 
 	def msg
 		@obj = Message.find_by_id_and_download_key params[:id], (params[:k] || params[:id2])
-		@obj.ensure_rendered
-		send_file @obj.path, :filename => "letter.pdf", :disposition => 'inline', :type => 'application/pdf'
+		if @obj
+			@obj.ensure_rendered
+			send_file @obj.path, :filename => "letter.pdf", :disposition => 'inline', :type => 'application/pdf'
+		else
+			render :text => 'Letter no longer exists.'
+		end
 	end
 	
 end
