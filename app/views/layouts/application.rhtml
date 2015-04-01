@@ -30,7 +30,7 @@
 			var super_c = <%= params[:sc] ? "'#{params[:sc]}'" : 'null' %>;
 		</script>
 	</head>
-	<body class="<%= 'pop' if params[:popup] %>">
+	<body class="<%= 'pop' if params[:popup] %>"><!-- Hi -->
 		<% if RAILS_ENV == 'development' %><div id="dev-bar">DEVELOPMENT SITE</div><% end %>
 		<% unless @notabs or params[:popup] %>
 			<div id="tabs" class="tabs">
@@ -55,7 +55,7 @@
 					<%= tab 'Delivery', {:controller => :delivery, :sc => nil}, {}, {:class => 'tab-delivery' + (params[:sc] == 'delivery' ? ' active' : ''), :title => 'Deliver Letters to Applicants'} %>				
 					<%= tab 'Agencies', {:controller => :agency, :sc => nil}, {}, {:class => 'tab-person' + (params[:sc] == 'agency' ? ' active' : ''), :title => 'Agency Maintenance'} %>
 					<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (params[:sc] == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>
-					<% is_misc = %w{letter job exam_site perf_test department town village county user fire_district school_district empl_action_type db_change disapproval}.include?(params[:controller]) %>
+					<% is_misc = %w{cert_code letter job exam_site perf_test department town village county user fire_district school_district empl_action_type db_change disapproval}.include?(params[:controller]) %>
 					<%= tab 'Misc.', {:controller => :job, :sc => nil}, {}, {:class => 'tab-misc' + (is_misc ? ' active' : ''), :title => 'Manage Other Tables (Users, Agencies, etc.)'} %>
 				<% end %>
 				<div class="right tabs-menu">
