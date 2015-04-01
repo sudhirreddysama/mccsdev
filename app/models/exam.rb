@@ -197,7 +197,7 @@ class Exam < ActiveRecord::Base
 				
 				if !failed_perf
 					person_done = people_processed[a.person_id]
-					people_processed[a.person_id] = true
+					#people_processed[a.person_id] = true
 				end
 
 				as = a.app_status
@@ -214,13 +214,16 @@ class Exam < ActiveRecord::Base
 					
 					if as && as.eligible != 'N' && !failed_perf && !score_bad
 						
+						people_processed[a.person_id] = true
+						
 						self.no_passed += 1
 						
 						a.pos = pos
 						pos += 1
 						if last_score.nil? || last_score != a.final_score
-							rank != 1
+							rank += 1
 						end
+						last_score = a.final_score
 						a.rank = rank
 					else
 						a.pos = 0
