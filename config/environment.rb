@@ -112,7 +112,7 @@ class Date
 	end
 end 
 
-if RAILS_ENV = 'development'
+if RAILS_ENV == 'development'
 	FACEBOOK_KEY = '1549656988650169'
 	FACEBOOK_SECRET = 'cca686f8fc318d3dc81a5432c11176b9'
 	TWITTER_KEY = 'q6WnT3FFkQbXlfSDbEGXukqLY'
