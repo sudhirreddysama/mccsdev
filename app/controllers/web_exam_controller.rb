@@ -56,10 +56,11 @@ class WebExamController < CrudController
 			}
 		end
   end
-  def social_media
-    load_obj
-    super
-  end
+  
+  #def social_media
+  #  load_obj
+  #  super
+  #end
 	
 	def applicants_save
 		load_obj
@@ -247,5 +248,84 @@ class WebExamController < CrudController
 		end
 	end
 	skip_before_filter :authenticate, :only => :send_exam_emails
+
+	def social
+	end
+
+	def get_facebook_client
+		@facebook_client = Koala::Facebook::OAuth.new(
+			FACEBOOK_KEY, 
+			FACEBOOK_SECRET, 
+			url_for(:action => :facebook_callback)
+		)
+	end
 	
+	def facebook_oauth
+		get_facebook_client
+		redirect_to @facebook_client.url_for_oauth_code(:permissions => 'email,publish_actions,manage_pages')
+	end
+	
+	def facebook_callback
+		get_facebook_client
+		access_token = @facebook_client.get_access_token(params[:code])
+		graph = Koala::Facebook::API.new(access_token)
+		#res = graph.get_connections('me', 'accounts');
+		
+		page_token = graph.get_page_access_token('398465983501035')
+		page_graph = Koala::Facebook::API.new(page_token)
+		
+		exams = WebExam.find(:all, :order => 'name, no', :conditions => 'published = 1 and publish < now() and facebook_posted = 0')	
+		p "Exams To Post to Facebook: #{exams.length}"
+		if exams.length > 0
+			message = ''
+			exams.each { |e|
+				p "Posting to Facebook: #{e.id} #{e.no} #{e.name}"
+				message += [e.no, e.name].reject(&:blank?).join(' ') + "\n"
+				e.update_attribute :facebook_posted, true
+			}
+			page_graph.put_wall_post("New Exam/Job Announcements: \n#{message}Apply Now: cs.monroecounty.gov/hrapply");
+			#graph.put_connections('me', 'feed', :message => "New Exam/Job Announcements: \n#{message}Apply Now: cs.monroecounty.gov/hrapply")
+		end
+		p 'Facebook Done'		
+		flash[:notice] = 'Exams have been posted to Facebook.'
+		redirect_to :action => :social
+	end
+	
+	def get_twitter_client
+		@twitter_client = TwitterOAuth::Client.new(
+			:consumer_key => TWITTER_KEY, 
+			:consumer_secret => TWITTER_SECRET
+		)
+	end
+	
+	def twitter_oauth
+		get_twitter_client
+		request_token = @twitter_client.authentication_request_token(:oauth_callback => url_for(:action => :twitter_callback))
+		session[:twitter_token] = request_token.token
+		session[:twitter_secret] = request_token.secret
+		redirect_to request_token.authorize_url
+	end
+	
+	def twitter_callback
+		get_twitter_client
+		access_token = @twitter_client.authorize(
+			session[:twitter_token],
+			session[:twitter_secret],
+			:oauth_verifier => params[:oauth_verifier]
+		)
+		exams = WebExam.find(:all, :order => 'name, no', :conditions => 'published = 1 and publish < now() and twitter_posted = 0')	
+		logger.info "Exams To Post to Twitter: #{exams.length}"
+		if exams.length > 0
+			exams.each { |e|
+				logger.info "Posting to Twitter: #{e.id} #{e.no} #{e.name}"
+				# NOTE: "Apply*Online:*" contains non-breaking space characters!
+				@twitter_client.update 'New Exam/Job: ' + [e.no, e.name].reject(&:blank?).join(' ') + ' Apply Online: cs.monroecounty.gov/hrapply'
+				e.update_attribute :twitter_posted, true
+			}
+		end
+		logger.info 'Twitter Done'
+		flash[:notice] = 'Exams have been posted to Twitter.'
+		redirect_to :action => :social
+	end
+
 end

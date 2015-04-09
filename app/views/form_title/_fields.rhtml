@@ -1,1 +1,100 @@
+<%
+
+@agency_opts = Agency.find(:all, {
+	:order => 'agencies.name', 
+	:conditions => @current_user.agency_level? && @current_user.agency_id ? ['agencies.id in (?)', [@current_user.agency_id, @obj.agency_id]] : nil
+}).collect { |a| [a.name, a.id] }
+@department_opts = Department.find(:all, {
+	:order => 'departments.name', 
+	:conditions => @current_user.agency_level? && @current_user.department_id ? ['departments.id in (?)', [@current_user.department_id, @obj.department_id]] : nil
+}).collect { |a| [a.name, a.id] }
+
+%>
+<%= f.tr_select :agency_id, @agency_opts, :label => 'Agency', :req => true, :include_blank => !@current_user.agency_id %>
+<%= f.tr_select :department_id, @department_opts, :label => 'Department', :req => true, :include_blank => !@current_user.department_id %>
+<tr>
+	<th>County Departments:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>Cost Center No.:</th>
+				<th>SAP Org. No.:</th>
+				<th>Funding:</th>
+			</tr>
+			<tr>
+				<td><%= f.text_field :cost_center, :style => 'width: 150px;' %></td>
+				<td>2910<%= f.text_field :sap_number, :style => 'width: 150px;' %></td>
+				<td>
+					<label><%= f.radio_button :grant_funded, true %> Grant Funded</label>&nbsp;
+					<label><%= f.radio_button :grant_funded, false %> Non-Grant Funded</label>
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<th>Outside Jurisdictions:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>Division, Unit, or Section:</th>
+			</tr>
+			<tr>
+				<td>
+					<%= f.text_field :division_unit_section, :style => 'width: 150px;' %>
+					(For Towns, Villages, School Districts, Special Districts)
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<th>This is a Request to:</th>
+	<td>
+		<label><%= f.radio_button :classify_reclassify, 'Classify' %> Classify</label>&nbsp;
+		<label><%= f.radio_button :classify_reclassify, 'Reclassify' %> Reclassify</label>&nbsp;
+		<label><%= f.text_field :number_positions, :style => 'width: 50px;' %> # Positions</labeL>&nbsp;
+	</td>
+</tr>
+<tr>
+	<th>Present Position:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>Title:</th>
+				<th>Incumbant:</th>
+				<th>Salary Level:</th>
+				<th>Number (County Only):</th>
+			</tr>
+			<tr>
+				<td><%= f.text_field :present_title, :style => 'width: 150px;' %></td>
+				<td><%= f.text_field :present_incumbent, :style => 'width: 150px;' %></td>
+				<td><%= f.text_field :present_salary_level, :style => 'width: 100px;' %></td>
+				<td>6910<%= f.text_field :present_position_number, :style => 'width: 100px;' %></label></td>
+			</tr>
+		</table>
+	</td>
+</tr>
 <%= f.tr_text_field :suggested_title, :label => 'Suggested Title' %>
+<%= f.tr_text_field :suggested_salary_group_range, :label => 'Salary Group & Range', :style => 'width: 200px;' %>
+<tr>
+	<th>Description of Duties:</th>
+	<td>
+		Describe work in sufficient detail to give a clear word picture of the job. Use a separate paragraph for each 
+		kind of work and describe the more important or time-consuming duries first. In the left colum, estimate how 
+		the total working time is divided. <strong>Do not copy existing job descriptions</strong>.
+	</td>
+</tr>
+<tr>
+	<th></th>
+	<td class="subform">
+		<table>
+			<% 1.upto(6) { |i| %>
+				<tr>
+					<th><%= f.text_field "duties_percent#{i}", :style => 'width: 40px;' %>&nbsp;%</th>
+					<td><%= f.text_field "duties_description#{i}", :style => 'width: 400px; height: 50px;' %></td>
+				</tr>
+			<% } %>
+		</table>
+	</td>
+</tr>

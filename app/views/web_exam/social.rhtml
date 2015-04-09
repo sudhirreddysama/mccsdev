@@ -1,0 +1,15 @@
+<%= partial 'nav' %>
+<% content_for(:head) { %>
+	<style type="text/css">
+		#spost a { display: block; width: 300px; text-align: center; margin: 10px auto; font-weight: bold; color: #fff; text-decoration: none; font-size: 20px; padding: 10px; border-radius: 20px; }
+		#spost a:hover { text-decoration: none; }
+		#spost-fb { background-color: #39579A; }
+		#spost-fb:hover { background-color: #2a406f; }
+		#spost-tw { background-color: #3b94d9; }
+		#spost-tw:hover { background-color: #2f6d9d; }
+	</style>
+<% } %>
+<div id="spost">
+<%= link_to 'POST TO FACEBOOK', {:action => :facebook_oauth}, :id => 'spost-fb' %>
+<%= link_to 'POST TO TWITTER', {:action => :twitter_oauth}, :id => 'spost-tw' %>
+</div>

@@ -1,0 +1,15 @@
+<div id="select-text">
+	<% @texts.each_hash { |o| %>
+		<a href="#"><%= nl2br_h o.txt %></a>
+	<% } %>
+</div>
+<script type="text/javascript">
+	
+	(function($) {
+		$('#select-text a').click(function(e) {
+			e.preventDefault();
+			window.parent.cb($(this).text());
+		});
+	})(jQuery);
+	
+</script>

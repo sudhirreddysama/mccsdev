@@ -151,9 +151,9 @@
 			<div class="lm2">
 				<p><a href="http://www.monroecounty.gov/hr-index.php">Human Resources Home</a></p>
 				<ul>
-					<li><a href="/hrapply">Job Openings and Civil Service Exams - Apply Online</a>
-					<li><a href="/hrapply/subscribe">Email Notifications</a>
-					<li><a href="/mccs/lists">Civil Service Exam Scores</a>
+					<li><a href="/hrapply<%= 'dev' if RAILS_ENV == 'development' %>">Job Openings and Civil Service Exams - Apply Online</a>
+					<li><a href="/hrapply<%= 'dev' if RAILS_ENV == 'development' %>/subscribe">Email Notifications</a>
+					<li><a href="/mccs<%= 'dev' if RAILS_ENV == 'development' %>/lists">Civil Service Exam Scores</a>
 					<li><a href="http://www.monroecounty.gov/hr-civilservice.php">Civil Service Information</a>
 					<li><a href="http://www.monroecounty.gov/hr-guides.php">Forms and Study Guides</a>
 					<li><a href="http://www.monroecounty.gov/hr-faq.php">FAQ</a>

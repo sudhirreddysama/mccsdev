@@ -6,3 +6,9 @@ Exam: <%= @c.exam ? @c.exam.exam_no : 'None' %>
 Title: <%= @c.job ? @c.job.name : 'None' %>
 Agency: <%= @c.agency ? @c.agency.name : 'None' %>
 Department: <%= @c.department ? @c.department.name : 'None' %>
+
+Agency Comments:
+<%= @c.agency_comments %>
+
+Internal Notes:
+<%= @c.internal_notes %>

@@ -70,7 +70,7 @@ class CrudController < ApplicationController
 		end
 	end
 	
-	before_filter :load_obj, :only => [:edit, :social_media, :view, :delete, :duplicate, :print, :change_log]
+	before_filter :load_obj, :only => [:edit, :view, :delete, :duplicate, :print, :change_log]
 	
 	def view
 		template
@@ -93,15 +93,16 @@ class CrudController < ApplicationController
     end
     template
   end
-  def social_media
-    @obj.http_posted = true
-    if request.post? and @obj.update_attributes params[:obj]
-      flash[:notice] = 'Record has been saved.'
-      save_redirect
-      return
-    end
-    template
-  end
+  
+  #def social_media
+  #  @obj.http_posted = true
+  #  if request.post? and @obj.update_attributes params[:obj]
+  #    flash[:notice] = 'Record has been saved.'
+  #    save_redirect
+  #    return
+  #  end
+  #  template
+  #end
 	
 	def delete
 		if request.post? and @obj.destroy

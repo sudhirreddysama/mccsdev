@@ -121,6 +121,7 @@ class CertController < CrudController
 			@obj.requested_date = Time.now.to_date
 			@obj.requestor = @current_user.name
 		end		
+		@obj.job_id = @obj.exam ? @obj.exam.job_id : nil
 	end
 
 	def cert_upload
@@ -177,6 +178,13 @@ class CertController < CrudController
 		load_obj
 		ca = @obj.cert_applicants.find(params[:id2])
 		ca.update_attribute :comments, params[:cmt]
+		render_nothing
+	end
+	
+	def set_salary_per
+		load_obj
+		ca = @obj.cert_applicants.find(params[:id2])
+		ca.update_attribute :salary_per, params[:salary_per]
 		render_nothing
 	end
 	
@@ -282,6 +290,22 @@ class CertController < CrudController
 		load_obj
 		@cert_applicant = @obj.cert_applicants.find(params[:id2])
 		@applicant = @cert_applicant.applicant
+	end
+	
+	def select_end_of_list
+		@texts = DB.query('
+			select count(c.id) c, trim(trim("*" from replace(replace(replace(c.end_of_list, "\t", ""), "\r", ""), "\n", ""))) txt
+			from certs c group by txt having c > 1 and txt != "" order by c desc
+		');
+		render :template => 'partial/select_text'
+	end
+	
+	def select_bottom_note
+		@texts = DB.query('
+			select count(c.id) c, trim(trim("*" from trim("\n" from trim("\r" from c.bottom_note)))) txt
+			from certs c group by txt having c > 1 and txt != "" order by c desc
+		');
+		render :template => 'partial/select_text'
 	end
 	
 end

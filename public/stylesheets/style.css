@@ -74,6 +74,8 @@ a img { border: none; }
 .tabs a.active { background-image: url(../images/tab-active-bg.gif); }
 .tabs .right a span { border-right: none; border-left: 1px solid #888; }
 
+.tabs span b { padding: 0 3px; background: #888; border-radius: 3px; font-weight: normal; color: #fff; margin-left: 2px; }
+
 #stabs a span { padding-left: 5px; background-image: none; /* text-shadow: #fff 1px 1px 1px; font-weight: bold; border-left: 5px solid #000;  */ }
 
 .tabs a.tab-index span { background-image: url(../images/icons/text_align_justify.png); }
@@ -500,3 +502,6 @@ fieldset table.form { margin: 0; }
 #tabs .tabs-menu a:hover { background: #333 none; }
 
 #dev-bar { color: #fff; background-color: #a00; text-align: center; padding: 2px; border-bottom: 1px solid #f00; font-weight: bold; }
+
+#select-text a { display: block; padding: 1px 5px; text-decoration: none; border-bottom: 1px solid #888; }
+#select-text a:hover { background-color: #eee; }

@@ -5,6 +5,14 @@ module ApplicationHelper
 		opt[:class] += ' active' if p1.all? { |k, v| !v or params[k].to_s == v.to_s }
 		p = p1.merge(p2)
 		opt[:class] += ' tab-' + p[:action].to_s if p[:action] and !opt[:class].include?('tab-')
+		
+		if txt == 'Documents'
+			dc = @sobj ? @sobj.documents.count : @obj.documents.count
+			if dc > 0
+				txt += ' <b>' + dc.to_s + '</b>'
+			end
+		end
+		
 		link_to('<span>' + txt + '</span>', p, opt)
 	end
 	

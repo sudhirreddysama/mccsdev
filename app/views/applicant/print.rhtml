@@ -163,11 +163,11 @@
 							<td>
 								<p>Have you served in the Armed Forces of the U.S.A.? <b><%= @obj.army_served ? 'YES' : 'NO' %></b></p>
 								<p>Dates of active service: From: <b><%= @obj.army_from ? @obj.army_from.strftime('%m/%d/%Y') : s %></b> To: <b><%= @obj.army_to ? @obj.army_to.strftime('%m/%d/%Y') : s %></b>
-								<p>Veterans of the Armed Forces and Active Duty members soon to be discharged wishing to claim additional examination credits as veterans or disabled veterans 
-									must submit a form VC-1 and/or form VC-4 and a copy of their discharge papers (form DD-214) with our office.</p>
-								<p>Have you ever, since January 1, 1951, been permanently appointed or promoted in the service of NY State or any of its civil divisions from an eligible list as a result 
-									of additional veterans credits granted you on such list? <b><%= @obj.vc_used ? 'YES' : 'NO' %></b></p>
-								<p>If yes, name agency that established the eligible list: <b><%= @obj.vc_used_agency %></b></p>
+								<p>Wartime Veterans and Active Duty members soon to be discharged wishing to claim additional examination credits as veterans or disabled veterans 
+									must submit a form VC-1 and/or form VC-4 and a copy of their discharge papers (form DD-214) within 30 days of exam date.</p>
+								<p>Have you ever been appointed through the use of Veteran's Credits to any position in the State Civil Service or any City or Civil 
+								Division of New York State? <b><%= @obj.vc_used ? 'YES' : 'NO' %></b></p>
+								<p>If yes, where and when? <b><%= @obj.vc_used_agency %></b></p>
 							</td>
 						</tr>
 					<% end %>
@@ -510,101 +510,95 @@
 
     <% end %>
 
-    <% if @obj.vc_type.nil? or @obj.vc_type != 'none' %>
+    <% if !@obj.vc_type.nil? && @obj.vc_type != 'none' %>
     <!-- NEW PAGE -->
-    <center><h2>APPLICATION FOR VETERAN'S CREDITS (VC-1)</h2>
-
-      <p><b>Monroe County Department of Human Resources<br />
-        210 County Office Building<br />
-        39 West Main Street<br />
-        Rochester, New York 14614</b></p></center>
-
-    <p>Candidates must file a separate &quot;Application for Veteran's Credits&quot; form for each examination for which they wish to file. A copy of Applicant's
-      separation papers (form DD-214) must be filed with this form at the Commission address above by the date specified on the examination announcement.</p>
-
-    <ol>
-      <li>I wish to claim&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Disabled Veteran's Credits <%= @obj.vc_type == 'disabled' ? chk : uchk %> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Non-Disabled Veteran's Credits <%= @obj.vc_type == 'nondisabled' ? chk : uchk %></li>
-      <li>Job / Exam Announcement(s): <b><%= comma_h *@obj.web_exam_prices.collect { |e| "#{e.web_exam.no} #{e.web_exam.name}" } %></b></li>
-      <li>Full Name: <b><%= h @obj.first_name %> <%= h @obj.middle_name %> <%= h @obj.last_name %></b></li>
-      <li>Address: <b><%= h @obj.address %> <%= h @obj.address2 %> <%= h @obj.city %> <%= h @obj.state %> <%= h @obj.zip %></b></li>
-      <li>Date of Enlistment or Induction: <b><%= @obj.army_enlisted.strftime '%m/%d/%Y' if @obj.army_enlisted %></b></li>
-      <% if false %>
-          <li>Address at time of entrance into Forces: <b><%= h @obj.army_address %>, <% unless @obj.army_address2.blank? %><%= h @obj.address2 %>, <% end %><%= h @obj.army_city %>, <%= h @obj.army_state %> <%= h @obj.army_zip %></b></li>
-      <% end %><li>Dates of Active Service: From <b><%= @obj.army_from ? @obj.army_from.strftime('%m/%d/%Y') : s %></b> To <b><%= @obj.army_to ? @obj.army_to.strftime('%m/%d/%Y') : s %></b></li>
-      <li>Were you discharged under honorable conditions? <b><%= @obj.army_discharge_honorable ? 'YES' : 'NO' %></b></li>
-      <li>Reason for discharge or release as stated on certificate: <b><%= @obj.army_discharge_reason %></b></li>
-      <li>Have you ever been appointed through the use of Veteran's Credits to any position in the State Civil Service or any City or Civil Division of New York State? <b><%= @obj.vc_used ? 'YES' : 'NO' %></b></li>
-    </ol>
-
-    <h2>APPLICANTS FOR DISABLED VETERAN'S CREDITS MUST COMPLETE THE FOLLOWING:</h2>
-
-    <p>Applicants for Disabled Veterans credits must also complete and forward two copies of &quot;Authorization for Disability Form&quot; (VC-4), which is available at
-      the Commission address above, to the regional office of the Veteran's Administration where claim is now on file.  This form should be forwarded in
-      sufficient time so that the Commission will receive verification of your disability before the date specified on the examination announcement.</p>
-
-    <ol>
-      <li>U.S. Veteran's Administration Claim No: <b><%= h @obj.vc_disabled_claim_no %></b></li>
-      <li>Date on which two copies of &quot;Authorization for Disability Record&quot; (VC-4) were sent to Veteran's Administration: <b><%= @obj.vc_disabled_auth_date.strftime('%m/%d/%Y') if @obj.vc_disabled_auth_date %></b></li>
-    </ol>
-
-    <h2>THE USE OF VETERAN'S CREDITS</h2>
-
-    <p>New York State Civil Service law allows additional credits in examinations to successful candidates who have filed for and established their
-      status as disabled veterans or non-disabled veterans.  These credits are granted at the time of establishment of the eligible list on the
-      following basis:</p>
-
-    <table cellspacing="8" border="0" cellpadding="0">
-      <tr>
-        <td></td>
-        <td><b>Open-Competitive<br />Exams</b></td>
-        <td><b>Promotional<br />Exams</b></td>
-      </tr>
-      <tr>
-        <td>Disabled Veteran</td>
-        <td>10 pts.</td>
-        <td>5 pts.</td>
-      </tr>
-      <tr>
-        <td>Non-Disabled Veteran</td>
-        <td>5 pts.</td>
-        <td>2.5 pts.</td>
-      </tr>
-    </table>
-    <p>&nbsp;</p>
-    <p>In order to be considered for veterans credits, candidates must furnish proof (by this form and copy of separation papers) that they:</p>
-
-    <ol>
-      <li>Have served on active duty with the Armed Forces in a time of war, as defined in Section 85 of the State Civil Service Law.</li>
-      <li>Were honorably discharged or released under honorable circumstances from such services.</li>
-      <li>Are a resident of New York State at the time of the establishment of the eligible list.</li>
-    </ol>
-
-    <p>Disabled Veteran's Credits applicants must show in addition to the three factors listed above that they have a war-incurred disability of at
-      least 10% which is certified by (VC-4 form) to be in existence at the time of application for additional credits.</p>
-
-    <p>The mere application for Veteran's credits does not obligate applicant to the use of such credits.  Candidates who pass the examination will
-      be notified of their standing on the eligible list with or without these additional credits.  At the time of appointment eligible candidates will
-      be asked to sign forms using or relinquishing these additional credits.</p>
-
-    <p>Candidates may use their veteran's or disabled credits to gain appointment only once in the civil service of the State or of any City or Civil
-      Division thereof.</p>
-
-    <h2>TIME OF WAR IS DEFINED AS FOLLOWS:</h2>
-
-    <p>All service in the United States armed forces during:</p>
-
-    <p>World War I April 6, 1917 - November 11, 1918<br />
-      World War II December 7, 1941 - December 31, 1946<br />
-      Korean Conflict June 27, 1950 - January 31, 1955<br />
-      Viet Nam Conflict February 28, 1961 - May 7, 1975<br />
-      Persian Gulf Conflict August 2, 1990 - the date upon which such hostilities end</p>
-
-    <p>Service for which a veteran received the armed forces expeditionary medal, the navy expeditionary medal, or the marine corps
-      expeditionary medal for:</p>
-
-    <p>Hostilities in Lebanon June 1, 1983 - December 1, 1987<br />
-      Hostilities in Grenada October 23, 1983 - November 21, 1983<br />
-      Hostilities in Panama December 20, 1989 - January 31, 1990</p>
+    		<center><h2>APPLICATION FOR VETERAN'S CREDITS (VC-1)</h2>
+				<p><b>Monroe County Civil Service Commission<br />
+				39 West Main Street, Room 210 * Rochester, New York 14614<br />
+				585-753-1700 * 585-753-1728 FAX</b></p></center>
+				
+				<p><b>Veterans Status Claimed: (Check one):</b></p>
+				
+				<p><b><%= @obj.vc_type == 'nondisabled' ? chk : uchk %> Wartime Veteran</b><br />
+					Applicants for Wartime Veteran's Credits must complete this form (VC-1) for each examination 
+					and provide a copy of their DD-214 separation papers within 30 days after exam date. Candidates who have previously submitted 
+					a copy of their DD-214 to the Monroe County Department of Human Resources on or after January 1, 2013 do not need to resubmit 
+					them, but a new VC-1 form must be filed for each examination. DD-214 separation papers establishes proof the veteran:
+					</p>
+					<ul>
+						<li>Served on active duty in wartime, as defined in &sect;85 of the State Civil Service Law (see back VC-1 PDF),</li>
+						<li>Was honorably discharged or released under honorable circumstances from such services, and</li>
+						<li>Is a resident of New York State at the time of the establishment of the eligible list.</li>
+					</ul>
+				</p>
+				
+				<p><b><%= @obj.vc_type == 'disabled' ? chk : uchk %> Disabled Wartime Veteran</b><br />
+					In addition to the proof above, applicants for Disabled Wartime Veteran's Credits must also 
+					submit a &quot;Veterans Disability Records Release&quot; form (VC-4), to a Veteran's Affairs office or the Monroe County Veterans Services 
+					Agency to show that they have a war-incurred disability of at least 10% which is certified to be in existence at the time of 
+					application for additional credits. This form should be forwarded in sufficient time so that the Commission will receive verification 
+					of the disability within 30 days after exam date.</p>
+				</p>
+				
+				<p><b><%= @obj.vc_type == 'active' ? chk : uchk %> Active Duty Military</b><br />
+					Wartime Veteran's Credits will be applied after you are discharged and provide your DD-214.
+				</p>
+				
+				<table width="100%" cellpadding="4" border="1">
+					<tr>
+						<td width="50%" valign="top">
+							Full Name:<br />
+							<b><%= h @obj.first_name %> <%= h @obj.last_name %></b>&nbsp;
+						</td>
+						<td width="50%" valign="top">
+							Social Security Number:<br />
+							<b><%= h @obj.ssn %></b>&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td valign="top">
+							Address:<br />
+							<b><%= comma_h @obj.address, @obj.address2, @obj.city, "#{@obj.state} #{@obj.zip}", @obj.county %></b>&nbsp;
+						</td>
+						<td rowspan="2" valign="top">
+							Number and Title of Examination(s) for which credit is claimed:<br />
+							<b><% @obj.web_exam_prices.each { |ep| e = ep.web_exam %>
+								<% if e %>
+									<div><%= h e.no %> <%= h e.name %>&nbsp;</div>
+								<% end %>
+							<% } %></b>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top">
+							Date of Enlistment of Induction:<br />
+							<b><% if @obj.army_enlisted %><%= @obj.army_enlisted.strftime('%m/%d/%Y') %><% end %></b>&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" valign="top">
+							Dates of Active Service:<br />
+							From: <b><% if @obj.army_from %><%= @obj.army_from.strftime('%m/%d/%Y') %><% else %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<% end %></b>
+							To: <b><% if @obj.army_to %><%= @obj.army_to.strftime('%m/%d/%Y') %></b><% end %>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" valign="top">
+							Were you discharged under honorable conditions?<br />
+							<%= @obj.army_discharge_honorable == true ? chk : uchk %> Yes&nbsp;&nbsp;&nbsp;
+							<%= @obj.army_discharge_honorable == false ? chk : uchk %> No
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" valign="top">
+							Have you ever been appointed through the use of Veteran's Credits to any position in the State Civil Service or any City or Civil Division of New York State?
+							<%= @obj.vc_used == true ? chk : uchk %> Yes&nbsp;&nbsp;&nbsp;
+							<%= @obj.vc_used == false ? chk : uchk %> No<br />&nbsp;<br />
+							If Yes, where and when? <b><%= h @obj.vc_used_agency %></b><br />&nbsp;<br />
+							If you used your veteran's credit for permanent appointment or promotion in New York State or its civil divisions, you may not claim them again.
+						</td>
+					</tr>
+				</table>
 
 <% end %>
 

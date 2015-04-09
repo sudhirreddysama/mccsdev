@@ -176,7 +176,36 @@ jQuery(function($) {
 	$('.coolfieldset').coolfieldset({collapsed: true, animation: false});
 });
 
+// Popup select text fields.
 
+jQuery(function($) {
+	$('.popup-select-text').each(function(i, link) {
+		link = $(link);
+		link.click(function(e) {
+			e.preventDefault();
+			window.cb = function(val) {
+				$(pop).dialog('close');
+				$('#' + link.attr('id').substring(7)).val(val);
+				pop = null;
+			}
+			var w = 800;
+			var h = 500;
+			var pop = $('<iframe src="' + link.attr('href') + '" />').dialog({
+				title: 'Select Record',
+				width: w,
+				height: h,
+				modal: true,
+				overlay: {
+					opacity: 0.8,
+					background: 'black'
+				},
+				close: function() {
+					pop = null;
+				}
+			}).width(w).height(h).dialog('option', 'position', 'center');
+		});
+	});
+});
 
 
 

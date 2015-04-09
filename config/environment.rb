@@ -64,7 +64,9 @@ require 'spreadsheet'
 require 'net/pop'
 require 'shellwords'
 
-require 'twitter'
+#require 'twitter'
+#require 'oauth' 
+require 'twitter_oauth'
 require 'koala' #Facebook
 
 CalendarDateSelect.format = :american
@@ -110,7 +112,16 @@ class Date
 	end
 end 
 
-
-
+if RAILS_ENV = 'development'
+	FACEBOOK_KEY = '1549656988650169'
+	FACEBOOK_SECRET = 'cca686f8fc318d3dc81a5432c11176b9'
+	TWITTER_KEY = 'q6WnT3FFkQbXlfSDbEGXukqLY'
+	TWITTER_SECRET = 'JYTxpu7IdIX9tcyuH64Q7rntPtOEJccyAagcTGQwq21GT3Uvo6'
+else
+	FACEBOOK_KEY = '1549656988650169'
+	FACEBOOK_SECRET = 'cca686f8fc318d3dc81a5432c11176b9'
+	TWITTER_KEY = 'q6WnT3FFkQbXlfSDbEGXukqLY'
+	TWITTER_SECRET = 'JYTxpu7IdIX9tcyuH64Q7rntPtOEJccyAagcTGQwq21GT3Uvo6'
+end
 	
 

@@ -20,8 +20,8 @@ class Cert < ActiveRecord::Base
 	has_many :applicants, :through => :cert_applicants
 	
 	validates_presence_of :agency, :exam
-	
-	validates_presence_of :months, :general_or_residential, :job_time, :salary_range, :if => :agency_submit
+	validates_presence_of :temp_duration, :if => Proc.new { |c| c.job_type == 'T' && c.agency_submit }
+	validates_presence_of :general_or_residential, :job_time, :salary_range, :if => :agency_submit
 	
 	def agency_submit
 		if Thread.current[:current_user]

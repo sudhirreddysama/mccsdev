@@ -5,3 +5,7 @@
 <% if @current_user.admin_level? || @current_user.allow_edit_notice_emails %>
 	<%= tab 'Exam Notice Emails', {:action => :exam_emails, :id => nil, :controller => :web_exam} %>
 <% end %>
+
+<% if @current_user.admin_level? %>
+	<%= tab 'Facebook/Twitter', {:action => :social, :id => nil, :controller => :web_exam} %>
+<% end %>
