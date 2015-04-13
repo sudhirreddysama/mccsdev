@@ -21,6 +21,7 @@ class PayCert < ActiveRecord::Base
 	def path; "pay_certs/#{id}-#{filename}"; end
 	
 	#
+	#
 	#def save_filename
 	#	self.filename = file.original_filename if file
 	#	return true
