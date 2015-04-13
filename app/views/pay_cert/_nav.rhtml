@@ -1,22 +1,27 @@
-<% if @current_user.agency_level? %>
-	<% o = @sobj || @obj %>
-	<% c = params[:sc] || params[:controller] %>
-	<%= partial 'employee/nav_others' %>
-	<div class="tabs">
-		<%= tab 'List', {:controller => c, :action => :index, :sc => nil, :sid => nil} %>	
-		<%= tab 'New', {:controller => c, :action => :new, :sc => nil, :sid => nil} %>
-		<% if o and !o.new_record? %>
-			<%= tab truncate(o.label), {}, {:controller => c, :action => :view, :id => o.id, :sc => nil, :sid => nil}, {:class => 'tab-obj'} %>
-		<% end %>
-		<div class="clear"></div>
-	</div>
-	<% if o and !o.new_record? %>
+<%= partial 'partial/nav' %>
+
+
+<% if false %>
+	<% if @current_user.agency_level? %>
+		<% o = @sobj || @obj %>
+		<% c = params[:sc] || params[:controller] %>
+		<%= partial 'employee/nav_others' %>
 		<div class="tabs">
-			<%= tab 'View', {:controller => c, :action => :view, :id => o.id, :sc => nil, :sid => nil} %>
+			<%= tab 'List', {:controller => c, :action => :index, :sc => nil, :sid => nil} %>	
+			<%= tab 'New', {:controller => c, :action => :new, :sc => nil, :sid => nil} %>
+			<% if o and !o.new_record? %>
+				<%= tab truncate(o.label), {}, {:controller => c, :action => :view, :id => o.id, :sc => nil, :sid => nil}, {:class => 'tab-obj'} %>
+			<% end %>
 			<div class="clear"></div>
 		</div>
+		<% if o and !o.new_record? %>
+			<div class="tabs">
+				<%= tab 'View', {:controller => c, :action => :view, :id => o.id, :sc => nil, :sid => nil} %>
+				<div class="clear"></div>
+			</div>
+		<% end %>
+	</div>	
+	<% else %>
+		<%= partial 'partial/nav' %>
 	<% end %>
-</div>	
-<% else %>
-	<%= partial 'partial/nav' %>
 <% end %>

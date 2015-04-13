@@ -4,34 +4,66 @@ class PayCert < ActiveRecord::Base
 	belongs_to :user
 	has_many :pay_cert_lines, :dependent => :delete_all
 	
+	has_many :documents
+	belongs_to :last_document, :foreign_key => :last_document_id, :class_name => 'Document'
+	
 	def label; "#{as_of_date.d0} #{agency ? agency.name : 'UNKNOWN'}"; end
 	
-	validates_presence_of :as_of_date, :agency
+	validates_presence_of :agency
+	def validate
+		if !as_of_date 
+			errors.add_to_base 'Date of payroll is required.'
+		end
+	end
 	
 	attr :file, true
-	
-	validates_presence_of :file, :on => :create
 
-	def path; "pay_certs/#{id}-#{filename}"; end
+	#def path; "pay_certs/#{id}-#{filename}"; end
 
-	def save_filename
-		self.filename = file.original_filename if file
-		return true
-	end
-	before_save :save_filename
+	#def save_filename
+	#	self.filename = file.original_filename if file
+	#	return true
+	#end
+	#before_save :save_filename
 
 	def save_file
-		`cp "#{file.path}" "#{path}"` if file
+		if file
+			documents.create({
+				:uploaded_file => file,
+				:user_id => user_id
+			})
+		end
+		#`cp "#{file.path}" "#{path}"` if file
 	end
 	after_save :save_file
-
-	def process_file
+	
+	def self.convert_files_to_documents
+		pay_certs = PayCert.find(:all)
+		pay_certs.each { |c|
+			d = c.documents.create({
+				:uploaded_file => {
+					:original_filename => c.filename,
+					:path => c.path
+				}
+			})
+			c.update_attribute :last_document_id, d.id
+		}
+	end
+	
+	def process_file doc_id = nil
 		empl_ids = []
 		pay_cert_lines.clear
 		self.verified_count = 0
 		self.error_count = 0
 		
-		FasterCSV.foreach(path, :headers => true, :skip_blanks => true) { |r|
+		if doc_id
+			csv_path = documents.find(doc_id).path
+			self.last_document_id = doc_id
+		else
+			csv_path = path
+		end
+		
+		FasterCSV.foreach(csv_path, :headers => true, :skip_blanks => true) { |r|
 			if r['ssn'].to_s.match /(\d{3})(\d{2})(\d{4})/
 				r['ssn'] = "#{$1}-#{$2}-#{$3}"
 			end

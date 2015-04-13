@@ -4,7 +4,7 @@ empl_controllers = %w{employee pay_cert form_change form_hire}
 cert_controllers = %w{cert}
 @allow_liaison = @current_user.liaison_level? && (empl_controllers.include?(params[:controller]) || empl_controllers.include?(params[:sc]) )
 @allow_cert = @current_user.liaison_level? && cert_controllers.include?(params[:controller])
-agency_controllers = %w{cert form_change form_hire}
+agency_controllers = %w{cert form_change form_hire pay_cert}
 
 @allow_agency = @current_user.agency_level? && (agency_controllers.include?(params[:controller]) || agency_controllers.include?(params[:sc]))
 

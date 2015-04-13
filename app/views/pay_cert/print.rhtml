@@ -17,7 +17,7 @@
 		</style>
 	</head>
 	<body>
-		<h1>PAYROLL CERTIFICATION FOR <%= @obj.agency.name %> AS OF <%= @obj.as_of_date.d0? %> - 
+		<h1>PAYROLL CERTIFICATION FOR <%= @obj.agency.name %>, DATE OF PAYROLL: <%= @obj.as_of_date.d0? %> - 
 			<% if params[:id2] == 'verified' %>
 				VERIFIED
 			<% else %>
