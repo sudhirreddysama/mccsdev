@@ -63,7 +63,7 @@
 				<% if o.last_document %>
 					<td>
 						<label>Processed File:</label>
-						<%= link_to o.last_document.filename, :sc => :pay_cert, :sid => o.id, :controller => :document, :action => :download, :id => o.id %>
+						<%= link_to o.last_document.filename, :sc => :pay_cert, :sid => o.id, :controller => :document, :action => :download, :id => o.last_document_id %>
 					</td>
 				<% end %>
 				<td>
