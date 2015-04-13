@@ -18,7 +18,7 @@ class PayCertController < CrudController
 		}
 		
 		@date_types = [
-			['As Of Date', 'pay_certs.as_of_date']
+			['Date of Payroll', 'pay_certs.as_of_date']
 		]
 		
 		cond << get_date_cond
@@ -51,11 +51,9 @@ class PayCertController < CrudController
 	
 	def process_file
 		load_obj
-		@obj.process_file
-		
+		@obj.process_file params[:id2]
 		flash[:notice] = 'Payroll certification file has been processed.'
 		redirect_to :action => :view, :id => @obj.id
-		
 	end
 	
 	def load_error_lines

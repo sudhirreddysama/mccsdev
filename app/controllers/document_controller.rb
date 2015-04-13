@@ -1,5 +1,5 @@
 class DocumentController < CrudController
-
+	
 	def index
 		@paginate = false	
 		if params[:sc] == 'applicant'
@@ -73,6 +73,11 @@ class DocumentController < CrudController
 		end
 		flash[:notice] = 'Document has been moved.'
 		redirect_to :action => :index
+	end
+	
+	def build_obj
+		super
+		@obj.user = @current_user
 	end
 
 end
