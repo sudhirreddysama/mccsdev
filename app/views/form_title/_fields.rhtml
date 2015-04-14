@@ -25,8 +25,33 @@
 				<td><%= f.text_field :cost_center, :style => 'width: 150px;' %></td>
 				<td>2910<%= f.text_field :sap_number, :style => 'width: 150px;' %></td>
 				<td>
-					<label><%= f.radio_button :grant_funded, true %> Grant Funded</label>&nbsp;
-					<label><%= f.radio_button :grant_funded, false %> Non-Grant Funded</label>
+					<label><%= f.radio_button :grant_funded, 'Grant Funded' %> Grant Funded</label>&nbsp;
+					<label><%= f.radio_button :grant_funded, 'Non-Grant Funded' %> Non-Grant Funded</label>
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<th>HR Use Only:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>FLSA:</th>
+				<th>EEO:</th>
+				<th>Union:</th> 
+			</tr>
+			<tr>
+				<td>
+					<label><%= f.radio_button :flsa, 'Exempt' %> Exempt</label>
+					<label><%= f.radio_button :flsa, 'Non-Exempt' %> Non-Exempt</label>
+				</td>
+				<td>
+					<label><%= f.radio_button :eeo, 'EEO' %> EEO</label>
+					<label><%= f.radio_button :eeo, 'AAP' %> AAP</label>
+				</td>
+				<td>
+					<%= f.text_field :union %>
 				</td>
 			</tr>
 		</table>
@@ -62,7 +87,7 @@
 		<table>
 			<tr>
 				<th>Title:</th>
-				<th>Incumbant:</th>
+				<th>Incumbent:</th>
 				<th>Salary Level:</th>
 				<th>Number (County Only):</th>
 			</tr>
@@ -92,9 +117,130 @@
 			<% 1.upto(6) { |i| %>
 				<tr>
 					<th><%= f.text_field "duties_percent#{i}", :style => 'width: 40px;' %>&nbsp;%</th>
-					<td><%= f.text_field "duties_description#{i}", :style => 'width: 400px; height: 50px;' %></td>
+					<td><%= f.text_area "duties_description#{i}", :cols => 80, :rows => 3 %></td>
 				</tr>
 			<% } %>
 		</table>
 	</td>
 </tr>
+<tr>
+	<th>Supervisor(s):</th>
+	<td>Name, Title, and Phone Number(s) Supervising this position (General, Direct, Administrative, etc).:</td>
+</tr>
+<tr>
+	<th></th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>Name</th>
+				<th>Title</th>
+				<th>Type of Supervision</th>
+				<th>Email</th>
+				<th>Phone</th>
+			</tr>
+			<% 1.upto(3) { |i| %>
+				<tr>
+					<td><%= f.text_field "supervisor_name#{i}", :style => 'width: 170px;' %></td>
+					<td><%= f.text_field "supervisor_title#{i}", :style => 'width: 170px;' %></td>
+					<td><%= f.text_field "supervisor_type#{i}", :style => 'width: 170px;' %></td>
+					<td><%= f.text_field "supervisor_email#{i}", :style => 'width: 170px;' %></td>
+					<td><%= f.text_field "supervisor_phone#{i}", :style => 'width: 100px;' %></td>
+				</tr>
+			<% } %>
+		</table>
+	</td>
+</tr>
+<tr>
+	<th>Supervisee(s):</th>
+	<td>Names and Titles of Persons Supervised by Employee in this position:</td>
+</tr>
+<tr>
+	<th></th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>Name</th>
+				<th>Title</th>
+				<th>Type of Supervision</th>
+			</tr>
+			<% 1.upto(3) { |i| %>
+				<tr>
+					<td><%= f.text_field "supervisee_name#{i}", :style => 'width: 170px;' %></td>
+					<td><%= f.text_field "supervisee_title#{i}", :style => 'width: 170px;' %></td>
+					<td><%= f.text_field "supervisee_type#{i}", :style => 'width: 170px;' %></td>
+				</tr>
+			<% } %>
+		</table>
+	</td>
+</tr>
+<tr>
+	<th>Similar Position(s):</th>
+	<td>Names and Titles of Persons doing substantially the same kind and level of work as will be done by the incumbent of this new position:</td>
+</tr>
+<tr>
+	<th></th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>Name</th>
+				<th>Title</th>
+				<th>Location</th>
+			</tr>
+			<% 1.upto(3) { |i| %>
+				<tr>
+					<td><%= f.text_field "similar_name#{i}", :style => 'width: 170px;' %></td>
+					<td><%= f.text_field "similar_title#{i}", :style => 'width: 170px;' %></td>
+					<td><%= f.text_field "similar_location#{i}", :style => 'width: 170px;' %></td>
+				</tr>
+			<% } %>
+		</table>
+	</td>
+</tr>
+<tr>
+	<th>Min. Education:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>High School:</th>
+				<td><%= f.text_field 'min_hs', :style => 'width: 50px' %></td>
+				<td colspan="2">years (plus experience as described below)</td>
+			</tr>
+			<tr>
+				<th>College:</th>
+				<td><%= f.text_field 'min_college', :style => 'width: 50px' %></td>
+				<td>years, with specialization in:</td>
+				<td><%= f.text_field :min_college_specialization, :style => 'width: 200px;' %></td>
+			</tr>
+			<tr>
+				<th>Other:</th>
+				<td><%= f.text_field 'min_other', :style => 'width: 50px' %></td>
+				<td>years, with specialization in:</td>
+				<td><%= f.text_field :min_other, :style => 'width: 200px;' %></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+<%= f.tr_text_area :experience, :label => 'Experience', :help => '(list amount and type of experience)' %>
+<tr>
+	<th>Essential Knowledge,<br />Skills, and Abilities:</th>
+	<td><%= f.text_area :essential_skills, :cols => 60, :rows => 4 %></td>
+</tr>
+<%= f.tr_text_field :license_certification_required, :label => 'Required License/Certificate' %>
+<tr>
+	<th>Drug Testing:</th>
+	<td>
+		<div>Is this position covered under the D.O.T. drug testing regulations?</div>
+		<label><%= f.radio_button :drug_testing, true %> YES</label>&nbsp;&nbsp;&nbsp;<label><%= f.radio_button :drug_testing, true %> NO</label>
+	</td>
+</tr>
+<% if @current_user.staff_level? %>
+	<tr style="background: #e8e8e8;">
+		<th></th>
+		<th>CIVIL SERVICE COMMISSION:</th>
+	</tr>
+	<%= f.tr_text_field :final_title, :label => 'Title' %>
+	<%= f.tr_text_field :final_job_spec_number, :label => 'Job Specification Number' %>
+	<%= f.tr_text_field :final_salary_group_range, :label => 'Salary Group and Range' %>
+	<%= f.tr_text_field :final_civil_service_class, :label => 'Civil Service Class' %>
+	<%= f.tr_calendar_date_select :effective_date, :label => 'Effective Date' %>
+<% end %>
