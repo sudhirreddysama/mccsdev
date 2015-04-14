@@ -319,7 +319,7 @@ class WebExamController < CrudController
 			exams.each { |e|
 				logger.info "Posting to Twitter: #{e.id} #{e.no} #{e.name}"
 				# NOTE: "Apply*Online:*" contains non-breaking space characters!
-				@twitter_client.update 'New Exam/Job: ' + [e.no, e.name].reject(&:blank?).join(' ') + ' Apply Online: cs.monroecounty.gov/hrapply'
+				@twitter_client.update 'New Exam/Job: ' + [e.no, e.name].reject(&:blank?).join(' ') + " Apply Online: cs.monroecounty.gov/hrapply/apply/exam/#{e.id}"
 				e.update_attribute :twitter_posted, true
 			}
 		end
