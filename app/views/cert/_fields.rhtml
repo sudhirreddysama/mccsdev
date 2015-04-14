@@ -1,9 +1,13 @@
 <%
 
-@agency_opts = Agency.find(:all, {
+@agencies = Agency.find(:all, {
 	:order => 'agencies.name', 
 	:conditions => @current_user.agency_level? && @current_user.agency_id ? ['agencies.id in (?)', [@current_user.agency_id, @obj.agency_id]] : nil
-}).collect { |a| [a.name, a.id] }
+})
+
+@school_agency_ids = @agencies.select { |a| a.agency_type == 'SCHOOL DISTRICT' }.collect &:id
+
+@agency_opts = @agencies.collect { |a| [a.name, a.id] }
 @department_opts = Department.find(:all, {
 	:order => 'departments.name', 
 	:conditions => @current_user.agency_level? && @current_user.department_id ? ['departments.id in (?)', [@current_user.department_id, @obj.department_id]] : nil
@@ -122,7 +126,39 @@
 	
 	var cdate_change;
 	
+	var school_agency_ids = <%= @school_agency_ids.to_json %>;
+	
 	(function($) {
+	
+		agency_select = $('#obj_agency_id');	
+		department_select = $('#obj_department_id');
+		department_row = department_select.closest('tr');
+		var toggle_department = function() {
+			var agency_id = parseInt(agency_select.val());
+			if(school_agency_ids.indexOf(agency_id) != -1) {
+				department_row.hide();
+			}
+			else {
+				department_row.show();
+			}
+		}
+		var set_department = function() {
+			agency_name = agency_select.find(':selected').text();
+			var department_options = department_select.children();
+			for(var i = 0; i < department_options.length; i++) {
+				if($(department_options[i]).text() == agency_name) {
+					department_select[0].selectedIndex = i;
+				}
+			}
+			toggle_department();
+		}
+		if(department_select[0].selectedIndex == 0) {
+			set_department();
+		}
+		else {
+			toggle_department();
+		}
+		agency_select.change(set_department);
 	
 		cdate = $('#obj_certification_date');
 		

@@ -6,14 +6,233 @@
 		<table>
 			<tr>
 				<td>
-					<label>ID:</label>
+					<label>ID</label>
 					<%= o.id %>
 				</td>
 				<td>
-					<label>Title:</label>
-					<%= h o.title %>
+					<label>Agency</label>
+					<%= h o.agency.name if o.agency %>
+				</td>
+				<td>
+					<label>Department</label>
+					<%= h o.department.name if o.department %>
 				&nbsp;</td>
 			</tr>
 		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Request To</label>
+					<% if !o.classify_reclassify.blank? %>
+						<%= o.classify_reclassify %>
+						<%= o.number_positions.to_i %> # Positions
+					<% end %>
+				</td>
+				<td>
+					<label>Present Title</label>
+					<%= h o.present_title %>
+				</td>
+				<td>
+					<label>Incumbent</label>
+					<%= h o.present_incumbent %>
+				</td>
+				<td>
+					<label>Salary Level</label>
+					<%= h o.present_salary_level %>
+				</td>
+				<td>
+					<label>Position Number (County Only)</label>
+					<%= h o.present_position_number %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Funding</label>
+					<%= h o.grant_funded %>
+				</td>
+				<td>
+					<label>FLSA</label>
+					<%= h o.flsa %>
+				</td>
+				<td>
+					<label>EEO</label>
+					<%= h o.eeo %>
+				</td>
+				<td>
+					<label>SAP Org. #</label>
+					<%= h o.sap_number %>
+				</td>
+				<td>
+					<label>Cost Center #</label>
+					<%= h o.cost_center %>
+				</td>
+				<td>
+					<label>Division, Unit, or Section</label>
+					<%= h o.division_unit_section %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Suggested Title</label>
+					<%= h o.suggested_title %>
+				</td>
+				<td>
+					<label>Salary Group &amp; Range</label>
+					&nbsp;<%= h o.suggested_salary_group_range %>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<div class="viewer">
+	<div class="header">Description of Duties</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td><label>#</label></td>
+				<td><label>%</label></td>
+				<td><label>Description</label></td>
+			</tr>
+			<% 1.upto(6).collect { |i| perc = o.send "duties_percent#{i}"; desc = o.send "duties_description#{i}" %>
+				<tr>
+					<td><%= i %></td>
+					<td><%= h perc %></td>
+					<td><%= nl2br_h desc %></td>
+				</tr>
+			<% } %>
+		</table>
+	</div>
+</div>
+
+<div class="viewer">
+	<div class="header">Supervisors</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td><label>#</label></td>
+				<td><label>Name</label></td>
+				<td><label>Title</label></td>
+				<td><label>Type of Supervision</label></td>
+				<td><label>Email</label></td>
+				<td><label>Phone</label></td>
+			</tr>
+			<% 1.upto(3).collect { |i| %>
+				<%
+					name = o.send "supervisor_name#{i}"
+					title = o.send "supervisor_title#{i}" 
+					type = o.send "supervisor_type#{i}"
+					email = o.send "supervisor_email#{i}"
+					phone = o.send "supervisor_phone#{i}"
+				%>
+				<tr>
+					<td><%= i %></td>
+					<td><%= h name %></td>
+					<td><%= h title %></td>
+					<td><%= h type %></td>
+					<td><%= h email %></td>
+					<td><%= h phone %></td>
+				</tr>
+			<% } %>
+		</table>
+	</div>
+</div>
+
+<div class="viewer">
+	<div class="header">Supervised Positions</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td><label>#</label></td>
+				<td><label>Name</label></td>
+				<td><label>Title</label></td>
+				<td><label>Type of Supervision</label></td>
+			</tr>
+			<% 1.upto(3).collect { |i| %>
+				<%
+					name = o.send "supervisee_name#{i}"
+					title = o.send "supervisee_title#{i}" 
+					type = o.send "supervisee_type#{i}"
+				%>
+				<tr>
+					<td><%= i %></td>
+					<td><%= h name %></td>
+					<td><%= h title %></td>
+					<td><%= h type %></td>
+				</tr>
+			<% } %>
+		</table>
+	</div>
+</div>
+
+<div class="viewer">
+	<div class="header">Similar Positions</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td><label>#</label></td>
+				<td><label>Name</label></td>
+				<td><label>Title</label></td>
+				<td><label>Location of Position</label></td>
+			</tr>
+			<% 1.upto(3).collect { |i| %>
+				<%
+					name = o.send "similar_name#{i}"
+					title = o.send "similar_title#{i}" 
+					loc = o.send "similar_location#{i}"
+				%>
+				<tr>
+					<td><%= i %></td>
+					<td><%= h name %></td>
+					<td><%= h title %></td>
+					<td><%= h loc %></td>
+				</tr>
+			<% } %>
+		</table>
+	</div>
+</div>
+
+<div class="viewer">
+	<div class="header">Monroe County Civil Service Commission</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Title</label>
+					<%= h o.final_title %>
+				</td>
+				<td>
+					<label>Salary Group and Range</label>
+					<%= h o.final_salary_group_range %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Job Specification Number</label>
+					<%= h o.final_job_spec_number %>
+				</td>
+				<td>
+					<label>Civil Service Class</label>
+					<%= h o.final_civil_service_class %>
+				</td>
+				<td>
+					<label>Effective Date</label>
+					&nbsp;<%= h o.effective_date.d0? %>
+				</td>
+			</tr>
 	</div>
 </div>

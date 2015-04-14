@@ -12,8 +12,10 @@
 	</div>
 <% end %>
 <% if (@current_user.liaison_level?) %>
+	<div class="tabs buttons">
     <%= tab 'Notify Certification Specialist', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist? This will change the status to "pending".', :class => 'tab-delivery' %>
-
+		<div class="clear"></div>
+	</div>
 <% end %>
 
 <% if @obj.status == 'certified' && @obj.certification_date <= Time.now.to_date %>
@@ -32,6 +34,10 @@
 	<% end %>
 <% end %>
 
+<% @pref_list = PreferredList.find(:first, :conditions => ['status != "exhausted" and job_id = ? and agency_id = ? and department_id = ?', @obj.job_id, @obj.agency_id, @obj.department_id]) %>
+<% if @pref_list %>
+	<%= link_to('Preferred list exists for this job/agency/department! Click here to view', {:sc => nil, :sid => nil, :controller => 'preferred_list', :action => :view, :id => @pref_list.id}, :style => 'display: block; margin: 5px; padding: 5px; background-color: #800; text-align: center; color: #fff; text-decoration: none; font-weight: bold;')%>
+<% end %>
 <div class="viewer">
 	<div class="header">General Info.</div>
 	<div class="row">
@@ -188,7 +194,7 @@
 		</table>
 	</div>
 	
-	<div class="row">
+	<div class="row"<% unless o.bottom_note.blank? %> style="background-color: #ffc; font-weight: bold;"<% end %>>
 		<table>
 			<tr>
 				<td>

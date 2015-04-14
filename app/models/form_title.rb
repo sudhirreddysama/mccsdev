@@ -11,15 +11,18 @@ class FormTitle  < ActiveRecord::Base
 	belongs_to :submitter, :class_name => 'User', :foreign_key => 'submitter_id'	
 	belongs_to :status_user, :class_name => 'User', :foreign_key => 'status_user_id'
 	
-	def label; "#220 #{title}"; end
+	def label; "#222 #{title}"; end
 	
 	def title
 		t = final_title
 		t = suggested_title if t.blank?
 		t = present_title if t.blank?
+		t = '(blank)' if t.blank?
 		t
 	end
 	
 	include DbChangeHooks
+
+	def form_type; '222'; end
 	
 end

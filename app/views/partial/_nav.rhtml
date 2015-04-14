@@ -3,6 +3,9 @@
 empl_controllers = %w{employee pay_cert form_change form_hire}
 cert_controllers = %w{cert}
 @allow_liaison = @current_user.liaison_level? && (empl_controllers.include?(params[:controller]) || empl_controllers.include?(params[:sc]) )
+
+@allow_liaison = @current_user.liaison_level? && (params[:controller] == 'cert' || params[:sc] == 'cert')
+
 @allow_cert = @current_user.liaison_level? && cert_controllers.include?(params[:controller])
 agency_controllers = %w{cert form_change form_hire pay_cert}
 
@@ -80,7 +83,7 @@ addtest = request.url
 				<% end %>
 			<% end %>			
 				<%= tab 'View', :controller => params[:controller], :action => :view, :id => @obj.id %>
-				<% if !@view_only || @allow_agency %>
+				<% if !@view_only || @allow_agency || @allow_liaison %>
 					<% if @current_user.staff_level? || @allow_liaison || @allow_agency %>
 						<%= tab 'Edit', :controller => params[:controller], :action => :edit, :id => @obj.id %>
 						<% unless @no_create || @no_clone %>

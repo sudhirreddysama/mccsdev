@@ -1,9 +1,13 @@
 <% if @o.form_type == '330' -%>
 A new 330 form has been submitted:
 
-http://www.monroecounty.gov/mccs/form_hire/view/<%= @o.id %>
+http://cs.monroecounty.gov/mccs/form_hire/view/<%= @o.id %>
 <% elsif @o.form_type == '105' -%>
 A new 105 form has been submitted:
 
-http://www.monroecounty.gov/mccs/form_change/view/<%= @o.id %>
+http://cs.monroecounty.gov/mccs/form_change/view/<%= @o.id %>
+<% elsif @o.form_type == '222' -%>
+A new 222 form has been submitted:
+
+http://cs.monroecounty.gov/mccs/form_title/view/<%= @o.id %>
 <% end %>
