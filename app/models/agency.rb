@@ -1,6 +1,6 @@
 class Agency < ActiveRecord::Base
 
-	has_and_belongs_to_many :web_exams
+	#has_and_belongs_to_many :web_exams
 	
 	has_many :employees
 	has_many :users
