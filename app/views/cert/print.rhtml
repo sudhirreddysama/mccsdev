@@ -225,7 +225,7 @@ end
 							<% if c %>
 								<%= c.description %>&nbsp;<br />
 							<% end %>
-							<% if !ca.comments.blank? && (!c || (c.description != ca.comments)) %>
+							<% if !ca.comments.blank? && (!c || (c.description != ca.comments)) && ca.comments != '$0' %>
 								<%= h ca.comments %>&nbsp;<br />
 							<% end %>
 							<% if ca.action_date %>
