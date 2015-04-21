@@ -37,7 +37,7 @@ class PayCertController < CrudController
 	
 	def build_obj
 		super
-		@obj.as_of_date = Time.now.to_date unless request.post?
+		#@obj.as_of_date = Time.now.to_date unless request.post?
 		@obj.user = @current_user
 		if @current_user.agency_level?
 			@obj.agency = @current_user.agency

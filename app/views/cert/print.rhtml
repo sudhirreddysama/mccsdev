@@ -137,9 +137,11 @@ end
               GEN/DEPT/RES:
               <div style="text-align: center;"><%= h @obj.general_or_residential %></div>
             </td>
-            <td>
-              MONTHS:
-              <div style="text-align: center;"><%= @obj.months %></div>
+            <td>&nbsp;
+            	<% if false %>
+								MONTHS:
+								<div style="text-align: center;"><%= @obj.months %></div>
+							<% end %>
             </td>
           </tr>
 		</table>
