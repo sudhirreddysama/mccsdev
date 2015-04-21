@@ -39,7 +39,9 @@
 									<% unless t1.blank? || a.comments.to_s.include?(t1.to_s) %>
 										<%= h cc.description %>
 									<% end %>
-									<%= h a.comments %>
+									<% if !(a.comments == '$0') %>
+										<%= h a.comments %>
+									<% end %>
 									<%= a.action_date.d0? %>
 								<% end %>
 							</td>
