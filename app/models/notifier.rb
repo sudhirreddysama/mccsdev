@@ -106,7 +106,9 @@ class Notifier < ActionMailer::Base
 		
 	# DEV ONLY!
 	def recipients *args
+		logger.info 'recipients overloaded...'
 		if RAILS_ENV == 'development'
+			logger.info 'Sending dev email...'
 			super ['jessesternberg@monroecounty.gov']
 		else
 			super *args

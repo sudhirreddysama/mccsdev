@@ -8,7 +8,21 @@ Agency: <%= @c.agency ? @c.agency.name : 'None' %>
 Department: <%= @c.department ? @c.department.name : 'None' %>
 
 Agency Comments:
+<% unless @c.agency_comments.blank? -%>
 <%= @c.agency_comments %>
+<% end -%>
 
 Internal Notes:
+<% unless @c.internal_notes.blank? -%>
 <%= @c.internal_notes %>
+<% end -%>
+
+Attached Documents:
+<% if @c.documents.empty? -%>
+(None)
+<% else -%>
+<% @c.documents.each { |d| -%>
+<%= d.filename %>: 
+http://cs.monroecounty.gov/mccs/cert/<%= @c.id %>/document/download/<%= d.id %>
+<% } -%>
+<% end -%>
