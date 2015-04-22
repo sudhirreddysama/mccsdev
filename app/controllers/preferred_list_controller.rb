@@ -104,6 +104,7 @@ class PreferredListController < CrudController
 	end
 	
 	def export_xls
+		load_obj
 		load_candidates
 		@objs = @obj.preferred_candidates.find(:all, :order => 'preferred_candidates.seniority_date desc')
 		@export_fields = %w{id first_name last_name address address2 city state zip_code seniority_date salary_group wage wage_per activity}
