@@ -14,6 +14,6 @@
 	<%= tab 'Move To List', :id => params[:sid] || params[:id], :sc => nil, :sid => nil, :controller => params[:sc] || params[:controller], :action => :move_to_list %>
 	<%= tab 'Letters', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :bulk_message}, {:action => :index, :id => nil}, {:class => 'tab-letter'} %>
 <% end %>
-<% if @current_user.staff_level? or @current_user.agency_level? %>
+<% if @current_user.staff_level? or @current_user.agency_level? || @current_user.liaison_level? %>
 	<%= tab 'Documents', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>
 <% end %>
