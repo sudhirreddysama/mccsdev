@@ -13,7 +13,7 @@ agency_controllers = %w{cert form_change form_hire pay_cert}
 
 addtest = request.url
 
-@allow_add = @current_user.agency_level? && addtest.include?('web_exam') && addtest.include?('document')
+@allow_add = (@current_user.agency_level? || @current_user.liaison_level?) && addtest.include?('web_exam') && addtest.include?('document')
 %>
 
 <% if params[:sc] %>
