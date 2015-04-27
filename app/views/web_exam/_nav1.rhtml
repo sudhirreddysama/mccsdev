@@ -6,6 +6,6 @@
 	<%= tab 'Exam Notice Emails', {:action => :exam_emails, :id => nil, :controller => :web_exam} %>
 <% end %>
 
-<% if @current_user.admin_level? %>
+<% if @current_user.staff_level? %>
 	<%= tab 'Facebook/Twitter', {:action => :social, :id => nil, :controller => :web_exam} %>
 <% end %>
