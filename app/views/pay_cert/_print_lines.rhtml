@@ -33,12 +33,20 @@
 				<tr class="<%= cycle 'odd', 'even' %>">
 					<% if @current_user.staff_level? || @allow_liaison %>
 						<% if wge %>
-							<td><%= check_box_tag "wage_changes[]", o.id, false, :class => 'wage_change' + (e.leave_date ? '' : ' empl-active') %></td>
+							<% if e %>
+								<td><%= check_box_tag "wage_changes[]", o.id, false, :class => 'wage_change' + (e.leave_date ? '' : ' empl-active') %></td>
+							<% else %>
+								<td></td>
+							<% end %>
 						<% end %>
 					<% end %>
 					<td>
 						<% if params[:action] == 'view' && error != 'employee' %>
-							<%= link_to "#{o.last_name}, #{o.first_name}", {:controller => :employee, :action => :view, :id => o.employee_id}, :target => '_blank' %>
+							<% if e %>
+								<%= link_to "#{o.last_name}, #{o.first_name}", {:controller => :employee, :action => :view, :id => o.employee_id}, :target => '_blank' %>
+							<% else %>
+								<%= o.last_name %> <%= o.first_name %> (deleted)
+							<% end %>
 							<% if e && e.leave_date %>
 								<span class="req">* <%= e.leave_date.d0? %></span>
 							<% end %>
