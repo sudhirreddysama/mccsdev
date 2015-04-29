@@ -103,6 +103,31 @@ class Notifier < ActionMailer::Base
 		subject 'Payroll Certification Uploaded'
 		body :o => o
 	end
+	
+	# Only called from the console. A quick way to batch process email blasts. Populate email_blasts
+	# table with whatever you want. Example:
+	# insert into blast_emails (email)
+	# select distinct email from mccs.users
+	# union select distinct email from mccs.people
+	# union select distinct email from hr_apply_online.users
+	# union select distinct email from hr_apply_online.subscriptions
+	# order by email
+	def self.process_blast_social limit = 1000
+		result = DB.query('select * from blast_emails where sent = 0 limit 0, %d', limit)
+		result.each_hash { |h|
+			p "Sending Email To: #{h.email}"
+			Notifier.deliver_blast_social h.email
+			DB.query('update blast_emails set sent = 1 where id = %d', h.id);
+			p "Email Sent!"
+		}
+	end
+	
+	def blast_social e
+		recipients [e]
+		subject 'Never Miss a Job or Exam Announcement'
+		from DEFAULT_FROM
+		body({})
+	end
 		
 	# DEV ONLY!
 	def recipients *args
