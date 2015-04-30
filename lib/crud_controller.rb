@@ -120,7 +120,8 @@ class CrudController < ApplicationController
 	end
 	
 	def sort
-		params[:order].each_with_index { |oid, sort|
+		input = params[:order] || params[:objs]
+		input.each_with_index { |oid, sort|
 			@model.update oid.to_i, :sort => sort
 		}
 		render_nothing		

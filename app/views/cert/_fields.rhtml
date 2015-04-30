@@ -105,7 +105,7 @@
 	<tr>
 		<th>Comments:</th>
 		<td>
-			<div><a href="<%= popup_url(:action => :select_bottom_note) %>" id="select_obj_bottom_note" class="popup-select-text">Select Previous Entry...</a></div>
+			<div><a href="<%= popup_url(:controller => :cert_bottom_note, :action => :index) %>" id="select_obj_bottom_note" class="popup-select-text">Select Previous Entry...</a></div>
 			<%= f.text_area :bottom_note, :class => 'ucase', :size => '80x3' %>
 		</td>
 	</tr>
@@ -113,7 +113,7 @@
 	<tr>
 		<th>End of List:</th>
 		<td>
-			<div><a href="<%= popup_url(:action => :select_end_of_list) %>" id="select_obj_end_of_list" class="popup-select-text">Select Previous Entry...</a></div>
+			<div><a href="<%= popup_url(:controller => :cert_end_of_list, :action => :index) %>" id="select_obj_end_of_list" class="popup-select-text">Select Previous Entry...</a></div>
 			<%= f.text_area :end_of_list, :class => 'ucase', :size => '80x2' %>
 		</td>
 	</tr>

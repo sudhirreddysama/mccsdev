@@ -112,5 +112,9 @@ addtest = request.url
 	<% end %>
 </div>
 <% if params[:popup] and @obj and !@obj.new_record? %>
-	<%= link_to_function '<span>Select This Record</span>', "window.parent.cb(#{@obj.id}, #{@obj.label.to_json});", {:class => 'bigbtn'} %>
+	<% if params[:controller] == 'cert_bottom_note' || params[:controller] == 'cert_end_of_list' %>
+		<%= link_to_function '<span>Select This Record</span>', "window.parent.cb(#{@obj.value.to_json});", {:class => 'bigbtn'} %>
+	<% else %>
+		<%= link_to_function '<span>Select This Record</span>', "window.parent.cb(#{@obj.id}, #{@obj.label.to_json});", {:class => 'bigbtn'} %>
+	<% end %>
 <% end %>
