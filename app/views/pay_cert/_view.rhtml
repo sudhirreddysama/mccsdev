@@ -1,14 +1,13 @@
-<div class="tabs buttons">
-	<% if false and (@current_user.staff_level? || @allow_liaison) %>
-		<%= tab 'Process File', :action => :process_file, :id => @obj.id %>
-	<% end %>
-	<%= tab 'Print Verified', {:action => :print, :id => @obj.id, :id2 => 'verified'}, {}, {:target => '_blank'} %>
-	<%= tab 'Print Errors', {:action => :print, :id => @obj.id, :id2 => 'errors'}, {}, {:target => '_blank'} %>
-	<%= tab 'Export to Excel', {:action => :excel, :id => @obj.id}, {}, {:target => '_blank'} %>
-	<div class="clear"></div>
-</div>
-
 <% if @current_user.staff_level? || @allow_liaison %>
+	<div class="tabs buttons">
+		<% if false and (@current_user.staff_level? || @allow_liaison) %>
+			<%= tab 'Process File', :action => :process_file, :id => @obj.id %>
+		<% end %>
+		<%= tab 'Print Verified', {:action => :print, :id => @obj.id, :id2 => 'verified'}, {}, {:target => '_blank'} %>
+		<%= tab 'Print Errors', {:action => :print, :id => @obj.id, :id2 => 'errors'}, {}, {:target => '_blank'} %>
+		<%= tab 'Export to Excel', {:action => :excel, :id => @obj.id}, {}, {:target => '_blank'} %>
+		<div class="clear"></div>
+	</div>
 	<div class="viewer">
 		<div class="header">Process/Reprocess Payroll File:</div>
 		<div class="row">
