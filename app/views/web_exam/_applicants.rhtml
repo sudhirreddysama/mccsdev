@@ -35,7 +35,11 @@
 						<%= link_to o.person.label, {:controller => :web_exam, :action => :applicant, :id => o.web_exam_id, :id2 => o.id}, :target => '_blank' if o.person %>
 					<% end %>
 					<% if params[:action] == 'all_applicants' %>
-						<%= link_to o.web_exam.name, {:controller => :web_exam, :action => :view, :id => o.web_exam_id} %>
+						<% if o.web_exam %>
+							<%= link_to o.web_exam.name, {:controller => :web_exam, :action => :view, :id => o.web_exam_id} %>
+						<% else %>
+							(unknown web post)
+						<% end %>
 					<% end %>
 					<% if o.conditional %>
 						<span style="color: #800;">&nbsp;&nbsp;&nbsp;Conditional: <%= h o.conditional_reason %></span>
