@@ -1,6 +1,9 @@
 <%= partial 'errors', :errors => o.errors.full_messages %>
-<% table_form_for(:obj, :html => {:multipart => true}) { |f| %>
+<% table_form_for(:obj, :html => {:multipart => true, :id => 'obj-form'}) { |f| %>
 	<%= partial 'fields', :f => f, :o => o %>
+	<% if @model != User and @model.method_defined? :documents %>
+		<%= partial 'upload/field' %>
+	<% end %>
 	<% if o.new_record? %>
 		<tr><th></th><td><%= submit_tag 'Submit &amp; View' %><% if false %><%= submit_tag 'Submit &amp; Enter Another', :name => 'another' %><% end %></td></tr>
 	<% else %>

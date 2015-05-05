@@ -27,7 +27,7 @@
 Sortable.create('objs', {
 	onChange: function(e) {
 		sorting_obj = $(e);
-		sorting_obj.addClassName('busy-bg');
+		//sorting_obj.addClassName('busy-bg');
 	},
 	onUpdate: function() { 
 		var o = sorting_obj;
@@ -47,6 +47,7 @@ Sortable.create('objs', {
 var set_value;
 var obj_delete;
 (function($) {
+	$('#objs td').disableSelection();
 	set_value = function(id) {
 		window.parent.cb($('#value-' + id).text());
 	}

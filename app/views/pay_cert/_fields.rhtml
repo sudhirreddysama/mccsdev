@@ -3,17 +3,13 @@
 	<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name').collect { |a| [a.name, a.id] }, :include_blank => true, :req => true, :label => 'Agency' %>
 <% end %>
 <%= f.tr_text_area :notes, :label => 'Notes', :size => '60x5', :help => 'Type in any notes you may have for your Monroe County HR Liaison.' %>
-<%= f.tr_file_field(
-	:file, 
-	:label => 'File', 
-	:help => link_to('Click here to download an example payroll certification file in the correct format.', {:action => :example_file}, :target => '_blank') + 
-		' Include the column headers in the uploaded file.') %>
 <tr>
-	<th>Additional Files:</th>
-	<td>Additional files may be uploaded via the &quot;Documents&quot; tab once this payroll certification record is saved.</td>
-</tr>
-	<tr><th></th><td>Remember to also attach the list of employees who did not work this particular pay period so they won't be listed on your discrepancy report.</td></tr>
-	<tr><th></th><td>Also complete the signature page and upload it via the &quot;Documents&quot; tab.</td></tr>
-	<tr><th></th><td>One you hit &quot;Submit&quot; below your Monroe County HR Liaison will receive an email message that your payroll has arrived and you will be able to access the &quot;Documents&quot; tab to upload additional files.</td></tr>
+	<th>Additional Info:</th>
+	<td>
+		<div style="margin-bottom: 3px;">Files may be uploaded using the &quot;Upload Documents&quot; button below.</div>
+		<div style="margin-bottom: 3px;"><%= link_to('Click here to download an example payroll certification file in the correct format.', {:action => :example_file}, :target => '_blank') %> Include the column headers in the uploaded file.</div>
+		<div style="margin-bottom: 3px;">Remember to also attach the list of employees who did not work this particular pay period so they won't be listed on your discrepancy report.</div>
+		<div style="margin-bottom: 3px;">Also complete and upload the signature page.</div>
+		<div>Once you hit &quot;Submit&quot; below your Monroe County HR Liaison will receive an email message that your payroll has arrived.</div>
 	</td>
 </tr>

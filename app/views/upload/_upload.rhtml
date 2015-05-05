@@ -1,0 +1,5 @@
+<div id="upload-<%= d.id %>">
+	<%= link_to d.filename, {:sc => nil, :sid => nil, :controller => :upload, :action => :download, :id => d.id}, :target => '_blank' %>
+	<a onclick="upload_delete(<%= d.id %>); return false" class="dim" href="#">delete</a>
+	<input type="hidden" name="upload_ids[]" value="<%= d.id %>" />
+</div>

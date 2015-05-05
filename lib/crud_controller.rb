@@ -48,6 +48,12 @@ class CrudController < ApplicationController
 	
 	def save_redirect
 		redirect_to params[:another] ? {} : :action => :view, :id => @obj.id	
+		if params[:upload_ids]
+			@docs = Document.find(params[:upload_ids], :conditions => {:user_id => @current_user.id, :temporary => true})
+			@docs.each { |d|
+				d.update_attributes :temporary => false, @model.to_s.underscore => @obj
+			}
+		end
 	end
 	
 	def new
@@ -141,6 +147,8 @@ class CrudController < ApplicationController
 		@objs = @obj.db_changes.paginate(:all, :page => params[:page], :per_page => 50)
 		template
 	end
+	
+	
 	
 	
 end

@@ -6,6 +6,8 @@ cert_controllers = %w{cert}
 
 @allow_liaison = @allow_liaison || (@current_user.liaison_level? && (params[:controller] == 'cert' || params[:sc] == 'cert'))
 
+
+
 @allow_cert = @current_user.liaison_level? && cert_controllers.include?(params[:controller])
 agency_controllers = %w{cert form_change form_hire pay_cert}
 
@@ -53,6 +55,13 @@ addtest = request.url
 		</div>
 	<% end %>
 <% end %>
+<%
+
+
+@allow_liaison = @allow_liaison || (@current_user.liaison_level? && params[:controller] == 'document' && params[:sc] == 'web_exam')
+
+
+%>
 <% unless @notabs %>
 	<% unless params[:popup] %>
 		<%= partial 'snav' %>

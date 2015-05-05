@@ -1,0 +1,84 @@
+<tr>
+	<th>Documents:</th>
+	<td>
+		<div id="uploading">
+			<% if params[:upload_ids] && !params[:upload_ids].empty? %>
+				<% @docs = Document.find(params[:upload_ids], :conditions => {:user_id => @current_user.id, :temporary => true}) %>
+				<% @docs.each { |d| %>
+					<%= partial 'upload/upload', :d => d %>
+				<% } %>
+			<% end %>
+		</div>
+    <div class="tabs buttons" style="margin: 0;">
+    	<a href="#" id="upload" onclick="return false" class="tab-documents"><span>Upload Documents...</span></a>
+    	<div class="clear"></div>
+    </div>
+		<div>Documents uploaded here will be available via the &quot;Documents&quot; tab once this record is saved.</div>
+	</td>
+</tr>
+<script type="text/javascript">
+ 
+var upload_delete;
+var uploader;
+ 
+(function($) { 
+	$('#obj-form').submit(function(e) {
+		if(uploader.state == plupload.UPLOADING) {
+			alert('Files are uploading. Please wait until uploads are complete to submit this form.');			
+			e.preventDefault();
+		}
+	});
+	upload_delete = function(id) {
+		var upload = $('#upload-' + id);
+		upload.addClass('busy-bg');
+		if(!confirm('Are you sure you want to delete this file?')) {
+			upload.removeClass('busy-bg');
+			return false;
+		}
+		$.ajax({
+			url: '<%= url_for :sc => nil, :sid => nil, :controller => :upload, :action => :delete %>/' + id,
+			success: function() {
+				upload.remove();
+			},
+			complete: function() {
+				upload.removeClass('busy-bg');
+			}
+		});
+	}
+	uploader = new plupload.Uploader({
+		runtimes : 'html5,html4',
+		browse_button : 'upload',
+		url : '<%= url_for :sc => nil, :sid => nil, :controller => :upload, :action => :new %>',
+		init: {
+			FilesAdded: function(up, files) {
+				uploader.start();
+				$(files).each(function(i, file) {
+					$('#uploading').append(
+						'<div id="' + file.id + '" class="busy-bg">' + 
+							file.name + ' ' + 
+							'<a class="dim" href="#" onclick="return false">cancel</a> <span>0%</span>' + 
+						'</div>'
+					);
+					file.div = $('#' + file.id);
+					file.div.find('a').click(function(e) {
+						up.removeFile(file);
+						file.div.remove();
+					});
+				});
+			},
+			UploadProgress: function(up, file) {
+				file.div.find('span').text(file.percent + '%');
+			},
+			FileUploaded: function(up, file, resp) {
+				file.div.replaceWith(resp.response);
+			},
+			Error: function(up, err) {
+				console.log(err);
+				alert('Error uploading document.');
+			}
+		}
+	});
+	uploader.init();
+})(jQuery);
+ 
+</script>
