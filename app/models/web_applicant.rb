@@ -121,7 +121,6 @@ class WebApplicant < ActiveRecord::Base
 				:residence_zip => wa.res_zip.to_s.upcase.strip,
 				:residence_county => wa.res_county.to_s.upcase.strip,
 				:date_of_birth => wa.dob,
-				:gender => wa.gender.to_s.upcase.strip,
 				:race => wa.race.to_s,
 				:contact_via => wa.contact_via,
         :fire_district_id => fire_id,
@@ -129,8 +128,11 @@ class WebApplicant < ActiveRecord::Base
         :village_id => village_id,
         :town_id => town_id,
         :county_id => county_id=="MONROE" ? 2 : 7
-
     	}
+    	
+    	unless wa.gender.blank?
+    		attr[:gender] = wa.gender.to_s.upcase.strip
+    	end
 
       if p
 				p.update_attributes attr
