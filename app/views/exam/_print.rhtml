@@ -110,7 +110,7 @@
                         <% if ac.cert_code and !ac.comments.to_s.include?(ac.cert_code.label.to_s) %>
 								<%= h ac.cert_code.description  %>&nbsp;&nbsp;&nbsp;
 							<% end %>
-							<% unless ac.comments.blank? %>
+							<% unless ac.comments.blank? || ac.comments == '$0' %>
 								<%= h ac.comments %>&nbsp;&nbsp;&nbsp;
 							<% end %>
 							<% if ac.action_date %>
