@@ -57,6 +57,8 @@ class Message < ActiveRecord::Base
 		c = super
 		c.delivery_id = nil
 		c.delivered_via = nil
+		c.delivered_email = false
+		c.rendered_pdf = false
 		c.created_at = Time.now
 		return c
 	end
