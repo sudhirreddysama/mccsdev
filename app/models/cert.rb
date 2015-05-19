@@ -39,6 +39,8 @@ class Cert < ActiveRecord::Base
 		n = Time.now.to_date
 		if return_date && return_date < n
 			return completed_date ? 'expired' : 'overdue'
+		elsif !finished.blank?
+			return 'finished'
 		elsif completed_date && completed_date <= n
 			return 'completed'
 		elsif certification_date && certification_date <= n
@@ -51,6 +53,7 @@ class Cert < ActiveRecord::Base
 	end
 	
 	def set_title		
+		self.job_id = exam ? exam.job_id : nil
 		self.title = [agency ? agency.name : 'UNKONWN AGENCY', department ? department.abbreviation : ' ', job ? job.name : 'UNKNOWN TITLE' ,exam ? exam.exam_no : 'UNKOWN EXAM' ].reject(&:blank?).join(', ')
 	end
 	before_save :set_title
