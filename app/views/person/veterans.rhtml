@@ -1,0 +1,42 @@
+<%= partial 'nav' %>
+<%= partial 'filter' %>
+<%= partial 'pages' %>
+<% objs = @objs%>
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">SSN</th>
+			<th width="46%">Name</th>
+			<th width="1%">Type</th>
+			<th width="1%">Verified?</th>
+			<th width="1%">Used?</th>
+			<th width="1%" class="nobr">Used Date</th>
+			<th width="1%" class="nobr">Used Points</th>
+			<th width="1%" class="nobr">Exam No.</th>
+			<th width="46%" class="nobr">Used Title</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr">
+				<%= link_to image_tag('icons/zoom.png', :size => '16x16', :alt => 'view', :title => 'View VC'), :action => :view_vet, :id => o.id %>
+				<%= link_to image_tag('icons/pencil.png', :size => '16x16', :alt => 'edit', :title => 'Edit VC'), :action => :edit_vet, :id => o.id %>
+				</td>
+				<td><%= o.id %></td>
+				<td class="nobr"><%= h o.ssn %></td>
+				<td><%= link_to o.label, :action => :view_vet, :id => o.id %></td>
+				<td class="nobr"><%= h o.veteran %></td>
+				<td class="nobr"><%= yn o.veteran_verified %></td>
+				<td class="nobr"><%= yn o.veteran_used %></td>
+				<td class="nobr"><%= h o.veteran_used_date.d0? %></td>
+				<td class="nobr"><%= h o.veteran_used_points %></td>
+				<td class="nobr"><%= h o.veteran_used_exam_no %></td>
+				<td><%= h o.veteran_used_title %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
+<%= partial 'pages' %>

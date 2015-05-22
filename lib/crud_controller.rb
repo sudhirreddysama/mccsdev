@@ -47,7 +47,7 @@ class CrudController < ApplicationController
 	end
 	
 	def save_redirect
-		redirect_to params[:another] ? {} : :action => :view, :id => @obj.id	
+		redirect_to @redirect || (params[:another] ? {} : {:action => :view, :id => @obj.id})
 		if params[:upload_ids]
 			@docs = Document.find(params[:upload_ids], :conditions => {:user_id => @current_user.id, :temporary => true})
 			@docs.each { |d|

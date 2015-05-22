@@ -1,0 +1,10 @@
+<tr>
+	<th>Type/Status:</th>
+	<td>
+		<label><%= f.check_box :type_veteran %> VETERAN</label>&nbsp;&nbsp;&nbsp;
+		<label><%= f.check_box :type_disabled_vet %> DISABLED VET</label>&nbsp;&nbsp;&nbsp;
+		<label><%= f.check_box :type_active_duty %> ACTIVE DUTY</label>&nbsp;&nbsp;&nbsp;
+		<%= f.select :veteran_verified, [['Only Verified', 'verified'], ['Only Unverified', 'unverified']], :include_blank => 'Verified/Unverified...' %>&nbsp;&nbsp;&nbsp;
+		<%= f.select :veteran_used, [['Only Used', 'used'], ['Only Unused', 'unused']], :include_blank => 'Used/Unused...' %>
+	</td>
+</tr>

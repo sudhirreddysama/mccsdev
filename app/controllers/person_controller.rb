@@ -28,7 +28,6 @@ class PersonController < CrudController
 			'school_districts.name' => :like,
 			'fire_districts.name' => :like,
 		}
-		
 		@opt = {
 			:conditions => get_where(cond),
 			:order => get_order_auto,
@@ -36,6 +35,63 @@ class PersonController < CrudController
 		}
 		super
 	end
+	
+	def veterans
+		@filter = get_filter({
+			:sort1 => 'people.last_name',
+			:dir1 => 'asc',
+			:sort2 => 'people.first_name',
+			:dir2 => 'asc'
+		}, 'person_index_filter')
+		@orders = [
+			['ID', 'people.id'],
+			['First Name', 'people.first_name'],
+			['Last Name', 'people.last_name'],
+			['SSN', 'people.ssn'],
+			['Type', 'people.veteran'],
+			['Veteran Verified?', 'people.veteran_verified'],
+			['Veteran Used?', 'people.veteran_used'],
+		]
+		cond = get_search_conditions @filter[:search], {
+			'people.id' => :left,
+			'people.ssn' => :left,
+			'people.ssn_raw' => :left,
+			'people.first_name' => :like,
+			'people.last_name' => :like,
+			'people.veteran_used_exam_no' => :like,
+			'people.veteran_used_title' => :like,
+		}
+		cond << 'people.veteran != "" and people.veteran is not null'
+		types = []
+		types << 'VETERAN' if @filter.type_veteran == '1'
+		types << 'DISABLED VET' if @filter.type_disabled_vet == '1'
+		types << 'ACTIVE DUTY' if @filter.type_active_duty == '1'
+		if !types.empty?
+			cond << 'people.veteran in ("' + types.join('","') + '")'
+		end		
+		cond << 'people.veteran_verified = 1' if @filter.veteran_verified == 'verified'
+		cond << 'people.veteran_verified = 0' if @filter.veteran_verified == 'unverified'
+		cond << 'people.veteran_used = 1' if @filter.veteran_used == 'used'
+		cond << 'people.veteran_used = 0' if @filter.veteran_used == 'unused'
+		@opt = {
+			:conditions => get_where(cond),
+			:order => get_order_auto
+		}	
+		fetch_objs
+		template if !params[:export]
+	end
+	
+	def edit_vet
+		load_obj
+		@redirect = {:action => :view_vet, :id => @obj.id, :controller => :person}
+		edit
+	end
+	
+	def view_vet
+		load_obj
+		view
+	end
+	
 	def update_residency
     load_obj
     p=@obj

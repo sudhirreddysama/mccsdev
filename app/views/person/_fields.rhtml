@@ -1,178 +1,180 @@
-<%= f.tr_text_field :ssn, :label => 'SSN', :req => true, :class => 'ucase' %>
-<%= f.tr_text_field :first_name, :label => 'First Name', :req => true, :class => 'ucase' %>
-<%= f.tr_text_field :last_name, :label => 'Last Name', :req => true, :class => 'ucase' %>
-<%= f.tr_select :county_id, County.find(:all, :order => 'counties.name').collect { |c| [c.name, c.id] }, :include_blank => true, :label => 'County' %>
-<%= f.tr_select :school_district_id, SchoolDistrict.find(:all, :order => 'school_districts.name').collect { |s| [s.name, s.id] }, :include_blank => true, :label => 'School District' %>
-<%= f.tr_select :town_id, Town.find(:all, :order => 'towns.name').collect { |t| [t.name, t.id] }, :include_blank => true, :label => 'Town' %>
-<%= f.tr_select :village_id, Village.find(:all, :order => 'villages.name').collect { |v| [v.name, v.id] }, :include_blank => true, :label => 'Village' %>
-<%= f.tr_select :fire_district_id, FireDistrict.find(:all, :order => 'fire_districts.name').collect { |d| [d.name, d.id] }, :include_blank => true, :label => 'Fire District' %>
-<%= f.tr_text_field :home_phone, :label => 'Home Phone', :class => 'ucase' %>
-<%= f.tr_text_field :work_phone, :label => 'Work Phone', :class => 'ucase' %>
-<%= f.tr_text_field :cell_phone, :label => 'Cell Phone', :class => 'ucase' %>
-<%= f.tr_text_field :fax, :label => 'Fax', :class => 'ucase' %>
-<%= f.tr_text_field :email, :label => 'Email', :class => 'ucase' %>
-<%= f.tr_text_field :mailing_address, :label => 'Mailing Address', :class => 'ucase' %>
-<%= f.tr_text_field :mailing_address2, :label => 'Mailing Address Line 2', :class => 'ucase' %>
-<tr>
-	<th>Mailing City, State, Zip:</th>
-	<td class="subform">
-		<table>
-			<tr>
-				<td><%= f.text_field :mailing_city, :size => '40', :class => 'ucase' %></td>
-				<td><%= f.select :mailing_state, USState::UNAMES %></td>
-				<td><%= f.text_field :mailing_zip, :size => '10', :class => 'ucase' %></td>
-			</tr>
-		</table>
-	</td>
-</tr>
-<%= f.tr_select :mailing_county, ['MONROE', 'OUT OF COUNTY'], :label => 'Mailing County' %>
-<%= f.tr_check :residence_different, :label => 'Residence Different?', :text => 'Check here if residence address is different than mailing' %>
-<%= f.tr_text_field :residence_address, :label => 'Residence Address', :class => 'ucase', :tr_class => 'res' %>
-<tr class="res">
-	<th>Residence City, State, Zip:</th>
-	<td class="subform">
-		<table>
-			<tr>
-				<td><%= f.text_field :residence_city, :size => '40', :class => 'ucase' %></td>
-				<td><%= f.select :residence_state, USState::UNAMES %></td>
-				<td><%= f.text_field :residence_zip, :size => '10', :class => 'ucase' %></td>
-			</tr>
-		</table>
-	</td>
-</tr>
-<%= f.tr_select :residence_county, ['MONROE', 'OUT OF COUNTY'], :label => 'Residence County', :tr_class => 'res' %>
-
-<script type="text/javascript">
-	
-	(function($) {
-		var rd = $('#obj_residence_different');
-		var toggle_res_stuff = function() {
-			if(rd.is(':checked')) {
-				$('.res').show();
-			}
-			else {
-				$('.res').hide();
-			}
-		}
-		toggle_res_stuff();
-		rd.change(toggle_res_stuff);
-	})(jQuery);
-
-</script>
-
-<%= f.tr_calendar_date_select :date_of_birth, :label => 'Date of Birth', :class => 'ucase' %>
-<tr>
-	<th>Contact Via:</th>
+<% if params[:action] == 'edit_vet' %>
+	<%= f.tr_text_field :ssn, :label => 'SSN', :req => true, :class => 'ucase' %>
+	<%= f.tr_text_field :first_name, :label => 'First Name', :req => true, :class => 'ucase' %>
+	<%= f.tr_text_field :last_name, :label => 'Last Name', :req => true, :class => 'ucase' %>
+	<tr>
+		<th>Veteran:</th>
 		<td>
-			<label><%= f.radio_button :contact_via, 'postal' %> POSTAL MAIL</label>&nbsp;&nbsp;
-			<label><%= f.radio_button :contact_via, 'email' %> EMAIL</label>&nbsp;&nbsp;
-			<label><%= f.radio_button :contact_via, 'both' %> BOTH</label>&nbsp;&nbsp;
+			<% Const::VETERAN_TYPES.each { |v| %>
+				<label><%= f.radio_button :veteran, v[1] %> <%= h v[0] %></label>&nbsp;&nbsp;
+			<% } %>
 		</td>
-</tr>
-<tr>
-	<th>Veteran:</th>
-	<td>
-		<% Const::VETERAN_TYPES.each { |v| %>
-			<label><%= f.radio_button :veteran, v[1] %> <%= h v[0] %></label>&nbsp;&nbsp;
-		<% } %>
-	</td>
-</tr>
-<tr>
-	<th></th>
-	<td>
-		<label><%= f.check_box :veteran_verified %> VERIFIED</label>
-		<label><%= f.check_box :veteran_used %> USED</label>
-	</td>
-</tr>
-<tr id="vet-used"<% unless @obj.veteran_used %> style="display: none;"<% end %>>
-	<th>Vet. Credit Used:</th>
-	<td class="subform">
-		<table>
-			<tr>
-				<th>Date:</th>
-				<th>Points:</th>
-				<th>Exam No.:</th>
-				<th>Title:</th>
-			</tr>
-			<tr>
-				<td><%= f.calendar_date_select :veteran_used_date, :size => 15, :class => 'ucase' %></td>
-				<td><%= f.text_field :veteran_used_points, :size => 7, :class => 'ucase' %></td>
-				<td><%= f.text_field :veteran_used_exam_no, :size => 18, :class => 'ucase' %></td>
-				<td><%= f.text_field :veteran_used_title, :size => 40, :class => 'ucase' %></td>
-			</tr>
-		</table>
-	</td>
-</tr>
-<% races = [['White', 'white'], ['Black', 'black'], ['Hispanic', 'hispanic'], ['Asian', 'asian'], ['American Indian', 'americanindian']] %>
-<%= f.tr_select :gender, ['M', 'F'], :include_blank => true, :label => 'Gender' %>
-<%= f.tr_select :race, races, :include_blank => true, :label => 'EEO Race' %>
-<%= f.tr_text_area :comments, :label => 'Comments', :size => '60x3' %>
-<tr>
-	<th>Sabbath Observer:</th>
-	<td>
-		<label><%= f.radio_button :sabbath_observer, false %> NO</label>
-		<label><%= f.radio_button :sabbath_observer, true %> YES</label>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><%= f.check_box :sabbath_observer_docs %>Documentation On File</label>
-	</td>
-</tr>
-<tr>
-	<th>Special Accomodations:</th>
-	<td>
-		<%= f.text_field :special_accommodations, :size => 60, :class => 'ucase' %>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><%= f.check_box :special_accommodations_docs %>Documentation On File</label>
-	</td>
-</tr>
+	</tr>
+	<tr>
+		<th></th>
+		<td>
+			<label><%= f.check_box :veteran_verified %> VERIFIED</label>
+			<label><%= f.check_box :veteran_used %> USED</label>
+		</td>
+	</tr>
+	<tr id="vet-used">
+		<th>Vet. Credit Used:</th>
+		<td class="subform">
+			<table>
+				<tr>
+					<th>Date:</th>
+					<th>Points:</th>
+					<th>Exam No.:</th>
+					<th>Title:</th>
+				</tr>
+				<tr>
+					<td><%= f.calendar_date_select :veteran_used_date, :size => 15, :class => 'ucase' %></td>
+					<td><%= f.text_field :veteran_used_points, :size => 7, :class => 'ucase' %></td>
+					<td><%= f.text_field :veteran_used_exam_no, :size => 18, :class => 'ucase' %></td>
+					<td><%= f.text_field :veteran_used_title, :size => 40, :class => 'ucase' %></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<% if false %>
+		<script type="text/javascript">
+			(function($) { 
+				var vcu = $('#obj_veteran_used');
+				var vu = $('#vet-used');
+				vcu.change(function(e) {
+					if(vcu[0].checked) {
+						vu.show();
+					}
+					else {
+						vu.hide();
+					}
+				});
+			})(jQuery);
+		</script>
+	<% end %>
+<% else %>
+	<%= f.tr_text_field :ssn, :label => 'SSN', :req => true, :class => 'ucase' %>
+	<%= f.tr_text_field :first_name, :label => 'First Name', :req => true, :class => 'ucase' %>
+	<%= f.tr_text_field :last_name, :label => 'Last Name', :req => true, :class => 'ucase' %>
+	<%= f.tr_select :county_id, County.find(:all, :order => 'counties.name').collect { |c| [c.name, c.id] }, :include_blank => true, :label => 'County' %>
+	<%= f.tr_select :school_district_id, SchoolDistrict.find(:all, :order => 'school_districts.name').collect { |s| [s.name, s.id] }, :include_blank => true, :label => 'School District' %>
+	<%= f.tr_select :town_id, Town.find(:all, :order => 'towns.name').collect { |t| [t.name, t.id] }, :include_blank => true, :label => 'Town' %>
+	<%= f.tr_select :village_id, Village.find(:all, :order => 'villages.name').collect { |v| [v.name, v.id] }, :include_blank => true, :label => 'Village' %>
+	<%= f.tr_select :fire_district_id, FireDistrict.find(:all, :order => 'fire_districts.name').collect { |d| [d.name, d.id] }, :include_blank => true, :label => 'Fire District' %>
+	<%= f.tr_text_field :home_phone, :label => 'Home Phone', :class => 'ucase' %>
+	<%= f.tr_text_field :work_phone, :label => 'Work Phone', :class => 'ucase' %>
+	<%= f.tr_text_field :cell_phone, :label => 'Cell Phone', :class => 'ucase' %>
+	<%= f.tr_text_field :fax, :label => 'Fax', :class => 'ucase' %>
+	<%= f.tr_text_field :email, :label => 'Email', :class => 'ucase' %>
+	<%= f.tr_text_field :mailing_address, :label => 'Mailing Address', :class => 'ucase' %>
+	<%= f.tr_text_field :mailing_address2, :label => 'Mailing Address Line 2', :class => 'ucase' %>
+	<tr>
+		<th>Mailing City, State, Zip:</th>
+		<td class="subform">
+			<table>
+				<tr>
+					<td><%= f.text_field :mailing_city, :size => '40', :class => 'ucase' %></td>
+					<td><%= f.select :mailing_state, USState::UNAMES %></td>
+					<td><%= f.text_field :mailing_zip, :size => '10', :class => 'ucase' %></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<%= f.tr_select :mailing_county, ['MONROE', 'OUT OF COUNTY'], :label => 'Mailing County' %>
+	<%= f.tr_check :residence_different, :label => 'Residence Different?', :text => 'Check here if residence address is different than mailing' %>
+	<%= f.tr_text_field :residence_address, :label => 'Residence Address', :class => 'ucase', :tr_class => 'res' %>
+	<tr class="res">
+		<th>Residence City, State, Zip:</th>
+		<td class="subform">
+			<table>
+				<tr>
+					<td><%= f.text_field :residence_city, :size => '40', :class => 'ucase' %></td>
+					<td><%= f.select :residence_state, USState::UNAMES %></td>
+					<td><%= f.text_field :residence_zip, :size => '10', :class => 'ucase' %></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<%= f.tr_select :residence_county, ['MONROE', 'OUT OF COUNTY'], :label => 'Residence County', :tr_class => 'res' %>
 
-
-<% 
-
-city_zips = {} 
-CityZip.find(:all).each { |cz| 
-	city_zips[cz.city] = cz.zip
-} 
-
-%>
-
-
-<script type="text/javascript">
+	<script type="text/javascript">
 	
-	(function($){
-		
-		var vcu = $('#obj_veteran_used');
-		var vu = $('#vet-used');
-		vcu.change(function(e) {
-			if(vcu[0].checked) {
-				vu.show();
+		(function($) {
+			var rd = $('#obj_residence_different');
+			var toggle_res_stuff = function() {
+				if(rd.is(':checked')) {
+					$('.res').show();
+				}
+				else {
+					$('.res').hide();
+				}
 			}
-			else {
-				vu.hide();
-			}
-		});
+			toggle_res_stuff();
+			rd.change(toggle_res_stuff);
+		})(jQuery);
 
-		var city_zips = <%= city_zips.to_json %>;
+	</script>
+
+	<%= f.tr_calendar_date_select :date_of_birth, :label => 'Date of Birth', :class => 'ucase' %>
+	<tr>
+		<th>Contact Via:</th>
+			<td>
+				<label><%= f.radio_button :contact_via, 'postal' %> POSTAL MAIL</label>&nbsp;&nbsp;
+				<label><%= f.radio_button :contact_via, 'email' %> EMAIL</label>&nbsp;&nbsp;
+				<label><%= f.radio_button :contact_via, 'both' %> BOTH</label>&nbsp;&nbsp;
+			</td>
+	</tr>
+	<% races = [['White', 'white'], ['Black', 'black'], ['Hispanic', 'hispanic'], ['Asian', 'asian'], ['American Indian', 'americanindian']] %>
+	<%= f.tr_select :gender, ['M', 'F'], :include_blank => true, :label => 'Gender' %>
+	<%= f.tr_select :race, races, :include_blank => true, :label => 'EEO Race' %>
+	<%= f.tr_text_area :comments, :label => 'Comments', :size => '60x3' %>
+	<tr>
+		<th>Sabbath Observer:</th>
+		<td>
+			<label><%= f.radio_button :sabbath_observer, false %> NO</label>
+			<label><%= f.radio_button :sabbath_observer, true %> YES</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><%= f.check_box :sabbath_observer_docs %>Documentation On File</label>
+		</td>
+	</tr>
+	<tr>
+		<th>Special Accomodations:</th>
+		<td>
+			<%= f.text_field :special_accommodations, :size => 60, :class => 'ucase' %>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><%= f.check_box :special_accommodations_docs %>Documentation On File</label>
+		</td>
+	</tr>
+	<% 
+
+	city_zips = {} 
+	CityZip.find(:all).each { |cz| 
+		city_zips[cz.city] = cz.zip
+	} 
+
+	%>
+	<script type="text/javascript">
 	
-		$('#obj_mailing_city').change(function(e) {
-			cz = city_zips[$(this).val().toUpperCase()];
-			if(cz) {
-				$('#obj_mailing_zip').val(cz);
-			}
-		});
-		
-		$('#obj_residence_city').change(function(e) {
-			cz = city_zips[$(this).val().toUpperCase()];
-			if(cz) {
-				$('#obj_residence_zip').val(cz);
-			}
-		});		
+		(function($){
+			var city_zips = <%= city_zips.to_json %>;
+			$('#obj_mailing_city').change(function(e) {
+				cz = city_zips[$(this).val().toUpperCase()];
+				if(cz) {
+					$('#obj_mailing_zip').val(cz);
+				}
+			});
+			$('#obj_residence_city').change(function(e) {
+				cz = city_zips[$(this).val().toUpperCase()];
+				if(cz) {
+					$('#obj_residence_zip').val(cz);
+				}
+			});		
+			var ssn = $('#obj_ssn');
+			ssn.change(function(e) {
+				var val = ssn.val();
+				if(val.toString().length == 9) {
+					ssn.val(val.substr(0, 3) + '-' + val.substr(3, 2) + '-' + val.substr(5, 4));
+				}
+			});
+		})(jQuery);
 	
-		var ssn = $('#obj_ssn');
-		ssn.change(function(e) {
-			var val = ssn.val();
-			if(val.toString().length == 9) {
-				ssn.val(val.substr(0, 3) + '-' + val.substr(3, 2) + '-' + val.substr(5, 4));
-			}
-		});
-	
-	})(jQuery);
-	
-</script>
+	</script>
+<% end %>

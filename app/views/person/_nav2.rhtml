@@ -1,3 +1,5 @@
+<%= tab 'View VC', {:sc => nil, :sid => nil, :controller => :person, :action => 'view_vet', :id => (params[:sid] || @obj.id)}, {}, {:class => 'tab-veterans'} %>
+<%= tab 'Edit VC', {:sc => nil, :sid => nil, :controller => :person, :action => 'edit_vet', :id => (params[:sid] || @obj.id)}, {}, {:class => 'tab-veterans'} %>
 <%= tab 'Documents', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>
 <%= tab 'Letters', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :message}, {:action => :index, :id => nil}, {:class => 'tab-letter'} %>
 <%= tab 'List Notes', {:sc => nil, :sid => nil, :controller => :person, :action => :list_notes, :id => (params[:id] || params[:sid])}, {}, {:class => 'tab-list_note'} %>

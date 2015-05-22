@@ -1,0 +1,77 @@
+<%= partial 'nav' %>
+<% o = @obj %>
+<div class="viewer">
+	<div class="header">General Veteran's Credits Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>SSN:</label>
+					<%= h o.ssn %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.label %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>		
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Type:</label>
+					<%= h o.veteran %>
+				</td>
+				<td>
+					<label>Verified?</label>
+					<%= yn o.veteran_verified %>
+				</td>
+				<td>
+					<label>Used?</label>
+					<%= yn o.veteran_used %>
+				</td>
+				<td>
+					<label>Date:</label>
+					<%= h o.veteran_used_date.d0? %>
+				</td>
+				<td>
+					<label>Points:</label>
+					<%= h o.veteran_used_points %>
+				</td>
+				<td>
+					<label>Exam No.:</label>
+					<%= h o.veteran_used_exam_no %>
+				</td>
+				<td>
+					<label>Title:</label>
+					<%= h o.veteran_used_title %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div class="viewer">
+	<div class="header">Documents</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<% if o.documents.empty? %>
+						<label>&nbsp;</label>
+						No Documents
+					<% else %>
+						<label>Click to Download/View:</label>
+						<% o.documents.each { |d| %>
+							<div><%= link_to d.filename, :sc => :person, :sid => o.id, :controller => :document, :action => :download, :id => d.id %></div>
+						<% } %>
+					<% end %>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

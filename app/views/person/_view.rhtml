@@ -74,7 +74,7 @@
 			</tr>
 		</table>
 	</div>
-		
+	
 	<div class="row">
 		<table>
 			<tr>
@@ -89,14 +89,6 @@
 				<td>
 					<label>Race:</label>
 					<%= h o.race %>
-				</td>
-				<td>
-					<label>Veteran:</label>
-					<%= h o.veteran %>
-					<% if o.veteran == 'VETERAN' || o.veteran == 'DISABLED VET' %>
-						- <%= o.veteran_verified ? 'VERIFIED' : 'UNVERIFIED' %>
-						- <%= o.veteran_used ? 'USED' : 'UNUSED' %>
-					<% end %>
 				&nbsp;</td>
 			</tr>
 		</table>
@@ -116,7 +108,7 @@
 			</tr>
 		</table>
 	</div>			
-	
+
 	<div class="row">
 		<table>
 			<tr>
@@ -146,7 +138,7 @@
 			</tr>
 		</table>
 	</div>
-	
+
 	<div class="row">
 		<table>
 			<tr>
@@ -168,7 +160,7 @@
 			</tr>
 		</table>
 	</div>
-	
+
 	<div class="row">
 		<table>
 			<tr>
@@ -183,7 +175,7 @@
 			</tr>
 		</table>
 	</div>	
-	
+
 	<div class="row">
 		<table>
 			<tr>
@@ -207,7 +199,7 @@
 		</table>
 	</div>	
 
-	
+
 </div>
 
 <h2>Applications</h2>
@@ -222,9 +214,9 @@
 			<th width="1%">Submitted</th>
 			<th width="1%">Status</th>
 			<th width="1%">Exam No.</th>
-      <th width="1%">Exam Date</th>
-      <th width="1%">Est. Date</th>
-      <th width="1%">Exp. Date</th>
+			<th width="1%">Exam Date</th>
+			<th width="1%">Est. Date</th>
+			<th width="1%">Exp. Date</th>
 			<th width="92%">Title</th>
 			</tr>
 		</tr>
@@ -244,17 +236,17 @@
 				<td class="nobr"><%= a.submitted_at.d0? %></td>
 				<td class="nobr"><% if a.app_status %><span class="<% if a.app_status.eligible == 'N' %>req<% end %>"><%= h a.app_status.name %></span><% end %></td>
 				<td class="nobr"><%= h exam.exam_no if exam %></td>
-        <td class="nobr"><%= exam.given_at.d0? if exam %></td>
-        <td class="nobr"><%= exam.established_date.d0? if exam %></td>
-        <td class="nobr">
+				<td class="nobr"><%= exam.given_at.d0? if exam %></td>
+				<td class="nobr"><%= exam.established_date.d0? if exam %></td>
+				<td class="nobr">
 					<% if exam %>
 						<% if exam.valid_until %>
-			        <span class="<% if exam.valid_until < Time.now.to_date %>req<% end %>"><%= exam.valid_until.d0? %></span>
-			      <% else %>
-			      	<% if exam.given_at && exam.given_at < Time.now.to_date && !exam.applicants.to_a.find { |a| a.app_status && a.app_status.eligible != 'N' } %> <span class="req">(NO LIST)</span><% end %>
-			      <% end %>
-			    <% end %>
-			  </td>
+							<span class="<% if exam.valid_until < Time.now.to_date %>req<% end %>"><%= exam.valid_until.d0? %></span>
+						<% else %>
+							<% if exam.given_at && exam.given_at < Time.now.to_date && !exam.applicants.to_a.find { |a| a.app_status && a.app_status.eligible != 'N' } %> <span class="req">(NO LIST)</span><% end %>
+						<% end %>
+					<% end %>
+				</td>
 				<td><%= h a.exam.title if a.exam %></td>
 			</tr>
 		<% } %>
