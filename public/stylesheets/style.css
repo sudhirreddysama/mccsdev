@@ -221,6 +221,9 @@ a img { border: none; }
 .tabs a.tab-username span { background-image: url(../images/icons/user.png); }
 .tabs a.tab-switch span { background-image: url(../images/icons/user_go.png); }
 .tabs a.tab-switchto span { background-image: url(../images/icons/status_offline.png); }
+.tabs a.tab-jobs span { background-image: url(../images/icons/text_list_bullets.png); }
+.tabs a.tab-problems span { background-image: url(../images/icons/exclamation.png); }
+.tabs a.tab-veterans span { background-image: url(../images/icons/award_star_gold_1.png); }
 
 #misc-tabs a span { background-image: none; padding-left: 5px; }
 
@@ -461,6 +464,7 @@ input.ucase, textarea.ucase { text-transform: uppercase; }
 .cert-status.cert-requested { background-color: #888; }
 .cert-status.cert-certified { background-color: #080; }
 .cert-status.cert-completed { background-color: #008; }
+.cert-status.cert-finished { background-color: #088; }
 .cert-status.cert-overdue { background-color: #000; }
 .cert-status.cert-pending { background-color: #880; }
 
@@ -505,3 +509,10 @@ fieldset table.form { margin: 0; }
 
 #select-text a { display: block; padding: 1px 5px; text-decoration: none; border-bottom: 1px solid #888; }
 #select-text a:hover { background-color: #eee; }
+
+.agency-jobs { width: 900px; }
+.agency-jobs-col { width: 300px; float: left; }
+.agency-jobs label { display: block; font-size: 10px; padding-left: 5px; padding-left: 20px; text-indent: -15px; }
+.agency-jobs label:hover { background-color: #ffc; }
+.agency-jobs label.inactive { color: #800; }
+.agency-jobs input { margin: 0; padding: 0; }
