@@ -29,6 +29,16 @@ class Const
 		['PENDING CLASSIFICATION', 'D']
 	]
 	
+	JOB_CLASSES_SHORT = [
+		['UNCLASS', 'U'],
+		['COMP', 'C'],
+		['NON-COMP', 'N'],
+		['SPECIAL', '5'],
+		['LABOR', 'L'],
+		['EXEMPT', 'E'],
+		['PENDING', 'D']
+	]
+	
 	GIVEN_BY = [
 		['State Decentralized', 1],
 		['State Prepared and Rated', 2],
@@ -46,9 +56,25 @@ class Const
 		['PENDING-NYS', 'PN']
 	]
 	
+	JOB_STATUSES_SHORT = [
+		['PERM', 'P'],
+		['PROV', 'V'],
+		['PROV2', 'V2'],
+		['CONT-PERM', 'C'],
+		['TEMP', 'T'],
+		['SEASONAL', 'S'],
+		['SUB', 'SU'],
+		['PEND-NYS', 'PN']
+	]
+	
 	JOB_TIMES = [
 		['FULL TIME', 'F'],
 		['PART TIME', 'P']
+	]
+	
+	JOB_TIMES_SHORT = [
+		['FULL', 'F'],
+		['PART', 'P']
 	]
 	
 	# Note: Some records from the old system have strange wage units.
@@ -100,10 +126,10 @@ class Const
 	]
 	
 	VETERAN_TYPES = [
-		['UNKNOWN', ''],
-		['NON-VET', 'NON-VET'],
+		['NON-VET', ''],
 		['VETERAN', 'VETERAN'],
-		['DISABLED VET', 'DISABLED VET']
+		['DISABLED VET', 'DISABLED VET'],
+		['ACTIVE DUTY', 'ACTIVE DUTY']
 	]
 	
 end
