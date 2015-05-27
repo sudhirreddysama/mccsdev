@@ -26,6 +26,9 @@
 							<td><%= h c.agency.name if c.agency %></td>
 							<td><%= h c.department.name if c.department && (!c.agency || (c.agency.name != c.department.name)) %></td>
 							<td class="nobr">
+								<% if c.job_type == 'T' %>
+									T,<%= h c.temp_duration %><br />
+								<% end %>
 								<% if c.job_time == 'P' %>
 									PART TIME
 								<% elsif c.job_time == 'F' %>
