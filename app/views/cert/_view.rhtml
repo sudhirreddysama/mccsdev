@@ -21,16 +21,16 @@
 <% if @obj.status == 'certified' && @obj.certification_date <= Time.now.to_date %>
 	<% if @current_user.level == 'agency-head' %>
 		<a href="#" onclick="jQuery('#complete').toggle();" style="color: #fff; background-color: #080; margin: 5px 5px 0 5px; padding: 5px; display: block; text-decoration: none; text-align: center;">
-			This certified list has yet to be completed and returned to Monroe County HR. Click here to return to MC HR Liaison.
+			This certified list has yet to be completed and submitted to Monroe County HR. Click here to submit to MC HR Liaison.
 		</a>
 		<div id="complete" style="text-align: center; display: none; margin: 0 5px 0 5px; border: 1px solid #080; border-top: none; padding: 5px;">
 			<%= form_tag :action => :complete_list, :id => @obj.id %>
-				<div>NOTE: Candidate actions are required! Make sure one is selected for each candidate or you will not be able to continue. Once the list is completed and returned to MC HR Liaison actions cannot be changed.</div>
-				<%= submit_tag 'Electronically Complete List' %>
+				<div>NOTE: Candidate actions are required! Make sure one is selected for each candidate or you will not be able to continue. Once the list is completed and submitted to MC HR Liaison actions cannot be changed.</div>
+				<%= submit_tag 'Electronically Submit List' %>
 			</form>
 		</div> 
 	<% else %>
-		<div style="text-align: center; margin: 5px; padding: 5px; background-color: #080; color: #fff;">This certified list is now editable. Please enter all candidate actions and have an agency head return the list to MC HR Liaison.</div>
+		<div style="text-align: center; margin: 5px; padding: 5px; background-color: #080; color: #fff;">This certified list is now editable. Please enter all candidate actions and have an agency head submit the list to MC HR Liaison.</div>
 	<% end %>
 <% end %>
 
@@ -131,6 +131,10 @@
 				<td>
 					<label>Completed By:</label>
 					<%= h o.completed_by.name if o.completed_by %>
+				</td>
+				<td>
+					<label>Finished:</label>
+					<%= h o.finished %>
 				&nbsp;</td>
 			</tr>
 		</table>
@@ -323,8 +327,15 @@
 						<% if @current_user.staff_level? || (@current_user.agency_level? && (@obj.status == 'certified' || @obj.status == 'overdue') && @obj.certification_date <= Time.now.to_date) %>
 							<table>
 								<tr>
-									<td class="nobr">Action:</td>
-									<td><%= select_tag "actions[#{ca.id}]", options_for_select([[]] + @cert_codes, ca.cert_code_id), :style => 'width: 300px;', :class => 'ca-action', :id => "actions-#{ca.id}" %></td>
+									<td class="nobr">Action:</td><%
+									
+									opts = @cert_codes
+									if(ca.cert_code && !@cert_codes.rassoc(ca.cert_code.id))
+										opts = [[ca.cert_code.description, ca.cert_code.id]] + opts
+									end
+									
+									%>
+									<td><%= select_tag "actions[#{ca.id}]", options_for_select([[]] + opts, ca.cert_code_id), :style => 'width: 300px;', :class => 'ca-action', :id => "actions-#{ca.id}" %></td>
 								</tr>
 								<% unless @current_user.agency_level? %>
 									<tr>
