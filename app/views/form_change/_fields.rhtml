@@ -33,7 +33,15 @@
 		</table>
 	</td>
 </tr><%= f.tr_text_field :retirement_no, :label => 'Retirement No.', :size => '30', :class => 'ucase' %>
-<%= f.tr_select :present_title_id, @job_opts, :include_blank => true, :label => 'Present Title', :req => true %>
+
+<tr>
+	<th>Present Title: <span class="req">*</span></th>
+	<td>
+		<%= partial 'pop_field', :text => (@obj.present_title_job ? @obj.present_title_job.label : ''), :name => 'obj[present_title_id]', :id => 'obj_present_title_id', :url => popup_url({:controller => :job}), :value => @obj.present_title_id %>
+	</td>
+</tr>
+
+
 <%= f.tr_check :present_provisional, :label => 'Provisional?', :text => 'Check here if current title is provisional' %>
 <%= f.tr_calendar_date_select :effective_date, :label => 'Effective Date', :class => 'ucase', :req => true %>
 <tr>
@@ -55,7 +63,7 @@
 					<th>New Title:</th>
 				</tr>
 				<tr>
-					<td><%= f.select :demotion_title_id, @job_opts, :include_blank => true %></td>
+					<td><%= partial 'pop_field', :text => (@obj.demotion_title_job ? @obj.demotion_title_job.label : ''), :name => 'obj[demotion_title_id]', :id => 'obj_demotion_title_id', :url => popup_url({:controller => :job}), :value => @obj.demotion_title_id %></td>
 				</tr>
 			</table>
 			<table>
@@ -155,7 +163,7 @@
 					<th>New Title:</th>
 				</tr>
 				<tr>
-					<td><%= f.select :promotion_new_title_id, @job_opts, :include_blank => true %></td>
+					<td><%= partial 'pop_field', :text => (@obj.promotion_new_title_job ? @obj.promotion_new_title_job.label : ''), :name => 'obj[promotion_new_title_id]', :id => 'obj_promotion_new_title_id', :url => popup_url({:controller => :job}), :value => @obj.promotion_new_title_id %></td>
 				</tr>
 			</table>
 			<table>
@@ -326,7 +334,7 @@
 					<th>New Title:</th>
 				</tr>
 				<tr>
-					<td><%= f.select :title_change_new_title_id, @job_opts, :include_blank => true %></td>
+					<td><%= partial 'pop_field', :text => (@obj.title_change_new_title_job ? @obj.title_change_new_title_job.label : ''), :name => 'obj[title_change_new_title_id]', :id => 'obj_title_change_new_title_id', :url => popup_url({:controller => :job}), :value => @obj.title_change_new_title_id %></td>
 				</tr>
 			</table>
 			<table>
@@ -392,6 +400,12 @@
 			});
 			tgl(c, $(c[0]._section));
 		}
+		window.popup_url_rewrite = function(url, id) {
+			if(id == 'obj_present_title_id' || id == 'obj_title_change_new_title_id' || id == 'obj_demotion_title_id' || id == 'obj_promotion_new_title_id') {
+				url += '?agency_id=' + $('#obj_agency_id').val(); 
+			}
+			return url;
+		}
 		var employee_id = $('#obj_employee_id');
 		var employee_id_text = $('#obj_employee_id_text');
 		employee_id.change(function(e) {
@@ -405,17 +419,19 @@
 					complete: function() {
 						employee_id_text.removeClass('busy-bg');
 					},
-                    success: function(data, status, xhr) {
+          success: function(data, status, xhr) {
 						if(data) {
 							$('#obj_first_name').val(data.first_name);
 							$('#obj_last_name').val(data.last_name);
-							$('#obj_present_title').val(data.job_name);
+							//$('#obj_present_title').val(data.job_name);
 							$('#obj_present_provisional')[0].checked = data.provisional;
 							$('#obj_name_change_from').val(data.last_name + ', ' + data.first_name);
 							$('#obj_salary_change_from').val(data.wage);
-                            $('#obj_retirement_no').val(data.pension_no);
+              $('#obj_retirement_no').val(data.pension_no);
 							set_select_value(data.wage_per, $('#obj_salary_change_from_per')[0]);
-							set_select_value(data.job_id, $('#obj_present_title_id')[0]);
+							//set_select_value(data.job_id, $('#obj_present_title_id')[0]);
+							$('#obj_present_title_id').val(data.job_id);
+							$('#obj_present_title_id_text').val(data.job_name);
 						}
 					}
 				});

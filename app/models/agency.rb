@@ -5,7 +5,8 @@ class Agency < ActiveRecord::Base
 	has_many :employees
 	has_many :users
   has_many :contacts
-	
+  has_many :agency_jobs
+  has_many :jobs, :through => :agency_jobs
 	belongs_to :liaison, :class_name => 'User', :foreign_key => 'liaison_id'
 	
 	validates_presence_of :name

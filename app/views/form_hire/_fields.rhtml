@@ -128,7 +128,7 @@
 	<td class="subform">
 		<table>
 			<tr>
-				<td><%= f.select :job_id, @job_opts, :include_blank => true %></td>
+				<td><%= partial 'pop_field', :text => (@obj.job ? @obj.job.label : ''), :name => 'obj[job_id]', :id => 'obj_job_id', :url => popup_url({:controller => :job}), :value => @obj.job_id %></td>
 			</tr>
 		</table>
 	</td>
@@ -223,6 +223,12 @@
 <script type="text/javascript">
 
 	(function($) {
+		window.popup_url_rewrite = function(url, id) {
+			if(id == 'obj_job_id') {
+				url += '?agency_id=' + $('#obj_agency_id').val(); 
+			}
+			return url;
+		}
 		var employee_id = $('#obj_employee_id');
 		var employee_id_text = $('#obj_employee_id_text');
 		employee_id.change(function(e) {

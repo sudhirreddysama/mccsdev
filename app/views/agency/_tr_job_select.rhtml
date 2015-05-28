@@ -1,0 +1,26 @@
+<tr id="tr_<%= f.object_name %>_title_id">
+	<th>Title: <span class="req">*</span>
+	<td>
+		<%= partial 'agency/job_select', :f => f %>
+		<div>With options open, type * or ** to view inactive titles.</div>
+	</td>
+</tr>
+<script type="text/javascript">
+	(function($) {
+		var object_name = '<%= f.object_name %>';
+		var tr = $('#tr_' + object_name + '_title_id');
+		var agency_select = $('#' + object_name + '_agency_id');
+		agency_select.change(function() {
+			tr.addClass('busy-bg');
+			$.ajax({
+				url: '<%= url_for :sid => nil, :sc => nil, :controller => :agency, :action => :job_select, :id => f.object_name %>/' + agency_select.val() + '?job_id=' + $('#' + object_name + '_job_id').val(),
+				complete: function(xhr, status) {
+					tr.removeClass('busy-bg');
+				},
+				success: function(data, status, xhr) {
+					$('#' + object_name + '_job_id').replaceWith(data);
+				}
+			});
+		});
+	})(jQuery);
+</script>

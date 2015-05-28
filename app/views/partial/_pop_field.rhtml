@@ -4,21 +4,25 @@
 <script type="text/javascript">
 	
 	(function($) {		
-		var id = '#<%= id %>';
+		var id = '<%= id %>';
 		var pop;
-		$(id + '_text').focus(function() {
+		$('#' + id + '_text').focus(function() {
 			if(pop) {
 				return;
 			}
 			window.cb = function(val, text) { 
 				$(pop).dialog('close');
-				$(id).val(val);
-				$(id + '_text').val(text);
-				$(id).change();
+				$('#' + id).val(val);
+				$('#' + id + '_text').val(text);
+				$('#' + id).change();
 			}
 			var w = 800;
 			var h = 500;
-			pop = $('<iframe src="<%= url %>" />').dialog({
+			url = '<%= url %>';
+			if(window.popup_url_rewrite) {
+				url = window.popup_url_rewrite(url, id);
+			}
+			pop = $('<iframe src="' + url + '" />').dialog({
 				title: 'Select Record',
 				width: w,
 				height:h,

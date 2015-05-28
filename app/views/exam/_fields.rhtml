@@ -1,5 +1,8 @@
 <%= f.tr_text_field :exam_no, :label => 'Exam No.', :req => true %>
-<%= f.tr_select :job_id, Job.find(:all, :order => 'jobs.name asc').collect { |j| [j.name, j.id] }, :include_blank => true, :label => 'Title' %>
+<tr>
+	<th>Title: <span class="req">*</span></th>
+	<td><%= partial 'pop_field', :text => (@obj.job ? @obj.job.label : ''), :name => 'obj[job_id]', :id => 'obj_job_id', :url => popup_url({:controller => :job, :agency_id => ''}), :value => @obj.job_id %></td>
+</tr>
 <%= f.tr_text_field :title, :label => 'Exam Title' %>
 <tr>
 	<th>Dates:</th>
@@ -106,7 +109,7 @@
 	(function($) {
 		
 		$('#obj_job_id').change(function(e) {
-			var v = $('#obj_job_id option:selected')[0].innerHTML;
+			var v = $('#obj_job_id_text').val(); //$('#obj_job_id option:selected')[0].innerHTML;
 			if(v) {
 				$('#obj_title').attr('value', v);
 			}

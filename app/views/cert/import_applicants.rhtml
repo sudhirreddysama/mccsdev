@@ -30,6 +30,9 @@
 						<td><%= f.text_field :limit, :size => 3 %></td>
 						<th>Top Applicants</th>
 						<th><label><%= f.check_box :only_active %> Only Select Active</label></th>
+						<% if @obj.agency %>
+							<th><label><%= f.check_box :agency %> Only <%= @obj.agency.name %></label></th>
+						<% end %>
 						<th><label><%= f.radio_button :gender, '' %> Male &amp; Female</label></th>
 						<th><label><%= f.radio_button :gender, 'M' %> Male Only</label></th>
 						<th><label><%= f.radio_button :gender, 'F' %> Female Only</label></th>
@@ -59,6 +62,7 @@
 				<th width="1">Status</th>
 				<th width="1">SSN</th>
 				<th width="1">M/F</th>
+				<th width="1">Agency</th>
 				<th width="1">Name</th>
 				<th>Residency</th>
 			</tr>
@@ -83,6 +87,8 @@
 						
 						selected &&= p.gender == @select[:gender] if !@select[:gender].blank?
 						
+						selected &&= a.agency_id == @obj.agency_id if @select[:agency].to_i == 1
+						
 						no_selected += 1 if selected
 					end
 					
@@ -93,6 +99,7 @@
 					<td class="nobr"><%= s.name %></td>
 					<td class="nobr"><%= p.ssn %></td>
 					<td class="nobr"><%= p.gender %></td>
+					<td class="nobr"><% if a.agency %><%= h a.agency.name %><% end %></td>
 					<td class="nobr"><%= link_to "#{p.last_name}, #{p.first_name}", {:action => :view, :controller => :applicant, :id => a.id}, :target => '_blank' %></td>
 					<td>
 						<% if p.town %><span class="dim">Town: </span><%= h p.town.name %><% end %>

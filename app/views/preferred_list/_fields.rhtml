@@ -1,3 +1,4 @@
+<% hlp = '<span class="req">*</span> required for preferred lists' %>
 <tr>
 	<th>List Type: <span class="req">*</span>
 	<td>
@@ -5,22 +6,26 @@
 		<label><%= f.radio_button :list_type, 'military' %> Military List</label>
 	</td>
 </tr>
-<%= f.tr_select :job_id, Job.find(:all, :order => 'jobs.name asc').collect { |j| [j.name, j.id] }, :include_blank => true, :label => 'Title', :req => true %>
+<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Agency', :help => hlp %>
+<%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name').collect { |d| [d.name, d.id] }, :include_blank => true, :label => 'Department', :help => hlp %>
+<tr>
+	<th>Title: <span class="req">*</span></th>
+	<td><%= partial 'pop_field', :text => (@obj.job ? @obj.job.label : ''), :name => 'obj[job_id]', :id => 'obj_job_id', :url => popup_url({:controller => :job}), :value => @obj.job_id %></td>
+</tr>
 <%= f.tr_text_field :title, :label => 'List Title' %>
 <%= f.tr_select :status, Const::PREF_LIST_STATUSES, :label => 'Status', :req => true %>
 <%= f.tr_calendar_date_select :established_date, :size => '30', :label => 'Established Date' %>
 <%= f.tr_calendar_date_select :valid_until, :size => '30', :label => 'Valid Until' %>
-<% hlp = '<span class="req">*</span> required for preferred lists' %>
-<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Agency', :help => hlp %>
-<%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name').collect { |d| [d.name, d.id] }, :include_blank => true, :label => 'Department', :help => hlp %>
 <%= f.tr_check :include_on_master, :label => 'Master List', :text => 'Check here to include this list on the exam master list report.' %>
 <%= f.tr_text_field :master_notes, :label => 'Master List Notes' %>
 <script type="text/javascript">
 
 	(function($) {
-		
+		window.popup_url_rewrite = function(url, id) {
+			return url += '?agency_id=' + $('#obj_agency_id').val();
+		}
 		$('#obj_job_id').change(function(e) {
-			var v = $('#obj_job_id option:selected')[0].innerHTML;
+			var v = $('#obj_job_id_text').val();//$('#obj_job_id option:selected')[0].innerHTML;
 			if(v) {
 				$('#obj_title').attr('value', v);
 			}

@@ -3,6 +3,7 @@
 <%= f.tr_password_field :password_confirmation, :label => 'Confirm Password', :help => 'Please retype the password.', :req => @obj.new_record?, :autocomplete => 'off' %>
 <%= f.tr_text_field :name, :label => 'Name', :req => true %>
 <%= f.tr_text_field :initials, :label => 'Initials', :size => '5' %>
+<%= f.tr_text_field :title, :label => 'title' %>
 <%= f.tr_text_field :email, :label => 'Email', :req => true %>
 <%= f.tr_text_field :email2, :label => '2nd Email', :req => false %>
 <%= f.tr_text_field :fax, :label => 'Fax' %>

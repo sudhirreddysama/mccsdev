@@ -47,6 +47,13 @@ class Notifier < ActionMailer::Base
 		from Thread.current[:current_user].email_with_name
 		body :c => c
 	end
+	
+	def cert_complete u, c
+		recipients u.collect { |u| u.email_with_name }
+		subject 'Certified List Completed/Returned'
+		from Thread.current[:current_user].email_with_name
+		body :c => c
+	end
 
 	def perf_request u, o
 		recipients u.collect { |i| i.email_with_name }
@@ -127,6 +134,13 @@ class Notifier < ActionMailer::Base
 		subject 'Never Miss a Job or Exam Announcement'
 		from DEFAULT_FROM
 		body({})
+	end
+	
+	def custom_email r, s, f, b
+		recipients r
+		subject s
+		from f
+		body :b => b
 	end
 		
 	# DEV ONLY!

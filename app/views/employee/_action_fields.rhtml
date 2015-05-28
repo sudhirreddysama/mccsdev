@@ -35,16 +35,18 @@ empl_action_types.each { |t|
 <%= f.tr_select :empl_action_type_id, empl_action_types.collect { |t| [t.label, t.id] }, :include_blank => true, :label => 'Action', :req => true %>
 <%= f.tr_calendar_date_select :leave_date, :label => 'Leave Date' %>
 <%= f.tr_calendar_date_select :received_date, :label => 'Received Date' %>
-<% if false %>
-	<%= f.tr_check :absent, :label => 'Absent?', :text => 'Check here to make this employee no longer current. The action date will be the date left. This will autopopulate from the action but can be overridden.' %>
-<% end %>
-
-
-<%= f.tr_select :job_id, Job.find(:all, {
-	:order => 'jobs.inactive asc, jobs.name asc',
-}).collect { |j| [j.inactive ? "*#{j.name}" : j.name, j.id] }, :include_blank => true, :label => 'Title', :req => true, :help => 'With options open, type * to view inactive titles.' %>
-<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name asc').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Agency', :req => true %>
+<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name asc').collect { |a| [a.name, a.id] }, {:include_blank => true, :label => 'Agency', :req => true}, :class => 'pop-info' %>
 <%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name asc').collect { |d| [d.name, d.id] }, :include_blank => true, :label => 'Department', :req => true %>
+
+<tr>
+	<th>Title: <span class="req">*</span></th>
+	<td>
+		<% name = params[:action] == 'new' ? 'obj[new_empl_action][job_id]' : 'act[job_id]' %>
+		<%= partial 'pop_field', :text => (@act.job ? @act.job.label : ''), :name => name, :id => 'act_job_id', :url => popup_url({:controller => :job}), :value => @act ? @act.job_id : @obj.job_id %>
+	</td>
+</tr>
+
+
 <tr>
 	<th>Salary/Wage:</th>
 	<td>
@@ -71,6 +73,13 @@ empl_action_types.each { |t|
 		var agency_id = $('#obj_new_empl_action_agency_id, #act_agency_id');
 		var department_id = $('#obj_new_empl_action_department_id, #act_department_id');
 		
+		window.popup_url_rewrite = function(url, id) {
+			if(id == 'act_job_id') {
+				url += '?agency_id=' + agency_id.val();
+			}
+			return url;
+		}
+		
 		agency_id.change(function(e) {
 			
 			var txt = $(this).find('option[value=' + agency_id.val() + ']').text();
@@ -78,32 +87,6 @@ empl_action_types.each { |t|
 			department_id.val(val);
 		});
 		
-		<% if false %>
-		var action_type_id = $('#obj_new_empl_action_empl_action_type_id, #act_empl_action_type_id');
-		var absent = $('#obj_new_empl_action_absent, #act_absent');
-		
-		var action_types_absent = <%= action_types_absent.to_json %>;
-		
-		action_type_id.change(function(e) {
-			var v = $(this).val();
-			var a = action_types_absent[v];
-			absent[0].checked = a;
-		});
-		<% end %>
-		
 	})(jQuery);
 	
 </script>
-
-
-
-
-
-
-
-
-
-<% if false %>
-	<%= f.tr_text_field :exam_no, :label => 'Exam No.', :size => 30 %>
-	<%= f.tr_text_field :cert_info, :label => 'Cert. Info' %>
-<% end %>

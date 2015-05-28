@@ -1,4 +1,8 @@
 <tr>
-	<th></th>
-	<td><label><%= f.check_box :inactive %> Show Inactive Titles</label></td>
+	<th>Options:</th>
+	<td>
+		<label>Agency Titles: <%= f.select :agency_id, @agency_options, :include_blank => 'All Titles' %></label>
+		(Only agencies with title lists are available)&nbsp;&nbsp;&nbsp;
+		<label><%= f.check_box :inactive %> Show Inactive Titles</label>
+	</td>
 </tr>

@@ -69,7 +69,7 @@ addtest = request.url
 	<div id="<%= params[:controller] %>-tabs" class="active-<%= params[:action] %>">
 		<% @obj, @original = @original, @obj if @original %>
 		<div class="tabs">
-			<%= tab 'List', :controller => params[:controller], :action => :index %>	
+			<%= tab 'List', :controller => params[:controller], :action => :index, :id => nil %>	
 			<% unless (@view_only || @no_create) && (!@allow_new) %>
 				<% if @current_user.staff_level? || @allow_liaison || @allow_agency || @allow_add || @allow_cert %>
 					<%= tab 'New', :controller => params[:controller], :action => :new %>

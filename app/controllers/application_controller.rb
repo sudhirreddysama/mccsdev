@@ -99,7 +99,7 @@ class ApplicationController < ActionController::Base
 	end
 	
 	def get_filter default = {}, name = nil
-		name ||= "#{params[:controller]}_#{params[:action]}_filter"
+		name ||= "#{params[:controller]}_#{params[:action]}_filter" + (params[:popup] ? '_pop' : '')
 		@filter = params[:filter] || session[name]
 		@filter = default if !@filter or @filter[:clear]
 		session[name] = @filter

@@ -62,7 +62,10 @@ class CertController < CrudController
         sub_c << 'certs.certification_date <= date(now()) and certs.return_date >= date(now()) and (certs.completed_date is null or certs.completed_date > date(now()))'
 			end
 			if @filter.statuses.include?('completed')
-				sub_c << 'certs.return_date >= date(now()) and certs.completed_date <= date(now())'
+				sub_c << 'certs.return_date >= date(now()) and certs.completed_date <= date(now()) and ifnull(certs.finished, "") = ""'
+			end
+			if @filter.statuses.include?('finished')
+				sub_c << 'certs.return_date >= date(now()) and ifnull(certs.finished, "") != ""'
 			end
 			cond << get_where_or(sub_c)
     end
@@ -197,7 +200,6 @@ class CertController < CrudController
 	
 	def complete_list
 		load_obj
-		
 		err = @obj.cert_applicants.find(:first, :include => :cert_code, :conditions => 'cert_codes.id is null')
 		if err
 			flash[:errors] = ['Could not complete list. You must select an action for each candidate. If no action was taken select "NO ACTION"']
@@ -205,7 +207,11 @@ class CertController < CrudController
 			@obj.completed_by = @current_user
 			@obj.completed_date = Time.now.to_date
 			@obj.save
-			flash[:notice] = 'Certified list has been completed. HR has been notified.'
+			u = Agency.get_liaison(@obj.agency, @obj.department)
+			if u
+				Notifier.deliver_cert_complete [u], @obj
+			end
+			flash[:notice] = 'Certified list has been completed and submitted to HR.'
 		end
 		redirect_to :action => :view, :id => @obj.id
 	end

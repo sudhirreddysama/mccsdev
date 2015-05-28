@@ -133,10 +133,22 @@ class WebApplicant < ActiveRecord::Base
     	unless wa.gender.blank?
     		attr[:gender] = wa.gender.to_s.upcase.strip
     	end
+    	
+    	vet_map = {'nondisabled' => 'VETERAN', 'disabled' => 'DISABLED VET', 'active' => 'ACTIVE DUTY'}
+    	vet_val = vet_map[wa.vc_type]
 
-      if p
+      if p      	
+      	if(
+      		(p.veteran == 'ACTIVE DUTY' && (vet_val == 'VETERAN' || vet_val == 'DISABLED VET')) || 
+      		(p.veteran == 'VETERAN' && vet_val == 'DISABLED VET') || 
+      		p.veteran.blank?
+      	)
+      		attr[:veteran_verified] = false
+      		attr[:veteran] = vet_val
+				end
 				p.update_attributes attr
 			else
+				attr[:veteran] = vet_val
 				p = Person.create(attr)
 			end
 			

@@ -1,0 +1,35 @@
+<%= partial 'nav' %>
+<%= partial 'nav_jobs' %>
+<div class="marg">
+	All employees for this agency that either are not in the title list or have inactive titles.
+</div>
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%" class="nobr">List?</th>
+			<th width="1%" class="nobr">Active?</th>
+			<th width="1%">SSN</th>
+			<th width="31%">Name (links to employee)</th>
+			<th width="1%">Time</th>
+			<th width="1%">Status</th>
+			<th width="1%">Class</th>
+			<th width="31%">Title (links to title)</th>
+			<th width="31%">Department</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @objs.each_hash { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>">
+				<td class="nobr"><%= yn o.agency_job %></td>
+				<td class="nobr"><%= yn o.job_inactive == '0' %></td>
+				<td class="nobr"><%= h o.ssn %></td>
+				<td><%= link_to "#{o.last_name}, #{o.first_name}", :controller => :employee, :action => :view, :id => o.id %></td>
+				<td class="nobr"><%= h Const::JOB_TIMES_SHORT.rassoc(o.job_time)[0] rescue nil %></td>
+				<td class="nobr"><%= h Const::JOB_STATUSES_SHORT.rassoc(o.status)[0] rescue nil %></td>
+				<td class="nobr"><%= h Const::JOB_CLASSES_SHORT.rassoc(o.classification)[0] rescue nil %></td>
+				<td><%= link_to o.job_name, :controller => :job, :action => :view, :id => o.id %></td>
+				<td><%= h o.department_name %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

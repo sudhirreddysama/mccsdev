@@ -45,6 +45,11 @@ class TableFormBuilder < ActionView::Helpers::FormBuilder
 		super(method, choices, options, html_options)
 	end
 	
+	def grouped_collection_select(method, collection, group_method, group_label_method, option_key_method, option_value_method, options = {}, html_options = {})
+		html_options[:disabled] = true if @noform
+		super(method, collection, group_method, group_label_method, option_key_method, option_value_method, options, html_options)
+	end
+	
 	def calendar_date_select(method, options = {})
 		options[:readonly] = true if @noform
 		#if @noform
@@ -101,6 +106,11 @@ class TableFormBuilder < ActionView::Helpers::FormBuilder
 	def tr_select(method, select_opts, options, opt2 = {})
 		options[:disabled] = true if @noform
 		tr method, select(method, select_opts, trim_opts(options), opt2), options
+	end
+	
+	def tr_grouped_collection_select(method, collection, group_method, group_label_method, option_key_method, option_value_method, options = {}, html_options = {})
+		options[:disabled] = true if @noform
+		tr method, grouped_collection_select(method, collection, group_method, group_label_method, option_key_method, option_value_method, trim_opts(options), html_options), options
 	end
 	
 	def tr_calendar_date_select(method, options = {})

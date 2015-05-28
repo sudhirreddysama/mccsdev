@@ -1,0 +1,20 @@
+<%= partial 'nav' %>
+<%= partial 'nav_jobs' %>
+<%= partial 'exam/save_bar', :url => url_for(:action => :jobs_save, :id => @obj.id) %>
+<form class="agency-jobs" id="review-form">
+	<% @jobs.in_groups(3, false).each { |grp| %>
+		<div class="agency-jobs-col">
+			<% grp.each { |j| %>
+				<label class="<% if j.inactive %>inactive<% end %>"><%= check_box_tag 'job_ids[]', j.id, @agency_jobs[j.id] %> <%= h j.name %></label>
+			<% } %>
+		</div>
+	<% } %>
+	<div class="clear"></div>
+</form>
+<script type="text/javascript">
+	(function($) {
+		$('#review-form input').click(function(e) {
+			window.input_dirty = true;
+		});
+	})(jQuery);
+</script>

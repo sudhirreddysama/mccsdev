@@ -1,0 +1,18 @@
+<%
+
+obj = instance_variable_get('@' + f.object_name.to_s)
+agency_jobs = obj.agency ? obj.agency.jobs.find(:all, {
+	:order => 'jobs.inactive asc, jobs.name asc'
+}) : []
+all_jobs = Job.find(:all, {
+	:order => 'jobs.inactive asc, jobs.name asc', 
+	:conditions => (agency_jobs.empty? ? nil : ['id not in (?)', agency_jobs.collect(&:id)])
+})
+@collection = []
+unless agency_jobs.empty?
+	@collection << {:grp => 'Agency Titles', :jobs => agency_jobs.map { |j| {:name => j.inactive ? "*#{j.name}" : j.name, :id => j.id} }}
+end
+@collection << {:grp => 'All Titles', :jobs => all_jobs.map { |j| {:name => j.inactive ? "**#{j.name}" : j.name, :id => j.id} }}
+
+%>
+<%= f.grouped_collection_select(:job_id, @collection, :jobs, :grp, :id, :name, :label => 'Title', :req => true) %>
