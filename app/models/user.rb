@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
   attr_reader :password
   
   def self.authenticate u, p
-  	find_by_username u, :conditions => ['encrypted_password = ?', Digest::SHA1.hexdigest(p.to_s + SALT)]
+  	find_by_username u, :conditions => ['encrypted_password = ? and level != "disabled"', Digest::SHA1.hexdigest(p.to_s + SALT)]
   end
       
   def email_with_name 

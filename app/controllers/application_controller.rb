@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
 	helper :all
 	
 	def load_user
-		@current_user = User.find_by_id session[:current_user_id] if session[:current_user_id]
+		@current_user = User.find_by_id session[:current_user_id], :conditions => 'users.level != "disabled"' if session[:current_user_id]
 		Thread.current[:user_id] = session[:current_user_id]
 		Thread.current[:current_user] = @current_user
 	end
