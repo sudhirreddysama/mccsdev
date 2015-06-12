@@ -54,6 +54,14 @@ class WebExam < ActiveRecord::Base
 		}		
 	end
 	
+	def clone
+		c = super
+		c.facebook_posted = false
+		c.twitter_posted = false
+		c.notified = false
+		return c
+	end
+	
 	include DbChangeHooks
 	
 end
