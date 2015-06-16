@@ -235,7 +235,7 @@ class WebExamController < CrudController
 			f = TempfileExt.open 'wkhtmltopdf.html', 'tmp'
 			f.write html
 			f.close
-			`wkhtmltopdf9 --footer-html /home/rails/mccs/app/views/web_exam/new_exams_footer.html -s Letter -O Portrait --margin-left .5in --margin-right .5in --margin-top .5in --margin-bottom 1in --ignore-load-errors #{f.path} public/new-exams/#{@fname}`					
+			`wkhtmltopdf --footer-html /home/rails/mccs/app/views/web_exam/new_exams_footer.html -s Letter -O Portrait --margin-left .5in --margin-right .5in --margin-top .5in --margin-bottom 1in #{f.path} public/new-exams/#{@fname}`					
 			
 			if !params[:id] || params[:resend]
 				@system = System.find(:first)
