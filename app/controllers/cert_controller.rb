@@ -278,7 +278,9 @@ class CertController < CrudController
 		if users.empty?
 			flash[:notice] = 'No agency users to send notice to.'
 		else
-			Notifier.deliver_cert users, @obj
+			users.each { |u|
+				Notifier.deliver_cert [u], @obj
+			}
 			flash[:notice] = 'Notification email has been sent.'
 		end		
 		redirect_to :action => :view, :id => @obj.id
