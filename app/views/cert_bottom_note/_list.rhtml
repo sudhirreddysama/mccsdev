@@ -15,7 +15,8 @@
 					<%= link_to image_tag('icons/zoom.png', :size => '16x16', :alt => 'view', :title => 'View'), {:action => :view, :id => o.id} %>
 					<%= link_to image_tag('icons/pencil.png', :size => '16x16', :alt => 'edit', :title => 'Edit'), {:action => :edit, :id => o.id} %>
 					<%= link_to image_tag('icons/cross.png', :size => '16x16', :alt => 'delete', :title => 'Delete'), {:action => :delete, :id => o.id}, :onclick => "obj_delete(#{o.id}); return false" %>
-					<%= link_to_function image_tag('icons/tick.png', :size => '16x16', :alt => 'select'), "set_value(#{o.id}); return false" %>
+					<%= link_to_function image_tag('icons/tick.png', :size => '16x16', :alt => 'select', :title => 'Select'), "set_value(#{o.value.to_json}); return false" %>
+					<%= link_to_function image_tag('icons/add.png', :size => '16x16', :alt => 'append', :title => 'Append'), "set_value(#{o.value.to_json}, true); return false" %>
 				</td>
 				<td class="nobr"><%= o.id %></td>
 				<td class="nobr"><%= nl2br_h o.typ %></td>
@@ -50,8 +51,8 @@ var set_value;
 var obj_delete;
 (function($) {
 	$('#objs td').disableSelection();
-	set_value = function(id) {
-		window.parent.cb($('#value-' + id).text());
+	set_value = function(value, append) {
+		window.parent.cb(value, append);
 	}
 	obj_delete = function(id) {
 		$('#obj_' + id).addClass('busy-bg');

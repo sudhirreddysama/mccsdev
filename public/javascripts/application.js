@@ -183,9 +183,15 @@ jQuery(function($) {
 		link = $(link);
 		link.click(function(e) {
 			e.preventDefault();
-			window.cb = function(val) {
+			window.cb = function(val, append) {
 				$(pop).dialog('close');
-				$('#' + link.attr('id').substring(7)).val(val);
+				var inp = $('#' + link.attr('id').substring(7));
+				if(append) {
+					inp.val(inp.val() + ' ' + val);
+				}
+				else {
+					inp.val(val);
+				}
 				pop = null;
 			}
 			var w = 800;
