@@ -119,7 +119,7 @@ class WebExamController < CrudController
 		@date_types = [
 			['Date Submitted', 'applicants.submitted_at'],
 		]
-		if @current_user.agency_level?
+		if @current_user.agency_level? && !@current_user.allow_web_post_review
 			cond << 'applicants.approved = "Y"'
 		end		
 		cond << get_date_cond		

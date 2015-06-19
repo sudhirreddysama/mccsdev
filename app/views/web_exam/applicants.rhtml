@@ -9,7 +9,7 @@
 %><%= partial 'nav' %>
 <%= partial 'filter' %>
 
-<% if @editable and !@current_user.view_web_post_for_agency %>
+<% if @editable #and !@current_user.view_web_post_for_agency #why was this condition here?!? %>
 	<% load_applicant_review_options %>
 	<%= partial 'exam/save_bar', {:url => url_for(:action => :applicants_save, :id => @obj.id)}  %>
 	<% if @seasonal %>
