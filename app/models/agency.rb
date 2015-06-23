@@ -31,7 +31,7 @@ class Agency < ActiveRecord::Base
 	
 	def get_users d
 		u = users.find(:all, {
-			:conditions => d ? ['users.department_id is null or users.department_id = ?', d.id] : 'users.department_id is null'
+			:conditions => d ? ['(users.department_id is null or users.department_id = ?) and users.level != "disabled"', d.id] : 'users.department_id is null'
 		})
 		return u
 	end

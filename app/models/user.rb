@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 	belongs_to :department
 	
 	belongs_to :switch_user, :class_name => 'User', :foreign_key => 'switch_user_id'
-	has_many :switch_users, :class_name => 'User', :foreign_key => 'switch_user_id'	
+	has_many :switch_users, :class_name => 'User', :foreign_key => 'switch_user_id', :conditions => 'users.level != "disabled"'
 	
 	validates_format_of :username, :with => /\A[a-zA-Z0-9_]{3,100}\Z/
 	validates_uniqueness_of :username
