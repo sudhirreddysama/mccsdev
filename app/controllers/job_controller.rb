@@ -13,7 +13,9 @@ class JobController < CrudController
 			:dir1 => 'asc',
 			:agency_id => @current_user.agency_level? ? @current_user.agency_id : nil
 		})
-		if !params[:agency_id].blank? && params[:agency_id] != 'undefined'
+		if params[:agency_id] == 'undefined'
+			@filter[:agency_id] = @current_user.agency_id
+		elsif !params[:agency_id].blank? && params[:agency_id] != 'undefined'
 			@filter[:agency_id] = params[:agency_id]
 		end
 		@orders = [
