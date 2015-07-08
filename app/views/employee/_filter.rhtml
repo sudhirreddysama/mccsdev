@@ -1,4 +1,8 @@
-<% form_for(:filter, @filter, :builder => TableFormBuilder) { |f| %>
+<%
+
+load_job_options
+
+%><% form_for(:filter, @filter, :builder => TableFormBuilder) { |f| %>
 	<div class="left">
 		<table class="form">
 			<tr>
@@ -34,7 +38,7 @@
 					<td><%= f.select :agency_ids, Agency.find(:all, :order => 'agencies.name asc').collect { |a| [a.name, a.id] }, {}, :multiple => true, :style => 'width: 200px; height: 100px;' %></td>
 					<td><%= f.select :department_ids, Department.find(:all, :order => 'departments.name asc').collect { |d| [d.name, d.id] }, {}, :multiple => true, :style => 'width: 200px; height: 100px;' %></td>
 				<% end %>
-				<td><%= f.select :job_ids, Job.find(:all, :order => 'jobs.name asc').collect { |j| [j.name, j.id] }, {}, :multiple => true, :style => 'width: 200px; height: 100px;' %></td>				
+				<td><%= f.select :job_ids, @job_options, {}, :multiple => true, :style => 'width: 200px; height: 100px;' %></td>				
 				<td class="subform">
 					<table class="form">
 						<tr><td><%= f.select :date_type, @date_types %></td></tr>

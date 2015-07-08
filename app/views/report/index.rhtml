@@ -11,7 +11,7 @@ else
 	@departments = Department.find(:all, :order => 'departments.name')
 end
 
-@jobs = Job.find(:all, :order => 'jobs.name')
+load_job_options
 
 %>
 
@@ -82,7 +82,7 @@ end
 					</tr>
 					<tr>
 						<td colspan="2"><%= select_tag 'department_ids', options_for_select(@departments.collect { |a| [a.name, a.id] }), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>
-						<td colspan="2"><%= select_tag 'job_ids', options_for_select(@jobs.collect { |a| [a.name, a.id] }), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>				
+						<td colspan="2"><%= select_tag 'job_ids', options_for_select(@job_options), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>				
 					</tr>
 					<tr>
 						<th>Class:</th>
@@ -153,7 +153,7 @@ end
 								<th>Title:</th>
 							</tr>
 								<td colspan="5">
-									<%= select_tag 'job_ids', options_for_select(@jobs.collect { |j| [j.name, j.id] }), :multiple => true, :style => 'height: 150px;' %>
+									<%= select_tag 'job_ids', options_for_select(@job_options), :multiple => true, :style => 'height: 150px;' %>
 									<div>If no titles are selected, all will be used.
 								</td>
 							</tr>
@@ -200,7 +200,7 @@ end
 								<th>Title:</th>
 							</tr>
 								<td colspan="5">
-									<%= select_tag 'job_ids', options_for_select(@jobs.collect { |j| [j.name, j.id] }), :multiple => true, :style => 'height: 150px;' %>
+									<%= select_tag 'job_ids', options_for_select(@job_options), :multiple => true, :style => 'height: 150px;' %>
 									<div>If no titles are selected, all will be used.
 								</td>
 							</tr>

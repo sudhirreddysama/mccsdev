@@ -6,6 +6,7 @@ class Job < ActiveRecord::Base
 	has_many :preferred_lists
 	has_many :agency_jobs
 	has_many :agencies, :through => :agency_jobs
+	has_many :employees
 	
 	def label; name_was; end
 	
