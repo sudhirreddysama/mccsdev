@@ -129,7 +129,7 @@
 							<td class="nobr">
 								<%= partial 'notes', {:o => o} %>
 								<%= link_to o.person.label, {:controller => :applicant, :action => :view, :id => o.id}, :target => '_blank' %>
-								<% if o.person.veteran == 'VETERAN' || o.person.veteran == 'DISABLED VET' %>
+								<% if !o.person.veteran.blank? %>
 									<div style="color: #00a; font-size: 80%;">
 										<%= h o.person.veteran %>
 										- <%= o.person.veteran_verified ? 'VERIFIED' : 'UNVERIFIED' %>
@@ -146,14 +146,14 @@
 							<td>
 								<%= f.text_field :gender, :size => 3, :id => "cell-#{i}-7", :class => "cell row-#{i} col-7 ucase" %>
 								<% if o.army_served %>
-									<a href="#" style="color: #a00;" onclick="jQuery('#vet-<%= o.id %>').toggle(); return false">VET. INFO</a>
+									<a href="#" style="color: #a00;" onclick="jQuery('#vet-<%= o.id %>').toggle(); return false">Application Armed Forces/VC Info</a>
 								<% end %>
 								<% if o.agency_residency %>
 									<span style="color: #a0a;">BOCES RES.</span>
 								<% end %>
 							</td>
 						</tr>
-						<% if o.army_served %>
+						<% if o.army_served || !o.vc_type.blank? %>
 							<tr id="vet-<%= o.id %>" style="display: none;">
 								<td></td>
 								<td colspan="8" style="color: #a00; font-size: 90%;">
