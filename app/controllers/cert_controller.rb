@@ -71,7 +71,8 @@ class CertController < CrudController
     end
     if params[:popup]
       sub_c = []
-      sub_c << 'certs.certification_date <= date(now()) and certs.return_date >= date(now()) and (certs.completed_date is null or certs.completed_date > date(now()))'
+      # Disable for now?
+      #sub_c << 'certs.certification_date <= date(now()) and certs.return_date >= date(now()) and (certs.completed_date is null or certs.completed_date > date(now()))'
       cond << get_where_or(sub_c)
     end
 
