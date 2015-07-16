@@ -244,7 +244,7 @@ class WebExamController < CrudController
 					Notifier.deliver_new_exams e, @fname
 				}
 			end
-			render :inline => "<a href=\"/mccs/new-exams/#{@fname}\">#{@fname}</a>"
+			render :inline => "<a href=\"/mccs" + (RAILS_ENV == 'development' ? 'dev' : '') + "/new-exams/#{@fname}\">#{@fname}</a>"
 		end
 	end
 	skip_before_filter :authenticate, :only => :send_exam_emails

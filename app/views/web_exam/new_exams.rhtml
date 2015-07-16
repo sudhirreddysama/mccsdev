@@ -82,10 +82,10 @@
 				<% } %>
 			</table>
 		<% end %>
-		<% if !@public.empty? %>
-			<div style="page-break-before: always; height: 0; overflow: hidden;">&nbsp;</div>
-		<% end %>
 		<% if !@promo.empty? %>
+			<% if !@public.empty? %>
+				<div style="page-break-before: always; height: 0; overflow: hidden;">&nbsp;</div>
+			<% end %>
 			<%= head %>
 			<h3>EXAMINATIONS OPEN TO EMPLOYEES OF THE FOLLOWING JURISDICTIONS</h3>
 			<table>
