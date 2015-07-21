@@ -16,6 +16,14 @@ agency_controllers = %w{cert form_change form_hire pay_cert}
 addtest = request.url
 
 @allow_add = (@current_user.agency_level? || @current_user.liaison_level?) && addtest.include?('web_exam') && addtest.include?('document')
+
+if @current_user.liaison_level?
+	if(params[:sc] == 'agency') # && @sobj && @sobj.liaison_id == @current_user.id
+		@allow_edit = true
+		@no_create = true
+	end
+end
+
 %>
 
 <% if params[:sc] %>
@@ -37,12 +45,12 @@ addtest = request.url
 		</div>
 		<div class="tabs">
 			<%= tab 'View', :controller => params[:sc], :action => :view, :id => @sobj.id, :sc => nil %>
-			<% if @current_user.staff_level? || @allow_liaison || @allow_agency %>
+			<% if @current_user.staff_level? || @allow_liaison || @allow_agency || @allow_edit %>
 				<%= tab 'Edit', :controller => params[:sc], :action => :edit, :id => @sobj.id, :sc => nil %>
-				<% if !@current_user.agency_level? %>
-					<%= tab 'Clone', :controller => params[:sc], :action => :duplicate, :id => @sobj.id, :sc => nil %>
-				<% end %>
 			<% end %>
+			<% if !@current_user.agency_level? && (@current_user.staff_level? || @allow_liaison) %>
+				<%= tab 'Clone', :controller => params[:sc], :action => :duplicate, :id => @sobj.id, :sc => nil %>
+			<% end %>			
 			<% unless params[:popup] %>
 				<%= partial "#{params[:sc]}/nav2" if File.exists? "app/views/#{params[:sc]}/_nav2.rhtml" %>
 			<% end %>
@@ -57,8 +65,13 @@ addtest = request.url
 <% end %>
 <%
 
-
-@allow_liaison = @allow_liaison || (@current_user.liaison_level? && params[:controller] == 'document' && params[:sc] == 'web_exam')
+if @current_user.liaison_level?
+	@allow_liaison = @allow_liaison || (params[:controller] == 'document' && params[:sc] == 'web_exam')
+	if(params[:controller] == 'agency') # && @obj && @obj.liaison_id == @current_user.id
+		@allow_edit = true
+		@no_create = true
+	end
+end
 
 
 %>
@@ -92,8 +105,8 @@ addtest = request.url
 				<% end %>
 			<% end %>			
 				<%= tab 'View', :controller => params[:controller], :action => :view, :id => @obj.id %>
-				<% if !@view_only || @allow_agency || @allow_liaison %>
-					<% if @current_user.staff_level? || @allow_liaison || @allow_agency %>
+				<% if !@view_only || @allow_agency || @allow_liaison || @allow_edit  %>
+					<% if @current_user.staff_level? || @allow_liaison || @allow_agency || @allow_edit %>
 						<%= tab 'Edit', :controller => params[:controller], :action => :edit, :id => @obj.id %>
 						<% unless @no_create || @no_clone %>
 							<% if !@current_user.agency_level? %>

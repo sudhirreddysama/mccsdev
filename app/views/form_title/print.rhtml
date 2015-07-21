@@ -1,1 +1,365 @@
-<%= partial 'form_change/form_print' %>
+<% o = @obj %>
+<%
+
+county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
+
+%>
+<html>
+<head>
+	<style type="text/css">
+		body, td, th, input, select, textarea { font: 10px/1.5 Verdana, Arial, sans-serif; }
+		h1, h2, h3, h4, h5, h6 { font-weight: normal; padding: 0; margin: 1em 0; }
+		p { margin: 1em 0; }
+		h1 { font-size: 160%; }
+		h2 { font-size: 150%; }
+		h3 { font-size: 140%; }
+		h4 { font-size: 130%; }
+		h5 { font-size: 120%; }
+		h6 { font-size: 110%; }
+		.b { border: 1px solid #888; } 
+		.p { padding: 5px; } 
+		.nobr { white-space: nowrap; }
+		.uline { text-decoration: underline; }
+		.ulined { border-bottom: 1px solid #888; white-space: nowrap; text-align: center; font-weight: bold; }
+		span.ulined { display: inline-block; }
+		.mt { margin-top: 2px; }
+		table { margin: 0; padding: 0; border-collapse: collapse; width: 100%; }
+		table td { margin: 0; vertical-align: top; }
+		tr { page-break-inside: avoid; }
+	</style>
+</head>
+<body>
+	<table>
+		<tr>
+			<td width="33%" style="font-size: 12px; text-align: center;" class="b p">
+				Monroe County<br />
+				Civil Service Commission<br />
+				210 County Office Building<br />
+				39 West Main Street<br />
+				Rochester, New York 14614
+			</td>
+			<td colspan="2" class="b p">
+				New York State Civil Service Law: Section 22: Certification for positions. Before any new
+				position in the service of a civil division shall be created or any existing position in such
+				service shall be reclassified, the proposal therefore, including a statement of the duties of the
+				position, shall be referred to the municipal commission having jurisdiction and such
+				commission shall furnish a certificate stating the appropriate civil service title for the proposed
+				position or the position to be reclassified. Any such new position shall be created or any such
+				existing position reclassified only with the title approved and certified by the commission. 
+			</td>
+		</tr>
+		<tr>
+			<td class="b p">
+				<div style="text-align: center;"><strong>NEW POSITION DUTIES STATEMENT</strong></div>
+				Appointing authority requesting the creation of a new
+				position, must prepare a separate description for each
+				new position to be created except that one description
+				may cover two or more identical positions in the same
+				organizational unit.<br />
+				&nbsp;<br />
+				Forward two copies to this Commission, one to be
+				returned upon commission action.<br />
+				&nbsp;<br />
+				<strong>DO NOT COPY EXISTING JOB DESCRIPTIONS.</strong>
+			</td>
+			<td width="40%" class="b p">
+				This is a request to:<br />
+				&nbsp;<br />
+				<span class="ulined" style="width: 40px;"><%= o.classify_reclassify == 'Classify' ? 'X' : '' %>&nbsp;</span> Classify&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<span class="ulined" style="width: 40px;"><%= o.classify_reclassify == 'Classify' ? o.number_positions : '' %>&nbsp;</span> New Positions<br />
+				<span class="ulined" style="width: 40px;"><%= o.classify_reclassify == 'Reclassify' ? 'X' : '' %>&nbsp;</span> **Reclassify 
+				<span class="ulined" style="width: 40px;"><%= o.classify_reclassify == 'Reclassify' ? o.number_positions : '' %>&nbsp;</span> Present Positions<br />
+				&nbsp;<br />
+				** Position Number (County Only):<br />
+				<div class="ulined">6910<%= h o.present_position_number %>&nbsp;</div>
+				PRESENT TITLE:<br />
+				<div class="ulined"><%= h o.present_title %>&nbsp;</div>
+				INCLUMBENT:<br />
+				<div class="ulined"><%= h o.present_incumbent %>&nbsp;</div>
+				SALARY LEVEL:<br />
+				<div class="ulined"><%= h o.present_salary_level %>&nbsp;</div>
+			</td>
+			<td width="27%" class="b p">
+				<strong>COUNYY DEPARTMENTS ONLY</strong><br />
+				Position will be:<br />
+				<span class="ulined" style="width: 20px;"><%= o.grant_funded == 'Grant Funded' ? 'X' : '' %>&nbsp;</span> Grant Funded<br />
+				<span class="ulined" style="width: 20px;"><%= o.grant_funded == 'Non-Grant Funded' ? 'X' : '' %>&nbsp;</span> Non-grant Funded<br />
+				&nbsp;
+				<div style="text-align: center;"><strong>* * * * * * * * * * * * * * * * * * * * * *</strong></div>
+				&nbsp;<br />
+				<strong>HR Use Only:</strong><br />
+				FLSA: <span class="ulined" style="width: 20px;"><%= o.flsa == 'Exempt' ? 'X' : '' %>&nbsp;</span> Exempt
+				<span class="ulined" style="width: 20px;"><%= o.flsa == 'Non-Exempt' ? 'X' : '' %>&nbsp;</span> Non-Ex<br />
+				EEO: <span class="ulined" style="width: 20px;"><%= o.eeo == 'EEO' ? 'X' : '' %>&nbsp;</span> EEO
+				<span class="ulined" style="width: 20px;"><%= o.eeo == 'AAP' ? 'X' : '' %>&nbsp;</span> AAP<br />
+				Union:
+				<div class="ulined"><%= h o.union %>&nbsp;</div>
+			</td>
+		</tr>
+	</table>
+	<table class="b mt">
+		<tr>
+			<td colspan="3" class="p" style="padding-bottom: 0;"><strong>COUNTY DEPARTMENTS ONLY</strong></td>
+		</tr>
+		<tr>
+			<td width="33%" class="p">
+				1-A Employing Government
+				<div class="ulined"><% if county && o.agency %><%= h o.agency.name %><% end %>&nbsp;</div>
+			</td>
+			<td width="33%" class="p">
+				Department, Office, Institution
+				<div class="ulined"><% if county && o.department %><%= h o.department.name %><% end %>&nbsp;</div>
+			</td>
+			<td width="33%" class="p">
+				SAP Org. Number: <span class="ulined" style="width: 110px;">2910<%= h o.sap_number.to_s %>&nbsp;</span><br />
+				Cost Center Number: <span class="ulined" style="width: 110px;"><%= h o.cost_center.to_s %>&nbsp;</span>
+			</td>
+		</tr>
+	</table>
+	<table class="b mt">
+		<tr>
+			<td colspan="3" class="p" style="padding-bottom: 0;"><strong>OUTSIDE JURISDICTIONS (Towns, Villages, School Districts)</strong></td>
+		</tr>
+		<tr>
+			<td width="33%" class="p">
+				1-B Employing Government
+				<div class="ulined"><% if !county && o.agency %><%= h o.agency.name %><% end %>&nbsp;</div>
+			</td>
+			<td width="33%" class="p">
+				Department, Office, Institution
+				<div class="ulined"><% if !county && o.department %><%= h o.department.name %><% end %>&nbsp;</div>
+			</td>
+			<td width="33%" class="p">
+				Division, Unit or Section<br />
+				<div class="ulined"><%= h o.division_unit_section %>&nbsp;</div>
+			</td>
+		</tr>
+	</table>
+	<table class="b mt">
+		<tr>
+			<td width="50%" class="p">
+				2-A Suggested Title
+				<div class="ulined"><%= h o.suggested_title %>&nbsp;</div>
+			</td>
+			<td width="50%" class="p">
+				Salary Group and Range
+				<div class="ulined"><%= h o.suggested_salary_group_range %>&nbsp;</div>
+			</td>
+		</tr>
+	</table>
+	<div class="b p mt">
+		2-B DESCRIPTION OF DUTIES: Describe work in sufficient detail to give a clear word picture of the job. Use a separate
+		paragraph for each kind of work and describe the more important or time-consuming duties first. In the left column, estimate how
+		the total working time is divided. <strong>Do not copy existing job descriptions.</strong>
+	</div>
+	<table class="mt b">
+		<tr>
+			<td class="p" width="5%" style="border-right: 1px solid #888;"></td>
+			<td class="p" width="95%"><strong>Purpose of Position:</strong></td>
+		</tr>
+		<% 1.upto(6) { |i| %>		
+			<tr>
+				<td class="p" width="5%" style="border-right: 1px solid #888; white-space: nowrap; text-align: right; font-weight: bold;"><%= h o.send("duties_percent#{i}").to_s %>%</td>
+				<td class="p" width="95%" style="font-weight: bold;"><%= nl2br_h o.send("duties_description#{i}").to_s.strip %></td>
+			</tr>
+		<% } %>
+	</table>
+	<div style="page-break-after: always;"></div>
+	<table class="b">
+		<tr>
+			<td colspan="4" class="p" style="padding-bottom: 0;">3. Name, Title, and Phone Number of Person(s) Supervising this position (General, Direct, Administrative, etc.):<br />
+				<strong>*Submit Table of Organization*</strong>
+			</td>
+		</tr>
+		<tr>
+			<td width="25%" class="p" style="padding-bottom: 0;">
+				NAME
+			</td>
+			<td width="25%" class="p" style="padding-bottom: 0;">
+				TITLE
+			</td>
+			<td width="25%" class="p" style="padding-bottom: 0;">
+				TYPE OF SUPERVISION
+			</td>
+			<td width="25%" class="p" style="padding-bottom: 0;">
+				EMAIL &amp; PHONE NUMBER
+			</td>
+		</tr>
+		<% 1.upto(3) { |i| %>
+			<%
+			
+			c1 = o.send("supervisor_name#{i}")
+			c2 = o.send("supervisor_title#{i}")
+			c3 = o.send("supervisor_type#{i}")
+			c4 = o.send("supervisor_email#{i}")
+			c5 = o.send("supervisor_phone#{i}")
+			
+			%>
+			<% if !c1.blank? || !c2.blank? || !c3.blank? || !c3.blank? || !c4.blank? %>
+				<tr>
+					<td class="p" style="font-weight: bold; padding-bottom: 0;"><%= h c1 %></td>
+					<td class="p" style="font-weight: bold; padding-bottom: 0;"><%= h c2 %></td>
+					<td class="p" style="font-weight: bold; padding-bottom: 0;"><%= h c3 %></td>
+					<td class="p" style="font-weight: bold; padding-bottom: 0;"><%= h [c4, c5].reject(&:blank?).join(', ') %></td>
+				</tr>
+			<% end %>
+		<% } %>
+	</table>	
+	<table class="b mt">
+		<tr>
+			<td colspan="3" class="p" style="padding-bottom: 0;">4. Names and Titles of Persons Supervised by Employee in this position: <strong>*Submit Table of Organization*</strong>
+			</td>
+		</tr>
+		<tr>
+			<td width="25%" class="p" style="padding-bottom: 0;">
+				NAME
+			</td>
+			<td width="25%" class="p" style="padding-bottom: 0;">
+				TITLE
+			</td>
+			<td width="50%" class="p" style="padding-bottom: 0;">
+				TYPE OF SUPERVISION
+			</td>
+		</tr>
+		<% 1.upto(3) { |i| %>
+			<%
+			
+			c1 = o.send("supervisee_name#{i}")
+			c2 = o.send("supervisee_title#{i}")
+			c3 = o.send("supervisee_type#{i}")
+			
+			%>
+			<% if !c1.blank? || !c2.blank? || !c3.blank? %>
+				<tr>
+					<td class="p" style="font-weight: bold; padding-bottom: 0;"><%= h c1 %></td>
+					<td class="p" style="font-weight: bold; padding-bottom: 0;"><%= h c2 %></td>
+					<td class="p" style="font-weight: bold; padding-bottom: 0;"><%= h c3 %></td>
+				</tr>
+			<% end %>
+		<% } %>
+	</table>	
+	<table class="b mt">
+		<tr>
+			<td colspan="3" class="p" style="padding-bottom: 0;">5. Names and Titles of Persons doing substantially the same kind and level of work as will be done by the incumbent of this new position:<br />
+				<strong>*Submit Table of Organization*</strong>
+			</td>
+		</tr>
+		<tr>
+			<td width="25%" class="p" style="padding-bottom: 0;">
+				NAME
+			</td>
+			<td width="25%" class="p" style="padding-bottom: 0;">
+				TITLE
+			</td>
+			<td width="50%" class="p" style="padding-bottom: 0;">
+				LOCATION OF POSITION
+			</td>
+		</tr>
+		<% 1.upto(3) { |i| %>
+			<%
+			
+			c1 = o.send("similar_name#{i}")
+			c2 = o.send("similar_title#{i}")
+			c3 = o.send("similar_location#{i}")
+			
+			%>
+			<% if !c1.blank? || !c2.blank? || !c3.blank? %>
+				<tr>
+					<td class="p" style="font-weight: bold; padding-bottom: 0;"><%= h c1 %></td>
+					<td class="p" style="font-weight: bold; padding-bottom: 0;"><%= h c2 %></td>
+					<td class="p" style="font-weight: bold; padding-bottom: 0;"><%= h c3 %></td>
+				</tr>
+			<% end %>
+		<% } %>
+	</table>	
+	<div class="mt b p">
+		6. What minimum qualifications do you think should be required for this position? <strong>DO NOT COPY FROM EXISTING JOB DESCRIPTION.</strong><br />
+		&nbsp;
+		<table>
+			<tr>
+				<td class="nobr" width="1%" rowspan="4">Education:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			</tr>
+			<tr>
+				<td class="nobr" width="1%">High School:</td>
+				<td class="nobr" width="1%"><span class="ulined" style="width: 50px;"><%= h o.min_hs %>&nbsp;</span></td>
+				<td width="97%" colspan="2">years (plus experience as described below)<br /></td>
+			</tr>
+			<tr>
+				<td class="nobr">College:</td>
+				<td class="nobr"><span class="ulined" style="width: 50px;"><%= h o.min_college %>&nbsp;</span></td>
+				<td width="1%" class="nobr">years, with specialization in </td>
+				<td width="96%"><div class="ulined"><%= h o.min_college_specialization %>&nbsp;</div></td>
+			</tr>
+			<tr>
+				<td class="nobr">Other:</td>
+				<td class="nobr"><span class="ulined" style="width: 50px;"><%= h o.min_other %>&nbsp;</span></td>
+				<td>years, with specialization in </td>
+				<td width="96%"><div class="ulined"><%= h o.min_other_specialization %>&nbsp;</div></td>
+			</tr>
+		</table>
+		&nbsp;<br />Experience: (list amount and type)<br />
+		<strong><%= nl2br_h o.experience %></strong><br />&nbsp;<br />
+		Essential knowledge, skills, and abilities:<br />
+		<strong><%= nl2br_h o.essential_skills %></strong><br />&nbsp;<br />
+		Type of license or certificate required: <span class="ulined" style="width: 400px;"><%= h o.license_certification_required %>&nbsp;</span><br />
+		&nbsp;<br />
+		Drug Testing: Is this position covered under the D.O.T. drug testing regulations? 
+		<span class="ulined" style="width: 40px;"><%= o.drug_testing ? 'X' : '' %>&nbsp;</span>YES 
+		<span class="ulined" style="width: 40px;"><%= o.drug_testing ? '' : 'X' %>&nbsp;</span>NO
+	</div>
+	<table class="b mt">
+		<tr>
+			<td colspan="3" class="p" style="padding-bottom: 0;">7. The above statements are accurate and complete. I am submitting
+				duplicate copies, one of which will be returned upon commission action.
+			</td>
+		</tr>
+		<tr>
+			<td width="33%" class="p">
+				&nbsp;<br />
+				Date: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</td>
+			<td width="33%" class="p">
+				&nbsp;<br />
+				Title: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</td>
+			<td width="34%" class="p">
+				Appointing Officer<br />
+				Signature: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</td>
+		</tr>
+	</table>
+	<table class="b mt">
+		<tr>
+			<td colspan="2" class="p" style="padding-bottom: 0;">
+				<div style="text-align: center;">CERTIFICATE OF MONROE COUNTY CIVIL SERVICE COMMISSION</div>
+				8. In accordance with the provisions of Civil Service Law, Section 22, the Monroe County Civil Service Commission certifies that
+				the appropriate civil service title for the position described is:
+			</td>
+		</tr>
+		<tr>
+			<td width="50%" class="p">
+				Title: <span class="ulined" style="width: 290px;"><%= h o.final_title %>&nbsp;</span>
+			</td>
+			<td width="50%" class="p">
+				Salary Group: <span class="ulined" style="width: 260px;"><%= h o.final_salary_group_range %>&nbsp;</span>
+			</td>
+		</tr>
+		<tr>
+			<td width="50%" class="p">
+				Job Spec. Number: <span class="ulined" style="width: 230px;"><%= h o.final_job_spec_number %>&nbsp;</span>
+			</td>
+			<td width="50%" class="p">
+				Civil Service Class: <span class="ulined" style="width: 230px;"><%= h o.final_civil_service_class %>&nbsp;</span>
+			</td>
+		</tr>
+		<tr>
+			<td width="50%" class="p">
+				Date: <span class="ulined" style="width: 290px;"><%= h o.effective_date %>&nbsp;</span>
+			</td>
+			<td width="50%" class="p">
+				Signature: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</td>
+		</tr>
+	</table>		
+</body>
+</html>

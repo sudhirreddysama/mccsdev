@@ -12,6 +12,7 @@ class Document < ActiveRecord::Base
 	belongs_to :seasonal_app
 	belongs_to :preferred_candidate
 	belongs_to :pay_cert
+	belongs_to :provisional
 	
 	belongs_to :form_change
 	belongs_to :form_hire

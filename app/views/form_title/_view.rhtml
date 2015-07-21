@@ -16,6 +16,22 @@
 				<td>
 					<label>Department</label>
 					<%= h o.department.name if o.department %>
+				</td>
+				<td>
+					<label>Created By:</label>
+					<%= h o.user.name if o.user %>
+				</td>
+				<td>
+					<label>Created At:</label>
+					<%= h o.created_at.d0? %>
+				</td>
+				<td>
+					<label>Submitted By:</label>
+					<%= h o.submitter.name if o.submitter %>
+				</td>
+				<td>
+					<label>Submitted At:</label>
+					<%= h o.submitted_at.d0? %>
 				&nbsp;</td>
 			</tr>
 		</table>
