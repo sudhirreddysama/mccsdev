@@ -1,17 +1,27 @@
-<%
+<% if false %>
+	<% 
 
-@agency_opts = Agency.find(:all, {
-	:order => 'agencies.name', 
-	:conditions => @current_user.agency_level? && @current_user.agency_id ? ['agencies.id in (?)', [@current_user.agency_id, @obj.agency_id]] : nil
-}).collect { |a| [a.name, a.id] }
-@department_opts = Department.find(:all, {
-	:order => 'departments.name', 
-	:conditions => @current_user.agency_level? && @current_user.department_id ? ['departments.id in (?)', [@current_user.department_id, @obj.department_id]] : nil
-}).collect { |a| [a.name, a.id] }
+	@agency_opts = Agency.find(:all, {
+		:order => 'agencies.name', 
+		:conditions => @current_user.agency_level? && @current_user.agency_id ? ['agencies.id in (?)', [@current_user.agency_id, @obj.agency_id]] : nil
+	}).collect { |a| [a.name, a.id] }
+	@department_opts = Department.find(:all, {
+		:order => 'departments.name', 
+		:conditions => @current_user.agency_level? && @current_user.department_id ? ['departments.id in (?)', [@current_user.department_id, @obj.department_id]] : nil
+	}).collect { |a| [a.name, a.id] }
 
-%>
-<%= f.tr_select :agency_id, @agency_opts, :label => 'Agency', :req => true, :include_blank => !@current_user.agency_id %>
-<%= f.tr_select :department_id, @department_opts, :label => 'Department', :req => true, :include_blank => !@current_user.department_id %>
+	%>
+	<%= f.tr_select :agency_id, @agency_opts, :label => 'Agency', :req => true, :include_blank => !@current_user.agency_id %>
+	<%= f.tr_select :department_id, @department_opts, :label => 'Department', :req => true, :include_blank => !@current_user.department_id %>
+<% end %>
+
+
+<% if !@current_user.agency_level? || !@current_user.agency %>
+	<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name').collect { |a| [a.name, a.id] }, :label => 'Agency', :req => true, :include_blank => true %>
+<% end %>
+<% if !@current_user.agency_level? || !@current_user.department %>
+	<%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name').collect { |a| [a.name, a.id] }, :label => 'Department', :req => true, :include_blank => true %>
+<% end %>
 <tr>
 	<th>County Departments:</th>
 	<td class="subform">
