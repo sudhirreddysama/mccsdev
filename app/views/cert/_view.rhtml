@@ -65,23 +65,37 @@
 	<div class="row">
 		<table>
 			<tr>
-				<td>
-					<label>Exam No.:</label>
-					<%= link_to(o.exam.exam_no, :controller => :exam, :action => :view, :id => o.exam_id) if o.exam %>
-				</td>
-				<td>
-					<label>Exam Title (links to exam record):</label>
-					<%= link_to(o.exam.title, :controller => :exam, :action => :view, :id => o.exam_id) if o.exam %>
-				</td>
-				<td>
-					<% if @current_user.agency_level? %>
-						<label>Title of Position (links to title record):</label>
-						<%= link_to(o.job.name, :controller => :job, :action => :view, :id => o.job_id) if o.job %>
-					<% else %>
-						<label>Title of Position (links to title record):</label>
-						<%= link_to(o.job.name, :controller => :job, :action => :view, :id => o.job_id) if o.job %>
-					<% end %>
-				&nbsp;</td>
+				<% if params[:popup] %>
+					<td>
+						<label>Exam No.:</label>
+						<%= o.exam.exam_no if o.exam %>
+					</td>
+					<td>
+						<label>Exam Title:</label>
+						<%= o.exam.title if o.exam %>
+					</td>
+					<td>
+						<%= o.job.name if o.job %>
+					&nbsp;</td>
+				<% else %>
+					<td>
+						<label>Exam No.:</label>
+						<%= link_to(o.exam.exam_no, :controller => :exam, :action => :view, :id => o.exam_id) if o.exam %>
+					</td>
+					<td>
+						<label>Exam Title (links to exam record):</label>
+						<%= link_to(o.exam.title, :controller => :exam, :action => :view, :id => o.exam_id) if o.exam %>
+					</td>
+					<td>
+						<% if @current_user.agency_level? %>
+							<label>Title of Position (links to title record):</label>
+							<%= link_to(o.job.name, :controller => :job, :action => :view, :id => o.job_id) if o.job %>
+						<% else %>
+							<label>Title of Position (links to title record):</label>
+							<%= link_to(o.job.name, :controller => :job, :action => :view, :id => o.job_id) if o.job %>
+						<% end %>
+					&nbsp;</td>
+				<% end %>
 			</tr>
 		</table>
 	</div>
@@ -242,6 +256,10 @@
 		</div>	
 	<% end %>
 </div>
+
+
+<% if(!params[:popup]) %>
+
 
 <%
 
@@ -574,3 +592,5 @@
 	})(jQuery);
 
 </script>
+
+<% end %>
