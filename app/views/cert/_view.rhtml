@@ -259,15 +259,15 @@
 
 %>
 <% if @current_user.staff_level? || (@obj.status != 'requested' && @obj.status != 'pending') %>
-    <table class="dg">
-      <thead>
-      <tr>
-
-      <th width="100%;" style="text-align: center;">Apply this action to entire list: <%= select_tag 'action_all', options_for_select([[nil, 'Action...']] + @cert_codes) %>&nbsp;&nbsp;&nbsp;
-    </th>
-</tr>
-      </thead>
-    </table>
+	<% if @current_user.staff_level? || @current_user.liaison_level? || (@current_user.agency_level? && (@obj.status == 'certified' || @obj.status == 'overdue') && @obj.certification_date <= Time.now.to_date) %>
+		<table class="dg">
+			<thead>
+				<tr>
+				<th width="100%;" style="text-align: center;">Apply this action to entire list: <%= select_tag 'action_all', options_for_select([['Action...', nil]] + @cert_codes) %>&nbsp;&nbsp;&nbsp;</th>
+				</tr>
+			</thead>
+		</table>
+	<% end %>
 	<table class="dg">
 		<thead>
 			<tr>
@@ -276,7 +276,7 @@
 				<th width="1%" style="text-align: right;">Final<br />Score</th>
 				<th width="1%" style="text-align: right;">VC</th>
 				<th width="49%">Report of Action / Salary /<br />Effective Date / Documents</th>
-          	</tr>
+      </tr>
 		</thead>
 		<tbody id="objs">
 			<% @applicants.each_with_index { |ca, i| 
@@ -324,7 +324,7 @@
 					<td style="text-align: right;"><%= a.final_score %></td>
 					<td style="text-align: right;"><%= a.veterans_credits %></td>
 					<td>
-						<% if @current_user.staff_level? || (@current_user.agency_level? && (@obj.status == 'certified' || @obj.status == 'overdue') && @obj.certification_date <= Time.now.to_date) %>
+						<% if @current_user.staff_level? || @current_user.liaison_level? || (@current_user.agency_level? && (@obj.status == 'certified' || @obj.status == 'overdue') && @obj.certification_date <= Time.now.to_date) %>
 							<table>
 								<tr>
 									<td class="nobr">Action:</td><%
@@ -461,27 +461,29 @@
 				}
 			});
 		});
-        $('#action_all').change(function(e) {
-            var inp = $(this);
-            var val = inp.val();
-            inp.addClass('busy-bg');
-            $.ajax({
-                url: root_url + 'cert/set_action_all/<%= @obj.id %>/'+val,
-                data: {act: val},
-                complete: function(xhr, status) {
-                },
-                success: function(data, status, xhr) {
-                    inp.removeClass('busy-bg');
-                    window.location.href = $(location).attr('href');
-
-                },
-                error: function(xhr, status, error) {
-                    inp.removeClass('busy-bg');
-
-                    alert('Error setting action.');
-                }
-            });
-        });
+		$('#action_all').change(function(e) {
+			var inp = $(this);
+			var val = inp.val();
+			if(!confirm('Are you sure you want to set this action for everyone?')) {
+				inp.val('');
+				return;
+			}
+			inp.addClass('busy-bg');
+			$.ajax({
+				url: root_url + 'cert/set_action_all/<%= @obj.id %>/'+val,
+				data: {act: val},
+				complete: function(xhr, status) {
+				},
+				success: function(data, status, xhr) {
+					inp.removeClass('busy-bg');
+					window.location.href = $(location).attr('href');
+				},
+				error: function(xhr, status, error) {
+					inp.removeClass('busy-bg');
+					alert('Error setting action.');
+				}
+			});
+		});
 		$('.ca-status').change(function(e) {
 			var inp = $(this);
 			var id = inp.attr('id').split('-')[1];
