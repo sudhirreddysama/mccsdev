@@ -1,7 +1,7 @@
 <div class="tabs">
-	<%= tab 'List', :controller => 'exam', :action => :index, :id => nil %>
+	<%= tab 'List', :controller => 'exam', :action => :index, :id => nil, :sc => nil, :sid => nil %>
 	<% if @current_user.staff_level? || @allow_liaison %>
-		<%= tab 'New', :controller => 'exam', :action => :new, :id => nil %>
+		<%= tab 'New', :controller => 'exam', :action => :new, :id => nil, :sc => nil, :sid => nil %>
 	<% end %>
 	<%= partial 'exam/nav1' %>
 	<div class="clear"></div>
