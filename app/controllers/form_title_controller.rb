@@ -19,7 +19,7 @@ class FormTitleController < CrudController
 			'form_titles.present_title' => :like,
 			'form_titles.suggested_title' => :like,
 			'form_titles.final_title' => :like,
-			'form_titles.present_incumbant' => :like
+			'form_titles.present_incumbent' => :like
 		}
 		
 		if @current_user.agency_level?
