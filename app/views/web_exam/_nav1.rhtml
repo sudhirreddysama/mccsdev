@@ -1,11 +1,11 @@
 <% if @current_user.agency_level? %>
-	<%= tab 'All Applicants', {:action => :all_applicants, :id => nil, :sid => nil, :sc => nil, :controller => :web_exam}, {}, :class => 'tab-applicant' %>
+	<%= tab 'All Applicants', {:action => :all_applicants, :id => nil, :sid => nil, :sc => nil, :controller => :web_exam, :sc => nil, :sid => nil}, {}, :class => 'tab-applicant' %>
 <% end %>
 
 <% if @current_user.admin_level? || @current_user.allow_edit_notice_emails %>
-	<%= tab 'Exam Notice Emails', {:action => :exam_emails, :id => nil, :controller => :web_exam} %>
+	<%= tab 'Exam Notice Emails', {:action => :exam_emails, :id => nil, :controller => :web_exam, :sc => nil, :sid => nil} %>
 <% end %>
 
 <% if @current_user.staff_level? %>
-	<%= tab 'Facebook/Twitter', {:action => :social, :id => nil, :controller => :web_exam} %>
+	<%= tab 'Facebook/Twitter', {:action => :social, :id => nil, :controller => :web_exam, :sc => nil, :sid => nil} %>
 <% end %>
