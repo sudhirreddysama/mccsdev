@@ -1,7 +1,7 @@
 <%= partial 'nav' %>
 <%= partial 'scoring_nav' %>
 <%= partial 'errors', :errors => @obj.errors.full_messages %>
-
+<div class="marg"><strong>NOTE: Enter higher scores FIRST, at top of table!</strong></div>
 <% table_form_for(:bs) { |f| %>
 	<tr>
 		<th></th>

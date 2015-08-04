@@ -18,10 +18,12 @@ class Bandscore < ActiveRecord::Base
 				end
 			end
 		}
+		bs = bs.sort_by(&:grade).reverse # top score first
 		exam.applicants.each { |a|
 			use_score = a.raw_score.to_f + a.other_credits.to_f
 			b = bs.find { |b|	
-				use_score >= b.from && use_score <= b.to
+				# Now that top scores are first, we can assume if they hit the minimum they should get that score.
+				use_score >= b.from # && use_score <= b.to
 			}
 			if b
 				a.base_score = b.grade

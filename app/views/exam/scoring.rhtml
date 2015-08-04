@@ -225,7 +225,8 @@
 								if(from && to) {
 									from = toFloat(from);
 									to = toFloat(to);
-									if(use_score >= from && use_score <= to) {
+									// Assumes higher scores are first!
+									if(use_score >= from) { //&& use_score <= to) {
 										base = toFloat(gd);
 										$(pre + '3').val(gd);
 										bs_found = true;
