@@ -1,0 +1,21 @@
+<%= partial 'nav' %>
+<div class="marg">These are SSNs that have been pulled out of the normal SSN Merge because they are made up. The SSNs displayed here are:</div>
+<div class="marg"><%= PersonController::BAD_SSNS.join(', ') %></div>
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">SSN</th>
+			<td width="1%">ID</td>
+			<td width="98%">Name (click to view person/fix ssn)</td>
+		</tr>
+	</thead>
+	<% @objs.each { |o| %>
+		<tbody class="<%= cycle 'odd', 'even' %>">
+			<tr>
+				<td class="nobr"><%= h o.ssn %></td>
+				<td class="nobr"><%= h o.id %></td>
+				<td><%= link_to(o.full_name, {:action => :view, :id => o.id}, :target => '_blank') %></td>
+			</tr>
+		</tbody>
+	<% } %>
+</table>

@@ -133,7 +133,7 @@ class TableFormBuilder < ActionView::Helpers::FormBuilder
 	end
 	
 	def tr(method, field, options = {})
-		'<tr' + (options[:tr_class] ? ' class="' + options[:tr_class].to_s + '"' : '' ) + '>' +
+		'<tr class="' + (options[:tr_class] ? options[:tr_class].to_s + ' ' : '' ) + err(method) + '">' +
 			'<th class="nobr">' + 
 				((method.nil? or options[:label].blank?) ? '' : label(method, options[:label].to_s + ':')) +
 				(options[:req] ? ' <span class="req">*</span>' : '') +
@@ -145,6 +145,16 @@ class TableFormBuilder < ActionView::Helpers::FormBuilder
 				(options[:help].nil? ? '' : '<div class="help">' + options[:help].to_s + '</div>') +
 			'</td>' + 
 		'</tr>'
+	end
+	
+	def err? method
+		e = @template.instance_variable_get("@#{@object_name}").errors
+		method2 = method.to_s.sub('_id', '')
+		return e[method].present? || e[method2].present?
+	end
+	
+	def err method
+		return err?(method) ? 'err' : '' 
 	end
 	
 	def trim_opts opts

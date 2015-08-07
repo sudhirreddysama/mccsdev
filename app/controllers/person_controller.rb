@@ -35,7 +35,7 @@ class PersonController < CrudController
 		}
 		super
 	end
-	
+
 	def veterans
 		@filter = get_filter({
 			:sort1 => 'people.last_name',
@@ -68,7 +68,7 @@ class PersonController < CrudController
 		types << 'ACTIVE DUTY' if @filter.type_active_duty == '1'
 		if !types.empty?
 			cond << 'people.veteran in ("' + types.join('","') + '")'
-		end		
+		end
 		cond << 'people.veteran_verified = 1' if @filter.veteran_verified == 'verified'
 		cond << 'people.veteran_verified = 0' if @filter.veteran_verified == 'unverified'
 		cond << 'people.veteran_used = 1' if @filter.veteran_used == 'used'
@@ -76,22 +76,22 @@ class PersonController < CrudController
 		@opt = {
 			:conditions => get_where(cond),
 			:order => get_order_auto
-		}	
+		}
 		fetch_objs
 		template if !params[:export]
 	end
-	
+
 	def edit_vet
 		load_obj
 		@redirect = {:action => :view_vet, :id => @obj.id, :controller => :person}
 		edit
 	end
-	
+
 	def view_vet
 		load_obj
 		view
 	end
-	
+
 	def update_residency
     load_obj
     p=@obj
@@ -185,16 +185,18 @@ class PersonController < CrudController
 			flash[:notice] = 'List notes have been saved.'
 		else
 			@apps = @obj.applicants.find(:all, {
-				:include => [:exam, :app_status], 
+				:include => [:exam, :app_status],
 				:order => 'exams.established_date desc',
 				:conditions => 'applicants.approved = "Y" and app_statuses.eligible != "N"'
 			})
 			@objs = @obj.list_notes.find(:all, {
 				:include => {:applicant => [:exam, :app_status]},
 				:order => 'exams.established_date desc'
-			})		
+			})
 		end
 	end
+	
+	BAD_SSNS = %w(999-99-9999 012-34-5678 000-00-0000 123-12-1234 123-45-6789 111-11-1111)
 	
 	def ssn_merge
 		if request.post? && params[:objs]
@@ -214,15 +216,21 @@ class PersonController < CrudController
 			flash[:notice] = 'Records have been merged.'
 		else
 			@objs = DB.query('
-				select 
+				select
 				p1.ssn ssn,
-				p1.id old_id, p1.first_name old_first_name, p1.last_name old_last_name, 
+				p1.id old_id, p1.first_name old_first_name, p1.last_name old_last_name,
 				p2.id new_id, p2.first_name new_first_name, p2.last_name new_last_name
 				from people p1
 				join people p2 on p1.ssn = p2.ssn and p2.id > p1.id
+				where p1.ssn not in ("' + BAD_SSNS.join('","') + '")
 				order by p1.last_name asc, p1.first_name asc
 			')
 		end
 	end
 	
+	#adding this to catch the "spoof" ssn's that are flushed out of the ssn_merge
+	def ssn_merge_bad
+		@objs = Person.find(:all, :conditions => ['ssn in (?)', BAD_SSNS], :order => 'id desc')
+	end
+
 end

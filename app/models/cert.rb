@@ -21,7 +21,7 @@ class Cert < ActiveRecord::Base
 	
 	validates_presence_of :agency, :exam
 	validates_presence_of :temp_duration, :if => Proc.new { |c| c.job_type == 'T' && c.agency_submit }
-	validates_presence_of :general_or_residential, :job_time, :salary_range, :if => :agency_submit
+	validates_presence_of :requestor, :number_of_positions, :request_type, :job_time, :job_type, :general_or_residential, :salary_range
 	
 	def agency_submit
 		if Thread.current[:current_user]

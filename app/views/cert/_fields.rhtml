@@ -41,7 +41,7 @@
 	<%= f.tr_check :show_actions, :label => 'Show Actions?', :text => 'If checked, actions will be shown on the public website when exported.' %>	
 <% end %>
 <%= f.tr_text_field :number_of_positions, :label => 'No. Positions', :class => 'ucase', :size => 10, :req => true %>
-<tr>
+<tr class="<%= f.err(:request_type) %>">
 	<th>Request Type:<span class="req">*</span></th>
 	<td>
 		<label><%= f.radio_button :request_type, 'PROMOTIONAL' %> PROMOTIONAL</label>&nbsp;&nbsp;
@@ -49,15 +49,15 @@
 		<label><%= f.radio_button :request_type, 'PREFERRED' %> PREFERRED</label>
 	</td>
 </tr>
-	<tr>
-		<th>Time: <span class="req">*</span></th>
-		<td>
-			<% Const::JOB_TIMES.each_with_index { |t, i| %>
-							<label><%= f.radio_button :job_time, t[1] %> <%= h t[0] %></label>&nbsp;&nbsp;
-			 <% } %>
-		</td>
-	</tr>
-<tr id="tr_job_type">
+<tr class="<%= f.err(:job_time) %>">
+	<th>Time: <span class="req">*</span></th>
+	<td>
+		<% Const::JOB_TIMES.each_with_index { |t, i| %>
+						<label><%= f.radio_button :job_time, t[1] %> <%= h t[0] %></label>&nbsp;&nbsp;
+		 <% } %>
+	</td>
+</tr>
+<tr id="tr_job_type" class="<%= f.err(:job_type) %>">
 	<th>Job Type:<span class="req">*</span></th>
 	<td>
 		<label><%= f.radio_button :job_type, 'P' %> PERMANENT</label>&nbsp;&nbsp;
@@ -65,7 +65,7 @@
 		<label><%= f.radio_button :job_type, 'T' %> TEMPORARY</label>
 	</td>
 </tr>
-<tr id="tr_temp_duration"<% if(@obj.job_type != 'T') %> style="display: none;"<% end %>>
+<tr id="tr_temp_duration"<% if(@obj.job_type != 'T') %> style="display: none;"<% end %> class="<%= f.err(:temp_duration) %>">
 	<th>Temp Duration: <span class="req">*</span></th>
 	<% temp_opts = ['0-3 MONTHS', '3-6 MONTHS', '6-12 MONTHS'] %>
 	<% if @obj.temp_duration.blank? || temp_opts.include?(@obj.temp_duration) %>
@@ -78,7 +78,7 @@
 		<td><%= f.text_field :temp_duration, :label => 'If Temp, Duration', :class => 'ucase' %></td>
 	<% end %>
 </tr>
-<tr>
+<tr class="<%= f.err(:general_or_residential) %>">
 	<th>Gen/Dept/Res: <span class="req">*</span></th>
 	<td>
 		<% if(@obj.general_or_residential == 'N/A') %><label><%= f.radio_button :general_or_residential, 'N/A' %>N/A</label>&nbsp;&nbsp;<% end %>

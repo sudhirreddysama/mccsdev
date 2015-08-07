@@ -11,13 +11,15 @@ class PreferredListController < CrudController
 			['Agency', 'agencies.name'],
 			['Department', 'departments.name'],
 			['Established Date', 'preferred_lists.established_date'],
-			['Expiration Date', 'preferred_lists.valid_until']
+			['Expiration Date', 'preferred_lists.valid_until'],
+			['Status', 'preferred_lists.status']
 		]
 		cond = get_search_conditions @filter[:search], {
 			'preferred_lists.id' => :left,
 			'preferred_lists.title' => :like,
 			'agencies.name' => :like,
-			'departments.name' => :like
+			'departments.name' => :like,
+			'preferred_lists.status' => :left
 		}
 		
 		@date_types = [
