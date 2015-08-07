@@ -148,9 +148,13 @@ class TableFormBuilder < ActionView::Helpers::FormBuilder
 	end
 	
 	def err? method
-		e = @template.instance_variable_get("@#{@object_name}").errors
-		method2 = method.to_s.sub('_id', '')
-		return e[method].present? || e[method2].present?
+		begin
+			e = @template.instance_variable_get("@#{@object_name}").errors
+			method2 = method.to_s.sub('_id', '')
+			return e[method].present? || e[method2].present?
+		rescue
+			return false
+		end
 	end
 	
 	def err method
