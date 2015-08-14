@@ -302,6 +302,9 @@
 									<% if a.web_applicant && a.web_applicant.special_accommodations %>
 										<strong>** REQ. ACC.</strong>
 									<% end %>
+									<% if a.alternate_exam_date %>
+										<strong>**ALT DATE: <%= a.alternate_exam_date.d0? %></strong>
+									<% end %>
 								</td>
 								<td>
 									<% if @report[:full_ssn] == '1' %>
@@ -436,7 +439,10 @@
 												</div>
 											<% } %>
 										<% else %>
-											Exam Site: <%= h a.exam_site.name if a.exam_site %>
+											Exam Site: <%= h a.exam_site.name if a.exam_site %>											
+											<% if a.alternate_exam_date %>
+												<strong>**ALT DATE: <%= a.alternate_exam_date.d0? %></strong>
+											<% end %>
 										<% end %>
 									<div>
 								<% } %>
