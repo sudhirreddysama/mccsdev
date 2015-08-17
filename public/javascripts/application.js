@@ -179,6 +179,24 @@ jQuery(function($) {
 // Popup select text fields.
 
 jQuery(function($) {
+	$('.popup').each(function(i, link) {
+		link = $(link);
+		link.click(function(e) {
+			e.preventDefault();
+			var w = 800;
+			var h = $(window).height() - 100;
+			var pop = $('<iframe src="' + link.attr('href') + '" />').dialog({
+				title: link.attr('data-popup-title'),
+				width: w,
+				height: h,
+				modal: true,
+				overlay: {
+					opacity: 0.8,
+					background: 'black'
+				}
+			}).width(w).height(h).dialog('option', 'position', 'center');
+		});
+	});
 	$('.popup-select-text').each(function(i, link) {
 		link = $(link);
 		link.click(function(e) {

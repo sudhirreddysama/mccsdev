@@ -2,39 +2,52 @@
 	<div class="tabs buttons">
 		<%= tab 'Printable Version', {:action => :print, :id => @obj.id}, {}, :target => '_blank' %>
 		<%= tab 'Export to Excel', {:action => :excel, :id => @obj.id}, {}, :target => '_blank' %>
-		<% if @obj.status == 'certified' && @current_user.staff_level? %>
-			<%= tab 'Notify Agency', {:action => :notify_agency, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to all users in this agency that certified list is available?', :class => 'tab-delivery' %>
+		<% if false %>
+			<% if @obj.status == 'certified' && @current_user.staff_level? %>
+				<%= tab 'Notify Agency', {:action => :notify_agency, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to all users in this agency that certified list is available?', :class => 'tab-delivery' %>
+			<% end %>
+			<% if (@obj.status == 'requested' && (@current_user.staff_level? || @current_user.liaison_level?))  %>
+				<%= tab 'Notify Certification Specialist', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist? This will change the status to "pending".', :class => 'tab-delivery' %>
+			<% end %>
 		<% end %>
-		<% if (@obj.status == 'requested' && (@current_user.staff_level? || @current_user.liaison_level?))  %>
-			<%= tab 'Notify Certification Specialist', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist? This will change the status to "pending".', :class => 'tab-delivery' %>
-		<% end %>
+		<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => :cert, :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>
 		<div class="clear"></div>
 	</div>
 <% end %>
-<% if (@current_user.liaison_level?) %>
-	<div class="tabs buttons">
-    <%= tab 'Notify Certification Specialist', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist? This will change the status to "pending".', :class => 'tab-delivery' %>
-		<div class="clear"></div>
-	</div>
+<% if false %>
+	<% if (@current_user.liaison_level?) %>
+		<div class="tabs buttons">
+			<%= tab 'Notify Certification Specialist', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist? This will change the status to "pending".', :class => 'tab-delivery' %>
+			<div class="clear"></div>
+		</div>
+	<% end %>
 <% end %>
 
-<% if @obj.status == 'certified' && @obj.certification_date <= Time.now.to_date %>
-	<% if @current_user.level == 'agency-head' %>
-		<a href="#" onclick="jQuery('#complete').toggle();" style="color: #fff; background-color: #080; margin: 5px 5px 0 5px; padding: 5px; display: block; text-decoration: none; text-align: center;">
-			This certified list has yet to be completed and submitted to Monroe County HR. Click here to submit to MC HR Liaison.
-		</a>
-		<div id="complete" style="text-align: center; display: none; margin: 0 5px 0 5px; border: 1px solid #080; border-top: none; padding: 5px;">
-			<%= form_tag :action => :complete_list, :id => @obj.id %>
-				<div>NOTE: Candidate actions are required! Make sure one is selected for each candidate or you will not be able to continue. Once the list is completed and submitted to MC HR Liaison actions cannot be changed.</div>
-				<%= submit_tag 'Electronically Submit List' %>
-			</form>
-		</div> 
-	<% else %>
-		<div style="text-align: center; margin: 5px; padding: 5px; background-color: #080; color: #fff;">This certified list is now editable. Please enter all candidate actions and have an agency head submit the list to MC HR Liaison.</div>
+<% if false %>
+	<% if @obj.status == 'certified' && @obj.certification_date <= Time.now.to_date %>
+		<% if @current_user.level == 'agency-head' %>
+			<a href="#" onclick="jQuery('#complete').toggle();" style="color: #fff; background-color: #080; margin: 5px 5px 0 5px; padding: 5px; display: block; text-decoration: none; text-align: center;">
+				This certified list has yet to be completed and submitted to Monroe County HR. Click here to submit to MC HR Liaison.
+			</a>
+			<div id="complete" style="text-align: center; display: none; margin: 0 5px 0 5px; border: 1px solid #080; border-top: none; padding: 5px;">
+				<%= form_tag :action => :complete_list, :id => @obj.id %>
+					<div>NOTE: Candidate actions are required! Make sure one is selected for each candidate or you will not be able to continue. Once the list is completed and submitted to MC HR Liaison actions cannot be changed.</div>
+					<%= submit_tag 'Electronically Submit List' %>
+				</form>
+			</div> 
+		<% else %>
+			<div style="text-align: center; margin: 5px; padding: 5px; background-color: #080; color: #fff;">This certified list is now editable. Please enter all candidate actions and have an agency head submit the list to MC HR Liaison.</div>
+		<% end %>
 	<% end %>
 <% end %>
 
 <% @pref_list = PreferredList.find(:first, :conditions => ['status != "exhausted" and job_id = ? and agency_id = ? and department_id = ?', @obj.job_id, @obj.agency_id, @obj.department_id]) %>
+<% if @obj.exam && @obj.exam.job && @obj.exam.exam_type == 'OC' %>
+	<% @prom_list = Exam.find(:first, :conditions => ['exam_type = "PROM" and established_date <= date(now()) and valid_until >= date(now()) and job_id = ?', @obj.exam.job_id]) %>
+	<% if @prom_list %>
+		<%= link_to('This certified list is for an open competitive exam but a promotional list exists for this job title! Click here to view exam', {:sc => nil, :sid => nil, :controller => 'exam', :action => :view, :id => @prom_list.id}, :style => 'display: block; margin: 5px; padding: 5px; background-color: #800; text-align: center; color: #fff; text-decoration: none; font-weight: bold;')%>
+	<% end %>
+<% end %>
 <% if @pref_list %>
 	<%= link_to('Preferred list exists for this job/agency/department! Click here to view', {:sc => nil, :sid => nil, :controller => 'preferred_list', :action => :view, :id => @pref_list.id}, :style => 'display: block; margin: 5px; padding: 5px; background-color: #800; text-align: center; color: #fff; text-decoration: none; font-weight: bold;')%>
 <% end %>

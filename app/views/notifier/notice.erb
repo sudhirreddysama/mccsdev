@@ -1,0 +1,12 @@
+<% if !@n.body.blank? -%>
+<%= @n.body %>
+
+<% end -%>
+<% if !@n.documents.empty? -%>
+<% @n.documents.each { |d| -%>
+<%= d.filename %>:
+https://cs.monroecounty.gov/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/<%= @n.object.class.to_s.underscore %>/<%= @n.object.id %>/document/download/<%= d.id %>
+<% } %>
+<% end -%>
+Link to <%= @n.object_title %>:
+https://cs.monroecounty.gov/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/<%= @n.object.class.to_s.underscore %>/view/<%= @n.object.id %>

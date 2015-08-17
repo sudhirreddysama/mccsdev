@@ -11,6 +11,8 @@ class FormTitle  < ActiveRecord::Base
 	belongs_to :submitter, :class_name => 'User', :foreign_key => 'submitter_id'	
 	belongs_to :status_user, :class_name => 'User', :foreign_key => 'status_user_id'
 	
+	has_many :notices
+	
 	def label; "#222 #{title}"; end
 	
 	def title

@@ -189,7 +189,23 @@ class ExamController < CrudController
 			:include => [:app_status, :person, :exam, {:taken_perfs => :perf_code}]
 		})
 		@print_orient = 'Landscape'
-		render_pdf render_to_string(:layout => false), "#{@obj.exam_no}.pdf", {:flags => '--footer-right "[page] of [topage]"'}
+		if params[:coversheet] == '1'
+			html1 = render_to_string(:layout => false)
+			html2 = render_to_string(:inline => '<%= nl2br_h @obj.cover_sheet_notes %>');
+			tmp1 = TempfileExt.new('exam.pdf')
+			tmp2 = TempfileExt.new('cover.pdf')
+			tmp1.close
+			tmp2.close
+			render_pdf_to_file2 html1, tmp1.path, {:arg => '--footer-right "[page] of [topage]"'}
+			render_pdf_to_file2 html2, tmp2.path
+			io = IO.popen("pdftk #{tmp2.path} #{tmp1.path} cat output -", 'r')
+			send_data io.read, :filename => "#{@obj.exam_no}.pdf", :type => "application/pdf", :disposition => 'inline'
+			io.close
+			tmp1.delete
+			tmp2.delete
+		else 
+			render_pdf render_to_string(:layout => false), "#{@obj.exam_no}.pdf", {:flags => '--footer-right "[page] of [topage]"'}
+		end
 	end
 	
 	def attendance

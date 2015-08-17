@@ -164,7 +164,7 @@ class ApplicationController < ActionController::Base
 		f = TempfileExt.open 'wkhtmltopdf.html', 'tmp'
 		f.write html
 		f.close
-		orient = opt[:orient] || 'Portrait'
+		orient = opt[:orient] || @print_orient || 'Portrait'
 		`wkhtmltopdf -s Letter -O #{orient} --margin-left 1in --margin-right 1in --margin-top .5in --margin-bottom .5in #{f.path} #{fname}`
 	end
 	
@@ -173,7 +173,7 @@ class ApplicationController < ActionController::Base
 		f.write html
 		f.close
 		marg = opt[:margin] || '.5in'
-		orient = opt[:orient] || 'Portrait'
+		orient = opt[:orient] || @print_orient || 'Portrait'
 		`wkhtmltopdf #{opt[:arg]} -s Letter -O #{orient} --margin-left #{marg} --margin-right #{marg} --margin-top #{marg} --margin-bottom #{marg} #{f.path} #{fname}`
 	end		
 	

@@ -13,10 +13,10 @@ class Document < ActiveRecord::Base
 	belongs_to :preferred_candidate
 	belongs_to :pay_cert
 	belongs_to :provisional
-	
 	belongs_to :form_change
 	belongs_to :form_hire
 	belongs_to :form_title
+	belongs_to :notice
 	
 	attr :uploaded_file, true
 	

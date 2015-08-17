@@ -1,5 +1,5 @@
 <div id="res_print" style="display: none;">
-<% table_form_for(:print, :url => {:action => :print, :id => @obj.id}, :html => {:target => '_blank'}) { |f| %>
+<% table_form_for(:print, :url => {:action => :print, :id => @obj.id}, :html => {:target => '_blank', :onsubmit => 'print_submit()'}) { |f| %>
 	<tr>
 		<td width="25%"><strong>Town</strong></th>
 		<td width="25%"><strong>Village</strong></th>
@@ -16,6 +16,7 @@
 		<td colspan="4">
 			<%= submit_tag 'Print Short List', :name => 'short' %>
 			<%= submit_tag 'Print Long List', :name => 'long' %>
+			<input type="hidden" name="coversheet" id="coversheet2" value="" />
 		</td>
 	</tr>
 <% } %>
@@ -23,17 +24,35 @@
 <div class="tabs buttons">
 	<% if @current_user.staff_level? %>
 		<%= tab 'Post to Web', {:controller => :web_exam, :action => :new, :exam_id => @obj.id}, {}, :class => 'tab-web' %>
+		<%= tab 'Refresh', {:action => :rerank, :id => @obj.id}, {}, :confirm => 'Are you sure you want to refresh/rerank candidates?' %>
 	<% end %>
 	<% if @current_user.staff_level? || (@obj.established_date && @obj.established_date >= Time.now.to_date)%>
-		<%= tab 'Print Long list', {:action => :print, :id => @obj.id, :id2 => 'long'}, {}, :target => '_blank' %>
-		<%= tab 'Print Short list', {:action => :print, :id => @obj.id, :id2 => 'short'}, {}, :target => '_blank' %>
+		<%= tab 'Print Long list', {:action => :print, :id => @obj.id, :id2 => 'long'}, {}, :target => '_blank', :onclick => 'print_click(this)' %>
+		<%= tab 'Print Short list', {:action => :print, :id => @obj.id, :id2 => 'short'}, {}, :target => '_blank', :onclick => 'print_click(this)' %>
 		<a href="#" onclick="jQuery('#res_print').toggle(); return false;" class="tab-print"><span>Print Res. List</span></a>
-	<% end %>
-	<% if @current_user.staff_level? %>
-		<%= tab 'Refresh', {:action => :rerank, :id => @obj.id}, {}, :confirm => 'Are you sure you want to refresh/rerank candidates?' %>
+		<% unless @obj.cover_sheet_notes.blank? %>
+			<label><input type="checkbox" name="coversheet" id="coversheet" value="coversheet" checked="checked" /> Print Coversheet</label>
+		<% end %>
 	<% end %>
 	<div class="clear"></div>
 </div>
+<script type="text/javascript">
+
+	var print_click, print_submit;
+	(function($) {
+		print_click = function(link) {
+			var chk = $('#coversheet:checked')[0];
+			link = $(link);
+			href = link.attr('href').split('?')[0];
+			link.attr('href', href + (chk ? '?coversheet=1' : ''));
+		}
+		print_submit = function() {
+			var chk = $('#coversheet:checked')[0];
+			$('#coversheet2').val(chk ? '1' : '');
+		}
+	})(jQuery);
+
+</script>
 <div class="viewer">
 	<div class="header">Review Info.</div>
 	<div class="row">

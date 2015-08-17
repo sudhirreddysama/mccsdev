@@ -1,4 +1,13 @@
-<%= partial 'form_change/status', :o => o %>
+<% if false %>
+	<%= partial 'form_change/status', :o => o %>
+<% end %>
+<% if params[:action] != 'print' %>
+	<div class="tabs buttons">
+		<%= tab 'Printable Version', {:action => :print, :id => @obj.id}, {}, :target => '_blank' %>
+		<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => params[:controller], :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>		
+		<div class="clear"></div>
+	</div>
+<% end %>
 
 <div class="viewer">
 	<div class="header">General Info.</div>
@@ -113,6 +122,16 @@
 
 <div class="viewer">
 	<div class="header">Description of Duties</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Brief Summary of Position:</label>
+					<%= nl2br_h o.brief_summary %>&nbsp;
+				</td>
+			</tr>
+		</table>
+	</div>
 	<div class="row">
 		<table>
 			<tr>

@@ -114,6 +114,14 @@
 <%= f.tr_text_field :suggested_salary_group_range, :label => 'Salary Group & Range', :style => 'width: 200px;' %>
 <tr>
 	<th>Description of Duties:</th>
+	<td>Please provide a brief summary of this position:</td>
+</tr>
+<tr>
+	<th></th>
+	<td><%= f.text_area :brief_summary, :size => '80x3' %></td>
+</tr>
+<tr>
+	<th></th>
 	<td>
 		Describe work in sufficient detail to give a clear word picture of the job. Use a separate paragraph for each 
 		kind of work and describe the more important or time-consuming duries first. In the left colum, estimate how 
@@ -207,7 +215,10 @@
 	</td>
 </tr>
 <tr>
-	<th>Min. Education:</th>
+	<th rowspan="2">Suggested<br />Min. Education:</th>
+	<td>What minimum qualifications do you think should be required for this position? <strong>DO NOT COPY FROM EXISTING JOB DESCRIPTION.</strong></td>
+</tr>
+<tr>
 	<td class="subform">
 		<table>
 			<tr>
@@ -230,7 +241,7 @@
 		</table>
 	</td>
 </tr>
-<%= f.tr_text_area :experience, :label => 'Experience', :help => '(list amount and type of experience)' %>
+<%= f.tr_text_area :experience, :label => 'Suggested<br />Experience', :help => '(list amount and type of experience)' %>
 <tr>
 	<th>Essential Knowledge,<br />Skills, and Abilities:</th>
 	<td><%= f.text_area :essential_skills, :cols => 60, :rows => 4 %></td>

@@ -333,6 +333,7 @@ td.actions { padding: 0px 5px; }
 .ui-dialog .ui-dialog-titlebar { padding: 5px;  }
 .ui-dialog .ui-dialog-title { margin: 0; } 
 .ui-dialog .ui-dialog-titlebar-close { right: 5px; }
+.ui-dialog { box-shadow: 0 0 50px #000; }
 
 
 div.toggler h4 { border-bottom: 1px solid #888; margin: 0; background: #eee url(../images/minus.gif) right center no-repeat; padding: 3px 5px; cursor: hand; cursor: pointer; }
@@ -518,3 +519,11 @@ fieldset table.form { margin: 0; }
 .agency-jobs label:hover { background-color: #ffc; }
 .agency-jobs label.inactive { color: #800; }
 .agency-jobs input { margin: 0; padding: 0; }
+
+.notic-approval { font-weight: bold; color: #0a0; }
+.notic-disapproval { font-weight: bold; color: #a00; }
+.notic-message { font-weight: bold; color: #00a; }
+
+.notic-delete { float: right; font-size: 9px; color: #888; display: none; padding-right: 5px; }
+.notic-delete:hover { color: #000; }
+.viewer:hover .notic-delete { display: block; }

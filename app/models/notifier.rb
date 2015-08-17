@@ -129,6 +129,13 @@ class Notifier < ActionMailer::Base
 		}
 	end
 	
+	def notice n
+		recipients n.users.collect &:email_with_name
+		subject n.subject
+		from n.user.email_with_name
+		body :n => n
+	end
+		
 	def blast_social e
 		recipients [e]
 		subject 'Never Miss a Job or Exam Announcement'

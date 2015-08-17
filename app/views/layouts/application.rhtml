@@ -20,13 +20,15 @@
 			'jquery.caret.1.02.js',
 			'coolfieldset/js/jquery.coolfieldset.js',
 			'jquery.inputmask-3.x/jquery.inputmask.js',
-			'jquery.inputmask-3.x/jquery.inputmask.numeric.extensions.js'
+			'jquery.inputmask-3.x/jquery.inputmask.numeric.extensions.js',
+			'jquery.tokeninput/jquery.tokeninput.js'
 		) %>
 		<script type="text/javascript">jQuery.noConflict();</script>
 		<%= stylesheet_link_tag '/javascripts/jquery-ui-1.8.9.custom/css/smoothness/jquery-ui-1.8.9.custom.css', :media => 'screen' %>
 		<%= stylesheet_link_tag 'plupload.queue.css', :media => 'screen' %>
 		<%= stylesheet_link_tag 'style', :media => 'all' %>
 		<%= stylesheet_link_tag '/javascripts/coolfieldset/css/jquery.coolfieldset.css', :media => 'all' %>
+		<%= stylesheet_link_tag '/javascripts/jquery.tokeninput/token-input-mccs.css', :media => 'all' %>
 		<%= calendar_date_select_includes @cds_style || :default %>
 		<%= yield :head %>
 		</style>
@@ -37,8 +39,10 @@
 			var super_c = <%= params[:sc] ? "'#{params[:sc]}'" : 'null' %>;
 		</script>
 	</head>
-	<body class="<%= 'pop' if params[:popup] %>"><!-- Hi -->
-		<% if RAILS_ENV == 'development' %><div id="dev-bar">DEVELOPMENT SITE</div><% end %>
+	<body class="<%= 'pop' if params[:popup] %>">
+		<% if !params[:popup] %>
+			<% if RAILS_ENV == 'development' %><div id="dev-bar">DEVELOPMENT SITE</div><% end %>
+		<% end %>
 		<% unless @notabs or params[:popup] %>
 			<div id="tabs" class="tabs">
 				<% if @current_user.agency_level? %>

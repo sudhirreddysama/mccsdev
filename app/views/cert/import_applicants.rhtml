@@ -8,14 +8,14 @@
 			<td class="subform">
 				<table>
 					<tr>
-                      <th>School:</th>
-                      <th>Town:</th>
+						<th>School:</th>
+						<th>Town:</th>
 						<th>Village:</th>
 						<th>Fire:</th>
 					</tr>
 					<tr>
-                      <td><%= f.select :school_ids, SchoolDistrict.find(:all, :order => 'name').collect { |s| [s.name, s.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %></td>
-                      <td><%= f.select :town_ids, Town.find(:all, :order => 'name').collect { |s| [s.name, s.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %></td>
+						<td><%= f.select :school_ids, SchoolDistrict.find(:all, :order => 'name').collect { |s| [s.name, s.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %></td>
+						<td><%= f.select :town_ids, Town.find(:all, :order => 'name').collect { |s| [s.name, s.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %></td>
 						<td><%= f.select :village_ids, Village.find(:all, :order => 'name').collect { |s| [s.name, s.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %></td>
 						<td><%= f.select :fire_ids, FireDistrict.find(:all, :order => 'name').collect { |s| [s.name, s.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %></td>
 					</tr>
@@ -102,20 +102,32 @@
 					<td class="nobr"><% if a.agency %><%= h a.agency.name %><% end %></td>
 					<td class="nobr"><%= link_to "#{p.last_name}, #{p.first_name}", {:action => :view, :controller => :applicant, :id => a.id}, :target => '_blank' %></td>
 					<td>
-						<% if p.town %><span class="dim">Town: </span><%= h p.town.name %><% end %>
-						<% if p.village %><span class="dim">Vill: </span><%= h p.village.name %><% end %>
-						<% if p.school_district %><span class="dim">Schl: </span><%= h p.school_district.name %><% end %>
-						<% if p.fire_district %><span class="dim">Fire: </span><%= h p.fire_district.name %><% end %>
+						<span style="font-size: 10px;" class="dim">
+							<% if p.town && !p.town.name.blank? %>Town: <%= h p.town.name %><% end %>
+							<% if p.village && !p.village.name.blank? %>Vill: <%= h p.village.name %><% end %>
+							<% if p.school_district && !p.school_district.name.blank? %>Schl: <%= h p.school_district.name %><% end %>
+							<% if p.fire_district && !p.fire_district.name.blank? %>Fire: <%= h p.fire_district.name %><% end %>
+						</span>
 						<%
 						
-							exclude_action = a.cert_applicants.find(:first, :include => [{:cert => :agency}, :cert_code], :order => 'certs.certification_date desc', :conditions => ['cert_codes.exclude = 1 and certs.agency_id = ? and certs.department_id = ?', @obj.agency_id, @obj.department_id])
+							exclude_actions = a.cert_applicants.find(:all, :include => [{:cert => :agency}, :cert_code], :order => 'certs.certification_date desc', :conditions => ['cert_codes.exclude = 1 and certs.agency_id = ? and certs.department_id = ?', @obj.agency_id, @obj.department_id])
 						
 						%>
 						<% if a.agency_residency %>
 							<span style="color: #a0a;">&nbsp;&nbsp;&nbsp;BOCES RES.</span>
 						<% end %>
-						<% if exclude_action %>&nbsp;<br />
-							<span class="dim">Previous Agency Declination:</span> <%= h exclude_action.cert_code.label %> <%= link_to 'View Cert', {:action => :view, :id => exclude_action.cert_id}, :target => '_blank' %>
+						<% if !exclude_actions.empty? %>&nbsp;<br />
+							<span class="dim">Prev. Agency Declination:</span>
+							<% 
+								links = exclude_actions.collect { |ea|
+									eac = ea.cert
+									ea.cert_code.label + ' (' + (eac.department ? eac.department.name : 'UNKNOWN DEPT') + ') ' + link_to('View Cert', {:action => :view, :id => ea.cert_id}, :target => '_blank')
+								}
+							%>
+							<%= links.join(', ') %>
+						<% end %>
+						<% if !a.list_note.blank? %>
+							<div><span class="dim">List Note:</span> <%= h a.list_note %></div>
 						<% end %>
 					</td>
 				</tr>

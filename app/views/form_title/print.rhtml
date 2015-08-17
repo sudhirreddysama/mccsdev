@@ -57,9 +57,6 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 				may cover two or more identical positions in the same
 				organizational unit.<br />
 				&nbsp;<br />
-				Forward two copies to this Commission, one to be
-				returned upon commission action.<br />
-				&nbsp;<br />
 				<strong>DO NOT COPY EXISTING JOB DESCRIPTIONS.</strong>
 			</td>
 			<td width="40%" class="b p">
@@ -150,7 +147,9 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 	<div class="b p mt">
 		2-B DESCRIPTION OF DUTIES: Describe work in sufficient detail to give a clear word picture of the job. Use a separate
 		paragraph for each kind of work and describe the more important or time-consuming duties first. In the left column, estimate how
-		the total working time is divided. <strong>Do not copy existing job descriptions.</strong>
+		the total working time is divided. <strong>Do not copy existing job descriptions.</strong><br />
+		&nbsp;<br />
+		<strong><%= nl2br_h o.brief_summary %>&nbsp;</strong>
 	</div>
 	<table class="mt b">
 		<tr>
@@ -307,26 +306,46 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 		<span class="ulined" style="width: 40px;"><%= o.drug_testing ? 'X' : '' %>&nbsp;</span>YES 
 		<span class="ulined" style="width: 40px;"><%= o.drug_testing ? '' : 'X' %>&nbsp;</span>NO
 	</div>
+	<% if false %>
+		<table class="b mt">
+			<tr>
+				<td colspan="3" class="p" style="padding-bottom: 0;">7. The above statements are accurate and complete. I am submitting
+					duplicate copies, one of which will be returned upon commission action.
+				</td>
+			</tr>
+			<tr>
+				<td width="33%" class="p">
+					&nbsp;<br />
+					Date: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				</td>
+				<td width="33%" class="p">
+					&nbsp;<br />
+					Title: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				</td>
+				<td width="34%" class="p">
+					Appointing Officer<br />
+					Signature: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				</td>
+			</tr>
+		</table>
+	<% end %>
 	<table class="b mt">
 		<tr>
-			<td colspan="3" class="p" style="padding-bottom: 0;">7. The above statements are accurate and complete. I am submitting
-				duplicate copies, one of which will be returned upon commission action.
-			</td>
+			<td colspan="2" class="p">Electronic Approvals:</td>
 		</tr>
-		<tr>
-			<td width="33%" class="p">
-				&nbsp;<br />
-				Date: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-			</td>
-			<td width="33%" class="p">
-				&nbsp;<br />
-				Title: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-			</td>
-			<td width="34%" class="p">
-				Appointing Officer<br />
-				Signature: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-			</td>
-		</tr>
+		<% approvals = Notice.approvals_for(o) %>
+		<% if approvals.empty? %>
+			<tr>
+				<td colspan="2" class="p"><strong>No Approvals Yet</strong></td>
+			</tr>
+		<% else %>
+			<% approvals.each { |a| %>
+				<tr>
+					<td width="50%" class="p" style="padding-bottom: 0;">Name: <strong><%= h a.user.name %></strong></td>
+					<td width="50%" class="p" style="padding-bottom: 0;">Date/Time: <strong><%= h a.created_at.dt0? %></strong></td>
+				</tr>
+			<% } %>
+		<% end %>
 	</table>
 	<table class="b mt">
 		<tr>
@@ -357,7 +376,7 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 				Date: <span class="ulined" style="width: 290px;"><%= h o.effective_date %>&nbsp;</span>
 			</td>
 			<td width="50%" class="p">
-				Signature: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<% if false %>Signature: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><% end %>
 			</td>
 		</tr>
 	</table>		

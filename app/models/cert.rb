@@ -19,6 +19,8 @@ class Cert < ActiveRecord::Base
 	
 	has_many :applicants, :through => :cert_applicants
 	
+	has_many :notices
+	
 	validates_presence_of :agency, :exam
 	validates_presence_of :temp_duration, :if => Proc.new { |c| c.job_type == 'T' && c.agency_submit }
 	validates_presence_of :requestor, :number_of_positions, :request_type, :job_time, :job_type, :general_or_residential, :salary_range

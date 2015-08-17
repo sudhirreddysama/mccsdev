@@ -1,0 +1,105 @@
+<div id="notices">
+	<%= partial 'errors', :errors => @obj.errors.full_messages %>
+	<% form_for(:obj, {:builder => TableFormBuilder}) { |f| %>
+		<table class="form" width="100%">
+			<tr><th colspan="2">Use this form to approve/disapprove this <%= @obj.object_title %> or submit/email it the next responsible party.</th></tr>
+			<tr>
+				<th>Action: <span class="req">*</span></th>
+				<td>
+					<label class="notic-approval"><%= f.radio_button :action, 'approval' %> I APPROVE</label>
+					<label class="notic-disapproval"><%= f.radio_button :action, 'disapproval' %> I DISAPPROVE</label>&nbsp;&nbsp;&nbsp;
+					<label class="notic-message"><%= f.radio_button :action, 'message' %> SEND MESSAGE/SUBMIT TO...</label>
+					<div>Select &quot;approval&quot; or &quot;disapproval&quot; to &quot;sign&quot; or reject this certified list. Select &quot;message&quot; to simply notify the next repsonsible party.
+				</td>
+			</tr>
+			<tr>
+				<th>Message:</th>
+				<td>
+					<%= f.text_area :body, :style => 'width: 90%; height: 50px;' %>
+					<div>This message will be included in the email notification to the recipient(s), along with a link to this page.</div>
+				</td>
+			</tr>
+			<tr>
+				<th>Send To:</th>
+				<td>
+					<%= f.text_field :recipients, :style => 'width: 90%;' %>
+					<div>Recipient(s) must have a user account. Start typing to search by a name and select from the results list. Recipients will receive email notification of this approval/disapproval/message</div>
+				</td>
+			</tr>
+			<%= partial 'upload/field' %>
+			<tr><th></th><td><%= submit_tag 'Submit Message' %></td></tr>
+		</table>
+	<% } %>
+	<script type="text/javascript">
+		(function($) {
+			$('#obj_recipients').tokenInput('<%= url_for :action => :recipients_autocomplete %>', {
+				minChars: 2,
+				hintText: 'Start Typing a Name...',
+				prePopulate: <%= User.find(@obj.recipients.split(',')).collect { |u| {:id => u.id, :name => u.name} }.to_json %>,
+				theme: 'mccs'
+			});
+		})(jQuery);
+	</script>
+	<div class="viewer">
+		<div class="header">Previous Messages</div>
+	</div>
+	<% if @objs.empty? %>
+		<div class="viewer"><div class="row"><table><tr><td>No messages have been submited yet.</td></tr></table></div></div>
+	<% else %>
+		<% @objs.each { |o| %>
+			<div class="viewer" style="border-bottom-width: 3px;">
+				<div class="row">
+					<% if @current_user.admin_level? %>
+						<%= link_to 'delete', {:action => :delete, :id => o.id}, :class => 'notic-delete', :onclick => 'return confirm(\'Are you sure you want to delete this message?\');' %>
+					<% end %>
+					<table>
+						<tr>
+							<td>
+								<label>Date/Time:</label>
+								<%= h o.created_at.dt0? %>
+							</td>
+							<td>
+								<label>From:</label>
+								<%= h o.user.name %>
+							</td>
+							<td>
+								<label>Action:</label>
+								<div class="notic-<%= h o.action %>"><%= h o.action %></div>
+							</td>
+							<td>
+								<label>Recipients:</label>
+								<%= o.users.collect(&:name).join(', ') %>
+							&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+				<% if !o.body.blank? %>
+					<div class="row">
+						<table>
+							<tr>
+								<td>
+									<label>Message:</label>
+									<%= nl2br_h o.body %>
+								</td>
+							</tr>
+						</table>
+					</div>
+				<% end %>
+				<% if !o.documents.empty? %>
+					<div class="row">
+						<table>
+							<tr>
+								<td>
+									<label>Documents:</label>
+									<% o.documents.each { |d| %>
+										<div><%= link_to d.filename, {:controller => :documents, :id => d.id, :action => :download}, {:target => 'blank'} %></div>
+									<% } %>
+								</td>
+							</tr>
+						</table>
+					</div>
+				<% end %>
+			</div>
+		<% } %>
+	<% end %>
+</div>
