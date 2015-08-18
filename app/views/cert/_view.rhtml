@@ -1,5 +1,5 @@
-<% if((@current_user.staff_level? || @obj.status != 'requested') && !params[:popup]) %>
-	<div class="tabs buttons">
+<div class="tabs buttons">
+	<% if((@current_user.staff_level? || @obj.status != 'requested') && !params[:popup]) %>
 		<%= tab 'Printable Version', {:action => :print, :id => @obj.id}, {}, :target => '_blank' %>
 		<%= tab 'Export to Excel', {:action => :excel, :id => @obj.id}, {}, :target => '_blank' %>
 		<% if false %>
@@ -10,10 +10,10 @@
 				<%= tab 'Notify Certification Specialist', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist? This will change the status to "pending".', :class => 'tab-delivery' %>
 			<% end %>
 		<% end %>
-		<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => :cert, :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>
-		<div class="clear"></div>
-	</div>
-<% end %>
+	<% end %>
+	<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => :cert, :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>
+	<div class="clear"></div>
+</div>
 <% if false %>
 	<% if (@current_user.liaison_level?) %>
 		<div class="tabs buttons">
