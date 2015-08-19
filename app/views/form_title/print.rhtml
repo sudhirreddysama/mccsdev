@@ -329,24 +329,26 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 			</tr>
 		</table>
 	<% end %>
-	<table class="b mt">
-		<tr>
-			<td colspan="2" class="p">Electronic Approvals:</td>
-		</tr>
-		<% approvals = Notice.approvals_for(o) %>
-		<% if approvals.empty? %>
+	<% if @current_user.username == 'isadmin' %>
+		<table class="b mt">
 			<tr>
-				<td colspan="2" class="p"><strong>No Approvals Yet</strong></td>
+				<td colspan="2" class="p">Electronic Approvals:</td>
 			</tr>
-		<% else %>
-			<% approvals.each { |a| %>
+			<% approvals = Notice.approvals_for(o) %>
+			<% if approvals.empty? %>
 				<tr>
-					<td width="50%" class="p" style="padding-bottom: 0;">Name: <strong><%= h a.user.name %></strong></td>
-					<td width="50%" class="p" style="padding-bottom: 0;">Date/Time: <strong><%= h a.created_at.dt0? %></strong></td>
+					<td colspan="2" class="p"><strong>No Approvals Yet</strong></td>
 				</tr>
-			<% } %>
-		<% end %>
-	</table>
+			<% else %>
+				<% approvals.each { |a| %>
+					<tr>
+						<td width="50%" class="p" style="padding-bottom: 0;">Name: <strong><%= h a.user.name %></strong></td>
+						<td width="50%" class="p" style="padding-bottom: 0;">Date/Time: <strong><%= h a.created_at.dt0? %></strong></td>
+					</tr>
+				<% } %>
+			<% end %>
+		</table>
+	<% end %>
 	<table class="b mt">
 		<tr>
 			<td colspan="2" class="p" style="padding-bottom: 0;">
