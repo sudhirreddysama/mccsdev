@@ -1,5 +1,5 @@
 <div class="tabs buttons">
-	<% if((@current_user.staff_level? || @obj.status != 'requested') && !params[:popup]) %>
+	<% if((@current_user.staff_level? || @current_user.liaison_level? || @obj.status != 'requested') && !params[:popup]) %>
 		<%= tab 'Printable Version', {:action => :print, :id => @obj.id}, {}, :target => '_blank' %>
 		<%= tab 'Export to Excel', {:action => :excel, :id => @obj.id}, {}, :target => '_blank' %>
 		<% if @obj.status == 'certified' && @current_user.staff_level? %>
@@ -14,15 +14,6 @@
 	<% end %>
 	<div class="clear"></div>
 </div>
-
-<% if false %>
-	<% if (@current_user.liaison_level?) %>
-		<div class="tabs buttons">
-			<%= tab 'Notify Certification Specialist', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist? This will change the status to "pending".', :class => 'tab-delivery' %>
-			<div class="clear"></div>
-		</div>
-	<% end %>
-<% end %>
 
 <% if @obj.status == 'certified' && @obj.certification_date <= Time.now.to_date %>
 	<% if @current_user.level == 'agency-head' %>
