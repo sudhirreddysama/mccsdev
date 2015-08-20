@@ -471,12 +471,14 @@ input.ucase, textarea.ucase { text-transform: uppercase; }
 .cert-status.cert-overdue { background-color: #000; }
 .cert-status.cert-pending { background-color: #880; }
 
-.form-status { display: block; padding: 0 3px; color: #fff; float: left; }
+.form-status { display: block; padding: 0 3px; color: #fff; float: left; white-space: nowrap; }
 .form-status.form-started { background-color: #888; }
 .form-status.form-submitted { background-color: #008; }
 .form-status.form-approved { background-color: #080; }
 .form-status.form-rejected,
 .form-status.form-disapproved { background-color: #800; }
+.form-status.form-review { background-color: #880; }
+.form-status.form-info-needed { background-color: #808; }
 .form-status.form-pendingNYS  { background-color: #088; }
 
 .pref-status { display: block; padding: 0 3px; color: #fff; float: left; }

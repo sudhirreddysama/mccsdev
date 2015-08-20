@@ -306,30 +306,24 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 		<span class="ulined" style="width: 40px;"><%= o.drug_testing ? 'X' : '' %>&nbsp;</span>YES 
 		<span class="ulined" style="width: 40px;"><%= o.drug_testing ? '' : 'X' %>&nbsp;</span>NO
 	</div>
+	<table class="b mt">
+		<tr>
+			<td colspan="4" class="p" style="padding-bottom: 0;">7. The above statements are accurate and complete.</td>
+		</tr>
+		<tr>
+			<td class="p" width="30%" style="padding-bottom: 0;">Created By:</td>
+			<td class="p" width="20%" style="padding-bottom: 0;">Created At:</td>
+			<td class="p" width="30%" style="padding-bottom: 0;">Submitted By:</td>
+			<td class="p" width="20%" style="padding-bottom: 0;">Submitted At:</td>
+		</tr>
+		<tr>
+			<td class="p" style="font-weight: bold;"><%= h o.user.name if o.user %></td>
+			<td class="p" style="font-weight: bold;"><%= h o.created_at.d0? %></td>
+			<td class="p" style="font-weight: bold;"><%= h o.submitter.name if o.submitter %></td>
+			<td class="p" style="font-weight: bold;"><%= h o.submitted_at.d0? %>&nbsp;</td>
+		</tr>
+	</table>
 	<% if false %>
-		<table class="b mt">
-			<tr>
-				<td colspan="3" class="p" style="padding-bottom: 0;">7. The above statements are accurate and complete. I am submitting
-					duplicate copies, one of which will be returned upon commission action.
-				</td>
-			</tr>
-			<tr>
-				<td width="33%" class="p">
-					&nbsp;<br />
-					Date: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				</td>
-				<td width="33%" class="p">
-					&nbsp;<br />
-					Title: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				</td>
-				<td width="34%" class="p">
-					Appointing Officer<br />
-					Signature: <span class="ul">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				</td>
-			</tr>
-		</table>
-	<% end %>
-	<% if @current_user.username == 'isadmin' %>
 		<table class="b mt">
 			<tr>
 				<td colspan="2" class="p">Electronic Approvals:</td>

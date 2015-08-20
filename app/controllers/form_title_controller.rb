@@ -62,16 +62,21 @@ class FormTitleController < CrudController
 	end
 	
 	def view
+		@obj.status_notify = @obj.user && @obj.user.email
 		if request.post?
 			@obj.status_user = @current_user
 			@obj.status_date = Time.now.to_date
 			@obj.update_attributes params[:obj]
 			flash[:notice] = 'Status has been updated.'
 			u = @obj.user #@obj.agency ? @obj.agency.get_users(@obj.department) : nil
-			u2 = @obj.submitter
-			if u2
-				Notifier.deliver_form_status [u2].reject(&:nil?), @obj
+			u2 = @obj.status_notify.to_s.split(',').reject(&:blank?).collect { |e| {:email_with_name => e.strip} }
+			if !u2.empty?
+				Notifier.deliver_form_status u2, @obj
 			end
+			#u2 = @obj.submitter
+			#if u2
+			#	Notifier.deliver_form_status [u2].reject(&:nil?), @obj
+			#end
 			redirect_to
 		else
 			super

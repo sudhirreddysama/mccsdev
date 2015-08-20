@@ -13,10 +13,10 @@ Name: <%= @o.last_name %>, <%= @o.first_name %>
 
 http://www.monroecounty.gov/mccs/form_change/view/<%= @o.id %>
 <% elsif @o.form_type == '222' -%>
-The status for a 222 form you submitted has been updated:
+The status for a 222 form has been updated:
 
 Status: <%= @o.status %>
-Name: <%= @o.last_name %>, <%= @o.first_name %>
+Title: <%= @o.title %>
 
 http://www.monroecounty.gov/mccs/form_title/view/<%= @o.id %>
 <% end %>
