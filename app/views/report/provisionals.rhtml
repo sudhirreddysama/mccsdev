@@ -44,10 +44,16 @@
 				<tr><th colspan="4" style="border-bottom: 1px solid #888;"><%= h k %></th></tr>
 				<% objs.each { |o| %>
 					<tr>
-						<td>&nbsp;&nbsp;&nbsp;&nbsp;<%= h o.name %></td>
-						<td><%= h o.title %></td>
-						<td class="nobr"><%= h o.original_appointment %></td>
+						<% s = o.notes.blank? ? '' : 'border-bottom: none; padding-bottom: 0;' %>
+						<td style="padding-left: 20px;<%= s %>"><%= h o.name %></td>
+						<td style="<%= s %>"><%= h o.title %></td>
+						<td style="<%= s %>" class="nobr"><%= h o.original_appointment %></td>
 					</tr>
+					<% unless o.notes.blank? %>
+						<tr>
+							<td colspan="3" style="padding-left: 20px; padding-top: 0;"><%= nl2br_h(o.notes) %></td>
+						</tr>
+					<% end %>
 				<% } %>
 			<% } %>
 		</table>

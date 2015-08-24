@@ -7,3 +7,4 @@
 <%= f.tr_text_field :jurisdiction, :label => 'Jurisdiction', :class => 'ucase' %>
 <%= f.tr_select :pass_fail, ['Y', 'N'], :include_blank => true, :label => 'Illegal Provisional/Past 60 Days' %>
 <%= f.tr_calendar_date_select :reference_date, :label => 'Reference Date' %>
+<%= f.tr_text_area :notes, :size => '60x2', :label => 'Notes' %>
