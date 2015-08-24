@@ -1,5 +1,6 @@
 <%= partial 'nav' %>
 <%= partial 'nav_jobs' %>
+<div class="marg" style="background-color: #ffc; text-decoration: underline;"><strong>TIP: Use the browser search function (Ctrl-F) to search for titles.</strong></div>
 <%= partial 'exam/save_bar', :url => url_for(:action => :jobs_save, :id => @obj.id) %>
 <form class="agency-jobs" id="review-form">
 	<% @jobs.in_groups(3, false).each { |grp| %>
