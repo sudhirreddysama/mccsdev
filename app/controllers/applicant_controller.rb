@@ -145,6 +145,8 @@ class ApplicantController < CrudController
 			@obj.update_attribute :notes, params[:applicant]
 		elsif params[:list]
 			@obj.update_attribute :list_note, params[:list]
+		elsif params[:seniority_date]
+			@obj.update_attribute :seniority_date, params[:seniority_date]
 		end
 		
 		if n

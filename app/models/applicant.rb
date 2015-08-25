@@ -133,6 +133,37 @@ class Applicant < ActiveRecord::Base
 		alternate_exam_date || exam.given_at.to_date
 	end
 	
+	def calculated_seniority_years
+		d1 = seniority_date
+		d2 = exam && exam.given_at.to_date	
+		y = 0
+		if d1 && d2
+			y = d2.year - d1.year 
+			if d1.month > d2.month
+				y = y - 1
+			elsif d1.month == d2.month && d1.day > d2.day
+				y = y - 1
+			end
+		end
+		return y
+	end
+	
+	def calculated_seniority_points
+		y = calculated_seniority_years
+		if y > 21
+			return 5
+		elsif y > 16
+			return 4
+		elsif y > 11
+			return 3
+		elsif y > 6
+			return 2
+		elsif y > 1
+			return 1
+		end
+		return 0
+	end
+	
 	include DbChangeHooks
 	
 end

@@ -151,6 +151,10 @@
 								<% if o.agency_residency %>
 									<span style="color: #a0a;">BOCES RES.</span>
 								<% end %>
+								<% if o.seniority_date %>
+									<% p = o.calculated_seniority_points %>
+									<span>Seniority Date: <%= o.seniority_date.d0? %> (<%= p %> points<% if p > 0 %> <a href="#" onclick="seniority(<%= i %>, <%= p %>); return false">apply</a><% end %>)</span>
+								<% end %>
 							</td>
 						</tr>
 						<% if o.army_served || !o.vc_type.blank? %>
@@ -179,6 +183,7 @@
 	<script type="text/javascript">
 			
 		var cell_change;
+		var seniority;
 		
 		var bandscore = <%= @obj.bandscore ? @obj.bandscore.attributes.to_json : 'null' %>;
 		
@@ -187,6 +192,13 @@
 		}
 		
 		(function($) { 
+			
+			seniority = function(i, p) {
+				var c = $('#cell-'+ i + '-5');
+				c.val(p);
+				c.change();
+				new Effect.Highlight(c[0]);
+			}
 			
 			var focus_tbody;
 			$('table input').focus(function(e) {
