@@ -302,6 +302,8 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 		<strong><%= nl2br_h o.essential_skills %></strong><br />&nbsp;<br />
 		Type of license or certificate required: <span class="ulined" style="width: 400px;"><%= h o.license_certification_required %>&nbsp;</span><br />
 		&nbsp;<br />
+		Issuing Agency: <span class="ulined" style="width: 400px;"><%= h o.issuing_agency %>&nbsp;</span><br />
+		&nbsp;<br />
 		Drug Testing: Is this position covered under the D.O.T. drug testing regulations? 
 		<span class="ulined" style="width: 40px;"><%= o.drug_testing ? 'X' : '' %>&nbsp;</span>YES 
 		<span class="ulined" style="width: 40px;"><%= o.drug_testing ? '' : 'X' %>&nbsp;</span>NO

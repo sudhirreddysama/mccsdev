@@ -62,7 +62,7 @@ class FormTitleController < CrudController
 	end
 	
 	def view
-		@obj.status_notify = @obj.user && @obj.user.email
+		#@obj.status_notify = @obj.user && @obj.user.email
 		if request.post?
 			@obj.status_user = @current_user
 			@obj.status_date = Time.now.to_date
@@ -92,6 +92,13 @@ class FormTitleController < CrudController
 		@obj.update_attributes({:status => 'submitted', :submitter_id => @current_user.id, :submitted_at => Time.now})
 		redirect_to :action => :view, :id => @obj.id
 		flash[:notice] = 'Form has been submitted to HR'
+	end
+	
+	def email_autocomplete
+		t = params[:term]
+		cond = get_search_conditions params[:term], {'username' => :like, 'name' => :like, 'email' => :like}
+		cond << 'level != "disabled"'
+		render :json => User.find(:all, :select => 'email', :conditions => get_where(cond), :limit => 10, :group => 'email').collect(&:email).to_json
 	end
 
 end

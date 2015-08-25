@@ -31,6 +31,7 @@ a img { border: none; }
 .marg { margin: 5px; }
 .margh { margin-left: 5px; margin-right: 5px; }
 .margv { margin-top: 5px; margin-bottom: 5px; }
+.ui-autocomplete-loading,
 .busy-bg { background-image: url(../images/busy-bg.gif) !important; background-repeat: repeat !important; }
 .busy-bg-i { background-image: url(../images/busy-bg-i.gif) !important; background-repeat: repeat !important; }
 .busy-bg td, .busy-bg th { background: transparent !important; }

@@ -45,14 +45,17 @@
 				<% objs.each { |o| %>
 					<tr>
 						<% s = o.notes.blank? ? '' : 'border-bottom: none; padding-bottom: 0;' %>
+						<% s = '' %>
 						<td style="padding-left: 20px;<%= s %>"><%= h o.name %></td>
 						<td style="<%= s %>"><%= h o.title %></td>
 						<td style="<%= s %>" class="nobr"><%= h o.original_appointment %></td>
 					</tr>
-					<% unless o.notes.blank? %>
-						<tr>
-							<td colspan="3" style="padding-left: 20px; padding-top: 0;"><%= nl2br_h(o.notes) %></td>
-						</tr>
+					<% if false %>
+						<% unless o.notes.blank? %>
+							<tr>
+								<td colspan="3" style="padding-left: 20px; padding-top: 0;"><%= nl2br_h(o.notes) %></td>
+							</tr>
+						<% end %>
 					<% end %>
 				<% } %>
 			<% } %>

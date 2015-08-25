@@ -67,6 +67,15 @@
 						<%= text_field :obj, :status_notify, :size => '30' %>
 						<%= submit_tag 'Update' %>
 					</td>
+					<script type="text/javascript">
+						(function($) {
+							var f = $('#obj_status_notify');
+							f.autocomplete({
+								source: '<%= url_for(:controller => :form_title, :action => :email_autocomplete) %>',
+								minLength: 2
+							});
+						})(jQuery);
+					</script>
 				<% end %>
 				<td>
 					<label>Updated By:</label>
