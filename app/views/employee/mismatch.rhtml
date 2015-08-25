@@ -30,7 +30,7 @@
 				<td><%= link_to "#{o.e_last_name}, #{o.e_first_name}", {:controller => :employee, :action => :view, :id => o.e_id}, :target => '_blank' %></td>
 				<td><%= h [o.e_address o.e_city, o.e_zip].reject(&:blank?).join(', ') %></td>
 				<td><%= h o.p_id %></td>
-				<td><%= link_to "#{o.p_last_name}, #{o.p_first_name}", {:controller => :applicant, :action => :view, :id => o.p_id}, :target => '_blank' %></td>
+				<td><%= link_to "#{o.p_last_name}, #{o.p_first_name}", {:controller => :person, :action => :view, :id => o.p_id}, :target => '_blank' %></td>
 				<td><%= h [o.p_address o.p_city, o.p_zip].reject(&:blank?).join(', ') %></td>
 			</tr>
 		<% } %>
