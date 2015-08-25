@@ -3,6 +3,7 @@ The status for a 330 form you submitted has been updated:
 
 Status: <%= @o.status %>
 Name: <%= @o.last_name %>, <%= @o.first_name %>
+Reason: <%= @o.status_reason %>
 
 http://www.monroecounty.gov/mccs/form_hire/view/<%= @o.id %>
 <% elsif @o.form_type == '105' -%>
@@ -10,6 +11,7 @@ The status for a 105 form you submitted has been updated:
 
 Status: <%= @o.status %>
 Name: <%= @o.last_name %>, <%= @o.first_name %>
+Reason: <%= @o.status_reason %>
 
 http://www.monroecounty.gov/mccs/form_change/view/<%= @o.id %>
 <% elsif @o.form_type == '222' -%>
@@ -17,6 +19,7 @@ The status for a 222 form has been updated:
 
 Status: <%= @o.status %>
 Title: <%= @o.title %>
+Reason: <%= @o.status_reason %>
 
 http://www.monroecounty.gov/mccs/form_title/view/<%= @o.id %>
 <% end %>
