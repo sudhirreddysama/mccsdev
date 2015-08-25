@@ -251,4 +251,25 @@ class EmployeeController < CrudController
 		end
 	end
 	
+	def mismatch
+		params[:id] ||= 'name'
+		@objs = DB.query('
+			select 
+				e.ssn ssn, e.id e_id, p.id p_id,
+				e.first_name e_first_name, e.last_name e_last_name, 
+				p.first_name p_first_name, p.last_name p_last_name,
+				e.address e_address, e.address2 e_address2, e.city e_city, e.state e_state, e.zip e_zip,
+				p.mailing_address p_address, p.mailing_address2 p_address2, p.mailing_city p_city, p.mailing_state p_state, p.mailing_zip p_zip,
+				substring_index(e.first_name, " ", 1) != substring_index(p.first_name, " ", 1) or 
+					substring_index(e.last_name, " ", 1) != substring_index(p.last_name, " ", 1) name_mismatch,
+				substring_index(e.address, " ", 2) != substring_index(p.mailing_address, " ", 2) or 
+					e.city != p.mailing_city or e.zip != p.mailing_zip address_mismatch
+			from employees e
+			join people p on p.ssn = e.ssn
+			where e.leave_date is null or date(e.leave_date) > date(now())
+			having ' + (params[:id] == 'name' ? 'name_mismatch' : 'address_mismatch') + '
+			order by e.last_name, e.first_name
+		')
+	end
+	
 end

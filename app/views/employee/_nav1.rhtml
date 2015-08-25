@@ -3,4 +3,7 @@
 	<%= tab '105 Forms', {:controller => :form_change, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_change' ? ' active' : ''), :title => 'Electronic Personnel Change Form'} %>				
 	<%= tab '330 Forms', {:controller => :form_hire, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_hire' ? ' active' : ''), :title => 'Electronic New Hire Form'} %>				
 	<%= tab '222 Forms', {:controller => :form_title, :sc => nil}, {}, {:class => 'tab-form', :title => 'Electronic New Title Form'} %>				
+	<% if !@current_user.agency_level? %>
+		<%= tab 'Empl/Appl Mismatch', {:controller => :employee, :sc => nil, :sid => nil, :action => :mismatch}, {:id => 'name'}, {:class => 'tab-mismatch', :title => 'Display name and address mismatches between the employee and applicant databases'} %>				
+	<% end %>
 <% end %>

@@ -227,6 +227,8 @@ a img { border: none; }
 .tabs a.tab-problems span { background-image: url(../images/icons/exclamation.png); }
 .tabs a.tab-veterans span { background-image: url(../images/icons/award_star_gold_1.png); }
 
+.tabs a.tab-mismatch span { background-image: url(../images/icons/status_offline.png); }
+
 #misc-tabs a span { background-image: none; padding-left: 5px; }
 
 .tabs.buttons { border-left: 1px solid #888; margin-left: 5px; background: transparent none; }
