@@ -71,13 +71,13 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 				<div class="ulined">6910<%= h o.present_position_number %>&nbsp;</div>
 				PRESENT TITLE:<br />
 				<div class="ulined"><%= h o.present_title %>&nbsp;</div>
-				INCLUMBENT:<br />
+				INCUMBENT:<br />
 				<div class="ulined"><%= h o.present_incumbent %>&nbsp;</div>
 				SALARY LEVEL:<br />
 				<div class="ulined"><%= h o.present_salary_level %>&nbsp;</div>
 			</td>
 			<td width="27%" class="b p">
-				<strong>COUNYY DEPARTMENTS ONLY</strong><br />
+				<strong>COUNTY DEPARTMENTS ONLY</strong><br />
 				Position will be:<br />
 				<span class="ulined" style="width: 20px;"><%= o.grant_funded == 'Grant Funded' ? 'X' : '' %>&nbsp;</span> Grant Funded<br />
 				<span class="ulined" style="width: 20px;"><%= o.grant_funded == 'Non-Grant Funded' ? 'X' : '' %>&nbsp;</span> Non-grant Funded<br />
@@ -87,8 +87,8 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 				<strong>HR Use Only:</strong><br />
 				FLSA: <span class="ulined" style="width: 20px;"><%= o.flsa == 'Exempt' ? 'X' : '' %>&nbsp;</span> Exempt
 				<span class="ulined" style="width: 20px;"><%= o.flsa == 'Non-Exempt' ? 'X' : '' %>&nbsp;</span> Non-Ex<br />
-				EEO: <span class="ulined" style="width: 20px;"><%= o.eeo == 'EEO' ? 'X' : '' %>&nbsp;</span> EEO
-				<span class="ulined" style="width: 20px;"><%= o.eeo == 'AAP' ? 'X' : '' %>&nbsp;</span> AAP<br />
+				EEO: <span class="ulined" style="width: 40px;"><%= h o.eeo %>&nbsp;</span> EEO
+				<span class="ulined" style="width: 40px;"><%= o.aap %>&nbsp;</span> AAP<br />
 				Union:
 				<div class="ulined"><%= h o.union %>&nbsp;</div>
 			</td>
@@ -115,7 +115,7 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 	</table>
 	<table class="b mt">
 		<tr>
-			<td colspan="3" class="p" style="padding-bottom: 0;"><strong>OUTSIDE JURISDICTIONS (Towns, Villages, School Districts)</strong></td>
+			<td colspan="3" class="p" style="padding-bottom: 0;"><strong>OUTSIDE JURISDICTIONS (Towns, Villages, School Districts, Special Districts)</strong></td>
 		</tr>
 		<tr>
 			<td width="33%" class="p">
@@ -148,7 +148,7 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 		</tr>
 	</table>
 	<div class="b p mt">
-		2-B DESCRIPTION OF DUTIES: Describe work in sufficient detail to give a clear word picture of the job. Use a separate
+		2-B DESCRIPTION OF DUTIES: Describe work in sufficient detail to give a clear picture of the job. Use a separate
 		paragraph for each kind of work and describe the more important or time-consuming duties first. In the left column, estimate how
 		the total working time is divided. <strong>Do not copy existing job descriptions.</strong><br />
 		&nbsp;<br />
@@ -361,7 +361,7 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 				Title: <span class="ulined" style="width: 290px;"><%= h o.final_title %>&nbsp;</span>
 			</td>
 			<td width="50%" class="p">
-				Salary Group: <span class="ulined" style="width: 260px;"><%= h o.final_salary_group_range %>&nbsp;</span>
+				Salary Group &amp; Range: <span class="ulined" style="width: 210px;"><%= h o.final_salary_group_range %>&nbsp;</span>
 			</td>
 		</tr>
 		<tr>

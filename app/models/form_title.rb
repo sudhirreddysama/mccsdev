@@ -31,7 +31,7 @@ class FormTitle  < ActiveRecord::Base
 			end
 		end
 		err 'Select request to classify or reclassify and enter number of positions' if !['Classify', 'Reclassify'].include?(classify_reclassify) || number_positions.blank?
-		err 'Present position title, incumbent, and salary level are required' if present_title.blank? || present_incumbent.blank? || present_salary_level.blank?		
+		err 'Present position title, incumbent, and salary level are required if reclassifying a position' if classify_reclassify == 'Reclassify' && (present_title.blank? || present_incumbent.blank? || present_salary_level.blank?)
 		err 'Suggested title is required' if suggested_title.blank?
 		err 'Salary group and range is required' if suggested_salary_group_range.blank?
 		err 'Job duties brief summary is required' if brief_summary.blank?

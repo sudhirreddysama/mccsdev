@@ -54,6 +54,7 @@
 				<tr>
 					<th>FLSA:</th>
 					<th>EEO:</th>
+					<th>AAP:</th>
 					<th>Union:</th> 
 				</tr>
 				<tr>
@@ -62,8 +63,10 @@
 						<label><%= f.radio_button :flsa, 'Non-Exempt' %> Non-Exempt</label>
 					</td>
 					<td>
-						<label><%= f.radio_button :eeo, 'EEO' %> EEO</label>
-						<label><%= f.radio_button :eeo, 'AAP' %> AAP</label>
+						<%= f.text_field :eeo, :size => 5 %>
+					</td>
+					<td>
+						<%= f.text_field :aap, :size => 5 %>
 					</td>
 					<td>
 						<%= f.text_field :union %>
@@ -94,11 +97,12 @@
 	<td>
 		<label><%= f.radio_button :classify_reclassify, 'Classify' %> Classify</label>&nbsp;
 		<label><%= f.radio_button :classify_reclassify, 'Reclassify' %> Reclassify</label>&nbsp;
-		<label><%= f.text_field :number_positions, :style => 'width: 50px;' %> # Positions</labeL>&nbsp;
+		<label><%= f.text_field :number_positions, :style => 'width: 50px;' %> # Positions</labeL>
+		<div>(if &quot;Reclassify&quot; enter &quot;Present Title&quot; below)</div>
 	</td>
 </tr>
-<tr>
-	<th>Present Position: <span class="req">*</span></th>
+<tr id="present-title">
+	<th>Present Title:</th>
 	<td class="subform">
 		<table>
 			<tr>
@@ -116,6 +120,18 @@
 		</table>
 	</td>
 </tr>
+<script type="text/javascript">
+	(function($) {
+		var c = $('#obj_classify_reclassify_classify');
+		var r = $('#obj_classify_reclassify_reclassify');
+		var dim_present_title = function() {
+			$('#present-title')[r[0].checked ? 'removeClass' : 'addClass']('dim');
+		}
+		c.change(dim_present_title);
+		r.change(dim_present_title);
+		dim_present_title();
+	})(jQuery);
+</script>
 <%= f.tr_text_field :suggested_title, :label => 'Suggested Title', :req => true %>
 <%= f.tr_text_field :suggested_salary_group_range, :label => 'Salary Group & Range', :style => 'width: 200px;', :req => true %>
 <% if !@current_user.agency_level? %>
@@ -137,7 +153,7 @@
 	<th></th>
 	<td>
 		Describe work in sufficient detail to give a clear word picture of the job. Use a separate paragraph for each 
-		kind of work and describe the more important or time-consuming duries first. In the left column, estimate how 
+		kind of work and describe the more important or time-consuming duties first. In the left column, estimate how 
 		the total working time is divided. <strong>Do not copy existing job descriptions</strong>.
 	</td>
 </tr>
