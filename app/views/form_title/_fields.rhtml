@@ -125,7 +125,7 @@
 		var c = $('#obj_classify_reclassify_classify');
 		var r = $('#obj_classify_reclassify_reclassify');
 		var dim_present_title = function() {
-			$('#present-title')[r[0].checked ? 'removeClass' : 'addClass']('dim');
+			$('#present-title, #present-title input')[r[0].checked ? 'removeClass' : 'addClass']('dim');
 		}
 		c.change(dim_present_title);
 		r.change(dim_present_title);
