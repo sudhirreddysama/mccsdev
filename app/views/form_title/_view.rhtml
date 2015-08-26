@@ -27,8 +27,11 @@
 					<label>Request To</label>
 					<% if !o.classify_reclassify.blank? %>
 						<%= o.classify_reclassify %>
-						<%= o.number_positions.to_i %> # Positions
 					<% end %>
+				</td>
+				<td>
+					<label># Positions</label>
+					<%= o.number_positions.to_i %>
 				</td>
 				<td>
 					<label>Present Title</label>
