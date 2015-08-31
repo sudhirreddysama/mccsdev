@@ -1,3 +1,4 @@
+<% if !@nonav %>
 <%
 
 empl_controllers = %w{employee pay_cert form_change form_hire form_title}
@@ -139,4 +140,5 @@ end
 	<% else %>
 		<%= link_to_function '<span>Select This Record</span>', "window.parent.cb(#{@obj.id}, #{@obj.label.to_json});", {:class => 'bigbtn'} %>
 	<% end %>
+<% end %>
 <% end %>
