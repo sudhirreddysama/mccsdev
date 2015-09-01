@@ -150,15 +150,15 @@ class Applicant < ActiveRecord::Base
 	
 	def calculated_seniority_points
 		y = calculated_seniority_years
-		if y > 21
+		if y >= 21
 			return 5
-		elsif y > 16
+		elsif y >= 16
 			return 4
-		elsif y > 11
+		elsif y >= 11
 			return 3
-		elsif y > 6
+		elsif y >= 6
 			return 2
-		elsif y > 1
+		elsif y >= 1
 			return 1
 		end
 		return 0
