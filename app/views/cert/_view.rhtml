@@ -378,7 +378,7 @@
 										<% if @current_user.staff_level? %>
 											<div class="right"><%= link_to 'log', {:controller => 'cert_applicant', :action => :change_log, :id => ca.id}, :class => 'popup' %></div>
 										<% end %>
-										<%= calendar_date_select_tag "action_dates[#{ca.id}]", ca.action_date, :style => 'width: 100px;', :class => 'ca-date ucase', :id => "date-#{ca.id}", :onchange => 'date_change(this);' %>
+										<%= calendar_date_select_tag "action_dates[#{ca.id}]", ca.action_date, :style => 'width: 100px;', :class => 'ca-date ucase', :id => "date-#{ca.id}", :onchange => 'date_change(this)' %>
 									</td> 
 								</tr>
 								<% if !ca.documents.empty? %>
@@ -574,20 +574,42 @@
 			});
 		});
 		
+		var cert_date = <%= o.certification_date.to_json %>;
+		var return_date = <%= o.return_date.to_json %>;
+		var allow_bad_dates = <%= @current_user.agency_level? ? 'false' : 'true' %>;
+		
+		if(cert_date) {
+			cert_date = Date.parse(cert_date);
+		}
+		if(return_date) {
+			return_date = Date.parse(return_date);
+		}
 		
 		date_change = function(inp) {
 			inp = $(inp);
 			var id = inp.attr('id').split('-')[1];
-			var val = inp.val();
+			var val_date = Date.parse(inp.val());
+			if(val_date && !allow_bad_dates) {
+				if(cert_date && val_date < cert_date) {
+					alert('Date entered is before certification date! Invalid entry.');
+					val_date = null;
+				}
+				if(return_date && val_date > return_date) {
+					alert('Date entered is after return date! Invalid entry.');
+					val_date = null;
+				}
+			}
+			val = val_date ? val_date.toString('MM/dd/yyyy') : '';
+			inp.val(val);
 			inp.addClass('busy-bg');
 			$.ajax({
 				url: root_url + 'cert/set_date/<%= @obj.id %>/'+ id,
 				data: {dte: val},
 				complete: function(xhr, status) {
-
+					inp.removeClass('busy-bg');
 				},
 				success: function(data, status, xhr) {
-                    inp.removeClass('busy-bg');
+        	
 				},
 				error: function(xhr, status, error) {
 					alert('Error setting action.');
