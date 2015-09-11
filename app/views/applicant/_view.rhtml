@@ -656,7 +656,18 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 			<div class="row">
 				<table>
 					<tr>
-						<td><label>Date of Birth</label><%= wa.dob.d0? %>&nbsp;</td>
+						<td>
+							<label>Date of Birth</label>
+							<%= wa.dob.d0? %>
+						</td>
+						<td>
+							<label>Age (at exam date)</label>
+							<% now = o.web_exam.exam_date ? o.web_exam.exam_date.to_date : nil %>
+							<% if now && wa.dob %>
+								<% now = now.to_date %>
+								<%= now.year - wa.dob.year - ((now.month > wa.dob.month || (now.month == wa.dob.month && now.day >= wa.dob.day)) ? 0 : 1) %>
+							<% end %>
+							&nbsp;</td>
 					</tr>
 				</table>
 			</div>
