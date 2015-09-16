@@ -28,8 +28,8 @@ class FormTitleController < CrudController
 		end
 		
 		@date_types = [
-			['Created Date', 'form_hires.created_at'],
-			['Effective Date', 'form_hires.effective_date']
+			['Created Date', 'form_titles.created_at'],
+			['Effective Date', 'form_titles.effective_date']
 		]
 		
 		cond += get_date_cond
