@@ -224,11 +224,11 @@ class ExamController < CrudController
 				cond = [DB.escape('date(exams.given_at) between "%s" and "%s"', @report.from_date.to_s, @report.to_date.to_s)]
 				cond << 'exams.id in (%s)' % @report.exam_ids.map(&:to_i).join(', ') if !@report.exam_ids.blank?
 				
-				cond << 'applicants.alternate_exam_date is not null' if @report[:alternate_exam_date] == '1'
-				
 				@report.given_by.map!(&:to_i)
 				
 				cond << 'exams.given_by in (%s)' % @report.given_by.join(', ') if !@report.given_by.blank?
+				
+				cond << 'alternate_exam_date is not null' if @report[:alternate_exam_date] == '1'				
 				
 				if params[:veterans]
 					
@@ -265,7 +265,6 @@ class ExamController < CrudController
 				
 				elsif params[:statistics]
 					
-					where = get_where(cond)
 					objs = DB.query('
 						select 
 							exams.*,
@@ -298,10 +297,10 @@ class ExamController < CrudController
 							from taken_perfs t
 							join perf_codes c on c.id = t.perf_code_id
 							join exams on exams.id = t.exam_id
-							where ' + where + '
+							where ' + get_where(cond.reject { |s| s.include?('alternate_exam_date') }) + '
 							group by exams.id, t.applicant_id
 						) t on t.exam_id = exams.id and t.applicant_id = a.id 
-						where ' + where + '
+						where ' + get_where(cond) + '
 						group by exams.id
 						order by exams.title asc
 					')
