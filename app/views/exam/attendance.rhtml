@@ -62,6 +62,12 @@
 			<div>Ctrl/Shift click to select multiple. If no exam is selected, all will be included.</div>
 		</td>
 	</tr>
+	<tr>
+		<th></th>
+		<td>
+			<label style="display: block;"><%= f.check_box :alternate_exam_date %> Only include applicants with an alternate exam date.</label>
+		</td>
+	</tr>
 	<%= f.tr_submit 'Generate Statistics Report', :name => 'statistics' %>
 	<%= f.tr_submit 'Generate Exams/Exam Sites Report', :name => 'exam_sites' %>
 	<%= f.tr_submit 'Generate Cross Filing Report', :name => 'cross_filing' %>
