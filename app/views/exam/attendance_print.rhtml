@@ -57,6 +57,41 @@
 					</tr>
 				<% } %>
 			</table>
+			
+		<% elsif params[:special_accommodations] %>
+			<h1>Special Accommodations For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %></h1>
+			<p>
+				<strong>Req.?</strong> - Indicates if special accommodations were requested on online application.<br />
+				<strong>(NO DOC)</strong> - Indicates documentation for special accommodations/sabbath observer was not provided.
+			</p>
+			
+			<table width="100%">
+				<tr>
+					<th>Name</th>
+					<th>Exam#</th>
+					<th>Req.?</th>
+					<th>Spec.&nbsp;Acc.</th>
+					<th>Sabbath</th>
+				</tr>
+				<% @objs.each { |o| %>
+					<tr>
+						<td><%= h o.last_name %>, <%= o.first_name %></td>
+						<td style="white-space: nowrap;"><%= h o.exam_no %></td>
+						<td style="white-space: nowrap;"><%= o.web_special_accommodations == '1' ? 'YES' : '' %></td>
+						<td>
+							<%= o.special_accommodations %>
+							<% if !o.special_accommodations.blank? %>
+								<%= h o.special_accommodations %> <% if o.special_accommodations_docs == '0' %>(NO DOC)<% end %>
+							<% end %>
+						</td>
+						<td style="white-space: nowrap;">
+							<% if o.sabbath_observer == '1' %>
+								YES <% if o.sabbath_observer_docs == '0' %>(NO DOC)<% end %>
+							<% end %>
+						</td>
+					</tr>
+				<% } %>
+			</table>
 		<% elsif params[:contact_preference] %>
 			<h1>Contact Preference Totals For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %></h1>
 			<table>
