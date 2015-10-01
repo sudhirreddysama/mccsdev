@@ -339,6 +339,25 @@ load_job_options
 			</fieldset>
 		</form>
 		
+		<%= form_tag({:action => 'perf_test'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Performance Test Report</legend>
+				<div class="fs">
+					<table class="form">
+						<tr>
+							<th>Perf. Test:</th>
+							<td><%= select_tag :perf_test_id, options_for_select([['ALL', nil]] + PerfTest.find(:all, :order => 'name').collect { |p| [p.name, p.id] }) %>
+							<th>From Date:</th>
+							<td><%= calendar_date_select_tag :from_date %></td>
+							<th>To Date:</th>
+							<td><%= calendar_date_select_tag :to_date %></td>
+							<td><%= submit_tag 'Run Report' %></td>
+						</tr>
+					</table>
+				</div>
+			</fieldset>
+		</form>
+		
 	<% end %>
 
 </div>

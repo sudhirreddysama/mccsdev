@@ -727,4 +727,25 @@ class ReportController < ApplicationController
 		render_pdf render_to_string(:layout => false), 'layoff-bump.pdf'
 	end
 	
+	def perf_test
+
+		@from_date = Date.parse(params[:from_date]) rescue nil
+		@to_date = Date.parse(params[:to_date]) rescue nil
+		
+		cond = []
+		cond << 'date(e.given_at) >= "' + @from_date.strftime('%Y-%m-%d') + '"' if @from_date
+		cond << 'date(e.given_at) <= "' + @to_date.strftime('%Y-%m-%d') + '"' if @to_date
+		cond << 'pt.id = ' + params[:perf_test_id].to_i.to_s if !params[:perf_test_id].blank?
+		w = get_where(cond)
+		
+		@objs = DB.query('
+			select pt.name perf_test_name, e.exam_no, e.title, e.given_at from exams e
+			join exam_perfs ep on ep.exam_id = e.id
+			join perf_tests pt on pt.id = ep.perf_test_id
+			' + (!w.blank? ? " where #{w} " : '') + '
+			order by e.given_at, e.exam_no, pt.name'
+		)
+		render_pdf render_to_string(:layout => false), 'perf-test.pdf'
+	end
+	
 end
