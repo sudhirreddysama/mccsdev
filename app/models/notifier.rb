@@ -76,11 +76,11 @@ class Notifier < ActionMailer::Base
 		body :o => o
 	end	
 	
-	def new_exams e, fname
+	def new_exams e, fname, txt = ''
 		recipients e
 		from DEFAULT_FROM
 		subject 'New Civil Service Exams Announced'
-		body :fname => fname
+		body :fname => fname, :txt => txt
 	end
 	
 	def web_exam_deadline u, web_exams

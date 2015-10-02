@@ -2,10 +2,27 @@
 <%= form_tag({:action => :send_exam_emails}, {:target => '_blank'}) %>
 	<table class="form">
 		<tr>
-			<th>Preview Date:</th>
+			<th>Generate/View PDF for Date:</th>
 			<td><%= calendar_date_select_tag :id, Time.now.to_date %></td>
-			<td><%= submit_tag 'Preview PDF' %></td>
-			<td><label><%= check_box_tag 'resend' %> Resend Email<label></td>
+		</tr>
+		<tr>
+			<th>Resend Email?</th>
+			<td><label><%= check_box_tag 'resend' %> Check here to immediately deliver the new PDF to everyone on the list. With the daily automatic delivery, this will result in delivering the email multiple times.<label></td>
+		</tr>
+		<tr>
+			<th>Resend With Text:</th>
+			<td colspan="3">
+				<div>If you choose &quot;Resend Email&quot; above, this text will appear at the top of the email. Use to resend email and notify of corrections.</div>
+				<%= text_area_tag :txt, '', :size => '60x2' %>
+			</td>
+		</tr>
+		<tr>
+			<th>Send To:</th>
+			<td><%= text_field_tag :emails, '', :size => 60 %><div>When &quot;Resend Email&quot; is checked, only send email to this email address. If left blank, email will be delivered to everyone.</div></td>
+		</tr>
+		<tr>
+			<th></th>
+			<td><%= submit_tag 'Preview/Resend PDF' %></td>
 		</tr>
 	</table>
 </form>
