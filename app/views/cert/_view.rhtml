@@ -3,7 +3,9 @@
 		<%= tab 'Printable Version', {:action => :print, :id => @obj.id}, {}, :target => '_blank' %>
 		<%= tab 'Export to Excel', {:action => :excel, :id => @obj.id}, {}, :target => '_blank' %>
 		<% if @obj.status == 'certified' && @current_user.staff_level? %>
-			<%= tab 'Notify Agency', {:action => :notify_agency, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to all users in this agency that certified list is available?', :class => 'tab-delivery' %>
+			<% users = @obj.agency ? @obj.agency.get_users(@obj.department).collect(&:username).join(', ') : '' %>
+			<% users = '(no users)' if users.blank? %>
+			<%= tab 'Notify Agency', {:action => :notify_agency, :id => @obj.id}, {}, :target => '_blank', :confirm => "Send email to all users in this agency that certified list is available?\n\nUsers are: " + users, :class => 'tab-delivery' %>
 		<% end %>
 		<% if (@obj.status == 'requested' && (@current_user.staff_level? || @current_user.liaison_level?))  %>
 			<%= tab 'Notify Certification Specialist', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist? This will change the status to "pending".', :class => 'tab-delivery' %>
