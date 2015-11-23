@@ -192,6 +192,7 @@ class WebApplicant < ActiveRecord::Base
 						:loans_default => wa.loans_default ? true : false,
 						:cross_filing => cross_filing,
 						:cross_filing_at => cross_filing_at.to_s.upcase.strip,
+						:cross_filing_exams => wa.web_other_exams.collect { |oe| "#{oe.no} #{oe.name} (#{oe.agency == 'other' ? oe.other : oe.agency})" }.join("\n"),
 						:army_served => wa.army_served,
 						:army_enlisted => wa.army_enlisted,
 						:army_from => wa.army_from,
