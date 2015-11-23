@@ -124,7 +124,7 @@
 				<label><%= f.radio_button :contact_via, 'both' %> BOTH</label>&nbsp;&nbsp;
 			</td>
 	</tr>
-	<% races = [['White', 'white'], ['Black', 'black'], ['Hispanic', 'hispanic'], ['Asian', 'asian'], ['American Indian', 'americanindian']] %>
+	<% races = [['White', 'white'], ['Black', 'black'], ['Hispanic', 'hispanic'], ['Asian', 'asian'], ['Hawaiian/Pacific Islander', 'pacific'], ['American Indian', 'americanindian'], ['Two or More', 'plural']] %>
 	<%= f.tr_select :gender, ['M', 'F'], :include_blank => true, :label => 'Gender' %>
 	<%= f.tr_select :race, races, :include_blank => true, :label => 'EEO Race' %>
 	<%= f.tr_text_area :comments, :label => 'Comments', :size => '60x3' %>

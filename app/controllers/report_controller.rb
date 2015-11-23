@@ -354,9 +354,8 @@ class ReportController < ApplicationController
 			sum(p.race = "white" and s.eligible = "N") w_i,
 			sum(p.race = "white" and p.gender = "M") w_m,
 			sum(p.race = "white" and p.gender = "F") w_f,
-		 sum(p.race = "white" and (a.final_score>59 and s.id<>2)) w_p,
-	   sum(p.race = "white" and (a.final_score<60 or s.id=2)) w_z,
-
+			sum(p.race = "white" and (a.final_score>59 and s.id<>2)) w_p,
+			sum(p.race = "white" and (a.final_score<60 or s.id=2)) w_z,
 			sum(p.race = "white" and (p.gender = "" or p.gender is null)) w_u,
 
 			
@@ -365,47 +364,66 @@ class ReportController < ApplicationController
 			sum(p.race = "asian" and a.approved = "N") a_d,
 			sum(p.race = "asian" and s.eligible != "N") a_e,
 			sum(p.race = "asian" and s.eligible = "N") a_i, 
-			sum(p.race = "asian" and p.gender = "M") w_m,
-			sum(p.race = "asian" and p.gender = "F") w_f,
+			sum(p.race = "asian" and p.gender = "M") a_m,
+			sum(p.race = "asian" and p.gender = "F") a_f,
       sum(p.race = "asian" and (a.final_score>59 and s.id<>2)) a_p,
 	    sum(p.race = "asian" and (a.final_score<60 or s.id=2)) a_z,
-
-			sum(p.race = "asian" and (p.gender = "" or p.gender is null)) w_u,
+			sum(p.race = "asian" and (p.gender = "" or p.gender is null)) a_u,
+			
+			sum(p.race = "pacific") p_t,
+			sum(p.race = "pacific" and a.approved = "Y") p_a, 
+			sum(p.race = "pacific" and a.approved = "N") p_d,
+			sum(p.race = "pacific" and s.eligible != "N") p_e,
+			sum(p.race = "pacific" and s.eligible = "N") p_i, 
+			sum(p.race = "pacific" and p.gender = "M") p_m,
+			sum(p.race = "pacific" and p.gender = "F") p_f,
+      sum(p.race = "pacific" and (a.final_score>59 and s.id<>2)) p_p,
+	    sum(p.race = "pacific" and (a.final_score<60 or s.id=2)) p_z,
+			sum(p.race = "pacific" and (p.gender = "" or p.gender is null)) p_u,			
 			
 			sum(p.race = "black") b_t,
 			sum(p.race = "black" and a.approved = "Y") b_a,
 			sum(p.race = "black" and a.approved = "N") b_d,
 			sum(p.race = "black" and s.eligible != "N") b_e,
 			sum(p.race = "black" and s.eligible = "N") b_i, 
-			sum(p.race = "black" and p.gender = "M") w_m,
-			sum(p.race = "black" and p.gender = "F") w_f,
+			sum(p.race = "black" and p.gender = "M") b_m,
+			sum(p.race = "black" and p.gender = "F") b_f,
       sum(p.race = "black" and (a.final_score>59 and s.id<>2)) b_p,
 	    sum(p.race = "black" and (a.final_score<60 or s.id=2)) b_z,
-
-			sum(p.race = "black" and (p.gender = "" or p.gender is null)) w_u,
+			sum(p.race = "black" and (p.gender = "" or p.gender is null)) b_u,
 			
 			sum(p.race = "americanindian") i_t,
 			sum(p.race = "americanindian" and a.approved = "Y") i_a,
 			sum(p.race = "americanindian" and a.approved = "N") i_d,
 			sum(p.race = "americanindian" and s.eligible != "N") i_e,
 			sum(p.race = "americanindian" and s.eligible = "N") i_i,
-			sum(p.race = "americanindian" and p.gender = "M") w_m,
-			sum(p.race = "americanindian" and p.gender = "F") w_f,
+			sum(p.race = "americanindian" and p.gender = "M") i_m,
+			sum(p.race = "americanindian" and p.gender = "F") i_f,
       sum(p.race = "americanindian" and (a.final_score>59 and s.id<>2)) i_p,
 	    sum(p.race = "americanindian" and (a.final_score<60 or s.id=2)) i_z,
-
-			sum(p.race = "americanindian" and (p.gender = "" or p.gender is null)) w_u,
+			sum(p.race = "americanindian" and (p.gender = "" or p.gender is null)) i_u,
 			
 			sum(p.race = "hispanic") h_t,
 			sum(p.race = "hispanic" and a.approved = "Y") h_a,
 			sum(p.race = "hispanic" and a.approved = "N") h_d,
 			sum(p.race = "hispanic" and s.eligible != "N") h_e,
 			sum(p.race = "hispanic" and s.eligible = "N") h_i,
-			sum(p.race = "hispanic" and p.gender = "M") w_m,
-			sum(p.race = "hispanic" and p.gender = "F") w_f,
+			sum(p.race = "hispanic" and p.gender = "M") h_m,
+			sum(p.race = "hispanic" and p.gender = "F") h_f,
       sum(p.race = "hispanic" and (a.final_score>59 and s.id<>2)) h_p,
 	    sum(p.race = "hispanic" and (a.final_score<60 or s.id=2)) h_z,
-			sum(p.race = "hispanic" and (p.gender = "" or p.gender is null)) w_u
+			sum(p.race = "hispanic" and (p.gender = "" or p.gender is null)) h_u,
+			
+			sum(p.race = "plural") h_t,
+			sum(p.race = "plural" and a.approved = "Y") l_a,
+			sum(p.race = "plural" and a.approved = "N") l_d,
+			sum(p.race = "plural" and s.eligible != "N") l_e,
+			sum(p.race = "plural" and s.eligible = "N") l_i,
+			sum(p.race = "plural" and p.gender = "M") l_m,
+			sum(p.race = "plural" and p.gender = "F") l_f,
+      sum(p.race = "plural" and (a.final_score>59 and s.id<>2)) l_p,
+	    sum(p.race = "plural" and (a.final_score<60 or s.id=2)) l_z,
+			sum(p.race = "plural" and (p.gender = "" or p.gender is null)) l_u
 			
 			from applicants a
 			join app_statuses s on s.id = a.app_status_id
@@ -417,6 +435,7 @@ class ReportController < ApplicationController
 			' group by j.id
 			order by j.name asc'
 		)
+		@print_orient = 'Landscape'
 		render_pdf render_to_string(:layout => false), 'demographics.pdf'
 	end
 	

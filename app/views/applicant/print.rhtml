@@ -477,18 +477,20 @@
           <% end %>
 
           <li>Race/Ethnicity*:<br />&nbsp;<br />
-            <%= @obj.race == 'white' ? chk : uchk %><strong>White (Not of Hispanic origin):</strong>
-            All persons having origins in any of the original peoples of European, North African or the Middle East.<br />&nbsp;<br />
-            <%= @obj.race == 'black' ? chk : uchk %><strong>Black (Not of Hispanic origin):</strong>
-            All persons having origins in any of the Black racial groups of Africa.<br />&nbsp;<br />
-            <%= @obj.race == 'hispanic' ? chk : uchk %><strong>Hispanic:</strong>
-            All persons of Mexican, Puerto Rican, Cuban, Central or South America or other Spanish culture or origin regardless of race.<br />&nbsp;<br />
-            <%= @obj.race == 'asian' ? chk : uchk %><strong>Asian or Pacific Islander:</strong>
-            All persons having origins in any of the original people of the Far East, Southeast Asia, the Indian subcontinent, or the Pacific
-            Islands.  This area includes, for example, China, India, Japan, Korea, the Philippine Islands, and Samoa.<br />&nbsp;<br />
-            <%= @obj.race == 'americanindian' ? chk : uchk %><strong>American Indian or Alaskan Native:</strong>
-            All persons having origin in any of the original people of North America, and who maintains cultural identification through
-            tribal affiliation or community recognition.<br />&nbsp;<br />
+						<%= @obj.race == 'hispanic' ? chk : uchk %> <strong>Hispanic or Latino</strong><br />
+						A person of Cuban, Mexican, Puerto Rican, South or Central American, or other Spanish culture or origin regardless of race.<br />&nbsp;<br />
+						<%= @obj.race == 'white' ? chk : uchk %> <strong>White (Non Hispanic or Latino)</strong><br />
+						All persons having origins in any of the original peoples of Europe, North Africa or the Middle East.<br />&nbsp;<br />
+						<%= @obj.race == 'black' ? chk : uchk %> <strong>Black or African American (Non Hispanic or Latino)</strong><br />
+						A person having origins in any of the black racial groups of Africa.<br />&nbsp;<br />
+						<%= @obj.race == 'asian' ? chk : uchk %> <strong>Asian (Non Hispanic or Latino)</strong><br />
+						A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian Subcontinent, including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam.<br />&nbsp;<br />
+						<%= @obj.race == 'pacific' ? chk : uchk %> <strong>Native Hawaiian or Other Pacific Islander (Non Hispanic or Latino)</strong><br />
+						A person having origins in any of the peoples of Hawaii, Guam, Samoa, or other Pacific Islands.<br />&nbsp;<br />
+						<%= @obj.race == 'americanindian' ? chk : uchk %> <strong>American Indian or Alaska Native (Non Hispanic or Latino)</strong><br />
+						A person having origins in any of the original peoples of North and South America (including Central America), and who maintain tribal affiliation or community attachment.<br />&nbsp;<br />
+						<%= @obj.race == 'plural' ? chk : uchk %> <strong>Two or More Races (Non Hispanic or Latino)</strong><br />
+						Persons who identify with two or more racial categories named above.<br />&nbsp;<br />
             <% if false %><%= @obj.race == 'other' ? chk : uchk %> Other <br />&nbsp;<% end %>
           </li>
 
