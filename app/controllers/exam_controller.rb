@@ -270,7 +270,7 @@ class ExamController < CrudController
 						join exams on exams.id = a.exam_id where ' + get_where(cond)
 					).fetch_hash
 				
-				elsif params[:cross_filing]
+				elsif params[:cross_filing] || params[:cross_filing_excel]
 					
 					cond << 'applicants.cross_filing = 1'
 					
@@ -421,6 +421,26 @@ class ExamController < CrudController
 						data = StringIO.new
 						book.write data
 						send_data data.string, :filename => 'export.xls', :type => 'application/vnd.ms-excel'
+						
+						
+					elsif params[:cross_filing_excel]
+						book = Spreadsheet::Workbook.new
+						sheet = book.create_worksheet
+						sheet.row(0).concat(%w(last_name first_name exam_no exam_title cross_filing_at other_exams))							
+						@objs.each_with_index { |o, i|
+							sheet.row(i + 1).concat([
+								o.person.last_name, o.person.first_name,
+								o.exam.exam_no, o.exam.title,
+								o.cross_filing_at,
+								o.web_applicant ? o.web_applicant.web_other_exams.collect { |oe| 
+									"#{oe.no} #{oe.name} (#{oe.agency == 'other' ? oe.other : oe.agency})" 
+								}.join("\n") :
+									''
+							]);
+						}
+						data = StringIO.new
+						book.write data
+						send_data data.string, :filename => 'export.xls', :type => 'application/vnd.ms-excel'			
 					else
 						html = render_to_string :action => :attendance_print, :layout => false
 						render_pdf html, 'report.pdf'
