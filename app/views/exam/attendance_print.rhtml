@@ -121,9 +121,7 @@
 						<td><%= h o.exam.exam_no %> - <%= h o.exam.title %></td>
 						<td><%= h o.cross_filing_at %></td>
 						<td>
-							<% if o.web_applicant %>
-								<%= o.web_applicant.web_other_exams.collect { |oe| h("#{oe.no} #{oe.name} (#{oe.agency == 'other' ? oe.other : oe.agency})") }.join('<br />') %>
-							<% end %>
+							<%= nl2br_h o.cross_filing_exams %>
 						</td>
 					</tr>
 				<% } %>

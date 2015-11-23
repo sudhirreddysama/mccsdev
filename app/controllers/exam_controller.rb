@@ -432,10 +432,7 @@ class ExamController < CrudController
 								o.person.last_name, o.person.first_name,
 								o.exam.exam_no, o.exam.title,
 								o.cross_filing_at,
-								o.web_applicant ? o.web_applicant.web_other_exams.collect { |oe| 
-									"#{oe.no} #{oe.name} (#{oe.agency == 'other' ? oe.other : oe.agency})" 
-								}.join("\n") :
-									''
+								o.cross_filing_exams.to_s.gsub("\r", '')
 							]);
 						}
 						data = StringIO.new

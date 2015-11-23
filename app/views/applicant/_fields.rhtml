@@ -64,7 +64,10 @@
 	</td>
 </tr>
 <%= f.tr_check :cross_filing, :label => 'Cross Filing?', :text => 'Check here if this applicant is cross filing exams.' %>
-<%= f.tr_text_field :cross_filing_at, :label => 'Cross Filing At', :help => 'Location applicant is taking cross filed exams.', :class => 'ucase' %>
+<tbody id="cross-filing-fields">
+	<%= f.tr_text_field :cross_filing_at, :label => 'Cross Filing At', :help => 'Location applicant is taking cross filed exams.', :class => 'ucase' %>
+	<%= f.tr_text_area :cross_filing_exams, :label => 'Cross Filing Exams', :size => '60x2' %>
+</tbody>
 <%= f.tr_check :army_served, :label => 'Veteran?', :text => 'Check here if applicant served in the armed forces.' %>
 <tbody id="veteran-fields">
 	<%= f.tr_calendar_date_select :army_from, :label => 'Enlisted From' %>
@@ -89,6 +92,13 @@
 		}
 		army_served.change(toggle_veterans);
 		toggle_veterans();
+		
+		var cross_filing = $('#obj_cross_filing');
+		var toggle_cross_filing = function(e) {
+			$('#cross-filing-fields')[cross_filing.is(':checked') ? 'show' : 'hide']();
+		}
+		cross_filing.change(toggle_cross_filing);
+		toggle_cross_filing();		
 		
 		$('#approved input').change(function(e) {
 			var c = $(this);
