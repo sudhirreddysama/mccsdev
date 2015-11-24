@@ -1,5 +1,5 @@
 class DocumentController < CrudController
-	
+		
 	def index
 		@paginate = false	
 		if params[:sc] == 'applicant'
@@ -78,6 +78,39 @@ class DocumentController < CrudController
 	def build_obj
 		super
 		@obj.user = @current_user
+	end
+	
+	def load_copy_document
+		if session[:copy_document_id]
+			@copy_document = Document.find_by_id session[:copy_document_id]
+			if !@copy_document
+				session[:copy_document_id] = nil
+			end
+		end
+	end
+	before_filter :load_copy_document
+	
+	def copy
+		load_obj
+		session[:copy_document_id] = @obj.id
+		flash[:notice] = 'Document has been copied. Navigate to the documents tab where you want to paste the document and hit the &quot;paste&quot; link in the blue bar below.'
+		redirect_to :back
+	end
+
+	def clear_copy
+		session[:copy_document_id] = nil
+		redirect_to :action => :index
+	end
+	
+	def paste
+		if session[:copy_document_id]
+			document = Document.find session[:copy_document_id]
+			if document
+				@sobj.documents << Document.new(:uploaded_file => document, :user => @current_user)
+			end
+		end
+		flash[:notice] = 'Document has been copied.'
+		redirect_to :action => :index
 	end
 
 end

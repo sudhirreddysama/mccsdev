@@ -51,8 +51,8 @@ a img { border: none; }
 .notice { color: #fff; background: #0a0 url(../images/icons/accept.png) 5px center no-repeat; padding: 5px 5px 5px 26px; margin: 5px 0; }
 .notice a { color: #fff; }
 
-.infobar { color: #fff; background: #00a url(../images/icons/information.png) 5px center no-repeat; padding: 5px 5px 5px 26px; margin: 5px 0; }
-.infobar a { color: #fff; }
+.infobar, .copybar { color: #fff; background: #00a url(../images/icons/page_paste.png) 5px center no-repeat; padding: 5px 5px 5px 26px; margin: 5px 0; }
+.infobar a, .copybar a { color: #fff; }
 
 .dg { width: 100%; border-collapse: collapse; margin: 5px 0; }
 .dg td, .dg th { padding: 1px 5px; vertical-align: top; text-align: left; }
@@ -121,6 +121,7 @@ a img { border: none; }
 .tabs a.tab-receipt span { background-image: url(../images/icons/printer.png); }
 .tabs a.tab-reimport span { background-image: url(../images/icons/arrow_rotate_clockwise.png); }
 .tabs a.tab-download span { background-image: url(../images/icons/arrow_down.png); }
+.tabs a.tab-copy span { background-image: url(../images/icons/page_paste.png); }
 
 .tabs a.tab-report span { background-image: url(../images/icons/report.png); }
 
