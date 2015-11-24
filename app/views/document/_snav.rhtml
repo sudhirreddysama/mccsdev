@@ -1,0 +1,7 @@
+<% if @copy_document %>
+	<div class="copybar">
+		<%= link_to "Paste &quot;#{h(@copy_document.filename)}&quot; Here", :action => :paste %>
+		&nbsp;&nbsp;&nbsp;
+		<%= link_to 'Cancel/Clear', :action => :clear_copy %>
+	</div>
+<% end %>
