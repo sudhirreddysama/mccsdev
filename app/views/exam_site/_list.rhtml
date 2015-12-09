@@ -4,8 +4,9 @@
 			<td width="1%">Actions</td>
 			<th width="1%">ID</th>
 			<th width="1%">Capacity</th>
-			<th width="40%">Name</th>
-			<th width="57%">Address</th>
+			<th width="32%">Name</th>
+			<th width="32%">Address</th>
+			<th width="33%">Notes</th>
 		</tr>
 	</thead>
 	<tbody id="objs">
@@ -16,6 +17,7 @@
 				<td class="nobr"><%= o.capacity %></td>
 				<td><%= link_to o.name, :action => :view, :id => o.id %></td>
 				<td><%= h o.full_address(', ') %>
+				<td><%= nl2br_h o.notes %></td>
 			</tr>
 		<% } %>
 	</tbody>

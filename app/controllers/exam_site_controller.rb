@@ -16,6 +16,7 @@ class ExamSiteController < CrudController
 			'exam_sites.address' => :like,
 			'exam_sites.address2' => :like,
 			'exam_sites.address3' => :like,
+			'exam_sites.notes' => :like
 		}
 		
 		@opt = {
