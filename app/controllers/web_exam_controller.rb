@@ -109,6 +109,7 @@ class WebExamController < CrudController
 			['First Name', 'people.first_name'],
 			['Last Name', 'people.last_name'],
 			['Submitted', 'applicants.submitted_at'],
+			['Disapproved/Approved', 'applicants.approved']
 		]
 		cond = get_search_conditions @filter[:search], {
 			'applicants.id' => :left,
