@@ -10,7 +10,7 @@
 		#list tr td { border-top: 1px solid #888; }
 		#list { border-bottom: 1px solid #888; }
 		
-		
+		.nowrap, .nowrap td, .nowrap th { white-space: nowrap; }		
 
 		.cols { border-bottom: 1px solid #888; }
 		.col-app { float: left; width: 45%; page-break-inside: avoid; }
@@ -97,13 +97,13 @@
 	
 					<table>
 						<tr>
-							<th>Exam #:</th>
+							<th class="nowrap">Exam #:</th>
 							<td>
 								<% if @obj.continuous %>
 									<%= Exam.find(:all, {
 										:conditions => ['current_exam_id = ? and valid_until >= date(now())', @obj.id],
 										:order => 'given_at desc'
-									}).collect(&:exam_no).join(', ') %>
+									}).collect { |e| "<span class=\"nowrap\">#{e.exam_no}</span>" }.join(', ') %>
 								<% else %>
 									<%= @obj.exam_no %>
 								<% end %>
@@ -154,7 +154,7 @@
 				</td>
 				<td>
 				
-					<table>
+					<table class="nowrap">
 						<tr>
 							<th>Most Recent Test Date:</th>
 							<td><%= @obj.given_at.fmt %></td>
