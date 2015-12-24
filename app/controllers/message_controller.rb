@@ -55,5 +55,13 @@ class MessageController < CrudController
 		@obj.ensure_rendered
 		send_file @obj.path, :filename => "#{@obj.subject}.pdf", :disposition => 'inline', :type => 'application/pdf'
 	end
+		
+	def copy
+		load_obj
+		session[:copy_message_id] = @obj.id
+		session[:copy_document_id] = nil
+		flash[:notice] = 'Letter has been copied. Navigate to the documents tab where you want to paste the letter\'s PDF and hit the &quot;paste&quot; link in the blue bar below.'
+		redirect_to :back
+	end
 
 end

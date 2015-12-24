@@ -86,6 +86,11 @@ class DocumentController < CrudController
 			if !@copy_document
 				session[:copy_document_id] = nil
 			end
+		elsif session[:copy_message_id]
+			@copy_message = Message.find_by_id session[:copy_message_id]
+			if !@copy_message
+				session[:copy_message_id] = nil
+			end
 		end
 	end
 	before_filter :load_copy_document
@@ -93,12 +98,14 @@ class DocumentController < CrudController
 	def copy
 		load_obj
 		session[:copy_document_id] = @obj.id
+		session[:copy_message_id] = nil
 		flash[:notice] = 'Document has been copied. Navigate to the documents tab where you want to paste the document and hit the &quot;paste&quot; link in the blue bar below.'
 		redirect_to :back
 	end
 
 	def clear_copy
 		session[:copy_document_id] = nil
+		session[:copy_message_id] = nil
 		redirect_to :action => :index
 	end
 	
@@ -108,8 +115,14 @@ class DocumentController < CrudController
 			if document
 				@sobj.documents << Document.new(:uploaded_file => document, :user => @current_user)
 			end
+			flash[:notice] = 'Document has been copied.'
+		elsif session[:copy_message_id]
+			message = Message.find session[:copy_message_id]
+			if message
+				message.ensure_rendered
+				@sobj.documents << Document.new(:uploaded_file => message, :user => message.user)	
+			end
 		end
-		flash[:notice] = 'Document has been copied.'
 		redirect_to :action => :index
 	end
 

@@ -11,7 +11,10 @@
 	<tbody id="objs">
 		<% @objs.each { |o| %>
 			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
-				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td class="nobr">
+					<%= partial 'actions', :o => o %>
+					<%= link_to image_tag('icons/page_paste.png', :alt => 'copy', :title => 'Copy'), :action => :copy, :id => o.id %>
+				</td>
 				<td><%= o.id %></td>
 				<td><%= link_to o.subject, :action => :view, :id => o.id %></td>
 				<td class="nobr"><%= o.created_at.dt0? %></td>

@@ -1,5 +1,8 @@
 <div class="tabs buttons">
 	<%= tab 'Print PDF', {:action => :print_pdf, :id => @obj.id}, {}, :target => '_blank', :class => 'tab-print' %>
+	<%= tab 'Copy', {:action => :copy, :id => @obj.id}, {} %>
+	<div class="clear"></div>
+</div>
 	<div class="clear"></div>
 </div>
 <div class="viewer">

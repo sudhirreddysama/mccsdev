@@ -11,6 +11,8 @@ class Message < ActiveRecord::Base
 	
 	def label; subject_was; end
 	
+	def original_filename; "#{subject}.pdf"; end
+	
 	#def has_email?; person && !person.email.blank?; end
 	
 	#def can_email?; has_email? && person.prefer_email; end

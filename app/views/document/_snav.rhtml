@@ -4,4 +4,10 @@
 		&nbsp;&nbsp;&nbsp;
 		<%= link_to 'Cancel/Clear', :action => :clear_copy %>
 	</div>
+<% elsif @copy_message %>
+	<div class="copybar">
+		<%= link_to "Paste &quot;#{h(@copy_message.subject)}&quot; Here", :action => :paste %>
+		&nbsp;&nbsp;&nbsp;
+		<%= link_to 'Cancel/Clear', :action => :clear_copy %>
+	</div>
 <% end %>
