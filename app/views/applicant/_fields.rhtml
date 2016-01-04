@@ -71,7 +71,7 @@
 <%= f.tr_check :army_served, :label => 'Veteran?', :text => 'Check here if applicant served in the armed forces.' %>
 <tbody id="veteran-fields">
 	<%= f.tr_calendar_date_select :army_from, :label => 'Enlisted From' %>
-	<%= f.tr_calendar_date_select :army_from, :label => 'Enlisted To' %>
+	<%= f.tr_calendar_date_select :army_to, :label => 'Enlisted To' %>
 	<%= f.tr_check :army_discharge_honorable, :label => 'Honorable Discharge?', :text => 'Check here if discharge was honorable' %>
 	<%= f.tr_text_field :army_discharge_reason, :label => 'Discharge Reason' %>
 	<%= f.tr_select :vc_type, %w{none nondisabled disabled}, :label => 'VC Type', :include_blank => true %>
