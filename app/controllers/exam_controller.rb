@@ -246,11 +246,16 @@ class ExamController < CrudController
 				
 					cond << 'wa.special_accommodations = 1 or p.special_accommodations != "" or p.sabbath_observer = 1'
 				
+					if @report[:only_active] == '1'
+						cond << 'app_statuses.code = "A"'
+					end
+				
 					objs = DB.query('
 						select p.first_name, p.last_name, p.ssn, p.special_accommodations, p.sabbath_observer, p.special_accommodations_docs, p.sabbath_observer_docs, exams.exam_no, exams.given_at, wa.special_accommodations web_special_accommodations
 						from applicants a
 						join people p on p.id = a.person_id
 						left join ' + HRAPPLYDB + '.applicants wa on wa.id = a.web_applicant_id
+						left join app_statuses on app_statuses.id = a.app_status_id
 						join exams on exams.id = a.exam_id
 						where ' + get_where(cond) + '
 						order by p.last_name asc, p.first_name asc'
@@ -274,8 +279,12 @@ class ExamController < CrudController
 					
 					cond << 'applicants.cross_filing = 1'
 					
+					if @report[:only_active] == '1'
+						cond << 'app_statuses.code = "A"'
+					end					
+					
 					@objs = Applicant.find(:all, {
-						:include => [:person, :exam],
+						:include => [:person, :exam, :app_status],
 						:conditions => get_where(cond),
 						:order => 'people.last_name asc, people.first_name asc'
 					})
