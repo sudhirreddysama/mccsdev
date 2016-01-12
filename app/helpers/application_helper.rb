@@ -122,7 +122,8 @@ module ApplicationHelper
 	end
 	
 	def load_job_options
-		cond = ['employees.id is not null']
+		#cond = ['employees.id is not null']
+		cond = []
 		if @current_user.agency_level?
 			if @current_user.agency
 				cond << 'employees.agency_id = %d' % @current_user.agency_id
