@@ -68,28 +68,35 @@ class PayCertController < CrudController
 
 	def view
 		if request.post?
+			bad_names = []
 			params[:wage_changes].each { |w|
 				l = @obj.pay_cert_lines.find(w)
 				e = l.employee
 				d = Date.parse(params[:action_date])
 				a = e.empl_actions.find(:first, :conditions => ['empl_actions.action_date <= ?', d], :order => 'empl_actions.action_date desc')
-				e.empl_actions.create({
-					:job_id => a.job_id,
-					:agency_id => a.agency_id,
-					:department_id => a.department_id,
-					:wage => l.salary_wage,
-					:wage_per => a.wage_per,
-					:classification => a.classification,
-					:status => a.status,
-					:job_time => a.job_time,
-					:leave_date => a.leave_date,
-					:reference_date => Time.now.to_date,
-					:action_date => params[:action_date],
-					:empl_action_type_id => 9
-				})
+				if a
+					e.empl_actions.create({
+						:job_id => a.job_id,
+						:agency_id => a.agency_id,
+						:department_id => a.department_id,
+						:wage => l.salary_wage,
+						:wage_per => a.wage_per,
+						:classification => a.classification,
+						:status => a.status,
+						:job_time => a.job_time,
+						:leave_date => a.leave_date,
+						:reference_date => Time.now.to_date,
+						:action_date => params[:action_date],
+						:empl_action_type_id => 9
+					})
+				else
+					n = "#{e.first_name}, #{e.last_name}"
+					logger.info "Couldn't create wage change action for: #{n}"
+					bad_names << n
+				end
 			}
 			redirect_to
-			flash[:notice] = 'Wage change actions have been saved.'
+			flash[:notice] = 'Wage change actions have been saved.' + (bad_names.empty? ? '' : " Could not create wage changes for: #{bad_names.join(', ')}")
 		else
 			load_error_lines
 			super
