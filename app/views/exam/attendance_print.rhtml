@@ -384,6 +384,7 @@
 			
 			<%
 			
+			no_distinct = {}
 			no_total = 0
 			no_present = 0
 			no_withdrew = 0
@@ -439,6 +440,7 @@
 
 									<%
 									
+									no_distinct[p.id] = true
 									no_total += 1
 									
 									if a.app_status
@@ -484,7 +486,8 @@
 					<% } %>
 				</tbody>
 			</table>
-			<p style="text-align: left;">TOTAL: <%= no_total %><br />
+			<p style="text-align: left;">TOTAL APPLICANTS: <%= no_distinct.keys.size %><br />
+			TOTAL APPLICANT/EXAMS: <%= no_total %><br />
 			TOTAL PRESENT: <%= no_present %><br />
 			TOTAL WITHDREW: <%= no_withdrew %><br />
 			TOTAL FTA: <%= no_fta %></p>
