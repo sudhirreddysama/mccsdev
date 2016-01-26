@@ -123,19 +123,18 @@ module ApplicationHelper
 	
 	def load_job_options
 		#cond = ['employees.id is not null']
-		cond = []
+		empl_cond = []
 		if @current_user.agency_level?
 			if @current_user.agency
-				cond << 'employees.agency_id = %d' % @current_user.agency_id
+				empl_cond << 'e.agency_id = %d' % @current_user.agency_id
 			end
 			if @current_user.department
-				cond << 'employees.department_id = %d' % @current_user.department_id
+				empl_cond << 'e.department_id = %d' % @current_user.department_id
 			end
 		end
 		@job_options = Job.find(:all, {
-			:conditions => cond.join(' and '),
 			:order => 'jobs.inactive asc, jobs.name asc', 
-			:include => :employees, :group => 'jobs.id'
+			:joins => empl_cond.empty? ? nil : 'join employees e on e.job_id = jobs.id and ' + empl_cond.join(' and '), :group => 'jobs.id'
 		}).collect { |j| [j.inactive ? "-#{j.name} (inactive)" : j.name, j.id] }
 	end
 	
