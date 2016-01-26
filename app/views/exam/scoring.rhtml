@@ -35,7 +35,17 @@
 				<% row = 0 %>
 				<% @objs.each_with_index { |o, i| %>
 					<tbody class="<%= cycle 'odd', 'even' %>">
-						<% @exam_perfs.each_with_index { |e, j| %>
+						<%
+						
+						ep = @exam_perfs
+						# If multiple performance tests + perf_code filter, find intersection of codes & exams for applicant!
+						if @filter[:perf_code_ids]
+							tp = o.taken_perfs.to_a # pre-filtered by perf_code!
+							ep = ep.select { |ep| tp.find { |p| p.perf_test_id == ep.perf_test_id }}
+						end
+						
+						%>
+						<% ep.each_with_index { |e, j| %>
 							<tr>
 								<% if j == 0 %>
 									<td class="nobr"><%= h o.person.ssn %></td>

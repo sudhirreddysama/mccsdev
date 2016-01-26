@@ -577,11 +577,18 @@ class ExamController < CrudController
 		
 		applicant_sort
 		
+		include = [:person, :app_status]
+		
 		if params[:id2] == 'perf'
 			@exam_perfs = @obj.exam_perfs.find(:all, {
 				:include => :perf_test,
 				:order => 'perf_tests.name'
 			})
+			if @filter[:perf_code_ids]
+				@filter[:perf_code_ids].map! &:to_i
+				@cond << 'taken_perfs.perf_code_id in (' + @filter[:perf_code_ids].join(',') + ')'
+				include << :taken_perfs
+			end
 		end
 		
 		@cond << 'applicants.approved = "Y"'
@@ -589,7 +596,7 @@ class ExamController < CrudController
 		opt = {
 			:order => get_order_auto,
 			:conditions => get_where(@cond),
-			:include => [:person, :app_status]
+			:include => include
 		}
 		
 		opt[:per_page] ||= 50

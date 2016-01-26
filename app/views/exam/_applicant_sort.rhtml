@@ -2,12 +2,20 @@
 	<table class="form">
 		<tr>
 			<th>Status</th>
+			<% if params[:id2] == 'perf' %>
+				<th>Perf. Status
+			<% end %>
 			<th>Sort</th>
 		</tr>
 		<tr>
 			<td>
 				<%= f.select :statuses, [['NO STATUS', 'NONE']] + @statuses.collect { |s| [s.name, s.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %>
 			</td>
+			<% if params[:id2] == 'perf' %>
+				<td>
+					<%= f.select :perf_code_ids, PerfCode.find(:all).collect { |c| [c.label, c.id] }, {}, :multiple => true, :style => 'width: 150px; height: 100px;' %>
+				</td>
+			<% end %>
 			<td class="subform">
 				<table>
 					<tr>
