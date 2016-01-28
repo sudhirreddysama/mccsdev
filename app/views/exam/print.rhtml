@@ -80,7 +80,7 @@
 	}
 	
 	by_dept = {}
-	if @obj.exam_type == 'PROM'
+	if @obj.exam_type == 'PROM' || @obj.sort_by_department
 		apps.each { |a|
 			n = a.department ? a.department.name : 'UNKOWN DEPT'
 			by_dept[n] ||= []
@@ -192,7 +192,7 @@
 		<div class="col-act"><strong>Actions</strong></div>
 		<div class="clear"></div>
 	</div>
-		<% if @obj.exam_type == 'PROM' %>
+		<% if @obj.exam_type == 'PROM' || @obj.sort_by_department %>
 			<% by_dept.keys.sort.each { |k| %>
 				<div class="cols"><div class="pad"><strong><%= k %></strong></div></div>
 				<%= partial 'exam/print', :apps => by_dept[k] %>

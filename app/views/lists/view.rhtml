@@ -15,7 +15,7 @@
 		<strong><%= h @obj.comments %></strong>
 	<% end %>
 </p>
-<% if @obj.exam_type == 'PROM' && @obj.sort_by_department %>
+<% if @obj.exam_type == 'PROM' || @obj.sort_by_department %>
 	<p>This is a promotional exam. Positions are per department.</p>
 <% end %>
 <% if @obj.bandscored %>
@@ -61,7 +61,7 @@ is reviewed at the time a residential certification is requested.</p>
 
 </script>
 
-<% if @obj.exam_type == 'PROM' %>
+<% if @obj.exam_type == 'PROM' || @obj.sort_by_department %>
 	<%
 	
 		grp = {}
