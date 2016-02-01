@@ -15,9 +15,6 @@
 		<strong><%= h @obj.comments %></strong>
 	<% end %>
 </p>
-<% if @obj.exam_type == 'PROM' || @obj.sort_by_department %>
-	<p>This is a promotional exam. Positions are per department.</p>
-<% end %>
 <% if @obj.bandscored %>
 	<p>This exam is band scored. &quot;other credits&quot; are included in the initial &quot;exam score.&quot;</p>
 <% end %>
