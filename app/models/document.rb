@@ -17,6 +17,7 @@ class Document < ActiveRecord::Base
 	belongs_to :form_hire
 	belongs_to :form_title
 	belongs_to :notice
+	belongs_to :vacancy
 	
 	attr :uploaded_file, true
 	

@@ -79,6 +79,10 @@ class User < ActiveRecord::Base
   	level == 'admin'
   end
   
+  def is_agency_county?
+  	agency_level? && agency && agency.agency_type == 'COUNTY'
+  end
+  
   def switch_username
   	if @switch_username 
   		return @switch_username 

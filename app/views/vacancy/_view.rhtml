@@ -1,0 +1,268 @@
+<% if params[:action] == 'print' || params[:print_all] %>
+	<div class="right">ID: <%= o.id %> &bull; <%= Time.now.d0? %></div>
+	<h1><%= h o.cost_center %> &bull; <%= h o.organization %><br /><%= o.position_no %> &bull; <%= o.position %></h1>
+<% else %>
+	<div class="tabs buttons">
+		<%= tab 'Printable Version', {:action => :print, :id => o.id}, {}, :target => '_blank' %>
+		<div class="clear"></div>
+	</div>
+<% end %>
+<div class="viewer">
+	<div class="header">Human Resources</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Decision</label>
+					<%= vac_status o.hr_decision %>
+				</td>
+				<td>
+					<label>Date</label>
+					<%= o.hr_date.d0? %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Comments</label>
+					<%= nl2br_h o.omb_comments %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label># of Jobs Authorized</label>
+					<label style="display: inline;">Overall Within Dept.:</label> <%= o.hr_auth_dept.to_i %>
+					<label style="display: inline;">Within Div.:</label> <%= o.hr_auth_div.to_i %>
+					<label style="display: inline;">For Pos.:</label> <%= o.hr_auth_pos.to_i %>
+				&nbsp;</td>
+				<td>
+					<label># of Jobs Filled</label>
+					<label style="display: inline;">Overall Within Dept.:</label> <%= o.hr_fill_dept.to_i %>
+					<label style="display: inline;">Within Div.:</label> <%= o.hr_fill_div.to_i %>
+					<label style="display: inline;">For Pos.:</label> <%= o.hr_fill_pos.to_i %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Approval Used</label>
+					<%= o.hr_approval_used.d0? %>
+				&nbsp;</td>
+				<td>
+					<label>Candidate Hired</label>
+					<%= h o.hr_candidate_hired %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>	
+</div>
+
+<div class="viewer">
+	<div class="header">Office of Management and Budget Decision</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Decision</label>
+					<%= vac_status o.omb_decision %>
+				</td>
+				<td>
+					<label>Date</label>
+					<%= o.omb_date.d0? %>
+				&nbsp;</td>
+				<td>
+					<label>Code</label>
+					<%= h o.omb_code %> <%= h Vacancy::OMB_CODES[o.omb_code] %>
+				&nbsp;</td>
+				<td>
+					<label>% Grant Funded</label>
+					<%= h o.omb_grant_percent %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Comments</label>
+					<%= nl2br_h o.omb_comments %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+
+<div class="viewer">
+	<div class="header">County Executive Decision</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Decision</label>
+					<%= vac_status o.exec_decision %>
+				</td>
+				<td>
+					<label>Date</label>
+					<%= o.exec_date.d0? %>
+				&nbsp;</td>
+				<td>
+					<label>Approval #</label>
+					<%= o.exec_approval_no %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Comments</label>
+					<%= nl2br_h o.exec_comments %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+
+<div class="viewer">
+	<div class="header">Request to Fill Vacancy Submission</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID</label>
+					<%= o.id %>
+				&nbsp;</td>
+				<td>
+					<label>Received Date</label>
+					<%= o.received_date.d0? %>
+				&nbsp;</td>
+				<td>
+					<label>Agency</label>
+					<%= h o.agency.name if o.agency %>
+				&nbsp;</td>
+				<td>
+					<label>Department</label>
+					<%= h o.department.name if o.department %>
+				&nbsp;</td>
+				<td>
+					<label>Created By</label>
+					<%= h o.user.username if o.user %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Organization</label>
+					<%= h o.organization %>
+				&nbsp;</td>
+				<td>
+					<label>Cost Center</label>
+					<%= h o.cost_center %>
+				&nbsp;</td>
+				<td>
+					<label>Org. #</label>
+					<%= o.org_no %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Position</label>
+					<%= h o.position %>
+				&nbsp;</td>
+				<td>
+					<label>Position #</label>
+					<%= h o.position_no %>
+				&nbsp;</td>
+				<td>
+					<label>Last Incumbent</label>
+					<%= h o.last_incumbent %>
+				&nbsp;</td>
+				<td>
+					<label>Leaving County?</label>
+					<%= yn o.leaving_county %>
+				&nbsp;</td>
+				<td>
+					<label>Vacancy Date</label>
+					<%= h o.vacancy_date %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Salary Group</label>
+					<%= h o.salary_group %>
+				&nbsp;</td>
+				<td>
+					<label># Weeks</label>
+					<%= o.no_weeks %>
+				&nbsp;</td>
+				<td>
+					<label>Hours/Week</label>
+					<%= o.hours_week %>
+				&nbsp;</td>
+				<td>
+					<label>Job Type</label>
+					<%= h o.job_type %>
+				&nbsp;</td>
+				<td>
+					<label>Filled From</label>
+					<%= h o.filled_from %>
+				&nbsp;</td>
+				<td>
+					<label>Desired Start</label>
+					<%= o.desired_start.d0? %>
+				&nbsp;</td>
+				<td>
+					<label>From Position</label>
+					<%= h o.from_position %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>How has or will the work be covered during the vacancy?</label>
+					<%= nl2br_h o.work_covered %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Justification for filling the vacancy?</label>
+					<%= nl2br_h o.justification %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+

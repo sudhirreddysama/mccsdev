@@ -111,6 +111,12 @@ module ApplicationHelper
 		'<div class="form-status form-' + s + '">' + s + '</div>'
 	end
 	
+	def vac_status s
+		s = s.to_s
+		s = 'None' if s.blank?
+		'<div class="form-status form-' + s.downcase + '">' + s + '</div>'
+	end	
+	
 	def pref_status s
 		s = s.to_s
 		'<div class="pref-status pref-' + s + '">' + s + '</div>'

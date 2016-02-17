@@ -1,0 +1,31 @@
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.name %>
+				</td>
+				<td>
+					<label>Path:</label>
+					<%= h o.path %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Text:</label>
+					<%= nl2br_h o.text %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>

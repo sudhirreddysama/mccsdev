@@ -1,0 +1,36 @@
+<% if !@current_user.agency_level? %>
+	<tr>
+		<th>Agency/Dept.:</th>
+		<td>
+			<%= f.select :agency_id, Agency.find(:all, :joins => 'join vacancies v on v.agency_id = agencies.id', :group => 'agencies.id').collect { |a| [a.name, a.id] }, :include_blank => true %>
+			<%= f.select :department_id, Department.find(:all, :joins => 'join vacancies v on v.department_id = departments.id', :group => 'departments.id').collect { |d| [d.name, d.id] }, :include_blank => true %>
+		</td>
+	</tr>
+<% end %>
+<tr>
+	<th>HR Status:</th>
+	<td>
+		<label><%= f.check_box :hr_none %> None</label>
+		<label><%= f.check_box :hr_hold %> Hold</label>
+		<label><%= f.check_box :hr_approved %> Approved</label>
+		<label><%= f.check_box :hr_disapproved %> Disapproved</label>
+	</td>
+</tr>
+<tr>
+	<th>OMB Status:</th>
+	<td>
+		<label><%= f.check_box :omb_none %> None</label>
+		<label><%= f.check_box :omb_hold %> Hold</label>
+		<label><%= f.check_box :omb_approved %> Approved</label>
+		<label><%= f.check_box :omb_disapproved %> Disapproved</label>
+	</td>
+</tr>
+<tr>
+	<th>Exec. Status:</th>
+	<td>
+		<label><%= f.check_box :exec_none %> None</label>
+		<label><%= f.check_box :exec_hold %> Hold</label>
+		<label><%= f.check_box :exec_approved %> Approved</label>
+		<label><%= f.check_box :exec_disapproved %> Disapproved</label>
+	</td>
+</tr>

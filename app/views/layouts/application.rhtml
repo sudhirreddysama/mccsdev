@@ -43,6 +43,7 @@
 		<% if !params[:popup] %>
 			<% if RAILS_ENV == 'development' %><div id="dev-bar">DEVELOPMENT SITE</div><% end %>
 		<% end %>
+		<%= partial 'top_texts' %>
 		<% unless @notabs or params[:popup] %>
 			<div id="tabs" class="tabs">
 				<% if @current_user.agency_level? %>
@@ -103,6 +104,7 @@
 					<%= tab 'Hist. Actions', {:controller => :empl_action_type, :sc => nil}, {}, {:class => 'tab-empl_action_type' + (params[:sc] == 'empl_action' ? ' active' : ''), :title => 'History Actions'} %>
 					<%= tab 'Disapprovals', {:controller => :disapproval, :sc => nil}, {}, {:class => 'tab-disapproval' + (params[:sc] == 'disapproval' ? ' active' : ''), :title => 'Disapproval Reasons'} %>
 					<%= tab 'Cert. Act.', {:controller => :cert_code, :sc => nil}, {}, {:class => 'tab-cert_code' + (params[:sc] == 'cert_code' ? ' active' : ''), :title => 'Certified List Actions'} %>
+					<%= tab 'Top Texts', {:controller => :top_text, :sc => nil}, {}, {:class => 'tab-top_text' + (params[:sc] == 'top_text' ? ' active' : ''), :title => 'Text that displays at top of window in various parts of application.'} %>									
 					<% if @current_user.admin_level? %>
 						<%= tab 'Log', {:controller => :db_change, :sc => nil}, {}, {:class => 'tab-change_log' + (params[:sc] == 'db_change' ? ' active' : ''), :title => 'Change Log'} %>
 						<%= tab 'Users', {:controller => :user, :sc => nil}, {}, {:class => 'tab-town' + (params[:sc] == 'town' ? ' active' : ''), :title => 'Personnel Users'} %>									

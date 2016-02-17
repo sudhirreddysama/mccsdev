@@ -1,6 +1,7 @@
 class Notifier < ActionMailer::Base
 	
 	DEFAULT_FROM = 'Monroe County Civil Service <civilservice@monroecounty.gov>'
+	HR_FROM = 'Monroe County HR <noreply@monroecounty.gov>'
 	
 	def message m
 		recipients m.person.email_with_name
@@ -108,6 +109,25 @@ class Notifier < ActionMailer::Base
 		recipients u.collect { |u| u.email_with_name }
 		from Thread.current[:current_user].email_with_name
 		subject 'Payroll Certification Uploaded'
+		body :o => o
+	end
+	
+	def vacancy_submitted u, o
+		recipients u.collect { |u| u.email_with_name }
+		from o.user.email_with_name
+		subject "Request to Fill Vacancy Submitted"
+		body :o => o
+	end
+	
+	def vacancy_updated u, o
+		recipients u.collect { |u| u.email_with_name }
+		from HR_FROM
+		changed = []
+		changed << 'HR' if o.hr_decision_changed?
+		changed << 'OMB' if o.omb_decision_changed?
+		changed << 'Exec' if o.exec_decision_changed?
+		s = changed.join(', ')
+		subject "Request to Fill Vacancy Decision Update (#{s})"
 		body :o => o
 	end
 	

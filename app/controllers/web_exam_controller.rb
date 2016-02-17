@@ -19,12 +19,12 @@ class WebExamController < CrudController
 			"#{HRAPPLYDB}.exams.no" => :like,
 			"#{HRAPPLYDB}.exam_types.short_name" => :like
 		}
-		if @current_user.agency_level? and !@current_user.view_web_post_for_agency?
+		if @current_user.agency_level? #and !@current_user.view_web_post_for_agency?
 			cond << 'users_web_exams.user_id = %d' % @current_user.id
     end
-    if @current_user.agency_level? and @current_user.view_web_post_for_agency?
-      cond << "#{HRAPPLYDB}.exams.exam_type_id = 4"
-    end
+    #if @current_user.agency_level? and @current_user.view_web_post_for_agency?
+      #cond << "#{HRAPPLYDB}.exams.exam_type_id = 4"
+    #end
 		@opt = {
 			:conditions => get_where(cond),
 			:order => get_order_auto,
@@ -127,9 +127,9 @@ class WebExamController < CrudController
 		include = [:person, :web_exam]
 		join = nil
 		if params[:action] == 'all_applicants'
-     if !@current_user.view_web_post_for_agency?
-			join = 'join users_web_exams uwe on uwe.web_exam_id = applicants.web_exam_id and uwe.user_id = %d' % @current_user.id
-     end 
+    	#if !@current_user.view_web_post_for_agency?
+				join = 'join users_web_exams uwe on uwe.web_exam_id = applicants.web_exam_id and uwe.user_id = %d' % @current_user.id
+     	#end 
 			@model = Applicant
 		else
 			load_obj

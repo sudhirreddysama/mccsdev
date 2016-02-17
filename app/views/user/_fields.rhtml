@@ -17,7 +17,9 @@
 </tr>
 <%= f.tr_check :allow_edit_notice_emails, :label => 'Edit Exam Notice Emails?', :text => 'Check here to grant access to the "Exam Notice Emails" tab.' %>
 <%= f.tr_check :allow_web_post_review, :label => 'Allow Web Post Review?', :text => 'Check here to allow agency users to review web post applications just like the Liaison role.' %>
-<%= f.tr_check :view_web_post_for_agency, :label => 'View all Web Posts for Agency?', :text => 'Check here to allow this agency user to view all web posts for their own agency.' %>
+<% if false %>
+	<%= f.tr_check :view_web_post_for_agency, :label => 'View all Web Posts for Agency?', :text => 'Check here to allow this agency user to view all web posts for their own agency.' %>
+<% end %>
 
 <%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name asc').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Agency', :help => 'Select an agency for agency and agency-head level users.' %>
 <%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name asc').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Department', :help => 'Select an department for agency and agency-head level users.' %>

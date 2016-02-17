@@ -7,13 +7,9 @@
 			<th width="1%" class="nobr">Status</th>
 			<th width="1%">Established</th>
 			<th width="1%">Valid&nbsp;Until</th>
-			<% if @current_user.agency_level? %>
-				<th width="96%">Title</th>
-			<% else %>
-				<th width="32%">Title</th>
-				<th width="32%">Agency</th>
-				<th width="32%">Department</th>
-			<% end %>
+			<th width="32%">Title</th>
+			<th width="32%">Agency</th>
+			<th width="32%">Department</th>
 		</tr>
 	</thead>
 	<tbody id="objs">
@@ -26,10 +22,8 @@
 				<td class="nobr"><%= o.established_date.d0? %></td>
 				<td class="nobr"><%= o.valid_until.d0? %></td>
 				<td><%= link_to o.title, :action => :view, :id => o.id %></td>
-				<% if !@current_user.agency_level? %>
-					<td><%= h o.agency.name if o.agency %></td>
-					<td><%= h o.department.name if o.department %></td>
-				<% end %>
+				<td><%= h o.agency.name if o.agency %></td>
+				<td><%= h o.department.name if o.department %></td>
 			</tr>
 		<% } %>
 	</tbody>

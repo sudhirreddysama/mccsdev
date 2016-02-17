@@ -8,6 +8,12 @@
 	
 	<p>This page lists all employees for your agency/department in the HR database. You can also electronically submit forms 105 (employment change) and 330 (new hire) here. To submit a form, click the tab for that form, then click the &quot;New&quot; tab.</p>
 	
+	<% if @current_user.is_agency_county? %>
+		<% if false %>
+			<p><%= link_to 'Requests to Fill Vacancies', :controller => :vacancy %> are also found under the Employees tab.</p>
+		<% end %>
+	<% end %>
+	
 	<% if @current_user.level != 'agency-employees' %>
 	
 		<% if @current_user.agency && @current_user.agency.show_web_posts %>

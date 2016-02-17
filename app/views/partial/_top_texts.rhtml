@@ -1,0 +1,7 @@
+<% if !@top_texts.empty? %>
+	<div id="top-texts">
+		<% @top_texts.each { |t| %>		
+			<div><%= nl2br_h t.text %></div>
+		<% } %>
+	</div>
+<% end %>

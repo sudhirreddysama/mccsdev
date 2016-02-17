@@ -1,5 +1,7 @@
 <% unless errors.nil? or errors.empty? or errors.all?(&:blank?) %>
 	<div class="errors">
-		<%= errors.join '<br />' %>
+		<% errors.each { |e| %>
+			<div><%= e.split('^').last %></div>
+		<% } %>
 	</div>
 <% end %>

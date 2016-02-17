@@ -58,8 +58,8 @@ a img { border: none; }
 .dg td, .dg th { padding: 1px 5px; vertical-align: top; text-align: left; }
 .dg thead { border-bottom: 1px solid #888; }
 .dg th { text-align: left; font-weight: bold; background-color: #fff; }
-.dg .odd { background-color: #f8f8f8; }
-.dg .odd:hover td, .dg .even:hover td { background-color: #eee; }
+.dg .odd { background-color: #f0f0f0; }
+.dg .odd:hover td, .dg .even:hover td { background-color: #e8e8e8; }
 
 .dg .padt td { padding-top: 10px; }
 .dg .padb td { padding-bottom: 10px; }
@@ -466,7 +466,7 @@ a.edit-show-hide.open { padding: 2px 5px 2px 12px; display: block; background: t
 
 input.ucase, textarea.ucase { text-transform: uppercase; }
 
-.cert-status { display: block; padding: 0 3px; color: #fff; float: left; }
+.cert-status { display: block; padding: 0 5px; color: #fff; float: left; border-radius: 5px; }
 .cert-status.cert-expired { background-color: #800; }
 .cert-status.cert-requested { background-color: #888; }
 .cert-status.cert-certified { background-color: #080; }
@@ -475,7 +475,7 @@ input.ucase, textarea.ucase { text-transform: uppercase; }
 .cert-status.cert-overdue { background-color: #000; }
 .cert-status.cert-pending { background-color: #880; }
 
-.form-status { display: block; padding: 0 3px; color: #fff; float: left; white-space: nowrap; }
+.form-status { display: block; padding: 0 5px; color: #fff; float: left; white-space: nowrap; border-radius: 5px; }
 .form-status.form-started { background-color: #888; }
 .form-status.form-submitted { background-color: #008; }
 .form-status.form-approved { background-color: #080; }
@@ -484,8 +484,10 @@ input.ucase, textarea.ucase { text-transform: uppercase; }
 .form-status.form-review { background-color: #880; }
 .form-status.form-info-needed { background-color: #808; }
 .form-status.form-pendingNYS  { background-color: #088; }
+.form-status.form-none { background-color: #888; }
+.form-status.form-hold { background-color: #008; }
 
-.pref-status { display: block; padding: 0 3px; color: #fff; float: left; }
+.pref-status { display: block; padding: 0 5px; color: #fff; float: left; border-radius: 5px; }
 .pref-status.pref-established { background-color: #888; }
 .pref-status.pref-requested { background-color: #008; }
 .pref-status.pref-certified { background-color: #080; }
@@ -533,3 +535,5 @@ fieldset table.form { margin: 0; }
 .notic-delete { float: right; font-size: 9px; color: #888; display: none; padding-right: 5px; }
 .notic-delete:hover { color: #000; }
 .viewer:hover .notic-delete { display: block; }
+
+#top-texts { border-bottom: 1px solid #888; color: #fff; padding: 5px 5px 5px 26px; background: #333 url(../images/icons/information.png) 5px 5px no-repeat; color: #fff;  }

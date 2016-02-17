@@ -1,0 +1,41 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%" class="nobr">Actions</td>
+			<th width="1%" class="nobr">ID<br />Apr#</th>
+			<th width="1%" class="nobr">Rcvd<br />User</th>
+			<th width="1%" class="nobr">HR<br />Date</th>
+			<th width="1%" class="nobr">OMB<br />Date</th>
+			<th width="1%" class="nobr">Exec<br />Date</th>
+			<th width="1%" class="nobr">Vac Date<br />Start</th>
+			<th width="1%" class="nobr">Pos#<br />Cost Center</th>
+			<th width="50%" class="nobr">Position<br />Dept/Div</th>
+			<th width="1%" class="nobr">Org#<br />Used</th>
+			<th width="41%" class="nobr">Incumbent<br />Hired</th>
+			<th width="1%" class="nobr">Agen<br />Dept</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr">
+					<%= partial 'actions', :o => o %>
+					<% if !o.documents.to_a.empty? %>
+						<%= link_to(image_tag('icons/attach.png', :size => '16x16', :alt => 'docs', :title => 'Documents'), {:sc => :form_hire, :sid => o.id, :controller => :document}) %>
+					<% end %>
+				</td>
+				<td class="nobr"><%= o.id %><br /><%= h o.exec_approval_no %></td>
+				<td class="nobr"><%= o.received_date.d0? %><br /><%= h o.user.username if o.user %></td>
+				<td class="nobr"><%= vac_status o.hr_decision %><br /><%= o.hr_date.d0? %></td>
+				<td class="nobr"><%= vac_status o.omb_decision %><br /><%= o.omb_date.d0? %></td>
+				<td class="nobr"><%= vac_status o.exec_decision %><br /><%= o.exec_date.d0? %></td>
+				<td class="nobr"><%= h o.vacancy_date %><br /><%= o.desired_start.d0? %></td>
+				<td class="nobr"><%= h o.position_no %><br /><%= h o.cost_center %></td>
+				<td><%= link_to "#{h(o.position)}<br />#{h(o.organization)}", :action => :view, :id => o.id %></td>
+				<td class="nobr"><%= h o.org_no %><br /><%= o.hr_approval_used.d0? %></td>
+				<td><%= h o.last_incumbent %><br /><%= h o.hr_candidate_hired %></td>
+				<td><%= o.agency.abbreviation if o.agency %><br /><%= o.department.abbreviation if o.department %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

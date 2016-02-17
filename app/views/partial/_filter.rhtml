@@ -42,8 +42,7 @@
 			<%= partial 'filter2', :f => f %>
 			<tr>
 				<th></th>
-				<td><%= f.submit 'Apply Filter' %> <%= f.submit 'Clear Filter', :name => 'filter[clear]' %>
-				<% if @export_fields %><%= f.submit 'Export (xls)', :name => 'export[xls]' %></td><% end %>
+				<td><%= partial 'filter_buttons', :f => f %></td>
 			</tr>
 		</table>
 	<% } %>

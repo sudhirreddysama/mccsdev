@@ -42,6 +42,11 @@ class ApplicationController < ActionController::Base
 	def options; end
 	before_filter :options
 	
+	def load_top_text
+		@top_texts = TopText.find(:all, :conditions => ['? like top_texts.path', request.path])
+	end
+	before_filter :load_top_text
+	
 	def template opt = nil
 		return if @performed_render
 		begin
@@ -107,13 +112,19 @@ class ApplicationController < ActionController::Base
 	
 	def get_date_cond
 		cond = []
-		dt = @date_types.rassoc(@filter[:date_type])[1] rescue nil		
+		date_type = @date_types.rassoc(@filter[:date_type])
+		dt = date_type[1] if date_type
 		d1 = Date.parse(@filter[:from_date]) rescue nil
 		d2 = Date.parse(@filter[:to_date]) rescue nil
 		cond << "#{dt} >= date('%s')" % d1 if dt && d1
 		cond << "#{dt} <= date('%s')" % d2 if dt && d2
+		@filter_d1 = d1
+		@filter_d2 = d2
+		@filter_dt = dt
+		@filter_dtl = date_type[0] if date_type
 		return cond
 	end
+	
   def get_date_condx
     cond = []
     dt = @date_types.rassoc(@filter[:date_type])[1] rescue nil
@@ -123,6 +134,7 @@ class ApplicationController < ActionController::Base
     cond << "#{dt} <= '%s 23:59'" % d2 if dt && d2
     return cond
   end
+  
 	def get_numeric_cond
 		cond = []
 		dt = @no_types.rassoc(@filter[:no_type])[1] rescue nil

@@ -91,6 +91,7 @@ class CrudController < ApplicationController
 		end
 		template
   end
+  
   def notes
     if request.post? and @obj.update_attributes params[:obj]
       flash[:notice] = 'Record has been saved.'

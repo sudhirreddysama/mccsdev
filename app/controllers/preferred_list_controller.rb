@@ -27,7 +27,9 @@ class PreferredListController < CrudController
 			['Expiration Date', 'preferred_lists.valid_until']
 		]
 		
-		if @current_user.agency_level?
+		if @current_user.is_agency_county?
+			cond << 'agencies.agency_type = "COUNTY"'
+		elsif @current_user.agency_level?
 			cond << 'agencies.id = %d' % @current_user.agency_id
 			cond << 'departments.id = %d' % @current_user.department_id if @current_user.department
 		end

@@ -1,0 +1,15 @@
+<html>
+<head>
+<style>
+<%= partial 'print_style' %>
+</style>
+</head>
+<body>
+<% @objs.each_with_index { |o, i| %>
+	<% if i != 0 %>
+		<div style="page-break-before: always;"></div>
+	<% end %>
+	<%= partial 'view', {:o => o} %>
+<% } %>
+</body>
+</html>

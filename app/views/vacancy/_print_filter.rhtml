@@ -1,0 +1,47 @@
+<%
+
+search = @filter.search.blank? ? '(none)' : @filter.search
+s1 = @orders.rassoc(@filter.sort1)
+s2 = @orders.rassoc(@filter.sort2)
+s3 = @orders.rassoc(@filter.sort3)
+d1 = @filter.dir1 == 'desc' ? 'Desc' : 'Asc'
+d2 = @filter.dir2 == 'desc' ? 'Desc' : 'Asc'
+d3 = @filter.dir3 == 'desc' ? 'Desc' : 'Asc'
+sorts = [] 
+sorts << "#{s1[0]} #{d1}" if s1
+sorts << "#{s2[0]} #{d2}" if s2
+sorts << "#{s3[0]} #{d3}" if s3
+sort = sorts.empty? ? '(none)' : sorts.reject(&:blank?).join(', ')
+if @filter_dt && (@filter_d1 || @filter_d2) 
+	dates = @filter_dtl + ', From: ' + (@filter_d1 ? @filter_d1.d0? : '(all dates)') + ', To:' + (@filter_d2 ? @filter_d2.d0? : '(all dates)')
+else
+	dates = '(none)'
+end
+hr_decision = @hr.empty? ? '(all)' : @hr.map { |d| d == '' ? 'None' : d }.join(', ')
+omb_decision = @omb.empty? ? '(all)' : @omb.map { |d| d == '' ? 'None' : d }.join(', ')
+exec_decision = @exec.empty? ? '(all)' : @exec.map { |d| d == '' ? 'None' : d }.join(', ')
+
+ag = @filter.agency_id.to_i == 0 ? '(all)' : Agency.find(@filter.agency_id).name
+dp = @filter.department_id.to_i == 0 ? '(all)' : Department.find(@filter.department_id).name
+
+%><p>
+<table class="filter">
+	<tr>
+		<th>Search:</th><td><%= h search %></td>
+		<th>HR Decision:</th><td><%= h hr_decision %></td>
+	</tr>
+	<tr>
+		<th>Sort:</th><td><%= h sort %></td>
+		<th>OMB Decision:</th><td><%= h hr_decision %></td>
+	</tr>
+	<tr>
+		<th>Dates:</th><td><%= h dates %></td>
+		<th>Exec. Decision:</th><td><%= h hr_decision %></td>
+	</tr>
+	<% if !@current_user.agency_level? %>
+		<tr>
+			<th>Agency/Dept.:</th>
+			<td colspan="3"><%= h ag %> / <%= h dp %></td>
+		</tr>
+	<% end %>
+</table>

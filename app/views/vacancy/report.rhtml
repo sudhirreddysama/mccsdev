@@ -1,0 +1,94 @@
+<html>
+<head>
+<style>
+html, body { padding: 0; margin: 0; border: 0; }
+body, td, th { font: 10px/15px Trebuchet MS, Verdana, Arial, sans-serif; }
+h1 { font-size: 14px; margin: 10px 0; padding: 0; font-weight: bold; }
+.right { float: right; }
+.nobr { white-space: nowrap; }
+table { border-collapse: collapse; padding: 0; margin: 10px 0; }
+th, td { text-align: left; } 
+th { font-weight: bold; }
+table.filter td { padding-right: 10px; }
+table.filter th { text-align: right; padding-right: 5px; }
+table.report { width: 100%; } 
+table.report th, table.report td { padding: 1px 5px 1px 0; border-bottom: 1px solid #ccc; }
+table.report th { border-color: #000; }
+.form-app { color: #080; }
+.form-dis { color: #800; }
+.form-status.form-none { color: #888; }
+.form-status.form-hold { color: #008; }
+table.report td.border { border: 1px solid #ccc; padding: 1px 3px 1px 2px; text-align: center; }
+
+tr { page-break-inside: avoid; }
+
+</style>
+</head>
+<body>
+<h1>Requests to Fill Vacancies Report</h1>
+<%= partial 'print_filter' %>
+<table class="report">
+	<thead>
+		<tr>
+			<th width="1%" class="nobr">ID</th>
+			<th width="1%" class="nobr">Rcvd</th>
+			<th width="1%" class="nobr">HR</th>
+			<th width="1%" class="nobr">OMB</th>
+			<th width="1%" class="nobr">%GF</th>
+			<th width="1%" class="nobr">Exec</th>
+			<th width="1%" class="nobr">App #</th>
+			<th width="1%" class="nobr">Pos #</th>
+			<th width="99%" class="nobr">Position</th>
+			<th width="1%" class="nobr">Wk</th>
+			<th width="1%" class="nobr">Hr</th>
+			<th width="1%" class="nobr">Grp</th>
+			<th width="1%" class="nobr">Type</th>
+			<th width="1%" class="nobr">Used</th>
+		</tr>	
+	</thead>
+	<% tot = 0; t_ft = 0; t_pt = 0; t_tmp = 0 %>
+	<% @objs_grouped.each { |grp, objs| %>
+		<% tot += objs.size %>
+		<% ft = 0; pt = 0; tmp = 0 %>
+		<% cc, org, no = grp.split("\t") %>
+		<tbody>
+			<% data = capture { %>
+				<% objs.each { |o| %>
+					<% ft += 1 if o.job_type == 'Full Time' %>
+					<% pt += 1 if o.job_type == 'Part Time' %>
+					<% tmp += 1 if o.job_type == 'Seasonal/Temporary' %>
+					<tr>
+						<td class="nobr"><%= o.id %></td>
+						<td class="nobr"><%= o.received_date.d0? %></td>
+						<td class="nobr border"><%= vac_status o.hr_decision.sub('Approved', 'App').sub('Disapproved', 'Dis') if !o.hr_decision.blank? %></td>
+						<td class="nobr border"><%= vac_status o.omb_decision.sub('Approved', 'App').sub('Disapproved', 'Dis') if !o.omb_decision.blank? %></td>
+						<td class="nobr border"><%= o.omb_grant_percent if o.omb_grant_percent.to_i != 0 %></div></td>
+						<td class="nobr border"><%= vac_status o.exec_decision.sub('Approved', 'App').sub('Disapproved', 'Dis') if !o.exec_decision.blank? %></td>
+						<td class="nobr" style="padding-left: 2px;"><%= h o.exec_approval_no %></td>
+						<td class="nobr"><%= o.position_no %></td>
+						<td><%= o.position %></td>
+						<td class="nobr"><%= o.no_weeks %></td>
+						<td class="nobr"><%= o.hours_week %></td>
+						<td class="nobr"><%= o.salary_group %></td>
+						<td class="nobr"><%= o.job_type.sub('Seasonal/Temporary', 'Tmp').sub('Full Time', 'FT').sub('Part Time', 'PT') %></td>
+						<td class="nobr"><%= o.hr_approval_used.d0? %></td>
+					</tr>
+				<% } %>			
+			<% } %>
+			<tr>
+				<th colspan="100" style="padding-top: 10px;">
+					<div class="right">Total Count: <%= objs.size %>, FT: <%= ft %>, PT: <%= pt %>, Tmp: <%= tmp %>, Org #: <%= h no %>, Cost Center: <%= h cc %></div>
+					<%= h org %>
+				</th>
+			</tr>
+			<%= data %>
+		</tbody>
+		<% t_ft += ft; t_pt += pt; t_tmp += tmp %>
+	<% } %>
+	<tbody>
+		<tr>
+			<th colspan="100" style="padding-top: 10px; border-bottom: 1px;">Total Count: <%= tot %>, FT: <%= t_ft %>, PT: <%= t_pt %>, Tmp: <%= t_tmp %></th>
+		</tr>
+	</tbody>
+</body>
+</html>
