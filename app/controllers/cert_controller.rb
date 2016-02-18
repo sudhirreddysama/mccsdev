@@ -97,25 +97,35 @@ class CertController < CrudController
 		})		
 		book = Spreadsheet::Workbook.new
 		@sheet = book.create_worksheet
-		@export_fields = %w{person.last_name person.first_name final_score person.home_phone}
-		@export_fields += %w{person.email person.mailing_address person.mailing_address2 person.mailing_city person.mailing_state person.mailing_zip exam.valid_until}		
+		@export_fields = %w{person.last_name person.first_name applicant.final_score app_status.name cert_code.label cert_applicant.action_date.d0? cert_applicant.comments cert_applicant.salary_per}
+		@export_fields += %w{person.home_phone person.email person.mailing_address person.mailing_address2 person.mailing_city person.mailing_state person.mailing_zip exam.valid_until}		
+		
 		if @current_user.staff_level?
-			@export_fields += %w{approved app_status.name pos rank person.ssn person.work_phone person.fax person.cell_phone raw_score base_score veterans_credits other_credits}
+			@export_fields += %w{applicant.approved applicant.pos applicant.rank person.ssn person.work_phone person.fax person.cell_phone applicant.raw_score applicant.base_score applicant.veterans_credits applicant.other_credits}
 			@export_fields += %w{person.residence_different person.residence_address person.residence_city person.residence_state person.residence_zip}
 			@export_fields += %w{person.town.name person.village.name person.fire_district.name person.school_district.name}
 		end
 		@sheet.row(0).concat(['cert_pos'] + @export_fields)
 		@objs.each_with_index { |o, i|
-			a = o.applicant
-			@sheet[i + 1, 0] = i + 1
-			@export_fields.each_with_index { |f, j|
-				@sheet[i + 1, j + 1] = a.instance_eval(f) rescue nil
-			}
+			render_excel_row o, i
 		}
 		data = StringIO.new
 		book.write data
 		send_data data.string, :filename => 'export.xls', :type => 'application/vnd.ms-excel'		
 	end
+	
+	def render_excel_row o, i
+		cert_applicant = o
+		applicant = o.applicant
+		person = applicant.person
+		exam = applicant.exam
+		app_status = applicant.app_status
+		cert_code = o.cert_code
+		@sheet[i + 1, 0] = i + 1
+		@export_fields.each_with_index { |f, j|
+			@sheet[i + 1, j + 1] = instance_eval(f) rescue nil
+		}
+	end	
 	
 	def build_obj
 		super
