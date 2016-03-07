@@ -175,7 +175,7 @@ class WebApplicant < ActiveRecord::Base
 					paid_by = 'R'
 					if we.price.to_f == 0
 						paid_by = 'X'
-					elsif wa.waiver_requested && wa.waiver_county
+					elsif wa.waiver_requested && (wa.waiver_county || wa.waiver_social_workers)
 						paid_by = 'E'
 					elsif wa.waiver_requested
 						paid_by = 'W'
