@@ -104,6 +104,7 @@ class CertController < CrudController
 			@export_fields += %w{applicant.approved applicant.pos applicant.rank person.ssn person.work_phone person.fax person.cell_phone applicant.raw_score applicant.base_score applicant.veterans_credits applicant.other_credits}
 			@export_fields += %w{person.residence_different person.residence_address person.residence_city person.residence_state person.residence_zip}
 			@export_fields += %w{person.town.name person.village.name person.fire_district.name person.school_district.name}
+			@export_fields += %w{person.race}
 		end
 		@sheet.row(0).concat(['cert_pos'] + @export_fields)
 		@objs.each_with_index { |o, i|
