@@ -113,7 +113,7 @@ class ExamController < CrudController
 		if params[:export]
 			@objs = Applicant.find(:all, opt)
 			@export_fields = %w{approved app_status.name pos rank person.ssn person.last_name person.first_name person.home_phone person.work_phone person.fax person.cell_phone person.email person.mailing_address person.mailing_address2 person.mailing_city person.mailing_state person.mailing_zip raw_score base_score veterans_credits other_credits final_score}
-			@export_fields += %w{person.residence_different person.residence_address person.residence_city person.residence_state person.residence_zip person.town.name person.village.name person.fire_district.name person.school_district.name exam.valid_until person.date_of_birth.d0?}			
+			@export_fields += %w{person.residence_different person.residence_address person.residence_city person.residence_state person.residence_zip person.town.name person.village.name person.fire_district.name person.school_district.name exam.valid_until person.date_of_birth.d0? person.race}			
 			book = Spreadsheet::Workbook.new
 			sheet = book.create_worksheet
 			sheet.row(0).concat(@export_fields)
