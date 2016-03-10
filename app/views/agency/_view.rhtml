@@ -44,7 +44,7 @@
         <td>
           <label>Fax:</label>
           <%= o.fax if o.fax%>
-        </td>
+        &nbsp;</td>
       </tr>
     </table>
   </div>
@@ -58,6 +58,10 @@
 				<td>
 					<label>Liaison:</label>
 					<%= h o.liaison.name if o.liaison %>
+				&nbsp;</td>
+				<td>
+					<label>OMB Liaison:</label>
+					<%= h o.omb_liaison.name if o.omb_liaison %>
 				&nbsp;</td>
 			</tr>
 		</table>
