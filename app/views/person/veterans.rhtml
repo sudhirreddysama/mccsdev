@@ -18,9 +18,9 @@
 			<th width="46%" class="nobr">Used Title</th>
 		</tr>
 	</thead>
-	<tbody id="objs">
-		<% @objs.each { |o| %>
-			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+	<% @objs.each { |o| %>
+		<tbody class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+			<tr>
 				<td class="nobr">
 				<%= link_to image_tag('icons/zoom.png', :size => '16x16', :alt => 'view', :title => 'View VC'), :action => :view_vet, :id => o.id %>
 				<%= link_to image_tag('icons/pencil.png', :size => '16x16', :alt => 'edit', :title => 'Edit VC'), :action => :edit_vet, :id => o.id %>
@@ -36,7 +36,12 @@
 				<td class="nobr"><%= h o.veteran_used_exam_no %></td>
 				<td><%= h o.veteran_used_title %></td>
 			</tr>
-		<% } %>
-	</tbody>
+			<% if !o.veteran_notes.blank? %>
+				<tr>
+					<td colspan="100"><strong>Veteran Notes:</strong> <%= nl2br_h o.veteran_notes %></td>
+				</tr>
+			<% end %>
+		</tbody>
+	<% } %>
 </table>
 <%= partial 'pages' %>

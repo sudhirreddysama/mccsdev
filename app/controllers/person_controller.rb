@@ -60,6 +60,7 @@ class PersonController < CrudController
 			'people.last_name' => :like,
 			'people.veteran_used_exam_no' => :like,
 			'people.veteran_used_title' => :like,
+			'people.veteran_notes' => :like
 		}
 		cond << 'people.veteran != "" and people.veteran is not null'
 		types = []
