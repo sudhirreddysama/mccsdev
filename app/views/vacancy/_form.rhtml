@@ -1,5 +1,5 @@
-<% if @current_user.agency_level? && (!o.hr_decision.blank? || !o.omb_decision.blank? || !o.exec_decision.blank?) %>
-	<p class="marg">A decision has been made on this vacancy request and it can no longer be edited.</p>
+<% if @current_user.agency_level? && o.exec_decision != 'Started' %>
+	<p class="marg">This request has been submitted and can no longer be edited.</p>
 <% else %>
 	<%= partial 'partial/form', :o => o %>
 <% end %>

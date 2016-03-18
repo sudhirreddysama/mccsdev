@@ -122,13 +122,15 @@ class Notifier < ActionMailer::Base
 	def vacancy_updated u, o
 		recipients u.collect { |u| u.email_with_name }
 		from HR_FROM
-		changed = []
-		changed << 'HR' if o.hr_decision_changed?
-		changed << 'OMB' if o.omb_decision_changed?
-		changed << 'Exec' if o.exec_decision_changed?
-		s = changed.join(', ')
-		subject "Request to Fill Vacancy Decision Update (#{s})"
+		subject "Request to Fill Vacancy Decision Update"
 		body :o => o
+	end
+	
+	def vacancy_notification f, u, o
+		recipients u.collect { |u| u.email_with_name }
+		from f.email_with_name
+		subject "Request to Fill Vacancy Notification"
+		body :o => o, :f => f
 	end
 	
 	# Only called from the console. A quick way to batch process email blasts. Populate email_blasts
@@ -172,9 +174,9 @@ class Notifier < ActionMailer::Base
 		
 	# DEV ONLY!
 	def recipients *args
-		logger.info 'recipients overloaded...'
 		if RAILS_ENV == 'development'
-			logger.info 'Sending dev email...'
+			logger.info 'recipients overloaded. Original Recipients:'
+			logger.info args.inspect		
 			super ['jessesternberg@monroecounty.gov']
 		else
 			super *args

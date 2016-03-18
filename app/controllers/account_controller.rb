@@ -79,6 +79,8 @@ class AccountController < ApplicationController
 	def default_redirect
 		if @current_user.liaison_level? || @current_user.view_only?
 			redirect_to :controller => :employee
+		elsif @current_user.only_vacancy
+			redirect_to :controller => :vacancy
 		elsif @current_user.agency_level?
 			redirect_to :controller => :agencies
 		else

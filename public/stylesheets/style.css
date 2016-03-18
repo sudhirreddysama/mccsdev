@@ -264,7 +264,7 @@ input[type=text], input[type=password], textarea, select { background-color: #ff
 
 .fieldWithErrors { color: #c00; display: inline; }
 .fieldWithErrors input { color: #c00; }
-.fieldWithErrors input[type=text] { border-color: #c00; }
+.fieldWithErrors input[type=text], .fieldWithErrors textarea { border-color: #c00; }
 .err * { color: #c00 !important; border-color: #c00 !important; }
 
 iframe { margin: 0; border: 0; padding: 0;/* width: 100%; height: 100%; */}
@@ -293,9 +293,9 @@ input.working { background-position: 100% -18px; }
 
 #login-body { text-align: center; background-color: #444; }
 #login { text-align: left; width: 250px; margin: 50px auto; border: 1px solid #000; background-color: #fff; 
-	box-shadow: 0px 0px 800px #000;
-	-webkit-box-shadow: 0px 0px 800px #000;
-	-moz-box-shadow: 0px 0px 800px #000;
+	box-shadow: 0px 20px 100px #000;
+	-webkit-box-shadow: 0px 20px 100px #000;
+	-moz-box-shadow: 0px 20px 100px #000;
 }
 #login table { width: 230px; }
 #login form { padding: 5px; }
@@ -485,7 +485,13 @@ input.ucase, textarea.ucase { text-transform: uppercase; }
 .form-status.form-info-needed { background-color: #808; }
 .form-status.form-pendingNYS  { background-color: #088; }
 .form-status.form-none { background-color: #888; }
-.form-status.form-hold { background-color: #008; }
+.form-status.form-hold { background-color: #088; }
+.form-status.form-filled { background-color: #808; }
+.form-status.form-expired { background-color: #000; }
+
+.dual-status .form-status { display: block; float: none; border-radius: 0; border-top: 1px solid rgba(255,255,255,.5); }
+.dual-status :first-child { border-radius: 5px 5px 0 0; border-top: none; }
+.dual-status :last-child { border-radius: 0 0 5px 5px; }
 
 .pref-status { display: block; padding: 0 5px; color: #fff; float: left; border-radius: 5px; }
 .pref-status.pref-established { background-color: #888; }
@@ -536,4 +542,20 @@ fieldset table.form { margin: 0; }
 .notic-delete:hover { color: #000; }
 .viewer:hover .notic-delete { display: block; }
 
-#top-texts { border-bottom: 1px solid #888; color: #fff; padding: 5px 5px 5px 26px; background: #333 url(../images/icons/information.png) 5px 5px no-repeat; color: #fff;  }
+#top-texts { border-bottom: 1px solid #888; color: #fff; padding: 5px 5px 5px 26px; background: #000 url(../images/icons/information.png) 5px 5px no-repeat; color: #fff;  }
+#top-texts a { color: #888; display: none; }
+#top-texts:hover a { display: inline; }
+.dual-status { display: block; }
+
+a.tick-green, a.tick-red { display: block; width: 16px; text-decoration: none; background-color: #bbb; text-align: center; border-radius: 20px; color: #fff; }
+tr:hover a.tick-green, tr:hover a.tick-red { background-color: #000; }
+a.tick-green:hover { background-color: #080 !important; }
+a.tick-green:active { background-color: #060 !important; }
+a.tick-red:hover { background-color: #800 !important; }
+a.tick-red:active { background-color: #600 !important; }
+
+.submit-message { display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: none; border-radius: 5px; }
+a.submit-message:hover { background-color: #500; }
+
+span.ac-extra { font-size: 9px; }
+span.ac-extra i { color: #aaa; font-style: normal; }

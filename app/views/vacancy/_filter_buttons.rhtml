@@ -1,3 +1,6 @@
 <%= partial 'partial/filter_buttons', :f => f %>
-<%= f.submit 'Print (pdf)', :name => 'print_all' %>
-<%= f.submit 'Report (pdf)', :name => 'report' %>
+<%= f.submit 'Print (pdf)', :name => 'print_all', :formtarget => '_blank' %>
+<%= f.submit 'Report (pdf)', :name => 'report[info]', :formtarget => '_blank' %>
+<% if !@current_user.agency_level? || @current_user.allow_vacancy_omb || @current_user.allow_vacancy_admin %>
+	<%= f.submit 'MTG Report (pdf)', :name => 'report[mtg]', :formtarget => '_blank' %>
+<% end %>

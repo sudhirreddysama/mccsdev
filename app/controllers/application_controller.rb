@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
 	before_filter :options
 	
 	def load_top_text
-		@top_texts = TopText.find(:all, :conditions => ['? like top_texts.path', request.path])
+		@top_texts = TopText.find(:all, :conditions => ['? like top_texts.path and top_texts.hidden = 0', request.path])
 	end
 	before_filter :load_top_text
 	

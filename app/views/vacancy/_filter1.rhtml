@@ -1,0 +1,13 @@
+<tr>
+	<th>Quick Filters:</th>
+	<td>
+		<%= submit_tag 'Approved', :name => 'preset_approved[list]' %>
+		<%= submit_tag 'Approved (pdf)', :name => 'preset_approved[report]', :formtarget => '_blank' %>
+		<% if !@current_user.agency_level? || @current_user.allow_vacancy_omb || @current_user.allow_vacancy_admin %>
+			<%= submit_tag 'HR Waiting', :name => 'preset_hr' %>
+			<%= submit_tag 'OMB Waiting', :name => 'preset_omb' %>
+			<%= submit_tag 'Meeting', :name => 'preset_mtg[list]' %>
+			<%= submit_tag 'Meeting (pdf)', :name => 'preset_mtg[report]', :formtarget => '_blank' %>
+		<% end %>
+	</td>
+</tr>

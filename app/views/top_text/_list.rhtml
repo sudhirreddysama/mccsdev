@@ -3,8 +3,9 @@
 		<tr>
 			<td width="1%">Actions</td>
 			<th width="1%">ID</th>
+			<th width="1%">Hidden</th>
 			<th width="1%">Path</th>
-			<th width="97%">Name</th>
+			<th width="96%">Name</th>
 		</tr>
 	</thead>
 	<tbody id="objs">
@@ -12,6 +13,7 @@
 			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
 				<td class="nobr"><%= partial 'actions', :o => o %></td>
 				<td><%= o.id %></td>
+				<td><%= yn o.hidden %></td>
 				<td class="nobr"><%= h o.path %></td>
 				<td><%= link_to o.name, :action => :view, :id => o.id %></td>
 			</tr>

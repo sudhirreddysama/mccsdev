@@ -1,4 +1,5 @@
-<% if params[:action] == 'print' || params[:print_all] %>
+<% printing = params[:action] == 'print' || params[:print_all] %>
+<% if printing %>
 	<div class="right">ID: <%= o.id %> &bull; <%= Time.now.d0? %></div>
 	<h1><%= h o.cost_center %> &bull; <%= h o.organization %><br /><%= o.position_no %> &bull; <%= o.position %></h1>
 <% else %>
@@ -6,137 +7,305 @@
 		<%= tab 'Printable Version', {:action => :print, :id => o.id}, {}, :target => '_blank' %>
 		<div class="clear"></div>
 	</div>
+	<% if @obj.exec_decision == 'Started' %>
+		<% if @current_user.level == 'agency-head' || @current_user.staff_level? || @current_user.liaison_level? || @current_user.allow_vacancy_admin %>
+			<%= link_to('This form has not yet been submitted to HR. Click here to submit.', 
+				{:action => :submit, :id => @obj.id},
+				:confirm => 'Are you sure you want to submit this form? No changes can be made after submitting. Please make sure all required information and documents have been provided.',
+				:class => 'submit-message') 
+			%>
+		<% else %>
+			<div class="submit-message">
+				This form has not yet been submitted to HR. An agency-head level user must submit it from this page.
+			</div>
+		<% end %>
+		<%= form_tag({}, {:id => 'email-form'})  %>
+			<div style="text-align: center;">
+				Email link to this request to fill vacancy to: 
+				<% 
+					label = [] 
+					label << @obj.agency.name if @obj.agency && @obj.agency.name != 'MONROE COUNTY'
+					label << @obj.department.name if @obj.department
+				%>
+				<%= select_tag 'email_id', options_for_select([[label.join(' - ') + ' USERS...', '']] + @obj.agency.get_users(@obj.department, true).collect { |u| [u.email_with_name + (u.level == 'agency-head' ? ' (Agency Head)' : ''), u.id] }) %>
+				<%= submit_tag 'Send Email' %>
+			</div>
+			<script type="text/javascript">
+				(function($) {
+					$('#email-form').submit(function(e) {
+						var email_id = $('#email_id').val();
+						if(!email_id) {
+							alert('Please select a recipient');
+							return false;
+						}
+						return confirm('Send email to selected user?');
+					});
+				})(jQuery);
+			</script>
+		</form>
+	<% end %>
 <% end %>
-<div class="viewer">
-	<div class="header">Human Resources</div>
-	<div class="row">
-		<table>
-			<tr>
-				<td>
-					<label>Decision</label>
-					<%= vac_status o.hr_decision %>
-				</td>
-				<td>
-					<label>Date</label>
-					<%= o.hr_date.d0? %>
-				&nbsp;</td>
-			</tr>
-		</table>
-	</div>	
-	<div class="row">
-		<table>
-			<tr>
-				<td>
-					<label>Comments</label>
-					<%= nl2br_h o.omb_comments %>
-				&nbsp;</td>
-			</tr>
-		</table>
+<% if !printing %>
+	<%= partial 'errors', :errors => @obj.errors.full_messages %>
+<% end %>
+<% form_for(:obj) { |f| %>
+	<% hr_edit = @current_user.staff_level? || @current_user.liaison_level? || @current_user.allow_vacancy_admin %>
+	<% if hr_edit || @current_user.allow_vacancy_omb %>
+		<div class="viewer">
+			<div class="header">Human Resources</div>	
+			<% if !printing && hr_edit %>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Decision</label>
+								<%= f.select :hr_decision, %w(Hold Approved Disapproved), :include_blank => 'None' %>
+							</td>
+							<td>
+								<label>Date</label>
+								<%= f.calendar_date_select :hr_date, :size => 15 %>
+							</td>
+							<td>
+								<label>Approval Used</label>
+								<%= f.calendar_date_select :hr_approval_used, :size => 15 %>
+							</td>
+							<td>
+								<label>Candidate Hired</label>
+								<%= f.text_field :hr_candidate_hired, :size => 30 %>
+							</td>					
+						</tr>
+					</table>
+				</div>	
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Comments</label>
+								<%= f.text_area :hr_comments, :size => '100x2' %><div style="margin-top: 5px;"><%= f.submit 'Update HR' %></div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<script type="text/javascript">(function($) {
+					var decision_select = $('#obj_hr_decision');
+					var date_input = $('#obj_hr_date');
+					decision_select.change(function(e) {
+						var v = decision_select.val();
+						date_input.val(v ? (new Date()).toString('MM/dd/yyyy') : '');
+					});
+				})(jQuery);</script>
+			<% else %>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Decision</label>
+								<%= vac_status o.hr_decision %>
+							</td>
+							<td>
+								<label>Date</label>
+								<%= o.hr_date.d0? %>
+							</td>
+							<td>
+								<label>Approval Used</label>
+								<%= o.hr_approval_used.d0? %>
+							</td>
+							<td>
+								<label>Candidate Hired</label>
+								<%= h o.hr_candidate_hired %>
+							&nbsp;</td>
+						</tr>
+					</table>
+				</div>	
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Comments</label>
+								<%= nl2br_h o.hr_comments %>
+							&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+			<% end %>
+		</div>
+	<% end %>
+	<% omb_edit = @current_user.staff_level? || @current_user.liaison_level? || @current_user.allow_vacancy_admin || @current_user.allow_vacancy_omb %>
+	<% if omb_edit %>
+		<div class="viewer">
+			<div class="header">Office of Management and Budget</div>	
+			<% if !printing && omb_edit %>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Decision</label>
+								<%= f.select :omb_code, Vacancy::OMB_CODES, :include_blank => 'None' %>
+							</td>
+							<td>
+								<label>Date</label>
+								<%= f.calendar_date_select :omb_date, :size => 15 %>
+							</td>
+							<td>
+								<label>% Grant Funded</label>
+								<%= f.text_field :omb_grant_percent, :size => 15 %>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Comments</label>
+								<%= f.text_area :omb_comments, :size => '100x2' %><div style="margin-top: 5px;"><%= f.submit 'Update OMB' %></div>
+							</td>
+						</tr>
+					</table>
+				</div>							
+				<script type="text/javascript">(function($) {
+					var decision_select = $('#obj_omb_code');
+					var date_input = $('#obj_omb_date');
+					decision_select.change(function(e) {
+						var v = decision_select.val();
+						date_input.val(v ? (new Date()).toString('MM/dd/yyyy') : '');
+					});
+				})(jQuery);</script>				
+			<% else %>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Decision</label>
+								<%= vac_status o.omb_decision %>
+							</td>
+							<td>
+								<label>Date</label>
+								<%= o.omb_date.d0? %>
+							&nbsp;</td>
+							<td>
+								<label>Code</label>
+								<%= h o.omb_code %> <%= h Vacancy::OMB_CODES.rassoc(o.omb_code)[0] rescue nil %>
+							&nbsp;</td>
+							<td>
+								<label>% Grant Funded</label>
+								<%= h o.omb_grant_percent %>
+							&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+			<% end %>
+		</div>
+	<% end %>
+	<div class="viewer">
+		<div class="header">Status/County Executive Decision</div>
+		<% if !@current_user.allow_vacancy_admin || printing %>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Status/Decision</label>
+							<%= vac_status o.exec_decision %>
+						</td>
+						<td>
+							<label>Date</label>
+							<%= o.exec_date.d0? %>
+						&nbsp;</td>
+						<td>
+							<label>Approval #</label>
+							<%= o.exec_approval_no %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Comments</label>
+							<%= nl2br_h o.exec_comments %>
+						&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		<% else %>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Status/Decision</label>
+							<% if %w(Submitted Approved Disapproved).include?(o.exec_decision) %>
+								<%= f.select :exec_decision, %w(Submitted Approved Disapproved) %>
+							<% else %>
+								<%= vac_status o.exec_decision %>
+							<% end %>
+						</td>
+						<td id="td_exec_date">
+							<label>Date</label>
+							<%= f.calendar_date_select :exec_date, :size => 15 %>
+						</td>
+						<td>
+							<label>Approval #</label>
+							<%= f.text_field :exec_approval_no, :size => 15 %> <a href="#" id="get_approval_no"><%= image_tag 'icons/arrow_rotate_clockwise.png', :size => '16x16' %></a>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Comments</label>
+							<%= f.text_area :exec_comments, :size => '100x2' %><div style="margin-top: 5px;"><%= f.submit 'Update Exec.' %></div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<script type="text/javascript">(function($) {
+				var decision_select = $('#obj_exec_decision');
+				var date_input = $('#obj_exec_date');    
+				var approval_no_input = $('#obj_exec_approval_no');
+				var get_approval_no = function() {
+					var d = Date.parse(date_input.val());
+					if(!d) {
+						new Effect.Highlight('td_exec_date', {restorecolor: '#ffffff'});
+						return;
+					}
+					var yr = d.getFullYear().toString().substr(2,2);
+					approval_no_input.addClass('busy-bg');
+					$.ajax({
+						url: '<%= url_for :action => :get_approval_no, :id => @obj.id %>',
+						data: {yr: yr},
+						complete: function(xhr, status) {
+							approval_no_input.removeClass('busy-bg');
+						},
+						error: function(xhr, status, error) {
+						},
+						success: function(data, status, xhr) {
+							approval_no_input.val(data);
+						}
+					});
+					return false;
+				}
+				$('#get_approval_no').click(get_approval_no);
+				var update_date = function(e) {
+					var v = decision_select.val();
+					date_input.val(v != 'Submitted' ? (new Date()).toString('MM/dd/yyyy') : '');
+					return v;
+				}
+				decision_select.change(function(e) {
+					var v = update_date();
+					if(v == 'Approved') {
+						get_approval_no();
+					}
+					else {
+						approval_no_input.val('');
+					}
+				});
+			})(jQuery);</script>
+		<% end %>
 	</div>
-	<div class="row">
-		<table>
-			<tr>
-				<td>
-					<label># of Jobs Authorized</label>
-					<label style="display: inline;">Overall Within Dept.:</label> <%= o.hr_auth_dept.to_i %>
-					<label style="display: inline;">Within Div.:</label> <%= o.hr_auth_div.to_i %>
-					<label style="display: inline;">For Pos.:</label> <%= o.hr_auth_pos.to_i %>
-				&nbsp;</td>
-				<td>
-					<label># of Jobs Filled</label>
-					<label style="display: inline;">Overall Within Dept.:</label> <%= o.hr_fill_dept.to_i %>
-					<label style="display: inline;">Within Div.:</label> <%= o.hr_fill_div.to_i %>
-					<label style="display: inline;">For Pos.:</label> <%= o.hr_fill_pos.to_i %>
-				&nbsp;</td>
-			</tr>
-		</table>
-	</div>
-	<div class="row">
-		<table>
-			<tr>
-				<td>
-					<label>Approval Used</label>
-					<%= o.hr_approval_used.d0? %>
-				&nbsp;</td>
-				<td>
-					<label>Candidate Hired</label>
-					<%= h o.hr_candidate_hired %>
-				&nbsp;</td>
-			</tr>
-		</table>
-	</div>	
-</div>
-
-<div class="viewer">
-	<div class="header">Office of Management and Budget Decision</div>
-	<div class="row">
-		<table>
-			<tr>
-				<td>
-					<label>Decision</label>
-					<%= vac_status o.omb_decision %>
-				</td>
-				<td>
-					<label>Date</label>
-					<%= o.omb_date.d0? %>
-				&nbsp;</td>
-				<td>
-					<label>Code</label>
-					<%= h o.omb_code %> <%= h Vacancy::OMB_CODES[o.omb_code] %>
-				&nbsp;</td>
-				<td>
-					<label>% Grant Funded</label>
-					<%= h o.omb_grant_percent %>
-				&nbsp;</td>
-			</tr>
-		</table>
-	</div>
-	<div class="row">
-		<table>
-			<tr>
-				<td>
-					<label>Comments</label>
-					<%= nl2br_h o.omb_comments %>
-				&nbsp;</td>
-			</tr>
-		</table>
-	</div>
-</div>
-
-
-<div class="viewer">
-	<div class="header">County Executive Decision</div>
-	<div class="row">
-		<table>
-			<tr>
-				<td>
-					<label>Decision</label>
-					<%= vac_status o.exec_decision %>
-				</td>
-				<td>
-					<label>Date</label>
-					<%= o.exec_date.d0? %>
-				&nbsp;</td>
-				<td>
-					<label>Approval #</label>
-					<%= o.exec_approval_no %>
-				&nbsp;</td>
-			</tr>
-		</table>
-	</div>
-	<div class="row">
-		<table>
-			<tr>
-				<td>
-					<label>Comments</label>
-					<%= nl2br_h o.exec_comments %>
-				&nbsp;</td>
-			</tr>
-		</table>
-	</div>
-</div>
-
-
+<% } %>
 <div class="viewer">
 	<div class="header">Request to Fill Vacancy Submission</div>
 	<div class="row">
@@ -145,22 +314,36 @@
 				<td>
 					<label>ID</label>
 					<%= o.id %>
-				&nbsp;</td>
-				<td>
-					<label>Received Date</label>
-					<%= o.received_date.d0? %>
-				&nbsp;</td>
+				</td>
 				<td>
 					<label>Agency</label>
 					<%= h o.agency.name if o.agency %>
-				&nbsp;</td>
+				</td>
 				<td>
 					<label>Department</label>
 					<%= h o.department.name if o.department %>
 				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
 				<td>
 					<label>Created By</label>
-					<%= h o.user.username if o.user %>
+					<%= h o.user.name if o.user %>
+				</td>
+				<td>
+					<label>Created Date</label>
+					<%= o.created_at.d0? %>
+				</td>
+				<td>
+					<label>Submitted By</label>
+					<%= h o.submitted_by.name if o.submitted_by %>
+				</td>
+				<td>
+					<label>Received Date</label>
+					<%= o.received_date.d0? %>
 				&nbsp;</td>
 			</tr>
 		</table>
@@ -260,6 +443,26 @@
 					<label>Justification for filling the vacancy?</label>
 					<%= nl2br_h o.justification %>
 				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<div class="viewer">
+	<div class="header">Documents</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Click to Download/View:</label>
+					<% if o.documents.empty? %>
+						No Documents
+					<% else %>
+						<% o.documents.each { |d| %>
+							<div><%= link_to d.filename, url_for(:only_path => false, :sc => :vacancy, :sid => o.id, :controller => :document, :action => :download, :id => d.id) %></div>
+						<% } %>
+					<% end %>
+				</td>
 			</tr>
 		</table>
 	</div>

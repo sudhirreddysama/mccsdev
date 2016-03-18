@@ -1,6 +1,7 @@
 <% if @filter %>
 	<% form_for(:filter, @filter, :builder => TableFormBuilder) { |f| %>
 		<table class="form">
+			<%= partial 'filter1', :f => f %>
 			<tr>
 				<th>Search / Sort:</th>
 				<td class="nobr">
@@ -21,9 +22,10 @@
 					<td class="nobr">
 						<%= f.select :date_type, @date_types %>
 						&nbsp;&nbsp;From: 
-						&nbsp;&nbsp;<%= f.calendar_date_select :from_date, :size => 20 %>
+						&nbsp;&nbsp;<%= f.calendar_date_select :from_date, :size => 12 %>
 						&nbsp;&nbsp;To:
-						&nbsp;&nbsp;<%= f.calendar_date_select :to_date, :size => 20 %>
+						&nbsp;&nbsp;<%= f.calendar_date_select :to_date, :size => 12 %>
+						&nbsp;&nbsp;<%= partial 'date_presets', :f => f %>
 					</td>
 				</tr>
 			<% end %>

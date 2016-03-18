@@ -1,0 +1,30 @@
+<%
+
+do_anything = @current_user.staff_level? || @current_user.allow_vacancy_admin || @current_user.liaison_level?
+allow_edit = do_anything || (@obj && @obj.exec_decision == 'Started' && @current_user.agency_level?)
+allow_new = do_anything || @current_user.allow_vacancy_admin || @current_user.agency_level?
+
+%>
+<% if !@current_user.only_vacancy %>
+	<%= partial 'employee/nav_others' %>
+<% end %>
+<div class="tabs">
+	<%= tab 'List', :controller => :vacancy, :action => :index, :id => nil %>	
+	<%= tab 'New', :controller => :vacancy, :action => :new if allow_new %>
+	<%= tab truncate(@obj.label), {:controller => :vacancy}, {:action => :view, :id => @obj.id}, {:class => 'tab-obj'} if @obj and !@obj.new_record? %>
+	<div class="clear"></div>
+</div>
+<% if @obj and !@obj.new_record? %>
+	<div class="tabs">
+		<% if @current_user.staff_level? %>
+			<div class="right"><%=tab 'Log', :controller => params[:controller], :action => :change_log, :id => @obj.id %></div>
+		<% end %>
+		<%= tab 'View', :controller => :vacancy, :action => :view, :id => @obj.id %>
+		<%= tab 'Edit', :controller => params[:controller], :action => :edit, :id => @obj.id if allow_edit %>
+		<%= tab 'Documents', {:sc => :vacancy, :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>
+		<% if do_anything %>
+			<%= tab 'Delete', :controller => params[:controller], :action => :delete, :id => @obj.id if allow_edit %>
+		<% end %>
+		<div class="clear"></div>
+	</div>
+<% end %>

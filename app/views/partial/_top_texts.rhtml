@@ -1,7 +1,12 @@
 <% if !@top_texts.empty? %>
 	<div id="top-texts">
 		<% @top_texts.each { |t| %>		
-			<div><%= nl2br_h t.text %></div>
+			<div>
+				<%= nl2br_h t.text %>
+				<% if @current_user.staff_level? || @current_user.liaison_level? || @current_user.allow_vacancy_admin %>
+					<%= link_to 'edit', :sid => nil, :sc => nil, :controller => :top_text, :action => :edit, :id => t.id %>
+				<% end %>
+			</div>
 		<% } %>
 	</div>
 <% end %>

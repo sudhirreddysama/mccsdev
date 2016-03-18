@@ -1,0 +1,24 @@
+<tbody>
+	<% objs.each { |o| %>
+		<tr>
+			<td><%= o.id %></td>
+			<td><%= o.received_date.d0? %></td>
+			<% if @filter.group != 'div' %>
+				<td><%= h o.organization %></td>
+			<% end %>
+			<td><%= h o.position%></td>
+			<td><%= h o.job_type.sub('Seasonal/Temporary', 'Tmp').sub('Full Time', 'FT').sub('Part Time', 'PT') %></td>
+			<% if @filter.report.mtg %>
+				<td class="fill-in"><%= vac_status o.omb_decision %></td>
+				<td class="fill-in"><div><% if o.omb_grant_percent.to_i > 0 %><%= h o.omb_grant_percent %><% end %></div></td>
+				<td class="fill-in"><%= vac_status o.hr_decision %></td>
+				<td class="fill-in"><% if !%w(Started Submitted).include?(o.exec_decision) %><%= vac_status o.exec_decision %><% else %><div>&nbsp;</div><% end %></td>
+			<% else %>
+				<td><%= h o.last_incumbent %></td>
+				<td><%= h o.exec_approval_no %></td>
+				<td><%= o.exec_date.d0? if %w(Approved Filled Expired).include?(o.exec_decision) %></td>
+				<td><%= h o.hr_candidate_hired %></td>
+			<% end %>
+		</tr>
+	<% } %>
+</tbody>

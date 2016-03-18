@@ -44,11 +44,11 @@ class Agency < ActiveRecord::Base
 		end
 	end	
 	
-	def get_users d
+	def get_users d, include_vacancy = false
 		# if no department, just find everyone with this agency_id who also has no department
 		# if department and agency is MONROE COUNTY, only include people specifically in that department (excluding people with no department)
 		# if department and agency is NOT MONROE COUNTY, include people in that department AND ALSO users with NO department
-		c = 'users.level != "disabled" and users.only_vacancy = 0 and '
+		c = 'users.level != "disabled" and ' + (include_vacancy ? '' : 'users.only_vacancy = 0 and ')
 		u = users.find(:all, {
 			:conditions => (
 				d ? 

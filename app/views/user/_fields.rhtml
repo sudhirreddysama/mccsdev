@@ -20,6 +20,7 @@
 <% if false %>
 	<%= f.tr_check :view_web_post_for_agency, :label => 'View all Web Posts for Agency?', :text => 'Check here to allow this agency user to view all web posts for their own agency.' %>
 <% end %>
+<%= f.tr_check :only_vacancy, :label => 'Only Req. to Fill Vac.?', :text => 'Check here if this user should ONLY see request to fill vacancies (no access to other agency level parts of system).' %>
 <%= f.tr_check :allow_vacancy_omb, :label => 'Req. to Fill Vac. OMB?', :text => 'Check here to allow this user to give OMB approval/disapproval for requests to fill vacancies.' %>
 <%= f.tr_check :allow_vacancy_admin, :label => 'Req. to Fill Vac. Admin?', :text => 'Check here to allow this user to give final (Exec.) approval/disapproval for requests to fill vacancies.' %>
 <%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name asc').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Agency', :help => 'Select an agency for agency and agency-head level users.' %>

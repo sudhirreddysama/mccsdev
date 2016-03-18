@@ -4,9 +4,7 @@
 	<%= tab '330 Forms', {:controller => :form_hire, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_hire' ? ' active' : ''), :title => 'Electronic New Hire Form'} %>				
 	<%= tab '222 Forms', {:controller => :form_title, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_title' ? ' active' : ''), :title => 'Electronic New Title Form'} %>				
 	<% if !@current_user.agency_level? || @current_user.is_agency_county? %>
-		<% if false %>
-			<%= tab 'Req. Fill Vac.', {:controller => :vacancy, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'vacancy' ? ' active' : ''), :title => 'Requests to Fill Vacancies'} %>
-		<% end %>
+		<%= tab 'Req. Fill Vac.', {:controller => :vacancy, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'vacancy' ? ' active' : ''), :title => 'Requests to Fill Vacancies'} %>
 	<% end %>
 	<% if !@current_user.agency_level? %>
 		<%= tab 'Empl/Appl Mismatch', {:controller => :employee, :sc => nil, :sid => nil, :action => :mismatch}, {:id => 'name'}, {:class => 'tab-mismatch', :title => 'Display name and address mismatches between the employee and applicant databases'} %>				

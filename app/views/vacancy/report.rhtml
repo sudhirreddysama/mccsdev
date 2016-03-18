@@ -4,6 +4,7 @@
 html, body { padding: 0; margin: 0; border: 0; }
 body, td, th { font: 10px/15px Trebuchet MS, Verdana, Arial, sans-serif; }
 h1 { font-size: 14px; margin: 10px 0; padding: 0; font-weight: bold; }
+h2 { font-size: 12px; margin: 10px 0; padding: 0; font-weight: bold; }
 .right { float: right; }
 .nobr { white-space: nowrap; }
 table { border-collapse: collapse; padding: 0; margin: 10px 0; }
@@ -11,15 +12,54 @@ th, td { text-align: left; }
 th { font-weight: bold; }
 table.filter td { padding-right: 10px; }
 table.filter th { text-align: right; padding-right: 5px; }
-table.report { width: 100%; } 
-table.report th, table.report td { padding: 1px 5px 1px 0; border-bottom: 1px solid #ccc; }
+table.report { width: 100%; table-layout: fixed; } 
+table.report th, table.report td { padding: 1px 5px 1px 0; border-bottom: 1px solid #ccc; vertical-align: top; }
 table.report th { border-color: #000; }
-.form-app { color: #080; }
-.form-dis { color: #800; }
-.form-status.form-none { color: #888; }
-.form-status.form-hold { color: #008; }
-table.report td.border { border: 1px solid #ccc; padding: 1px 3px 1px 2px; text-align: center; }
+.form-approved { color: #080; }
+.form-disapproved { color: #800; }
+.form-none { color: #888; }
+.form-hold { color: #008; }
+.form-started { color: #888; }
+.form-submitted { color: #008; }
+.form-filled { color: #808; }
+.form-expired { color: #000; }
+table.report td.fill-in { padding: 0 0 1px 1px; }
+table.report td.fill-in div { border: 1px solid #ccc; border-width: 0 1px 1px 1px; padding: 0 2px; text-align: center; min-height: 15px; }
+.center { text-align: center; }
 
+.td-id { width: 4%; }
+.td-received_date { width: 6%; }
+.td-job_type { width: 4%; }
+.td-exec_approval_no { width: 6%; }
+.td-hr_exec_date { width: 6%; }
+<% if @filter.group == 'div' %>
+.td-position { width: 34%; }
+.td-last_incumbent { width: 20%; }	
+.td-hr_candidate_hired { width: 20%; }
+
+.td-hr_decision { width: 14%; }
+.td-omb_decision { width: 14%; }
+.td-omb_grant_percent { width: 8%; }
+.td-exec_decision { width: 14%; }
+
+<% else %>
+.td-organization { width: 26%; }
+.td-position { width: 28%; }
+.td-last_incumbent { width: 10%; }	
+.td-hr_candidate_hired { width: 10%; }
+
+.td-hr_decision { width: 8%; }
+.td-omb_decision { width: 8%; }
+.td-omb_grant_percent { width: 5%; }
+.td-exec_decision { width: 9%; }
+
+<% end %>
+
+
+
+
+thead { display: table-header-group }
+tfoot, tbody { display: table-row-group }
 tr { page-break-inside: avoid; }
 
 </style>
@@ -27,6 +67,46 @@ tr { page-break-inside: avoid; }
 <body>
 <h1>Requests to Fill Vacancies Report</h1>
 <%= partial 'print_filter' %>
+<% if @filter.group == 'dept' %>
+	<% @objs_grouped.keys.sort.each { |d| objs = @objs_grouped[d]  %>
+		<h2><%= d %></h2>
+		<table class="report">
+			<%= partial 'report_thead' %>
+			<%= partial 'report_objs', :objs => objs %>
+		</table>
+	<% } %>
+<% elsif @filter.group == 'div' %>
+	<% @objs_grouped.keys.sort.each { |d| group = @objs_grouped[d]  %>
+		<h2><%= d %></h2>
+		<table class="report">
+			<%= partial 'report_thead' %>
+			<% group.keys.sort.each { |v| objs = group[v]  %>
+				<% div, org, cc = v.split("\t") %>
+				<tbody><tr><th colspan="8" style="padding-top: 10px;"><%= org %> - <%= div %> (<%= cc %>)</th></tr></tbody>
+				<%= partial 'report_objs', :objs => objs %>
+			<% } %>
+		</table>
+	<% } %>	
+<% else %>
+	<table class="report">
+		<%= partial 'report_thead' %>
+		<%= partial 'report_objs', :objs => @objs_grouped %>
+	</table>
+<% end %>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+<% if false %>
 <table class="report">
 	<thead>
 		<tr>
@@ -92,3 +172,4 @@ tr { page-break-inside: avoid; }
 	</tbody>
 </body>
 </html>
+<% end %>

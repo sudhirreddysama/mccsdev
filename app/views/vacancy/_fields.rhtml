@@ -1,112 +1,3 @@
-<% if !@current_user.agency_level? %>
-	<tr class="grp">
-		<th colspan="2"><h4>Human Resources</h4></th>
-	</tr>
-	<tr>
-		<th>Decision:</th>
-		<td id="obj_hr_decision">
-			<label><%= f.radio_button :hr_decision, '' %> None</label>&nbsp;&nbsp;&nbsp;
-			<label><%= f.radio_button :hr_decision, 'Hold' %> Hold</label>&nbsp;&nbsp;&nbsp;
-			<label><%= f.radio_button :hr_decision, 'Approved' %> Approved</label>&nbsp;&nbsp;&nbsp;
-			<label><%= f.radio_button :hr_decision, 'Disapproved' %> Disapproved</label>
-		</td>
-	</tr>
-	<%= f.tr_calendar_date_select :hr_date, :label => 'Decision Date' %>
-	<tr>
-		<th>Comments:</th>
-		<td><%= f.text_area :hr_comments, :style => 'width: 500px; height: 40px;' %></td>
-	</tr>
-	<tr>
-		<th>Jobs Auth./Filled:</th>
-		<td class="subform">
-			<table>
-				<tr>
-					<th># Jobs Authorized By:</th>
-					<th>Dept.</th>
-					<th>Div.</th>
-					<th>Pos.</th>
-					<th># Jobs Filled By:</th>
-					<th>Dept.</th>
-					<th>Div.</th>
-					<th>Pos.</th>
-				</tr>
-				<tr>
-					<td></td>
-					<td><%= f.text_field :hr_auth_dept, :style => 'width: 30px;' %></td>
-					<td><%= f.text_field :hr_auth_div, :style => 'width: 30px;' %></td>
-					<td><%= f.text_field :hr_auth_pos, :style => 'width: 30px;' %></td>
-					<td></td>
-					<td><%= f.text_field :hr_fill_dept, :style => 'width: 30px;' %></td>
-					<td><%= f.text_field :hr_fill_div, :style => 'width: 30px;' %></td>
-					<td><%= f.text_field :hr_fill_pos, :style => 'width: 30px;' %></td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<%= f.tr_calendar_date_select :hr_approval_used, :label => 'Approval Used' %>
-	<%= f.tr_text_field :hr_candidate_hired, :label => 'Candidate Hired' %>
-
-
-	<tr class="grp">
-		<th colspan="2"><h4>Office of Management and Budget</h4></th>
-	</tr>
-	<tr>
-		<th>Decision:</th>
-		<td class="subform">
-			<table>
-				<tr id="obj_omb_decision">
-					<td>
-						<label><%= f.radio_button :omb_code, '' %> None</label><br />
-						<label><%= f.radio_button :omb_code, 'H' %> <%= Vacancy::OMB_CODES['H'] %></label>
-					</td>
-					<td>
-						<label><%= f.radio_button :omb_code, 'A1' %> Approved - <%= Vacancy::OMB_CODES['A1'] %></label><br />
-						<label><%= f.radio_button :omb_code, 'A2' %> Approved - <%= Vacancy::OMB_CODES['A2'] %></label> - % Funded: <%= f.text_field :omb_grant_percent, :style => 'width: 30px;' %><br />
-						<label><%= f.radio_button :omb_code, 'A3' %> Approved - <%= Vacancy::OMB_CODES['A3'] %></label>
-					</td>
-					<td>
-						<label><%= f.radio_button :omb_code, 'D1' %> Disapproved - <%= Vacancy::OMB_CODES['D1'] %></label><br />
-						<label><%= f.radio_button :omb_code, 'D2' %> Disapproved - <%= Vacancy::OMB_CODES['D2'] %></label>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<%= f.tr_calendar_date_select :omb_date, :label => 'Decision Date' %>
-	<tr>
-		<th>Comments:</th>
-		<td><%= f.text_area :omb_comments, :style => 'width: 500px; height: 40px;' %></td>
-	</tr>
-
-	<tr class="grp">
-		<th colspan="2"><h4>County Executive</h4></th>
-	</tr>
-	<tr>
-		<th>Decision:</th>
-		<td id="obj_exec_decision">
-			<label><%= f.radio_button :exec_decision, '' %> None</label>&nbsp;&nbsp;&nbsp;
-			<label><%= f.radio_button :exec_decision, 'Hold' %> Hold</label>&nbsp;&nbsp;&nbsp;
-			<label><%= f.radio_button :exec_decision, 'Approved' %> Approved</label>&nbsp;&nbsp;&nbsp;
-			<label><%= f.radio_button :exec_decision, 'Disapproved' %> Disapproved</label>
-		</td>
-	</tr>
-	<tr id="tr_exec_date">
-		<th>Decision Date:</th>
-		<td><%= f.calendar_date_select :exec_date %></td>
-	</tr>
-	<tr>
-		<th>Approval #:</th>
-		<td><%= f.text_field :exec_approval_no, :style => 'width: 80px;' %> <a href="#" id="get_approval_no"><%= image_tag 'icons/arrow_rotate_clockwise.png', :size => '16x16' %></a></td>
-	</tr>
-	<tr>
-		<th>Comments:</th>
-		<td><%= f.text_area :exec_comments, :style => 'width: 500px; height: 40px;' %></td>
-	</tr>
-<% end %>
-
-<tr class="grp">
-	<th colspan="2"><h4>Request to Fill Vacancy</h4></th>
-</tr>
 <% if !@current_user.agency_level? || !@current_user.agency %>
 	<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name').collect { |a| [a.name, a.id] }, :label => 'Agency', :include_blank => true %>
 <% end %>
@@ -117,23 +8,12 @@
 	<%= f.tr_calendar_date_select :received_date, :label => 'Received Date' %>
 <% end %>
 <tr>
-	<th>Org. Info: <span class="req">*</span></th>
-	<td class="subform">
-		<table>
-			<tr>
-				<th>Department/Division: <span class="req">*</span></th>
-				<th>Org #: <span class="req">*</span></th>
-				<th>Cost Center: <span class="req">*</span></th>
-			</tr>
-			<tr>
-				<td>
-					<%= f.text_field :organization, :style => 'width: 300px;' %>
-					<div>Start typing to search for existing dept/div/cost centers.</div>
-				</td>
-				<td><%= f.text_field :org_no, :style => 'width: 80px;' %></td>
-				<td><%= f.text_field :cost_center, :style => 'width: 80px;' %></td>
-			</tr>
-		</table>
+	<th>Search SAP Data:</th>
+	<td>
+		<%= text_field_tag :search, '', :style => 'width: 500px;', :placeholder => 'Search Position, Pos #, Dept/Div, Org #, Cost Center, and Last Incumbent...' %>
+		<div style="width: 500px;">
+			Use the field above to search SAP data for a vacant position. Select a result to fill out the related fields below (some fields must still be manually entered).
+			Once the position data is filled in, you may manually edit the values if needed.<br /><a href="#" id="clear">Clear SAP Data Fields</a></div>
 	</td>
 </tr>
 
@@ -152,6 +32,27 @@
 		</table>
 	</td>
 </tr>
+
+<tr>
+	<th>Org. Info: <span class="req">*</span></th>
+	<td class="subform">
+		<table>
+			<tr>
+				<th>Department/Division: <span class="req">*</span></th>
+				<th>Org #: <span class="req">*</span></th>
+				<th>Cost Center: <span class="req">*</span></th>
+			</tr>
+			<tr>
+				<td>
+					<%= f.text_field :organization, :style => 'width: 300px;' %>
+				</td>
+				<td><%= f.text_field :org_no, :style => 'width: 80px;' %></td>
+				<td><%= f.text_field :cost_center, :style => 'width: 80px;' %></td>
+			</tr>
+		</table>
+	</td>
+</tr>
+
 <tr>
 	<th></th>
 	<td class="subform">
@@ -224,69 +125,100 @@
 
 <script type="text/javascript">
 	(function($) {
-		var org_input = $('#obj_organization');
+		var search_input = $('#search');
+		var organization_input = $('#obj_organization');
 		var org_no_input = $('#obj_org_no');
-		var cc_input = $('#obj_cost_center');
-    var hr_radios = $('#obj_hr_decision input');
-    var omb_radios = $('#obj_omb_decision input');
-    var exec_radios = $('#obj_exec_decision input');
-    var hr_date_input = $('#obj_hr_date');
-    var omb_date_input = $('#obj_omb_date');
-    var exec_date_input = $('#obj_exec_date');    
-		var approval_no_input = $('#obj_exec_approval_no');
-		org_input.autocomplete({
-			source: '<%= url_for :action => :vacancy_org_autocomplete %>',
-			minLength: 2,
-      select: function(e, ui) {
-        var i = ui.item;
-        org_input.val(i.name);
-        org_no_input.val(i.org_no);
-        cc_input.val(i.cost_center);
-        return false;
-      },
-    });
-    var get_approval_no = function() {
-    	var d = Date.parse($('#obj_exec_date').val());
-    	if(!d) {
-    		new Effect.Highlight('tr_exec_date', {restorecolor: '#ffffff'});
-    		return;
-    	}
-    	var yr = d.getFullYear().toString().substr(2,2);
-    	approval_no_input.addClass('busy-bg');
-    	$.ajax({
-    		url: '<%= url_for :action => :get_approval_no, :id => @obj.id %>',
-    		data: {yr: yr},
-    		complete: function(xhr, status) {
-					approval_no_input.removeClass('busy-bg');
-    		},
-    		error: function(xhr, status, error) {
-    		},
-    		success: function(data, status, xhr) {
-    			approval_no_input.val(data);
-    		}
-    	});
-    }
-    $('#get_approval_no').click(get_approval_no);
-    var update_decision_date = function(radios, date) {
-    	var v = radios.filter(':checked').val();
-    	var d = date.val();
-			date.val(v ? (new Date()).toString('MM/dd/yyyy') : '');
-    	return v;
-    }
-    hr_radios.change(function(e) {
-			update_decision_date(hr_radios, hr_date_input);
-    });
-    omb_radios.change(function(e) {
-			update_decision_date(omb_radios, omb_date_input);
-    });
-    exec_radios.change(function(e) {
-			var v = update_decision_date(exec_radios, exec_date_input);
-			if(v == 'Approved') {
-				get_approval_no();
+		var cost_center_input = $('#obj_cost_center');
+		var position_input = $('#obj_position');
+		var position_no_input = $('#obj_position_no');
+		var last_incumbent_input = $('#obj_last_incumbent');
+		var salary_group_input = $('#obj_salary_group');
+		var clear_link = $('#clear');
+		var setup_ac = function(input, field) {
+			input.autocomplete({
+				source: function(request, response) {
+					$.ajax({
+						url: '<%= url_for :action => :vacancy_autocomplete %>/',
+						data: {
+							search: search_input.val(),
+							organization: organization_input.val(),
+							org_no: org_no_input.val(),
+							cost_center: cost_center_input.val(),
+							position: position_input.val(),
+							position_no: position_no_input.val(),
+							last_incumbent: last_incumbent_input.val(),
+							field: field
+						},
+						success: function(data, status, xhr) {
+							response(data);
+						}
+					});
+				},
+				minLength: 2,
+				select: function(e, ui) {
+					var i = ui.item;
+					if(field == 'position' || field == 'position_no' || field == 'last_incumbent' || field == 'search') {
+						position_input.val(i.position);
+						new Effect.Highlight(position_input[0]);
+						position_no_input.val(i.position_no);
+						new Effect.Highlight(position_no_input[0]);
+						last_incumbent_input.val(i.last_incumbent);
+						new Effect.Highlight(last_incumbent_input[0]);
+						salary_group_input.val(i.salary_group);
+						new Effect.Highlight(salary_group_input[0]);
+						if(field == 'search') {
+							new Effect.Highlight(search_input[0]);
+						}
+					}
+					organization_input.val(i.organization);
+					new Effect.Highlight(organization_input[0]);
+					org_no_input.val(i.org_no);
+					new Effect.Highlight(org_no_input[0]);
+					cost_center_input.val(i.cost_center);
+					new Effect.Highlight(cost_center_input[0]);
+					search_input.val('');
+					return false;
+				},
+				focus: function(e, ui) {
+					if(field == 'search') {
+						e.preventDefault();
+					}
+				}
+			}).data('autocomplete')._renderItem = function(ul, item) {
+				var label = '';
+				if(field == 'organization' || field == 'org_no' || field == 'cost_center') {
+					label = item.organization + '<span class="ac-extra">' +
+						'<br /><i>Org#:</i> ' + item.org_no + ' &nbsp; <i>CC:</i> ' + item.cost_center +
+						'</span>';
+				}
+				else {
+					label = item.position + ' - ' + (item.last_incumbent ? item.last_incumbent : '(NO INCUMBENT)') + '<span class="ac-extra">' +
+						'<br /><i>Pos#:</i> ' + item.position_no + ' &nbsp; <i>Grp:</i> ' + item.salary_group + 
+						'<br />' + item.organization + ' <i>(' + item.org_no + ', ' + item.cost_center + ')</i>' +
+						'</span>';
+				}
+				return $('<li>').data('item.autocomplete', item).append('<a>' + label + '</a>').appendTo(ul);
 			}
-			else {
-				approval_no_input.val('');
+		}
+		setup_ac(search_input, 'search');
+		setup_ac(organization_input, 'organization');
+		setup_ac(org_no_input, 'org_no');
+		setup_ac(cost_center_input, 'cost_center');
+		setup_ac(position_input, 'position');
+		setup_ac(position_no_input, 'position_no');
+		setup_ac(last_incumbent_input, 'last_incumbent');
+		clear_link.click(function(e) {
+			e.preventDefault();
+			if(confirm('Clear SAP Data Fields?')) {
+				position_input.val('');
+				position_no_input.val('');
+				last_incumbent_input.val('');
+				cost_center_input.val('');
+				salary_group_input.val('');
+				organization_input.val('');
+				org_no_input.val('');
+				cost_center_input.val('');
 			}
-    });
+		});
 	})(jQuery);
 </script>

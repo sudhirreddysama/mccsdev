@@ -1,4 +1,4 @@
-<% if !@current_user.agency_level? %>
+<% if !@current_user.agency_level? || @current_user.allow_vacancy_omb || @current_user.allow_vacancy_admin %>
 	<tr>
 		<th>Agency/Dept.:</th>
 		<td>
@@ -6,31 +6,41 @@
 			<%= f.select :department_id, Department.find(:all, :joins => 'join vacancies v on v.department_id = departments.id', :group => 'departments.id').collect { |d| [d.name, d.id] }, :include_blank => true %>
 		</td>
 	</tr>
+	<tr>
+		<th>HR Status:</th>
+		<td>
+			<label><%= f.check_box :hr_none %> None</label>
+			<label><%= f.check_box :hr_hold %> Hold</label>
+			<label><%= f.check_box :hr_approved %> Approved</label>
+			<label><%= f.check_box :hr_disapproved %> Disapproved</label>
+		</td>
+	</tr>
+	<tr>
+		<th>OMB Status:</th>
+		<td>
+			<label><%= f.check_box :omb_none %> None</label>
+			<label><%= f.check_box :omb_hold %> Hold</label>
+			<label><%= f.check_box :omb_approved %> Approved</label>
+			<label><%= f.check_box :omb_disapproved %> Disapproved</label>
+		</td>
+	</tr>
 <% end %>
 <tr>
-	<th>HR Status:</th>
+	<th>Status:</th>
 	<td>
-		<label><%= f.check_box :hr_none %> None</label>
-		<label><%= f.check_box :hr_hold %> Hold</label>
-		<label><%= f.check_box :hr_approved %> Approved</label>
-		<label><%= f.check_box :hr_disapproved %> Disapproved</label>
-	</td>
-</tr>
-<tr>
-	<th>OMB Status:</th>
-	<td>
-		<label><%= f.check_box :omb_none %> None</label>
-		<label><%= f.check_box :omb_hold %> Hold</label>
-		<label><%= f.check_box :omb_approved %> Approved</label>
-		<label><%= f.check_box :omb_disapproved %> Disapproved</label>
-	</td>
-</tr>
-<tr>
-	<th>Exec. Status:</th>
-	<td>
-		<label><%= f.check_box :exec_none %> None</label>
-		<label><%= f.check_box :exec_hold %> Hold</label>
+		<label><%= f.check_box :exec_started %> Started</label>
+		<label><%= f.check_box :exec_submitted %> Submitted</label>
 		<label><%= f.check_box :exec_approved %> Approved</label>
 		<label><%= f.check_box :exec_disapproved %> Disapproved</label>
+		<label><%= f.check_box :exec_filled %> Filled</label>
+		<label><%= f.check_box :exec_expired %> Expired</label>
+	</td>
+</tr>
+<tr>
+	<th>Report Options:</th>
+	<td>
+		<label><%= f.radio_button :group, '' %> No Grouping</label>
+		<label><%= f.radio_button :group, 'dept' %> Group by Dept.</label>
+		<label><%= f.radio_button :group, 'div' %> Group by Dept./Div.</label>
 	</td>
 </tr>

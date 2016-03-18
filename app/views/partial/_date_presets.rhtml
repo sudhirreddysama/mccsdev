@@ -1,0 +1,80 @@
+<%= select_tag 'date_presets', options_for_select([
+	['Date Ranges...'],
+	['Today', 'today'],
+	['Yesterday', 'yesterday'],
+	['Tommorrow', 'tommorrow'],
+	['This Month', 'month'],
+	['Last Month', 'last-month'],
+	['Next Month', 'next-month'],
+	['This Year', 'year'],
+	['Last Year', 'last-year'],
+	['Next Year', 'next-year'],
+]) %><i></i>
+<script>
+	(function($) {
+		var date_presets_select = $('#date_presets');
+		var d1 = $('#filter_from_date');
+		var d2 = $('#filter_to_date');
+		d1.change(function(e) {
+			if(!d2.val()) {
+				d2.val(d1.val());
+			}
+		});
+		var f = function(d) {
+			return d.toString('M/d/yy');
+		}
+		date_presets_select.change(function(e) {
+			var v = date_presets_select.val();
+			if(v == 'today') {
+				var d = f(Date.parse('today'));
+				d1.val(d);
+				d2.val(d);
+			}
+			else if(v == 'yesterday') {
+				var d = f(Date.parse('today -1 day'));
+				d1.val(d);
+				d2.val(d);
+			}
+			else if(v == 'tommorrow') {
+				var d = f(Date.parse('today +1 day'));
+				d1.val(d);
+				d2.val(d);
+			}
+			else if(v == 'month') {
+				var d = Date.parse('today').moveToFirstDayOfMonth();
+				d1.val(f(d));
+				d = d.moveToLastDayOfMonth();
+				d2.val(f(d));
+			}
+			else if(v == 'last-month') {
+				var d = Date.parse('today').moveToFirstDayOfMonth().addMonths(-1);
+				d1.val(f(d));
+				d = d.moveToLastDayOfMonth();
+				d2.val(f(d));
+			}
+			else if(v == 'next-month') {
+				var d = Date.parse('today').moveToFirstDayOfMonth().addMonths(1);
+				d1.val(f(d));
+				d = d.moveToLastDayOfMonth();
+				d2.val(f(d));
+			}
+			else if(v == 'year') {
+				var y = (new Date()).getFullYear().toString();
+				d1.val('1/1/' + y);
+				d2.val('12/31/' + y);
+			}
+			else if(v == 'last-year') {
+				var y = ((new Date()).getFullYear() - 1).toString();
+				d1.val('1/1/' + y);
+				d2.val('12/31/' + y);
+			}
+			else if(v == 'next-year') {
+				var y = ((new Date()).getFullYear() + 1).toString();
+				d1.val('1/1/' + y);
+				d2.val('12/31/' + y);
+			}
+			e.preventDefault();
+			date_presets_select[0].selectedIndex = 0;
+		});
+	})(jQuery);
+</script>

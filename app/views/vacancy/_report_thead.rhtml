@@ -1,0 +1,22 @@
+<thead>
+	<tr>
+		<th class="td-id">Vac#</th>
+		<th class="td-received_date">Rcvd</th>
+		<% if @filter.group != 'div' %>
+			<th class="td-organization">Division</td>
+		<% end %>
+		<th class="td-position">Position</th>
+		<th class="td-job_type">Type</th>
+		<% if @filter.report.mtg %>
+			<th class="td-omb_decision center">OMB</th>
+			<th class="td-omb_grant_percent center">%GF</th>
+			<th class="td-hr_decision center">HR</th>
+			<th class="td-exec_decision center">Exec</th>
+		<% else %>
+			<th class="td-last_incumbent">Last Incumbent</th>	
+			<th class="td-exec_approval_no">Apv#</th>
+			<th class="td-hr_exec_date">Apvd</th>
+			<th class="td-hr_candidate_hired">Candidate Hired</th>
+		<% end %>
+	</tr>
+</thead>

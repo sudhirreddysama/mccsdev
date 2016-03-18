@@ -46,7 +46,9 @@
 		<%= partial 'top_texts' %>
 		<% unless @notabs or params[:popup] %>
 			<div id="tabs" class="tabs">
-				<% if @current_user.agency_level? %>
+				<% if @current_user.only_vacancy %>
+					<%= tab 'Req. Fill Vac.', {:controller => :vacancy, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'vacancy' ? ' active' : ''), :title => 'Requests to Fill Vacancies'} %>
+				<% elsif @current_user.agency_level? %>
 					<%= tab 'Home', {:controller => :agencies, :sc => nil, :sid => nil, :id => nil}, {}, {:class => 'tab-agencies', :title => 'Agency Portal Home'} %>
 					<%= tab 'Employees', {:controller => :employee, :sc => nil}, {}, {:class => 'tab-employee' + (params[:sc] == 'employee' || params[:controller] == 'pay_cert' || params[:sc] == 'pay_cert' || params[:controller] == 'form_change' || params[:sc] == 'form_change' || params[:controller] == 'form_hire' || params[:sc] == 'form_hire' || params[:controller] == 'form_title' || params[:sc] == 'form_title' || params[:controller] == 'vacancy' || params[:sc] == 'vacancy' ? ' active' : ''), :title => 'Employees + History'} %>					
 					<% if @current_user.level != 'agency-employees' %>
@@ -67,7 +69,7 @@
 					<%= tab 'Delivery', {:controller => :delivery, :sc => nil}, {}, {:class => 'tab-delivery' + (params[:sc] == 'delivery' ? ' active' : ''), :title => 'Deliver Letters to Applicants'} %>				
 					<%= tab 'Agencies', {:controller => :agency, :sc => nil}, {}, {:class => 'tab-person' + (params[:sc] == 'agency' ? ' active' : ''), :title => 'Agency Maintenance'} %>
 					<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (params[:sc] == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>
-					<% is_misc = %w{cert_code letter job exam_site perf_test department town village county user fire_district school_district empl_action_type db_change disapproval}.include?(params[:controller]) %>
+					<% is_misc = %w{cert_code letter job exam_site perf_test department town village county user fire_district school_district empl_action_type db_change disapproval top_text}.include?(params[:controller]) %>
 					<%= tab 'Misc.', {:controller => :job, :sc => nil}, {}, {:class => 'tab-misc' + (is_misc ? ' active' : ''), :title => 'Manage Other Tables (Users, Agencies, etc.)'} %>
 				<% end %>
 				<div class="right tabs-menu">
