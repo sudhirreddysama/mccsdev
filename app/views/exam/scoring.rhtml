@@ -16,7 +16,7 @@
 			<table class="dg keynav">
 				<thead>
 					<tr>
-						<th colspan="8">
+						<th colspan="10">
 						Valid Result Codes:
 						<%= perf_codes.collect { |s| "#{s.code}:&nbsp;#{s.label}" }.join(', ') %>
 						</th>
@@ -24,12 +24,14 @@
 					<tr>
 						<th width="1%">SSN</th>
 						<th class="nobr" width="1%">Name</th>
+						<th width="1%">Score</th>
+						<th width="1%">Pos</th>
 						<th width="1%">Performance&nbsp;Test</th>
 						<th width="1%">Taken</th>
 						<th width="1%">Time</th>
 						<th width="1%">Result</th>
 						<th width="1%">P. Test Notes</th>
-						<th width="93%">History</th>
+						<th width="91%">History</th>
 					</tr>
 				</thead>
 				<% row = 0 %>
@@ -53,9 +55,11 @@
 										<%= partial 'notes', {:o => o} %>
 										<%= link_to o.person.label, {:controller => :applicant, :action => :view, :id => o.id}, :target => '_blank' %>
 										
-									</td>
+									</td>									
+									<td><%= o.final_score %></td>
+									<td><%= o.pos %></td>
 								<% else %>
-									<td colspan="2"></td>
+									<td colspan="4"></td>
 								<% end %>
 								<td class="nobr"><%= h e.perf_test.name %></td>
 								<% tp = o.taken_perfs.find_by_exam_id_and_perf_test_id(@obj.id, e.perf_test_id) || TakenPerf.new %>

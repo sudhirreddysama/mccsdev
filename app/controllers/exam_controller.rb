@@ -506,7 +506,9 @@ class ExamController < CrudController
 			['SSN', 'people.ssn'],
 			['First Name', 'people.first_name'],
 			['Last Name', 'people.last_name'],
-			['Score', 'applicants.final_score']
+			['Score', 'applicants.final_score'],
+			['Tiebreaker', 'applicants.tiebreaker'],
+			['Position', 'applicants.pos']
 		]		
 		
 		@statuses = AppStatus.find(:all, :order => 'app_statuses.name')
