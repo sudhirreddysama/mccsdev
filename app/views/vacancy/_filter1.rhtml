@@ -1,7 +1,7 @@
 <tr>
 	<th>Quick Filters:</th>
 	<td>
-		<input type="submit" name="submit" value="Submit" style="overflow: hidden; height: 0; width: 0; margin: 0; padding: 0;" />
+		<div style="overflow: hidden; height: 0; width: 0; margin: 0; padding: 0; display: block;"><input type="submit" name="submit" value="Submit" /></div>
 		<%= submit_tag 'Approved', :name => 'preset_approved[list]' %>
 		<%= submit_tag 'Approved (pdf)', :name => 'preset_approved[report]', :formtarget => '_blank' %>
 		<% if !@current_user.agency_level? || @current_user.allow_vacancy_omb || @current_user.allow_vacancy_admin %>
