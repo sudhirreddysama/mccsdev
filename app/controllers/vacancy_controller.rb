@@ -36,6 +36,8 @@ class VacancyController < CrudController
 				:exec_submitted => '1',
 				:sort1 => 'vacancies.received_date',
 				:dir1 => 'asc',
+				:sort2 => 'vacancies.id',
+				:dir1 => 'asc',
 				:group => 'dept',
 				:hr_approved => '1',
 				:hr_disapproved => '1',
