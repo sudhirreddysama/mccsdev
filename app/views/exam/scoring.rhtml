@@ -67,29 +67,31 @@
 								<td><%= text_field_tag "perf[#{o.id}-#{e.perf_test_id}][time_taken]", tp.time_taken, :size => 8, :id => "cell-#{row}-2", :class => "cell row-#{row} col-2 ucase" %></td>
 								<td><%= text_field_tag "perf[#{o.id}-#{e.perf_test_id}][result_code]", tp.result_code, :size => 3, :id => "cell-#{row}-3", :class => "cell row-#{row} col-3 ucase" %></td>
 								<td><%= text_field_tag "perf[#{o.id}-#{e.perf_test_id}][notes]", tp.notes, :size => 20, :id => "cell-#{row}-4", :class => "cell row-#{row} col-4 ucase" %></td>								
-								<td class="phists">
-									<% prev = o.person.taken_perfs.find(:all, {
-										:conditions => ['taken_perfs.exam_id != ? and taken_perfs.perf_test_id not in (1,5,8)', @obj.id],
-										:include => [:perf_code, :exam, :perf_test],
-										:order => 'taken_perfs.date_taken desc'
-									}) %>
-                                  <% if prev.count>0  %>
-                                  <fieldset class="coolfieldset collapsed"><legend>Performance History</legend>
-                                    <% end %>
-									<% prev.each_with_index { |p, i| %>
-										<div>
-											<%= p.perf_test.name if p.perf_test %>
-											<%= p.date_taken %>
-											<%= h p.perf_code.label if p.perf_code %>
-											<%= h p.notes %>
-											<%= link_to(p.exam.exam_no, {:controller => :exam, :action => :view, :id => p.exam_id}, :target => '_blank') if p.exam %>
-										</div>
-									<% } %>
-                                      <% if prev.count>0  %>
+								<% if j == 0 %>
+									<td class="phists" rowspan="<%= ep.size %>">
+										<% prev = o.person.taken_perfs.find(:all, {
+											:conditions => ['taken_perfs.exam_id != ? and taken_perfs.perf_test_id not in (1,5,8)', @obj.id],
+											:include => [:perf_code, :exam, :perf_test],
+											:order => 'taken_perfs.date_taken desc'
+										}) %>
+																		<% if prev.count>0  %>
+																		<fieldset class="coolfieldset collapsed"><legend>Performance History</legend>
+																			<% end %>
+										<% prev.each_with_index { |p, i| %>
+											<div>
+												<%= p.perf_test.name if p.perf_test %>
+												<%= p.date_taken %>
+												<%= h p.perf_code.label if p.perf_code %>
+												<%= h p.notes %>
+												<%= link_to(p.exam.exam_no, {:controller => :exam, :action => :view, :id => p.exam_id}, :target => '_blank') if p.exam %>
+											</div>
+										<% } %>
+																				<% if prev.count>0  %>
 
-                                          </fieldset>
-                                          <% end %>
-								</td>
+																						</fieldset>
+																						<% end %>
+									</td>
+								<% end %>
 							</tr>
 							<% row += 1 %>
 						<% } %>
