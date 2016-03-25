@@ -45,7 +45,7 @@
 			<td colspan="2">
 				<%= f.submit 'Filter' %>
 				<%= f.submit 'Clear Filter', :name => 'filter[clear]' %>
-				<% if params[:action] == 'applicants' %>
+				<% if params[:action] == 'applicants' || params[:action] == 'scoring' %>
 					<%= f.submit 'Export to Excel', :name => 'export' %>
 				<% end %>
 			</td>

@@ -112,19 +112,7 @@ class ExamController < CrudController
 		
 		if params[:export]
 			@objs = Applicant.find(:all, opt)
-			@export_fields = %w{approved app_status.name pos rank person.ssn person.last_name person.first_name person.home_phone person.work_phone person.fax person.cell_phone person.email person.mailing_address person.mailing_address2 person.mailing_city person.mailing_state person.mailing_zip raw_score base_score veterans_credits other_credits final_score}
-			@export_fields += %w{person.residence_different person.residence_address person.residence_city person.residence_state person.residence_zip person.town.name person.village.name person.fire_district.name person.school_district.name exam.valid_until person.date_of_birth.d0? person.race}			
-			book = Spreadsheet::Workbook.new
-			sheet = book.create_worksheet
-			sheet.row(0).concat(@export_fields)
-			@objs.each_with_index { |o, i|
-				@export_fields.each_with_index { |f, j|
-					sheet[i + 1, j] = o.instance_eval(f) rescue nil
-				}
-			}
-			data = StringIO.new
-			book.write data
-			send_data data.string, :filename => 'export.xls', :type => 'application/vnd.ms-excel'
+			export_applicants
 		else
 			opt[:per_page] ||= 50
 			opt[:page] ||= params[:page]
@@ -601,10 +589,40 @@ class ExamController < CrudController
 			:include => include
 		}
 		
-		opt[:per_page] ||= 50
-		opt[:page] ||= params[:page]
-		@objs = @obj.applicants.paginate(:all, opt);
-		
+		if params[:export]
+			@objs = @obj.applicants.find(:all, opt);
+			export_applicants
+		else		
+			opt[:per_page] ||= 50
+			opt[:page] ||= params[:page]
+			@objs = @obj.applicants.paginate(:all, opt);
+		end		
+	end
+	
+	def export_applicants
+		@export_fields = %w{approved app_status.name pos rank person.ssn person.last_name person.first_name person.home_phone person.work_phone person.fax person.cell_phone person.email person.mailing_address person.mailing_address2 person.mailing_city person.mailing_state person.mailing_zip raw_score base_score veterans_credits other_credits final_score}
+		@export_fields += %w{person.residence_different person.residence_address person.residence_city person.residence_state person.residence_zip person.town.name person.village.name person.fire_district.name person.school_district.name exam.valid_until person.date_of_birth.d0? person.race}			
+		@perf_fields = %w{perf_test.name taken_test.date_taken taken_test.time_taken taken_test.result_code taken_test.notes}
+		book = Spreadsheet::Workbook.new
+		sheet = book.create_worksheet
+		sheet.row(0).concat(@export_fields + (@exam_perfs ? @perf_fields * @exam_perfs.size : []))
+		@objs.each_with_index { |o, i|
+			@export_fields.each_with_index { |f, j|
+				sheet[i + 1, j] = o.instance_eval(f) rescue nil
+			}
+			if @exam_perfs
+				@exam_perfs.each_with_index { |e, j|
+					perf_test = e.perf_test
+					taken_test = o.taken_perfs.find_by_exam_id_and_perf_test_id(@obj.id, e.perf_test_id) || TakenPerf.new
+					@perf_fields.each_with_index { |f, k|
+						sheet[i + 1, @export_fields.size + (j * @perf_fields.size) + k] = eval(f)
+					}
+				}
+			end
+		}
+		data = StringIO.new
+		book.write data
+		send_data data.string, :filename => 'export.xls', :type => 'application/vnd.ms-excel'
 	end
 	
 	def sites_save
