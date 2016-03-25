@@ -122,7 +122,7 @@
 									</td>
 								</tr>
 							</table>
-							<% if !seasonal && !ep.exam.minimum_age.blank? %>
+							<% if !seasonal %>
 								<p>&nbsp;<br />If applying for Police Officer, Deputy Sheriff or Firefighter positions, please indicate date of birth: <b><%= h @obj.dob.strftime('%m/%d/%Y') if @obj.dob %></b></p>
 							<% end %>
 						</td>
