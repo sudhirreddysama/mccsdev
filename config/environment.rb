@@ -62,6 +62,7 @@ require 'rexml/document'
 require 'base64'
 require 'spreadsheet'
 require 'net/pop'
+require 'net/ftp'
 require 'shellwords'
 
 #require 'twitter'
