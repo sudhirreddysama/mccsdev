@@ -7,11 +7,11 @@
 				<td class="nobr">
 					<%= f.text_field :search %>
 					<% if @orders %>					
-						&nbsp;&nbsp;<%= f.select :sort1, @orders, :include_blank => 'Sort 1' %>
+						&nbsp;&nbsp;<%= f.select :sort1, @orders, {:include_blank => 'Sort 1'}, :style => 'width: 110px;' %>
 						&nbsp;&nbsp;<%= f.select :dir1, [['Asc', 'asc'], ['Desc', 'desc']] %> 
-						&nbsp;&nbsp;<%= f.select :sort2, @orders, :include_blank => 'Sort 2' %>
+						&nbsp;&nbsp;<%= f.select :sort2, @orders, {:include_blank => 'Sort 2'}, :style => 'width: 110px;' %>
 						&nbsp;&nbsp;<%= f.select :dir2, [['Asc', 'asc'], ['Desc', 'desc']] %>
-						&nbsp;&nbsp;<%= f.select :sort3, @orders, :include_blank => 'Sort 3' %>
+						&nbsp;&nbsp;<%= f.select :sort3, @orders, {:include_blank => 'Sort 3'}, :style => 'width: 110px;' %>
 						&nbsp;&nbsp;<%= f.select :dir3, [['Asc', 'asc'], ['Desc', 'desc']] %>
 					<% end %>
 				</td>
