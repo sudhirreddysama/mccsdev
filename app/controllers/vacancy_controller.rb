@@ -10,8 +10,8 @@ class VacancyController < CrudController
 			@filter = get_filter({
 				:sort1 => 'vacancies.created_at',
 				:dir1 => 'desc',
-				:sort3 => 'vacancies.organization',
-				:dir4 => 'asc'
+				:sort2 => 'vacancies.organization',
+				:dir2 => 'asc'
 			})
 		else
 			@filter = get_filter({
@@ -37,7 +37,7 @@ class VacancyController < CrudController
 				:sort1 => 'vacancies.received_date',
 				:dir1 => 'asc',
 				:sort2 => 'vacancies.id',
-				:dir1 => 'asc',
+				:dir2 => 'asc',
 				:group => 'dept',
 				:hr_approved => '1',
 				:hr_disapproved => '1',
