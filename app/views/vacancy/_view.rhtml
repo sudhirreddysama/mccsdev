@@ -105,14 +105,6 @@
 							<td>
 								<label>Date</label>
 								<%= o.hr_date.d0? %>
-							</td>
-							<td>
-								<label>Approval Used</label>
-								<%= o.hr_approval_used.d0? %>
-							</td>
-							<td>
-								<label>Candidate Hired</label>
-								<%= h o.hr_candidate_hired %>
 							&nbsp;</td>
 						</tr>
 					</table>
@@ -214,6 +206,14 @@
 						<td>
 							<label>Approval #</label>
 							<%= o.exec_approval_no %>
+						&nbsp;</td>
+						<td>
+							<label>Approval Used</label>
+							<%= o.hr_approval_used.d0? %>
+						</td>
+						<td>
+							<label>Candidate Hired</label>
+							<%= h o.hr_candidate_hired %>
 						&nbsp;</td>
 					</tr>
 				</table>
