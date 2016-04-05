@@ -30,6 +30,13 @@
 		</td>
 	</tr>
 	<tr>
+		<th>Score Range:</th>
+		<td>
+			From: <%= f.text_field :min_score, :size => 4 %>
+			To: <%= f.text_field :max_score, :size => 4 %> (select by status/disapproval/agency FIRST)
+		</td>
+	</tr>
+	<tr>
 		<th></th>
 		<td>						
 			Select from the statuses/disapprovals above to auto select the applicants below.<br />
@@ -58,7 +65,7 @@
 							} 
 							
 							%>
-							<label style="display: block;" class="status-<%= a.app_status_id %> reason-<%= a.disapproval_id %> perf-test-status-<%= a.perf_test_status %> agency-<%= a.agency_id %> <%= tp_class.join(' ') %>">
+							<label data-final-score="<%= a.final_score %>" style="display: block;" class="status-<%= a.app_status_id %> reason-<%= a.disapproval_id %> perf-test-status-<%= a.perf_test_status %> agency-<%= a.agency_id %> <%= tp_class.join(' ') %>">
 								<%= check_box_tag "obj[new_applicant_ids][]", a.id, @obj.new_applicant_ids.include?(a.id) %>
 								<%= h a.person.last_name %>, <%= h a.person.first_name %>
 								<% if a.app_status %> (<%= h a.app_status.code %>)<% end %>
@@ -72,6 +79,9 @@
 								<% end %>
 								<% if a.agency %>
 									<span style="color: #888; font-size: 80%;">(<%= a.agency.abbreviation %>)</span>
+								<% end %>
+								<% if a.final_score %>
+									<span style="color: #888; font-size: 80%;"> <%= a.final_score %></span>
 								<% end %>
 							</label>
 						<% } %>
@@ -111,6 +121,8 @@
 			var app_status_ids = $('#obj_new_app_status_ids');
 			var disapproval_ids = $('#obj_new_disapproval_ids');
 			var agency_ids = $('#obj_new_agency_ids');
+			var min_score = $('#obj_min_score');
+			var max_score = $('#obj_max_score');
 			
 			var select_applicant_ids = function(e) {
 				var sids = $(app_status_ids.val());
@@ -118,25 +130,47 @@
 				var tids = $(agency_ids.val());
 				var via = $('#select_via input:checked').val();
 				$('#apps input').attr('checked', false);
+				var labels = $([]);
 				if(via == 'status') {
 					sids.each(function(i, v) {
-						$('label.status-' + v + ' input').attr('checked', true);
+						labels = labels.add('#apps label.status-' + v);
+						// $('label.status-' + v + ' input').attr('checked', true);
 					});
 				}
 				else if(via == 'disapproval') {
 					dids.each(function(i, v) {
-						$('label.reason-' + v + ' input').attr('checked', true);
+						labels = labels.add('#apps label.reason-' + v);
+						//$('label.reason-' + v + ' input').attr('checked', true);
 					});
 				}
-				else if(via == 'agency')
+				else if(via == 'agency') {
 					tids.each(function(i, v) {
-					$('label.status-5.agency-' + v + ' input').attr('checked', true);
-				});
+						labels = labels.add('#apps label.status-5.agency-' + v);
+						//$('label.status-5.agency-' + v + ' input').attr('checked', true);
+					});
+				}
+				var min_score_val = min_score.val();
+				var max_score_val = max_score.val();
+				if(min_score_val) {
+					min_score_val = parseInt(min_score_val);
+					labels = labels.filter(function(i, e) {
+						return parseInt($(e).data('final-score')) >= min_score_val;
+					});
+				}
+				if(max_score_val) {
+					max_score_val = parseInt(max_score_val);
+					labels = labels.filter(function(i, e) {
+						return parseInt($(e).data('final-score')) <= max_score_val;
+					});
+				}
+				labels.children('input').attr('checked', true);
 			}
 			
 			app_status_ids.change(select_applicant_ids);
 			disapproval_ids.change(select_applicant_ids);
 			agency_ids.change(select_applicant_ids);
+			min_score.change(select_applicant_ids);
+			max_score.change(select_applicant_ids);
 			
 			var toggle_selects = function() {
 				$('.selects').hide();
