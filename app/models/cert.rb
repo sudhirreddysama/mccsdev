@@ -40,7 +40,11 @@ class Cert < ActiveRecord::Base
 	def status
 		n = Time.now.to_date
 		if return_date && return_date < n
-			return completed_date ? 'expired' : 'overdue'
+			if completed_date 
+				return finished.blank? ? 'completed' : 'expired'
+			else
+				return 'overdue'
+			end
 		elsif !finished.blank?
 			return 'finished'
 		elsif completed_date && completed_date <= n

@@ -49,20 +49,22 @@ class CertController < CrudController
 			if @filter.statuses.include?('requested')
 				sub_c << 'certs.certification_date is null and certs.pending_date is null'
 			end
-			if @filter.statuses.include?('expired')
-				sub_c << 'certs.return_date < date(now()) and certs.completed_date is not null'
-			end
 			if @filter.statuses.include?('pending')
 				sub_c << '(certs.certification_date is null or certs.certification_date > date(now())) and certs.pending_date <= date(now())'
-			end			
-			if @filter.statuses.include?('overdue')
-				sub_c << 'certs.return_date < date(now()) and certs.completed_date is null'
 			end
 			if @filter.statuses.include?('certified')
         sub_c << 'certs.certification_date <= date(now()) and certs.return_date >= date(now()) and (certs.completed_date is null or certs.completed_date > date(now()))'
+			end			
+			if @filter.statuses.include?('expired')
+				#sub_c << 'certs.return_date < date(now()) and certs.completed_date is not null'
+				sub_c << 'certs.return_date < date(now()) and certs.completed_date is not null and ifnull(certs.finished, "") != ""'
+			end
+			if @filter.statuses.include?('overdue')
+				sub_c << 'certs.return_date < date(now()) and certs.completed_date is null'
 			end
 			if @filter.statuses.include?('completed')
-				sub_c << 'certs.return_date >= date(now()) and certs.completed_date <= date(now()) and ifnull(certs.finished, "") = ""'
+				#sub_c << 'certs.return_date >= date(now()) and certs.completed_date <= date(now()) and ifnull(certs.finished, "") = ""'
+				sub_c << 'certs.completed_date <= date(now()) and ifnull(certs.finished, "") = ""'
 			end
 			if @filter.statuses.include?('finished')
 				sub_c << 'certs.return_date >= date(now()) and ifnull(certs.finished, "") != ""'
