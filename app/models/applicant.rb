@@ -164,6 +164,27 @@ class Applicant < ActiveRecord::Base
 		return 0
 	end
 	
+	def self.assign_continuous_recruitment_exam_cron
+		logger.info "#{Time.now.to_s} Starting Applicant.assign_continuous_recruitment_exam_cron()"
+		@objs = Applicant.find(:all, {
+			:include => {:web_exam => :web_exam_type},
+			:conditions => "applicants.exam_id is null and #{HRAPPLYDB}.exam_types.short_name = 'CR'"
+		})
+		@objs.each { |o|
+			no = o.web_exam.no.split('-').first
+			no_like = "#{no}-%"
+			exam = Exam.find(:first, {
+				:conditions => ['exams.exam_no like ? and exams.deadline >= ? and exams.continuous = 1', no_like, o.submitted_at],
+				:order => 'exams.deadline asc'
+			})
+			logger.info "Assigning Applicant ID #{o.id} to Exam ID #{exam.id}"
+			o.exam_id = exam.id
+			o.save
+		}
+		logger.info "#{Time.now.to_s} Done With Applicant.assign_continuous_recruitment_exam_cron()"
+		logger.flush
+	end
+	
 	include DbChangeHooks
 	
 end
