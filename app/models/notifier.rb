@@ -171,12 +171,23 @@ class Notifier < ActionMailer::Base
 		from f
 		body :b => b
 	end
-		
+	
+	def deliver!(mail = @mail)
+		begin
+			logger.info "#{Time.now.to_s} Mail Subject: #{subject}, To: #{Array(recipients).join(',')}"
+			super mail
+		rescue Exception => e 
+			logger.info 'EMAIL ERROR!'
+			logger.info e.inspect
+			logger.info mail.encoded
+			logger.flush
+		end
+		return mail
+	end
+	
 	# DEV ONLY!
 	def recipients *args
 		if RAILS_ENV == 'development'
-			logger.info 'recipients overloaded. Original Recipients:'
-			logger.info args.inspect		
 			super ['jessesternberg@monroecounty.gov']
 		else
 			super *args
