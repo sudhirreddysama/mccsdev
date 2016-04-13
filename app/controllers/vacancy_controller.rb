@@ -60,7 +60,7 @@ class VacancyController < CrudController
 				:exec_submitted => '1',
 				:sort1 => 'vacancies.received_date',
 				:dir1 => 'asc',
-				:omb_hold => '1',
+				#:omb_hold => '1',
 				:omb_none => '1'
 			})			
 		end
@@ -69,8 +69,6 @@ class VacancyController < CrudController
 			['Received Date', 'vacancies.received_date'],
 			['Created Date', 'vacancies.created_at'],
 			['Desired Start Date', 'vacancies.desired_start'],
-			['HR Decision Date', 'vacancies.hr_date'],
-			['OMB Decision Date', 'vacancies.omb_date'],
 			['Exec Decision Date', 'vacancies.exec_date'],
 			['Approval Used Date', 'vacancies.hr_approval_used'],
 			['Department/Division', 'vacancies.organization'],
