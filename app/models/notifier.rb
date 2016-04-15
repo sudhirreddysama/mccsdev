@@ -1,7 +1,7 @@
 class Notifier < ActionMailer::Base
 	
-	DEFAULT_FROM = 'Monroe County Civil Service <civilservice@monroecounty.gov>'
-	HR_FROM = 'Monroe County HR <noreply@monroecounty.gov>'
+	DEFAULT_FROM = 'Monroe CS <civilservice@monroecounty.gov>'
+	HR_FROM = 'Monroe HR <noreply@monroecounty.gov>'
 	
 	def message m
 		recipients m.person.email_with_name
