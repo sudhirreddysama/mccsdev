@@ -34,9 +34,9 @@ class VacancyController < CrudController
 		elsif params[:preset_mtg]
 			@filter.clear.merge!({
 				:exec_submitted => '1',
-				:sort1 => 'vacancies.received_date',
+				:sort1 => 'departments.name',
 				:dir1 => 'asc',
-				:sort2 => 'vacancies.id',
+				:sort2 => 'vacancies.received_date',
 				:dir2 => 'asc',
 				:group => 'dept',
 				:hr_approved => '1',
