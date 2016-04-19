@@ -113,10 +113,8 @@ class VacancyController < CrudController
 		end
 		@date_types = [
 			['Received Date', 'vacancies.received_date'],
-			['Received Date', 'vacancies.created_date'],
+			['Created Date', 'vacancies.created_at'],
 			['Desired Start Date', 'vacancies.desired_start'],
-			['HR Decision Date', 'vacancies.hr_date'],
-			['OMB Decision Date', 'vacancies.omb_date'],
 			['Exec Decision Date', 'vacancies.exec_date'],
 			['Approval Used Date', 'vacancies.hr_approval_used']
 		]
