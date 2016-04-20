@@ -255,6 +255,15 @@ class VacancyController < CrudController
 			cond += get_search_conditions(params[:position_no], {'position_no' => :left}) if field != 'position' && field != 'last_incumbent'
 			cond += get_search_conditions(params[:last_incumbent], {'last_incumbent' => :like}) if field != 'position' && field != 'position_no'
 		end
+		if @current_user.agency_level?
+			data_codes = @current_user.department && @current_user.department.vacancy_data_codes
+			if data_codes.blank?
+				data_codes = @current_user.agency && @current_user.agency.vacancy_data_codes
+			end
+			if !data_codes.blank?
+				cond << 'substring(cost_center, 1, 2) in ("' + data_codes.split(',').map(&:to_i).join(',') + '")'
+			end
+		end
 		opt = {
 			:limit => 20,
 			:conditions => get_where(cond),
@@ -272,6 +281,7 @@ class VacancyController < CrudController
 				:position_no => o.position_no,
 				:last_incumbent => o.last_incumbent,
 				:salary_group => o.salary_group,
+				:status => o.status,
 				:label => field == 'search' ? "#{o.position} - #{o.last_incumbent.blank? ? '(NO INCUMBENT)' : o.last_incumbent}" : o.send(field)
 			}
 		}
