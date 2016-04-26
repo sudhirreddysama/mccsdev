@@ -3,6 +3,13 @@ class Notifier < ActionMailer::Base
 	DEFAULT_FROM = 'Monroe CS <civilservice@monroecounty.gov>'
 	HR_FROM = 'Monroe HR <noreply@monroecounty.gov>'
 	
+	def lost_password u, url
+		recipients u.email_with_name
+		from DEFAULT_FROM
+		subject 'Account Recovery'
+		body :u => u, :url => url
+	end
+	
 	def message m
 		recipients m.person.email_with_name
 		if m.email_from.blank?

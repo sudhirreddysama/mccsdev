@@ -6,17 +6,37 @@ class AccountController < ApplicationController
 	def index
 		redirect_after_login and return if @current_user
 		if request.post?
-			@login = params[:login]
-			u = User.authenticate @login[:username], @login[:password]
-			if u
-				session[:current_user_id] = u.id
-				session[:switch_user_ids] = ([u.id] + u.switch_user_ids).uniq
-				flash[:notice] = 'You have successfully logged in.'
-				@current_user = u
-				redirect_after_login
-				return
-			else
-				@errors = ['Invalid login.']
+			if params[:login]
+				@login = params[:login]
+				u = User.authenticate @login[:username], @login[:password]
+				if u
+					session[:current_user_id] = u.id
+					session[:switch_user_ids] = ([u.id] + u.switch_user_ids).uniq
+					flash[:notice] = 'You have successfully logged in.'
+					@current_user = u
+					redirect_after_login
+					return
+				else
+					@errors = ['Invalid login.']
+				end
+			elsif params[:lost]
+				@lost = params[:lost]
+				users = User.find :all, :conditions => ['level != "disabled" and username = ? or email = ?', @lost[:username], @lost[:username]]
+				if !users.empty?
+					users.each { |u|
+						u.create_activation_key
+						Notifier.deliver_lost_password u, url_for(:action => :recover, :id => u.id, :id2 => u.activation_key)
+					}
+					if users.size > 1
+						redirect_to
+						flash[:notice] = 'You have multiple accounts in the system. Account recovery emails for each of your accounts has been sent to your email address. Click the recovery links in the emails to recover your account.'
+					else
+						redirect_to :action => :recover, :id => users.first.id
+					end
+					return
+				else
+					@errors = ['Sorry, We don\'t have any user on file with that username or password.']
+				end
 			end
 		end
 	end
@@ -49,6 +69,25 @@ class AccountController < ApplicationController
 			@current_user = u			
 			redirect_to :back
 		end
+	end
+	
+	def recover
+		if params[:id2]
+			if params[:id2].blank?
+				@errors = ['Invalid key - user not found.']
+			else
+				u = User.authenticate_by_activation_key params[:id], params[:id2]
+				if u
+					session[:current_user_id] = u.id
+					@current_user = u		
+					flash[:notice] = 'Account recovery successfull. You have been automatically logged in. <a href="' + url_for(:action => :edit) + '">Please update your account with a new password.</a>'
+					redirect_after_login
+					return
+				else
+					@errors = ['Invalid key - user not found.']
+				end
+			end
+    end
 	end
 	
 	def edit

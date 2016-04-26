@@ -11,3 +11,14 @@
 		<tr><td class="ct"><%= f.submit 'Login' %></td></tr>
 	</table>
 <% } %>
+<% if params[:action] != 'switch' %>
+	<h2 id="recover-form"><span>Recover Password</span></h2>
+	<% form_for(:lost) { |f| %>
+		<table class="form">	
+			<tr><th><%= label :username, 'Username or Email: <span class="req">*</span>' %></th></tr>
+			<tr><td><%= f.text_field :username, :style => 'width: 90%;' %></td></tr>
+			<tr><td>Enter either your email or your username to have an account recovery link emailed to you.</td></tr>
+			<tr><td class="ct"><%= submit_tag 'Send Info' %></td></tr>
+		</table>
+	<% } %>
+<% end %>

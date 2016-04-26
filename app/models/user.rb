@@ -54,6 +54,22 @@ class User < ActiveRecord::Base
   def self.authenticate u, p
   	find_by_username u, :conditions => ['encrypted_password = ? and level != "disabled"', Digest::SHA1.hexdigest(p.to_s + SALT)]
   end
+  
+  def self.authenticate_by_activation_key uid, k
+  	u = find_by_id_and_activation_key uid, k
+  	if !u || u.level == 'disabled'
+  		return nil
+  	end
+		u.update_attributes :activation_key => ''
+		u
+  end
+  
+  def create_activation_key
+  	begin
+  		self.activation_key = Array.new(10) { rand(9).to_s }.join
+  	end while User.find_by_activation_key activation_key
+  	save
+  end
       
   def email_with_name 
   	"#{name} <#{email}>"
