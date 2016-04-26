@@ -1,0 +1,11 @@
+<%= render :partial => 'partial/errors', :locals => {:errors => @errors} %>
+<h2 id="recover-form"><span>Recover Password</span></h2>
+<%= form_tag(:action => :recover, :id => params[:id], :id2 => nil) %>
+	<table class="form">
+		<tr><td>A recovery key has been sent to your email address. Either enter the key in the field below, or click the link contained in the email to login to your account. Once logged in, please update your account with a new password.</td></tr>
+		<tr><td><%= link_to 'Back to Login', :action => :index %></tr>
+		<tr><th>Recovery Key: </th></tr>
+		<tr><td><%= text_field_tag 'id2', params[:id2], :style => 'width: 90%;' %></td></tr>
+		<tr><td><%= submit_tag 'Submit' %></td></tr>
+	</table>
+</form>
