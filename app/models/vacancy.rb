@@ -105,5 +105,7 @@ class Vacancy < ActiveRecord::Base
 		no = DB.query('select lpad(ifnull(max(substr(exec_approval_no, 4) + 0), 0) + 1, 3, "0") no from vacancies where substr(exec_approval_no, 1, 2) = "%s" and id != %d', yr, id).fetch_hash.no
 		return "#{yr}-#{no}"
 	end
+
+	include DbChangeHooks
 	
 end
