@@ -21,6 +21,10 @@ class AccountController < ApplicationController
 				end
 			elsif params[:lost]
 				@lost = params[:lost]
+				if @lost[:username].blank?
+					@errors = ['Enter a username or email address.']
+					return
+				end
 				users = User.find :all, :conditions => ['level != "disabled" and (username = ? or email = ?)', @lost[:username], @lost[:username]]
 				if !users.empty?
 					users.each { |u|
@@ -35,7 +39,7 @@ class AccountController < ApplicationController
 					end
 					return
 				else
-					@errors = ['Sorry, We don\'t have any user on file with that username or password.']
+					@errors = ['Sorry, We don\'t have any user on file with that username or email.']
 				end
 			end
 		end
