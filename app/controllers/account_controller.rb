@@ -21,7 +21,7 @@ class AccountController < ApplicationController
 				end
 			elsif params[:lost]
 				@lost = params[:lost]
-				users = User.find :all, :conditions => ['level != "disabled" and username = ? or email = ?', @lost[:username], @lost[:username]]
+				users = User.find :all, :conditions => ['level != "disabled" and (username = ? or email = ?)', @lost[:username], @lost[:username]]
 				if !users.empty?
 					users.each { |u|
 						u.create_activation_key
