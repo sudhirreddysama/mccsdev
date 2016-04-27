@@ -261,7 +261,7 @@ class VacancyController < CrudController
 				data_codes = @current_user.agency && @current_user.agency.vacancy_data_codes
 			end
 			if !data_codes.blank?
-				cond << 'substring(cost_center, 1, 2) in ("' + data_codes.split(',').map(&:to_i).join(',') + '")'
+				cond << 'substring(cost_center, 1, 2) in (' + data_codes.split(',').map(&:to_i).join(',') + ')'
 			end
 		end
 		opt = {
