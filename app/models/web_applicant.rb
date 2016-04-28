@@ -107,7 +107,7 @@ class WebApplicant < ActiveRecord::Base
 				:ssn => wa.ssn.to_s.upcase.strip,
 				:home_phone => wa.home_phone.to_s.upcase.strip,
 				:work_phone => wa.work_phone.to_s.upcase.strip,
-				:email => wa.web_user.email.to_s.upcase.strip,
+				:email => wa.web_user.email.to_s.strip,
 				:mailing_address => wa.address.to_s.upcase.strip,
 				:mailing_address2 => wa.address2.to_s.upcase.strip,
 				:mailing_city => wa.city.to_s.upcase.strip,
