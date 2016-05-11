@@ -8,7 +8,7 @@
 		<% @obj.established_date = Time.now.to_date %>
 		<% @obj.valid_until = Time.now.to_date.advance :years => 1 %>
 	<% end %>
-	<p class="marg">Use the form before to specify an established &amp; valid until date to establish the eligible list.</p>
+	<p class="marg">Use the form below to specify an established &amp; valid until date to establish the eligible list.</p>
 	<% table_form_for(:obj) { |o| %>
 		<%= o.tr_calendar_date_select :established_date, :label => 'Established Date', :req => true %>
 		<%= o.tr_calendar_date_select :valid_until, :label => 'Valid Until', :req => true %>

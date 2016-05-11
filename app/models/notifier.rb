@@ -172,6 +172,16 @@ class Notifier < ActionMailer::Base
 		body({})
 	end
 	
+	def pending_cert_exam_established c, e
+		u = ['JMcCann@monroecounty.gov']
+		liaison = Agency.get_liaison c.agency, c.department
+		u << liaison.email if liaison
+		recipients u 
+		subject "List Established For Pending Cert: #{c.title}"
+		from DEFAULT_FROM
+		body :c => c, :e => e
+	end
+	
 	def custom_email r, s, f, b
 		recipients r
 		subject s
@@ -195,6 +205,8 @@ class Notifier < ActionMailer::Base
 	# DEV ONLY!
 	def recipients *args
 		if RAILS_ENV == 'development'
+			logger.info 'Development Env intercepted mail recipients:'
+			logger.info args.inspect
 			super ['jessesternberg@monroecounty.gov']
 		else
 			super *args

@@ -1,0 +1,8 @@
+A list has been established for a pending certified list.
+
+Cert: <%= @c.title %>
+https://cs.monroecounty.gov/mccs/cert/view/<%= @c.id %>
+
+List: <%= @e.exam_no %> - <%= @e.title %>
+Established Date: <%= @e.established_date.d0? %>
+https://cs.monroecounty.gov/mccs/exam/view/<%= @e.id %>

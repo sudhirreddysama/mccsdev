@@ -104,6 +104,14 @@ class Exam < ActiveRecord::Base
 	end
 	after_save :set_current_exam_ids
 	
+	def check_pending_cert_exam_established
+		if established_date && established_date_was.nil?
+			certs.find(:all, :conditions => '(certs.certification_date is null or certs.certification_date > date(now())) and certs.pending_date <= date(now())').each { |c|
+				Notifier.deliver_pending_cert_exam_established c, self
+			}
+		end
+	end
+	before_save :check_pending_cert_exam_established
 	
 	
 	
