@@ -129,25 +129,31 @@
 		
 		
 		<% elsif params[:exam_sites] %>
-		
-			<% room_totals = {} %>
-			<% @objs.each { |o| %>
-				<%
-					grouped = {}
+			<%
+				grouped = {}
+				room_totals = {}
+				exam_totals = {}
+				@objs.each { |o|
+					exam = "#{o.exam_no} #{o.title}"
 					o.applicants.each { |a|
-						site_name = a.exam_site ? a.exam_site.name : 'UNKNOWN SITE'
-						grouped[site_name] ||= []
-						grouped[site_name] << a
-						room_totals[site_name] ||= 0
-						room_totals[site_name] += 1
+						room = a.exam_site ? a.exam_site.name : 'UNKNOWN SITE'
+						grouped[room] ||= {}
+						grouped[room][exam] ||= []
+						grouped[room][exam] << a
+						exam_totals[exam] ||= 0
+						exam_totals[exam] += 1
+						room_totals[room] ||= 0
+						room_totals[room] += 1
 					}
-				%>
-				<% grouped.keys.sort.each { |k| objs = grouped[k] %>
+				}
+			%>
+			<% grouped.keys.sort.each { |r| exams = grouped[r] %>
+				<% exams.keys.sort.each { |e| objs = exams[e] %>
 					
 					<h1<% unless first %> style="page-break-before: always;"<% end %>>
 						Exams/Sites For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %><br />
-						Exam: <%= h o.exam_no %> <%= h o.title %><br />
-						Site: <%= h k %>
+						Exam: <%= h e %><br />
+						Site: <%= h r %>
 					</h1>
 					<% first = false %>
 					<table>
@@ -183,9 +189,9 @@
 						</table>
 					<% } %>
 					<p>
-						<%= h o.exam_no %> <%= h o.title %> / <%= h k %> TOTAL: <%= objs.size %><br />
-						<%= h o.exam_no %> <%= h o.title %> TOTAL: <%= o.applicants.size %><br />
-						<%= h k %> TOTAL: <%= room_totals[k] %>
+						<%= h e %> / <%= h r %> TOTAL: <%= objs.size %><br />
+						<%= h e %> TOTAL: <%= exam_totals[e] %><br />
+						<%= h r %> TOTAL: <%= room_totals[r] %>
 					</p>
 					
 				<% } %>

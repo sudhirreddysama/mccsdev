@@ -330,7 +330,7 @@ class ExamController < CrudController
 
 					@objs = Exam.find(:all, {
 						:conditions => get_where(cond),
-						:order => 'exams.exam_no, exam_sites.name, people.last_name asc, people.first_name asc',
+						:order => 'exam_sites.name, exams.exam_no, people.last_name asc, people.first_name asc',
 						:include => [:applicants => [:exam, :exam_site, :app_status, :person]]
 					})					
 				
