@@ -6,7 +6,7 @@
 			<% if @filter.group != 'div' %>
 				<td><%= h o.organization %></td>
 			<% end %>
-			<td><%= h o.position%></td>
+			<td><%= h o.position_no %> <%= h o.position%></td>
 			<td><%= h o.job_type.sub('Seasonal/Temporary', 'Tmp').sub('Full Time', 'FT').sub('Part Time', 'PT') %></td>
 			<% if @filter.report.mtg %>
 				<td class="fill-in"><%= vac_status o.omb_decision %></td>
