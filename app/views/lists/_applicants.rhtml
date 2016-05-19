@@ -22,6 +22,9 @@
 				<td>
 					<% if p %>
 						<%= link_to "#{p.last_name}, #{p.first_name}", :action => :applicant, :id => o.person_id %>
+						<% if o.perf_test_status == 'R' %>
+							<div style="color: #777; font-size: 80%;">RESTRICTED</div>
+						<% end %>
 					<% else %>
 						UNKNOWN
 					<% end %>
