@@ -9,8 +9,9 @@ class Cert < ActiveRecord::Base
 	belongs_to :town
 	belongs_to :village
 	belongs_to :fire_district
-	
 	belongs_to :completed_by, :class_name => 'User', :foreign_key => 'completed_by_id'
+	belongs_to :recert_from, :class_name => 'Cert', :foreign_key => 'recert_from_id'
+	has_many :recerts, :class_name => 'Cert', :foreign_key => 'recert_from_id'
 	
 	has_many :cert_applicants, :dependent => :destroy
 	has_many :bulk_messages

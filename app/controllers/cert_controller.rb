@@ -338,7 +338,9 @@ class CertController < CrudController
 			@obj.certification_date = nil
 			@obj.return_date = nil
 			@obj.completed_date = nil
+			@obj.completed_by_id = nil
 			@obj.finished = nil
+			@obj.recert_from_id = old.id
 			if @obj.save
 				old.cert_applicants.each { |ca|
 					@obj.cert_applicants << ca.clone

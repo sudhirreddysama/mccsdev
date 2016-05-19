@@ -67,6 +67,20 @@
 					<label>Add'l Info:</label>
 					<%= o.additional %>
 				</td>
+				<% if o.recert_from %>
+					<td>
+						<label>Recertified From:</label>
+						<%= link_to o.recert_from_id, :action => :view, :id => o.recert_from_id %>
+					</td>
+				<% end %>
+				<% if !o.recerts.empty? %>
+					<td>
+						<label>Recertified To:</label>
+						<% o.recerts.each { |r| %>
+							<%= link_to r.id, :action => :view, :id => r.id %>&nbsp;&nbsp;&nbsp;
+						<% } %>
+					</td>
+				<% end %>
 			</tr>
 		</table>
 	</div>
