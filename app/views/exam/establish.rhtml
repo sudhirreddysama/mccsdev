@@ -1,17 +1,33 @@
 <%= partial 'nav' %>
 <%= partial 'scoring_nav' %>
 <% if @obj.established_date %>
-	<p class="marg">This exam has already been established. You can change the established &amp; valid until date under the edit tab.</p>
-<% else %>
-	<%= partial 'errors', :errors => @obj.errors.full_messages %>
-	<% unless @obj.established_date && @obj.valid_until %>	
-		<% @obj.established_date = Time.now.to_date %>
-		<% @obj.valid_until = Time.now.to_date.advance :years => 1 %>
-	<% end %>
+	<p class="marg"><strong style="color: #800;">This exam has already been established.</strong> You can still change the established &amp; valid until date here.</p>
+<% else %>	
 	<p class="marg">Use the form below to specify an established &amp; valid until date to establish the eligible list.</p>
-	<% table_form_for(:obj) { |o| %>
-		<%= o.tr_calendar_date_select :established_date, :label => 'Established Date', :req => true %>
-		<%= o.tr_calendar_date_select :valid_until, :label => 'Valid Until', :req => true %>
-		<%= o.tr_submit 'Establish List' %>
-	<% } %>
 <% end %>
+<%= partial 'errors', :errors => @obj.errors.full_messages %>
+<% unless @obj.established_date && @obj.valid_until %>	
+	<% @obj.established_date = Time.now.to_date %>
+	<% @obj.valid_until = Time.now.to_date.advance :years => 1 %>
+<% end %>
+<% table_form_for(:obj) { |o| %>
+	<%= o.tr_calendar_date_select :established_date, :label => 'Established Date', :req => true %>
+	<%= o.tr_calendar_date_select :valid_until, :label => 'Valid Until', :req => true %>
+	<tr>
+		<th>Pending Certs:</th>
+		<td>
+			<% pc = @obj.pending_certs %>
+			<% if pc.empty? %>
+				There are no pending certified lists for this exam/list.
+			<% else %>
+				<% pc.each { |c| %>
+					<div><%= link_to c.label, :action => :view, :id => c.id, :controller => :cert %></div>
+				<% } %>
+				<label><%= o.check_box :send_pending_cert_email %>
+				Check here to send an email for each pending certified list to the cert specialist and agency liaison.
+				</label>
+			<% end %>
+		</td>
+	</tr>
+	<%= o.tr_submit 'Establish List' %>
+<% } %>

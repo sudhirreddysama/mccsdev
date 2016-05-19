@@ -10,9 +10,12 @@
 		<% if (@obj.status == 'requested' && (@current_user.staff_level? || @current_user.liaison_level?))  %>
 			<%= tab 'Notify Certification Specialist', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist? This will change the status to "pending".', :class => 'tab-delivery' %>
 		<% end %>
-	<% end %>
-	<% if @current_user.username == 'isadmin' %>
-		<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => :cert, :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>
+		<% if @current_user.username == 'isadmin' %>
+			<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => :cert, :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>
+		<% end %>
+		<% if @current_user.staff_level? %>
+			<%= tab 'Recertify', {:action => :recertify, :id => @obj.id}, {}, {:confirm => 'Create new Certified List with same applicants? All properties of the new certified list will remain the same, except the certification date, return date, completed date, and finished field, which will be cleared.', :method => :post, :class => 'tab-duplicate'} %>
+		<% end %>
 	<% end %>
 	<div class="clear"></div>
 </div>

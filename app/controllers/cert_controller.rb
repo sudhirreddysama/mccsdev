@@ -330,4 +330,26 @@ class CertController < CrudController
 		render :template => 'partial/select_text'
 	end
 	
+	def recertify
+		if request.post?
+			load_obj
+			old = @obj
+			@obj = @obj.clone
+			@obj.certification_date = nil
+			@obj.return_date = nil
+			@obj.completed_date = nil
+			@obj.finished = nil
+			if @obj.save
+				old.cert_applicants.each { |ca|
+					@obj.cert_applicants << ca.clone
+				}
+				flash[:notice] = 'New certification has been created with the same applicants.'
+			else
+				flash[:errors] = @obj.errors.full_messages
+				@obj = old
+			end
+		end
+		redirect_to :action => :view, :id => @obj.id
+	end
+	
 end
