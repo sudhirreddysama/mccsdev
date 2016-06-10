@@ -108,7 +108,7 @@ class PersonController < CrudController
     a.delete! ','
     a.delete! '.'
     a.strip!
-    x = Parcel.find :first, :conditions => ['address like ? and left(PAR_ZIP, 5) = ?', "%#{a}", z[0, 5]]
+    x = Parcel.find :first, :conditions => ['address like ? and left(PAR_ZIP, 5) = ?', "%#{a}", z.to_s[0, 5]]
     if x
       web_swis = WebSwis.find_by_swis_code x.SWIS
       logger.warn "SWIS=#{x.SWIS}"

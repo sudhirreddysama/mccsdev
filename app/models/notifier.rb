@@ -105,10 +105,10 @@ class Notifier < ActionMailer::Base
 		body :exams => exams
 	end
 	
-	def mailtest
-		recipients ['jesse@unicornelex.com', 'jessesternberg@monroecounty.gov']
-		subject 'Test Email From MCCS'
-		from DEFAULT_FROM
+	def mailtest arg = 'test'
+		recipients ['jessesternbergmc@hotmail.com', 'jessesternberg@outlook.com', 'jesse@unicornelex.com', 'jessesternberg@monroecounty.gov', 'jessesternbergmc@gmail.com', 'jessesternbergmc@yahoo.com']
+		subject "Test Email From MCCS (#{arg})"
+		from 'jessesternberg@fakedomain.com'
 		body :a => 'TEST'
 	end
 	
