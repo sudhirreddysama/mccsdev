@@ -94,7 +94,7 @@ class Applicant < ActiveRecord::Base
 				prev = person.applicants.find(:first, {
 					:include => :exam, 
 					:conditions => ['exams.valid_until >= date(now()) and exams.title = ? and exams.exam_type = ? and applicants.tiebreaker != ""', exam.title, exam.exam_type],
-					:order => 'exams.valid_until asc'
+					:order => 'exams.valid_until desc'
 				})
 				if prev
 					self.tiebreaker = prev.tiebreaker
