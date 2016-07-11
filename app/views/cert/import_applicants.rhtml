@@ -64,10 +64,10 @@
 				<th width="1">M/F</th>
 				<th width="1">Agency</th>
 				<th width="1">Name</th>
-				<th>Residency</th>
 				<% if @obj.exam.continuous %>
 					<th width="1" class="nobr">Valid Until</th>
 				<% end %>
+				<th>Info</th>
 			</tr>
 		</thead>
 		<% @objs.each_with_index { |a, i| p = a.person; s = a.app_status %>
@@ -104,13 +104,18 @@
 					<td class="nobr"><%= p.gender %></td>
 					<td class="nobr"><% if a.agency %><%= h a.agency.name %><% end %></td>
 					<td class="nobr"><%= link_to "#{p.last_name}, #{p.first_name}", {:action => :view, :controller => :applicant, :id => a.id}, :target => '_blank' %></td>
+					<% if @obj.exam.continuous %>
+						<td><%= a.exam.valid_until.strftime('%m/%d/%y') %></td>
+					<% end %>					
 					<td>
+						<% if false %>
 						<span style="font-size: 10px;" class="dim">
 							<% if p.town && !p.town.name.blank? %>Town: <%= h p.town.name %><% end %>
 							<% if p.village && !p.village.name.blank? %>Vill: <%= h p.village.name %><% end %>
 							<% if p.school_district && !p.school_district.name.blank? %>Schl: <%= h p.school_district.name %><% end %>
 							<% if p.fire_district && !p.fire_district.name.blank? %>Fire: <%= h p.fire_district.name %><% end %>
 						</span>
+						<% end %>
 						<%
 						
 							exclude_actions = a.cert_applicants.find(:all, :include => [{:cert => :agency}, :cert_code], :order => 'certs.certification_date desc', :conditions => ['cert_codes.exclude = 1 and certs.agency_id = ? and certs.department_id = ?', @obj.agency_id, @obj.department_id])
@@ -133,9 +138,6 @@
 							<div><span class="dim">List Note:</span> <%= h a.list_note %></div>
 						<% end %>
 					</td>
-					<% if @obj.exam.continuous %>
-						<td><%= a.exam.valid_until.strftime('%m/%d/%y') %></td>
-					<% end %>
 				</tr>
 			</tbody>
 		<% } %>
