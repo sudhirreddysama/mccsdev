@@ -65,6 +65,9 @@
 				<th width="1">Agency</th>
 				<th width="1">Name</th>
 				<th>Residency</th>
+				<% if @obj.exam.continuous %>
+					<th width="1" class="nobr">Valid Until</th>
+				<% end %>
 			</tr>
 		</thead>
 		<% @objs.each_with_index { |a, i| p = a.person; s = a.app_status %>
@@ -130,6 +133,9 @@
 							<div><span class="dim">List Note:</span> <%= h a.list_note %></div>
 						<% end %>
 					</td>
+					<% if @obj.exam.continuous %>
+						<td><%= a.exam.valid_until.strftime('%m/%d/%y') %></td>
+					<% end %>
 				</tr>
 			</tbody>
 		<% } %>
