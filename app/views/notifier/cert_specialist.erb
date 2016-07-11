@@ -17,6 +17,14 @@ Internal Notes:
 <%= @c.internal_notes %>
 <% end -%>
 
+Notes:
+<% unless @c.internal_notes.blank? -%>
+<%= @c.comments %>
+<% end -%>
+
+Type:
+<%= [@c.general_or_residential.to_s, @c.months.to_s].reject(&:blank?).join('/') %>
+
 Attached Documents:
 <% if @c.documents.empty? -%>
 (None)
