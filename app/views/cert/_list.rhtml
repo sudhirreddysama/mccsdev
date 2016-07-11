@@ -9,6 +9,7 @@
 			<th width="1%">Return</th>
 			<th width="93%">Cert. Title</th>
       <th width="1%">Type</th>
+      <th width="1%">Notes</th>
 		</tr>
 	</thead>
 	<% @objs.each { |o| %>
@@ -22,13 +23,8 @@
 				<td class="nobr"><%= o.return_date.d0? %></td>
 				<td><%= link_to o.set_title, :action => :view, :id => o.id %></td>
 				<td class="nobr"><%= [o.general_or_residential.to_s, o.months.to_s].reject(&:blank?).join('/') %></td>
+				<td class="nobr"><%= o.comments %></td>
 			</tr>
-			<% unless o.agency_comments.blank? %>
-				<tr><td class="r" colspan="3"><b>Agency Comments:</b></td><td colspan="5"><%= nl2br_h o.agency_comments %></td></tr>
-			<% end %>
-			<% unless o.comments.blank? %>
-				<tr><td class="r" colspan="3"><b>Notes:</b></td><td colspan="5"><%= nl2br_h o.comments %></td></tr>
-			<% end %>
 		</tbody>
 	<% } %>
 </table>
