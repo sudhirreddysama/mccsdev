@@ -84,6 +84,7 @@
 	</td>
 </tr>
 <%= f.tr_text_field :ssn, :label => 'SSN', :size => '30', :class => 'ucase', :req => true %>
+<script>jQuery('#obj_ssn').inputmask('999-99-9999');</script>
 <%= f.tr_calendar_date_select :date_of_birth, :label => 'Date of Birth', :class => 'ucase' %>
 <%= f.tr_text_field :retirement_no, :label => 'Retirement No.', :size => '30', :class => 'ucase' %>
 <tr>
