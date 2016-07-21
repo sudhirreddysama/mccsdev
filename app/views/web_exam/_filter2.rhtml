@@ -1,0 +1,10 @@
+<% if(!(@current_user.agency_level? && !@current_user.allow_web_post_review)) %>
+	<tr>
+		<th>Status:</th>
+		<td>
+			<label><%= f.check_box 'status_na' %> NA</label>&nbsp;&nbsp;&nbsp;
+			<label><%= f.check_box 'status_approved' %> Approved</label>&nbsp;&nbsp;&nbsp;
+			<label><%= f.check_box 'status_disapproved' %> Disapproved</label>
+		</td>
+	</tr>
+<% end %>

@@ -122,6 +122,12 @@ class WebExamController < CrudController
 		]
 		if @current_user.agency_level? && !@current_user.allow_web_post_review
 			cond << 'applicants.approved = "Y"'
+		else			
+			sub_cond = []
+			sub_cond << 'applicants.approved = "Y"' if @filter.status_approved == '1'
+			sub_cond << 'applicants.approved = "N"' if @filter.status_disapproved == '1'
+			sub_cond << 'ifnull(applicants.approved, "") = ""' if @filter.status_na == '1'
+			cond << '(' + sub_cond.join(') or (') + ')' if !sub_cond.empty?
 		end		
 		cond << get_date_cond		
 		include = [:person, :web_exam]
