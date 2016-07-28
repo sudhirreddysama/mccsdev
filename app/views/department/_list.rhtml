@@ -4,8 +4,9 @@
 			<td width="1%">Actions</td>
 			<th width="1%">ID</th>
 			<th width="1%">Abbr.</th>
-			<th width="48%">Name</th>
-			<th width="49%">Liaison</th>
+			<th width="33%">Name</th>
+			<th width="32%">HR Liaison</th>
+			<th width="32%">OMB Liaison</th>
 		</tr>
 	</thead>
 	<tbody id="objs">
@@ -15,7 +16,8 @@
 				<td><%= o.id %></td>
 				<td class="nobr"><%= h o.abbreviation %></td>
 				<td><%= link_to o.name, :action => :view, :id => o.id %></td>
-				<td><%= h o.liaison.name if o.liaison %></td>				
+				<td><%= h o.liaison.name if o.liaison %></td>	
+				<td><%= h o.omb_liaison.name if o.omb_liaison %></td>				
 			</tr>
 		<% } %>
 	</tbody>

@@ -9,10 +9,11 @@
 			<th width="1%">ID</th>
 			<th width="1%">Abbr.</th>
 			<th width="1%">Type</th>
-			<th width="24%">Name</th>
-            <td width="24%">Contact</td>
-            <th width="24%">Address</th>
-			<th width="24%">Liaison</th>
+			<th width="20%">Name</th>
+			<td width="19%">Contact</td>
+			<th width="19%">Address</th>
+			<th width="19%">HR Liaison</th>
+			<th width="19%">OMB Liaison</th>
 		</tr>
 	</thead>
 	<tbody id="objs">
@@ -34,6 +35,7 @@
                <td class="nobr"><% if o.address1 %><%=o.address1%>&nbsp;&nbsp;<%= o.city%>, <%=o.state%> <%=o.zip%><% end%>
                </td>
 				<td><%= h o.liaison.name if o.liaison %></td>
+				<td><%= h o.omb_liaison.name if o.omb_liaison %></td>
 			</tr>
 		<% } %>
 	</tbody>

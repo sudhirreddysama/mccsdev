@@ -9,18 +9,23 @@ class AgencyController < CrudController
 			['ID', 'agencies.id'],
 			['Name', 'agencies.name'],
 			['Abbreviation', 'agencies.abbreviation'],
-			['Type', 'agencies.agency_type']
+			['Type', 'agencies.agency_type'],
+			['HR Liaison', 'users.name'],
+			['OMB Liaison', 'omb_liaisons_agencies.name']
 		]
 		cond = get_search_conditions @filter[:search], {
 			'agencies.id' => :left,
 			'agencies.name' => :like,
 			'agencies.agency_type' => :like,
 			'agencies.abbreviation' => :like,
+			'users.name' => :like,
+			'omb_liaisons_agencies.name' => :like
 		}
 		
 		@opt = {
 			:conditions => get_where(cond),
-			:order => get_order_auto
+			:order => get_order_auto,
+			:include => [:liaison, :omb_liaison]
 		}
 		
 		@export_fields = %w(id name)
