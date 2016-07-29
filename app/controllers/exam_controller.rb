@@ -833,9 +833,15 @@ class ExamController < CrudController
 		super
 	end
 	
-	
-	
-	
+	def max_cr_group
+		cond = ['title = ? and exam_type = ?', params[:title], params[:exam_type]]
+		if !params[:exam_id].blank?
+			cond[0] += ' and id <= ?'
+			cond << params[:exam_id].to_i
+		end
+		e = Exam.find(:first, :conditions => cond, :order => 'id desc')
+		render :text => (e ? e.cr_group : 0).to_s
+	end
 	
 	def send_expiring_cr_email
 		d = params[:id] ? Date.parse(params[:id]) : Time.now.to_date - 1

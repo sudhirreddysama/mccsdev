@@ -50,20 +50,25 @@
 		<label><%= f.check_box :sort_by_department %> Sort By Dept.</label>
 	</td>
 </tr>
+<tr id="cr_group">	
+	<th>CR Group:</th>
+	<td><%= f.text_field :cr_group, :size => 10 %> (Number) Use different groups to create separate CR lists with the same title and type. Exams within a group will be part of the same list.</td>
+</tr>
 <script type="text/javascript">
 	
 	(function($) {
 		var types = $('#exam_types input');
 		var promo = $('#obj_exam_type_prom');
+		var cr = $('#obj_continuous');
 		var sort_by = $('#obj_sort_by_department');
 		types.change(function() {
-			if(promo.is(':checked')) {
-				sort_by[0].checked = true;
-			}
-			else {
-				sort_by[0].checked = false;
-			}
-		})
+			sort_by[0].checked = promo.is(':checked');
+		});
+		var toggle_cr_group = function() {
+			cr_group[cr.is(':checked') ? 'show' : 'hide']();
+		}
+		toggle_cr_group();
+		cr.change(toggle_cr_group);
 	})(jQuery);
 	
 </script>
@@ -109,10 +114,32 @@
 
 	(function($) {
 		
+		var load_cr_group = function() {
+			var cr_group = $('#obj_cr_group');
+			cr_group.addClass('busy-bg');
+			$.ajax('<%= url_for :action => :max_cr_group %>', {
+				data: {
+					title: $('#obj_title').val(), 
+					exam_type: $('#exam_types input:checked').val(),
+					exam_id: <%= @obj.id ? @obj.id : '""' %>
+				},
+				complete: function(xhr, status) {
+					cr_group.removeClass('busy-bg');
+				},
+				success: function(data, status, xhr) {
+					cr_group.val(data);
+				},
+				error: function(xhr, status, error) {
+				}
+			});		
+		}
+		$('#obj_title, #exam_types input').change(load_cr_group);
+		
 		$('#obj_job_id').change(function(e) {
 			var v = $('#obj_job_id_text').val(); //$('#obj_job_id option:selected')[0].innerHTML;
 			if(v) {
-				$('#obj_title').attr('value', v);
+				$('#obj_title').attr('value', v);	
+				$('#obj_title').change();
 			}
 		});
 		

@@ -76,14 +76,14 @@ class Exam < ActiveRecord::Base
 		DB.query('
 			update exams e
 			join (
-				select e.id, e.title, e.exam_type, e.established_date from exams e 
+				select e.id, e.title, e.exam_type, e.cr_group, e.established_date from exams e 
 				join (
-					select title, exam_type, max(established_date) established_date from exams 
+					select title, exam_type, cr_group, max(established_date) established_date from exams 
 					where continuous = 1 and established_date is not null and valid_until is not null
-					group by title, exam_type
-				) e2 on e2.established_date = e.established_date and e2.title = e.title and e2.exam_type = e.exam_type
+					group by title, exam_type, cr_group
+				) e2 on e2.established_date = e.established_date and e2.title = e.title and e2.exam_type = e.exam_type and e2.cr_group = e.cr_group
 				where e.continuous = 1 and e.established_date is not null and e.valid_until is not null
-			) e2 on e2.title = e.title and e2.exam_type = e.exam_type
+			) e2 on e2.title = e.title and e2.exam_type = e.exam_type and e2.cr_group = e.cr_group
 			set e.current_exam_id = e2.id
 			where e.continuous = 1 and e.established_date is not null and e.valid_until is not null		
 		')
