@@ -11,13 +11,13 @@ class ApplicantController < CrudController
 			['SSN', 'people.ssn'],
 			['First Name', 'people.first_name'],
 			['Last Name', 'people.last_name'],
-			['First Name', 'people.first_name'],
+			['Status', 'app_statuses.name'],
 			['Exam No.', 'exams.exam_no'],
 			['Submitted', 'applicants.submitted_at'],
 			['Title', 'exams.title'],
 			['Exam Date', 'exams.given_at'],
 			['Web Post', 'we.name'],
-			['Web Type', 'et.short_name']
+			['Web Type', 'et.short_name'],
 		]
 		cond = get_search_conditions @filter[:search], {
 			'applicants.id' => :left,
@@ -27,7 +27,8 @@ class ApplicantController < CrudController
 			'exams.exam_no' => :like,
 			'exams.title' => :like,
 			'we.name' => :like,
-			'et.short_name' => :like
+			'et.short_name' => :like,
+			'app_statuses.name' => :left,
 		}
 		@date_types = [
 			['Date Submitted', 'applicants.submitted_at'],
@@ -40,7 +41,7 @@ class ApplicantController < CrudController
 		@opt = {
 			:conditions => get_where(cond),
 			:order => get_order_auto,
-			:include => [:person, :exam],
+			:include => [:person, :exam, :app_status],
 			:joins => '
 				left join ' + HRAPPLYDB + '.exams we on we.id = applicants.web_exam_id
 				left join ' + HRAPPLYDB + '.exam_types et on et.id = we.exam_type_id

@@ -1,4 +1,20 @@
+<% if false # Half-implemented. Takes up too much space and is redundant w/ status in search field. %>
+	<tr>
+		<th>Statuses:</th>
+		<td>
+			<% AppStatus.find(:all, :order => 'name').in_groups(3).each { |g| %>
+				<div>
+					<% g.each { |s| %>
+						<% if s %>
+							<label style="display: inline-block; width: 120px;"><%= check_box_tag 'filter[app_status_ids]', s.id, @filter.app_status_ids && @filter.app_status_ids.include?(s.id) %> <%= h s.name %></label>
+						<% end %>
+					<% } %>
+				</div>
+			<% } %>
+		</td>
+	</tr>
+<% end %>
 <tr>
-	<th></th>
+	<th>Options:</th>
 	<td><label><%= f.check_box :no_exam %> Only Applicants With No Exam</label></td>
 </tr>
