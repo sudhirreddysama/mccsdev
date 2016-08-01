@@ -67,12 +67,16 @@ class FormChangeController < CrudController
 		if request.post?
 			@obj.status_user = @current_user
 			@obj.status_date = Time.now.to_date
+			old_status = @obj.status
 			@obj.update_attributes params[:obj]
 			flash[:notice] = 'Status has been updated.'
 			u = @obj.user #@obj.agency ? @obj.agency.get_users(@obj.department) : nil
 			u2 = @obj.submitter
 			if u2
 				Notifier.deliver_form_status [u2].reject(&:nil?), @obj
+			end
+			if @obj.separation_provisional && @obj.status == 'approved' && old_status != @obj.status
+				Notifier.deliver_form_change_separation_provisional_approved @obj
 			end
 			redirect_to
 		else

@@ -21,6 +21,13 @@ class Notifier < ActionMailer::Base
 		body :m => m
 	end
 
+	def form_change_separation_provisional_approved f
+		recipients ['ndobson@monroecounty.gov']
+		from Thread.current[:current_user].email_with_name
+		subject '105 Form Provisional Separation Approved'
+		body :o => f
+	end
+
 	def form_status u, f
 		recipients u.collect { |i| i.email_with_name }
 		from Thread.current[:current_user].email_with_name
