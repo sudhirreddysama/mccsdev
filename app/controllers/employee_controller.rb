@@ -90,12 +90,13 @@ class EmployeeController < CrudController
 				@obj.wage = from.salary
 				@obj.wage_per = from.salary_per
         @obj.pension_no=from.retirement_no
+				@obj.date_of_birth = from.date_of_birth
 				@obj.new_empl_action.agency_id = from.agency_id
 				@obj.new_empl_action.department_id = from.department_id
 				@obj.new_empl_action.job_id = from.job_id
 				@obj.new_empl_action.action_date = from.effective_date
 				@obj.new_empl_action.received_date = from.submitted_at ? from.submitted_at.to_date : nil
-				@obj.new_empl_action.authorization = '330E'
+				@obj.new_empl_action.authorization = '330E'				
 				if from.hire_type == 'New Hire'
 					@obj.new_empl_action.empl_action_type_id = 30
 				elsif from.hire_type == 'Rehire'
@@ -110,7 +111,6 @@ class EmployeeController < CrudController
 					@obj.phone = empl.phone
 					@obj.work_phone = empl.work_phone
 					@obj.email = empl.email
-					@obj.date_of_birth = empl.date_of_birth
 					@obj.veteran = empl.veteran
 					@obj.exempt_vol_fire = empl.exempt_vol_fire
 				end
@@ -224,7 +224,8 @@ class EmployeeController < CrudController
 				:provisional => e.status == 'V',
 				:wage => e.wage,
 				:wage_per => e.wage_per,
-        :pension_no => e.pension_no
+        :pension_no => e.pension_no,
+        :date_of_birth => e.date_of_birth ? e.date_of_birth.strftime('%m/%d/%Y') : nil
 			}
 			render :json => atr.to_json
 		else
