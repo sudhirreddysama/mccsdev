@@ -425,6 +425,7 @@
 							$('#obj_last_name').val(data.last_name);
 							//$('#obj_present_title').val(data.job_name);
 							$('#obj_present_provisional')[0].checked = data.provisional;
+							$('#obj_separation_provisional')[0].checked = data.provisional;
 							$('#obj_name_change_from').val(data.last_name + ', ' + data.first_name);
 							$('#obj_salary_change_from').val(data.wage);
               $('#obj_retirement_no').val(data.pension_no);
@@ -437,6 +438,12 @@
 				});
 			}
 		});
+		
+		var prov1 = $('#obj_present_provisional');
+		var prov2 = $('#obj_separation_provisional');
+		prov1.change(function(e) { prov2[0].checked = this.checked; });
+		prov2.change(function(e) { prov1[0].checked = this.checked; });
+		
 	})(jQuery);
 
 </script>
