@@ -266,18 +266,20 @@
 	</td>
 </tr>
 <tr style="border-top: 1px solid #888;">
-	<th><label><%= f.check_box :change_status %> Status Change:</label></th>
+	<th><label><%= f.check_box :change_status %> Status/Class Change:</label></th>
 	<td class="subform" style="padding-bottom: 5px;">
 		<div id="status">
 			<table>
 				<tr>
 					<th>New Status:</th>
+					<th>New Classification:</th>
 				</tr>
 				<tr>
-					<td><%= f.select :status_type, Const::JOB_STATUSES + ['PT TO FT', 'FT TO PT'], :include_blank => true %></tr>
+					<td><%= f.select :status_type, Const::JOB_STATUSES + ['PT TO FT', 'FT TO PT'], :include_blank => true %></td>
+					<td><%= f.select :status_class, @class_opts, :include_blank => true %></td>
 				</tr>
 				<tr>
-					<th>
+					<th colspan="2">
 						If provisional, attach a CS Application**
 					</th>
 				</tr>

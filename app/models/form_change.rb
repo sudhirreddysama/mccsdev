@@ -34,7 +34,7 @@ class FormChange  < ActiveRecord::Base
 		s << 'Salary Change' if change_salary
 		s << 'Second Provisional Appointment' if change_second_provisional
 		s << 'Separation' if change_separation
-		s << 'Status' if change_status
+		s << 'Status/Class' if change_status
 		s << 'Suspension' if change_suspension
 		s << 'Title Change' if change_title
 		return s.join(', ')

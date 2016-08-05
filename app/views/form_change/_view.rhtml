@@ -309,12 +309,16 @@
 			<table>
 				<tr>
 					<td>
-						<label>Status:</label>
+						<label>Status/Class:</label>
 						<%= o.status_type %>
 						<% if o.status_type == 'Temporary' && !o.status_temporary_type.blank? %>
 							- <%= o.status_temporary_type %>
 						<% end %>
 					&nbsp;</td>
+					<td>
+						<label>Class:</label>
+						<%= o.status_class %>
+					</td>
 				</tr>
 			</table>
 		</div>
