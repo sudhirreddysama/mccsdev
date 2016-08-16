@@ -8,6 +8,7 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 <head>
 	<style type="text/css">
 		body, td, th, input, select, textarea { font: 10px/1.5 Verdana, Arial, sans-serif; }
+		body { width: 7.5in; padding: 0; margin: 0; }
 		h1, h2, h3, h4, h5, h6 { font-weight: normal; padding: 0; margin: 1em 0; }
 		p { margin: 1em 0; }
 		h1 { font-size: 160%; }
@@ -20,7 +21,7 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 		.p { padding: 5px; } 
 		.nobr { white-space: nowrap; }
 		.uline { text-decoration: underline; }
-		.ulined { border-bottom: 1px solid #888; white-space: nowrap; text-align: center; font-weight: bold; }
+		.ulined { border-bottom: 1px solid #888; /*white-space: nowrap;*/ text-align: center; font-weight: bold; }
 		span.ulined { display: inline-block; }
 		.mt { margin-top: 2px; }
 		table { margin: 0; padding: 0; border-collapse: collapse; width: 100%; }
@@ -303,9 +304,9 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 		<strong><%= nl2br_h o.experience %></strong><br />&nbsp;<br />
 		Essential knowledge, skills, and abilities:<br />
 		<strong><%= nl2br_h o.essential_skills %></strong><br />&nbsp;<br />
-		Type of license or certificate required: <span class="ulined" style="width: 400px;"><%= h o.license_certification_required %>&nbsp;</span><br />
-		&nbsp;<br />
-		Issuing Agency: <span class="ulined" style="width: 400px;"><%= h o.issuing_agency %>&nbsp;</span><br />
+		Type of license or certificate required:<br />
+		<strong><%= nl2br_h o.license_certification_required %></strong><br />&nbsp;<br />
+		Issuing Agency: <span class="ulined" style="width: 550px;"><%= h o.issuing_agency %>&nbsp;</span><br />
 		&nbsp;<br />
 		Drug Testing: Is this position covered under the D.O.T. drug testing regulations? 
 		<span class="ulined" style="width: 40px;"><%= o.drug_testing ? 'X' : '' %>&nbsp;</span>YES 

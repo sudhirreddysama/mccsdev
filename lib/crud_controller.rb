@@ -141,6 +141,7 @@ class CrudController < ApplicationController
 	
 	def print
 		@opt ||= {}
+		#render :layout => false
 		render_pdf render_to_string(:layout => false), "#{@obj.label}.pdf", @opt
 	end
 	
