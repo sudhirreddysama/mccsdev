@@ -4,33 +4,33 @@
 	
 	<p>Use the tabs at the top of the page to navigate the system. The functionality of each tab is described below.</p>
 	
-	<h4><%= link_to 'Employees', :controller => :employee %></h4>
+	<h4><%= link_to 'Employees', :sc => nil, :sid => nil, :controller => :employee %></h4>
 	
 	<p>This page lists all employees for your agency/department in the HR database. You can also electronically submit forms 105 (employment change) and 330 (new hire) here. To submit a form, click the tab for that form, then click the &quot;New&quot; tab.</p>
 	
 	<% if @current_user.is_agency_county? %>
-		<p><%= link_to 'Requests to Fill Vacancies', :controller => :vacancy %> are also found under the Employees tab.</p>
+		<p><%= link_to 'Requests to Fill Vacancies', :sc => nil, :sid => nil, :controller => :vacancy %> are also found under the Employees tab.</p>
 	<% end %>
 	
 	<% if @current_user.level != 'agency-employees' %>
 	
 		<% if @current_user.agency && @current_user.agency.show_web_posts %>
-			<h4><%= link_to 'Web Posts', :controller => :web_exam %></h4>
+			<h4><%= link_to 'Web Posts', :sc => nil, :sid => nil, :controller => :web_exam %></h4>
 		
 			<p>This page lists any vacancies/exams/summer jobs that HR has given your agency/department direct access to. Click a post's name to view it, then click the applicants tab to view applications for that post.</p>
 		<% end %>	
 	
-		<h4><%= link_to 'Pref. Lists', :controller => :preferred_list %></h4>
+		<h4><%= link_to 'Pref. Lists', :sc => nil, :sid => nil, :controller => :preferred_list %></h4>
 	
 		<p>This page lists all preferred lists (lists of employees that have been laid off and are eligible for rehire) for your agency.</p>
 	
-		<h4><%= link_to 'Cert. Lists', :controller => :cert %></h4>
+		<h4><%= link_to 'Cert. Lists', :sc => nil, :sid => nil, :controller => :cert %></h4>
 	
 		<p>This page lists all certified lists for your agency. To request a new certified list, click this tab, then &quot;New.&quot;</p>
 		
 	<% end %>
 	
-	<h4><%= link_to 'Reports', :controller => :report %></h4>
+	<h4><%= link_to 'Reports', :sc => nil, :sid => nil, :controller => :report %></h4>
 	
 	<p>Run the employee report from this page.</p>
 	
