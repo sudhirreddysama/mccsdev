@@ -86,7 +86,7 @@ if RUBY_VERSION =~ /1.9/
 	Encoding.default_internal = Encoding::UTF_8
 end
 
-ExceptionNotifier.exception_recipients = %w(jessesternberg@monroecounty.gov rgrape@monroecounty.gov sduritza@monroecounty.gov)
+ExceptionNotifier.exception_recipients = %w(jessesternberg@monroecounty.gov)# rgrape@monroecounty.gov sduritza@monroecounty.gov)
 ExceptionNotifier.sender_address = %("MCCS Error" <mccs@monroecounty.gov>)
 
 ActionMailer::Base.delivery_method = :smtp
