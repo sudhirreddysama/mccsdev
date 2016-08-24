@@ -217,7 +217,8 @@
 			<th width="1%">Exam Date</th>
 			<th width="1%">Est. Date</th>
 			<th width="1%">Exp. Date</th>
-			<th width="92%">Title</th>
+			<th width="46%">Title</th>
+			<th width="46%">Web Post</th>
 			</tr>
 		</tr>
 	</thead>
@@ -248,6 +249,7 @@
 					<% end %>
 				</td>
 				<td><%= h a.exam.title if a.exam %></td>
+				<td><%= link_to a.web_exam.name, :controller => 'web_exam', :action => :view, :id => a.web_exam_id, :sc => nil, :sid => nil if a.web_exam %></td>
 			</tr>
 		<% } %>
 	</tbody>
