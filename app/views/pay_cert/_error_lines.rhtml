@@ -1,3 +1,4 @@
+<% edits = params[:action] == 'view' && (@current_user.staff_level? || @allow_liaison) %>
 <h2>No Employee Record Found (in payroll file, not in employee database)</h2>
 <%= partial 'print_lines', :error => 'employee', :objs => @employee_error %>
 <h2>Name Mismatch (ssn matches but name does not)</h2>
@@ -5,32 +6,45 @@
 <h2>Title Mismtach (ssn matches, title does not)</h2>
 <%= partial 'print_lines', :error => 'title', :objs => @title_error %>
 <h2>Salary/Wage Mismatch (ssn matches, salary/wage does not)</h2>
-<% if @current_user.staff_level? || @allow_liaison %>
+<% lines = partial('print_lines', :error => 'salary_wage', :objs => @salary_wage_error) %>
+<% if edits %>
 	<%= form_tag %>
-	<%= partial 'print_lines', :error => 'salary_wage', :objs => @salary_wage_error %>
-		<% if params[:action] == 'view' %>
-			<div style="background-color: #eee; padding: 5px; font-weight: bold; border-top: 1px solid #888;">
-				Create WAGE CHG With Selected: &nbsp;&nbsp;
-				Action Date: <%= calendar_date_select_tag 'action_date' %>&nbsp;&nbsp;&nbsp;
-				<%= submit_tag 'Submit' %>
-			</div>
-			<script type="text/javascript">
-			
-				(function($) {
-					$('#select_all').change(function(e) {
-						$('.wage_change.empl-active').attr('checked', $(this).is(':checked'));
-					});
-				})(jQuery);
-			
-			</script>		
-		<% end %>
+		<%= lines %>
+		<div style="background-color: #eee; padding: 5px; font-weight: bold; border-top: 1px solid #888;">
+			Create WAGE CHG With Selected: &nbsp;&nbsp;
+			Action Date: <%= calendar_date_select_tag 'action_date' %>&nbsp;&nbsp;&nbsp;
+			<%= submit_tag 'Submit' %>
+		</div>
 	</form>
 <% else %>
-	<%= partial 'print_lines', :error => 'salary_wage', :objs => @salary_wage_error %>
+	<%= lines %>
 <% end %>
 <h2>Retirement No. Mismatch (ssn matches, retirement no does not)</h2>
-<%= partial 'print_lines', :error => 'retirement_no', :objs => @retirement_no_error %>
+<% lines = partial('print_lines', :error => 'retirement_no', :objs => @retirement_no_error) %>
+<% if edits %>
+	<%= form_tag %>
+		<%= lines %>
+		<div style="background-color: #eee; padding: 5px; font-weight: bold; border-top: 1px solid #888;">
+			Update RETIREMENT NO With Selected &nbsp;&nbsp;
+			<%= submit_tag 'Submit' %>
+		</div>
+	</form>
+<% else %>
+	<%= lines %>
+<% end %>
 <h2>Prior Employee Error (no longer employed according to employee database)</h2>
 <%= partial 'print_lines', :error => 'leave', :objs => @leave_error %>
 <h2>Not Found in Upload (in employee database, not in payroll file)</h2>
 <%= partial 'print_lines', :error => 'no_record', :objs => @no_record_error %>
+<% if edits %>
+	<script type="text/javascript">
+		(function($) {
+			$('#select_all').change(function(e) {
+				$('.wage_change.empl-active').attr('checked', $(this).is(':checked'));
+			});
+			$('#select_all2').change(function(e) {
+				$('.retire_change.empl-active').attr('checked', $(this).is(':checked'));
+			});			
+		})(jQuery);
+	</script>		
+<% end %>

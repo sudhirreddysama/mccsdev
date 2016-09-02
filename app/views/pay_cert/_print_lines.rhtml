@@ -1,7 +1,7 @@
 <%
 
 	wge = params[:action] == 'view' && error == 'salary_wage'
-
+	rtr = params[:action] == 'view' && error == 'retirement_no'
 %>
 
 <% if objs.empty? %>
@@ -12,10 +12,11 @@
 			<tr>
 				<% if @current_user.staff_level? || @allow_liaison %>
 					<% if wge %>
-						<th>
-							<%= check_box_tag 'select_all', 1, false %>
-						</th>
+						<th><%= check_box_tag 'select_all', 1, false %></th>
 					<% end %>
+					<% if rtr %>
+						<th><%= check_box_tag 'select_all2', 1, false %></th>
+					<% end %>					
 				<% end %>
 				<th>Name</th>
 				<th>SSN</th>
@@ -32,9 +33,13 @@
 				<% e = o.employee %>
 				<tr class="<%= cycle 'odd', 'even' %>">
 					<% if @current_user.staff_level? || @allow_liaison %>
-						<% if wge %>
+						<% if wge || rtr %>
 							<% if e %>
-								<td><%= check_box_tag "wage_changes[]", o.id, false, :class => 'wage_change' + (e.leave_date ? '' : ' empl-active') %></td>
+								<% if wge %>
+									<td><%= check_box_tag "wage_changes[]", o.id, false, :class => 'wage_change' + (e.leave_date ? '' : ' empl-active') %></td>
+								<% elsif rtr %>
+									<td><%= check_box_tag "retire_changes[]", o.id, false, :class => 'retire_change' + (e.leave_date ? '' : ' empl-active') %></td>
+								<% end %>
 							<% else %>
 								<td></td>
 							<% end %>
