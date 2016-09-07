@@ -87,7 +87,8 @@ class VacancyController < CrudController
 			'vacancies.org_no' => :like,
 			'vacancies.cost_center' => :like,
 			'vacancies.position_no' => :like,
-			'users.username' => :like
+			'users.username' => :like,
+			'vacancies.exec_approval_no' => :like
 		}
 		if @current_user.agency_level? && !@current_user.allow_vacancy_omb && !@current_user.allow_vacancy_admin
 			@filter.agency_id = @current_user.agency_id
