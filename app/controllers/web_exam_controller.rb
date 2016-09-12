@@ -166,10 +166,16 @@ class WebExamController < CrudController
 			book.write data
 			send_data data.string, :filename => 'export.xls', :type => 'application/vnd.ms-excel'			
 		elsif params[:approve_all]
+			app_status_a = AppStatus.find_by_code 'A'
+			app_status_d = AppStatus.find_by_code 'D'
 			find_on = @assoc || @model
 			@objs = find_on.find(:all, @opt)
 			@objs.each { |o|
-				o.update_attribute :approved, 'Y'
+				o.approved = 'Y'
+				if !o.app_status || o.app_status_id == app_status_d.id
+					o.app_status_id = app_status_a.id
+				end
+				o.save
 			}
 			redirect_to
 		else
