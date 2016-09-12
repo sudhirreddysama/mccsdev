@@ -56,6 +56,13 @@ class Notifier < ActionMailer::Base
 		body :c => c
 	end
 	
+	def cert_applicant_appointed u, ca, ca_appointed
+		recipients u.collect { |u| u.email_with_name }
+		subject 'Candidate Appionted From Other Certified List'
+		from Thread.current[:current_user].email_with_name
+		body :ca => ca, :ca_appointed => ca_appointed
+	end
+	
 	def cert_specialist c
 		recipients ['JMcCann@monroecounty.gov']
 		subject 'Certified List Pending'

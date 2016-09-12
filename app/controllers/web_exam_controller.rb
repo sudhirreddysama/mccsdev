@@ -165,6 +165,13 @@ class WebExamController < CrudController
 			data = StringIO.new
 			book.write data
 			send_data data.string, :filename => 'export.xls', :type => 'application/vnd.ms-excel'			
+		elsif params[:approve_all]
+			find_on = @assoc || @model
+			@objs = find_on.find(:all, @opt)
+			@objs.each { |o|
+				o.update_attribute :approved, 'Y'
+			}
+			redirect_to
 		else
 			fetch_objs
 		end

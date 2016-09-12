@@ -1,2 +1,3 @@
 <%= f.submit 'Apply Filter' %> <%= f.submit 'Clear Filter', :name => 'filter[clear]' %>
 <% if @export_fields %><%= f.submit 'Export (xls)', :name => 'export[xls]' %><% end %>
+<%= partial 'filter_buttons2', :f => f %>

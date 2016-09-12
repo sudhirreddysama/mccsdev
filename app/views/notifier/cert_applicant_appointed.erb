@@ -1,0 +1,9 @@
+A candidate on one of your certified lists has been appointed by another agency. Click the link below to view your certified list:
+
+http://cs.monroecounty.gov/mccs/cert/view/<%= @ca.cert_id %>
+
+Candidate: <%= @ca.applicant.person.full_name %>
+Exam: <%= @ca.cert.exam ? @ca.cert.exam.exam_no : 'None' %>
+Title: <%= @ca.cert.job ? @ca.cert.job.name : 'None' %>
+
+The action and status for this candidate has been updated to reflect this change.
