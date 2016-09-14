@@ -61,7 +61,7 @@ class FormHire  < ActiveRecord::Base
 		'Pending NYS Approval' => 'PN'}[civil_service_status]
 		if s_code == 'T'
 			s_code = 'S' if temporary_type == 'Seasonal'
-			s_code = 'SU' if temporary_type == 'Sub'
+			s_code = 'SU' if temporary_type == 'Sub' || temporary_type == 'Filling in for Leave of Absence'
 		end
 		s_code
 	end

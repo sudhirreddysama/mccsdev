@@ -77,7 +77,8 @@ class EmployeeController < CrudController
 		if !request.post? && params[:from]
 			from = FormHire.find params[:from]
 			if from
-				empl = from.employee				@obj.agency_id = from.agency_id
+				empl = from.employee
+				@obj.agency_id = from.agency_id
 				@obj.department_id = from.department_id
 				@obj.first_name = from.first_name
 				@obj.last_name = from.last_name
@@ -87,7 +88,7 @@ class EmployeeController < CrudController
 				@obj.state = from.address_state
 				@obj.zip = from.address_zip
 				@obj.ssn = from.ssn
-				@obj.wage = from.salary
+				@obj.wage = from.salary.to_s.gsub(/[^0-9.]/, '')
 				@obj.wage_per = from.salary_per
         @obj.pension_no=from.retirement_no
 				@obj.date_of_birth = from.date_of_birth
@@ -104,7 +105,7 @@ class EmployeeController < CrudController
 				elsif from.hire_type == 'Additional Position'
 					@obj.new_empl_action.empl_action_type_id = 42
 				end
-				@obj.new_empl_action.wage = from.salary
+				@obj.new_empl_action.wage = from.salary.to_s.gsub(/[^0-9.]/, '')
 				@obj.new_empl_action.wage_per = from.salary_per
 
 				if empl
@@ -120,33 +121,8 @@ class EmployeeController < CrudController
 				elsif from.full_or_part_time == 'FT'
 					@obj.new_empl_action.job_time = 'F'
 				end
-				if from.classification == 'Competitive'
-					@obj.new_empl_action.classification = 'C'
-				elsif from.classification == 'Non-Competitive'
-					@obj.new_empl_action.classification = 'N'
-				elsif from.classification == 'Labor'
-					@obj.new_empl_action.classification = 'L'
-				elsif from.classification == 'Exempt'
-					@obj.new_empl_action.classification = 'E'
-				elsif from.classification == 'Unclassified'
-					@obj.new_empl_action.classification = 'U'
-				end
-				if from.civil_service_status == 'Permanent'
-					@obj.new_empl_action.status = 'P'
-				elsif from.civil_service_status == 'Contigent Permanent'
-					@obj.new_empl_action.status = 'C'
-				elsif from.civil_service_status == 'Provisional'
-					@obj.new_empl_action.status = 'V'
-				elsif from.civil_service_status == 'Pending NYS Approval'
-					@obj.new_empl_action.status = 'PN'
-				elsif from.civil_service_status == 'Temporary'
-					@obj.new_empl_action.status = 'T'
-					if from.temporary_type == 'Seasonal'
-						@obj.new_empl_action.status = 'S'
-					elsif from.temporary_type == 'Filling in for Leave of Absence'
-						@obj.new_empl_action.status = 'SU'
-					end
-				end
+				@obj.new_empl_action.classification = from.classification_code
+				@obj.new_empl_action.status = from.status_code
 			end
 		end
 	end
