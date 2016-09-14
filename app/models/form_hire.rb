@@ -45,4 +45,25 @@ class FormHire  < ActiveRecord::Base
 	
 	include DbChangeHooks
 	
+	def classification_code
+		{'Competitive' => 'C', 
+		'Non-Competitive' => 'N', 
+		'Labor' => 'L', 
+		'Exempt' => 'E', 
+		'Unclassified' => 'U'}[classification]			
+	end
+	
+	def status_code
+		s_code = {'Permanent' => 'P',
+		'Contigent Permanent' => 'C', 
+		'Provisional' => 'V', 
+		'Temporary' => 'T',
+		'Pending NYS Approval' => 'PN'}[civil_service_status]
+		if s_code == 'T'
+			s_code = 'S' if temporary_type == 'Seasonal'
+			s_code = 'SU' if temporary_type == 'Sub'
+		end
+		s_code
+	end
+	
 end

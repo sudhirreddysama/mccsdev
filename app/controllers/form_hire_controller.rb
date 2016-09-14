@@ -99,16 +99,18 @@ class FormHireController < CrudController
 		@act = @obj.empl_actions.build
 		if @empl
 			la = @empl.last_action || {}
+			c_code = @obj.classification_code
+			s_code = @obj.status_code
 			@act.attributes = {
 				:employee => @empl,
-				:job_id => la.job_id,
-				:agency_id => la.agency_id,
-				:department_id => la.department_id,
-				:wage => la.wage,
-				:wage_per => la.wage_per,
-				:classification => la.classification,
-				:status => la.status,
-				:job_time => la.job_time,
+				:job_id => @obj.job_id,
+				:agency_id => @obj.agency_id,
+				:department_id => @obj.department_id,
+				:wage => @obj.salary.to_s.gsub(/[^0-9.]/, ''),
+				:wage_per => @obj.salary_per,
+				:classification => c_code || la.classification,
+				:status => s_code || la.status,
+				:job_time => @obj.full_or_part_time.to_s[0,1],
 				:action_date => @obj.effective_date,
 				:reference_date => Time.now.to_date,
 				:absent => true,

@@ -121,7 +121,7 @@ class FormChangeController < CrudController
 			@act.leave_date = @obj.separation_date
 		end
 		if @obj.change_salary
-			@act.wage = @obj.salary_change_to
+			@act.wage = @obj.salary_change_to.to_s.gsub(/[^0-9.]/, '')
 			@act.wage_per = @obj.salary_change_to_per
 		end
 		@act.authorization = '105E'
