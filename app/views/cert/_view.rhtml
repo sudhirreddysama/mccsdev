@@ -369,13 +369,25 @@
 								<tr>
 									<td class="nobr">Action:</td><%
 									
+									# If an action is already selected but it's not in our list of cert codes, don't let them edit it.
+									allow_action_edit = true
 									opts = @cert_codes
 									if(ca.cert_code && !@cert_codes.rassoc(ca.cert_code.id))
-										opts = [[ca.cert_code.description, ca.cert_code.id]] + opts
+										if @current_user.agency_level?
+											# Here because a non-agency user set the action, so we're going to deny the agency user editing rights for this one person.
+											allow_action_edit = false
+										else
+											# Unlikely to ever get here since non-agency users should have all the cert codes available. Actually this is possible if it's an archived action.
+											opts = [[ca.cert_code.description, ca.cert_code.id]] + opts
+										end
 									end
 									
 									%>
-									<td><%= select_tag "actions[#{ca.id}]", options_for_select([[]] + opts, ca.cert_code_id), :style => 'width: 300px;', :class => 'ca-action', :id => "actions-#{ca.id}" %></td>
+									<% if allow_action_edit %>
+										<td><%= select_tag "actions[#{ca.id}]", options_for_select([[]] + opts, ca.cert_code_id), :style => 'width: 300px;', :class => 'ca-action', :id => "actions-#{ca.id}" %></td>
+									<% else %>
+										<td><%= ca.cert_code.description %></td>
+									<% end %>
 								</tr>
 								<tr>
 									<td class="nobr">Status:</td>
@@ -387,20 +399,28 @@
 								</tr>
 								<tr>
 									<td class="nobr">Salary:</td>
-									<td style="white-space: nowrap;"><%
-										use_mask = ca.comments.blank? || ca.comments =~ /^\$?[0-9,]*(\.\d\d)?$/									
-										%><%= text_field_tag "comments[#{ca.id}]", ca.comments, :style => 'width: 100px;', :style => 'text-align: right;', :class => 'ca-comment ucase' + (use_mask ? ' money-mask' : '' ), :id => "comment-#{ca.id}" %>
-										Per <%= select_tag "salary_per[#{ca.id}]", options_for_select([['', '']] + Const::WAGE_UNITS, ca.salary_per), :class => 'ca-salary_per', :id => "salary_per-#{ca.id}" %>
-									</td>
+									<% if allow_action_edit %>
+										<td style="white-space: nowrap;"><%
+											use_mask = ca.comments.blank? || ca.comments =~ /^\$?[0-9,]*(\.\d\d)?$/									
+											%><%= text_field_tag "comments[#{ca.id}]", ca.comments, :style => 'width: 100px;', :style => 'text-align: right;', :class => 'ca-comment ucase' + (use_mask ? ' money-mask' : '' ), :id => "comment-#{ca.id}" %>
+											Per <%= select_tag "salary_per[#{ca.id}]", options_for_select([['', '']] + Const::WAGE_UNITS, ca.salary_per), :class => 'ca-salary_per', :id => "salary_per-#{ca.id}" %>
+										</td>
+									<% else %>
+										<td><%= h ca.comments %> <%= (' / ' + Const::WAGE_UNITS.rassoc(ca.salary_per)[0]) rescue nil %></td>
+									<% end %>
 								</tr>
 								<tr>
 									<td class="nobr">Effective Date:</td>
-									<td>
-										<% if @current_user.staff_level? %>
-											<div class="right"><%= link_to 'log', {:controller => 'cert_applicant', :action => :change_log, :id => ca.id}, :class => 'popup' %></div>
-										<% end %>
-										<%= calendar_date_select_tag "action_dates[#{ca.id}]", ca.action_date, :style => 'width: 100px;', :class => 'ca-date ucase', :id => "date-#{ca.id}", :onchange => 'date_change(this)' %>
-									</td> 
+									<% if allow_action_edit %>
+										<td>
+											<% if @current_user.staff_level? %>
+												<div class="right"><%= link_to 'log', {:controller => 'cert_applicant', :action => :change_log, :id => ca.id}, :class => 'popup' %></div>
+											<% end %>
+											<%= calendar_date_select_tag "action_dates[#{ca.id}]", ca.action_date, :style => 'width: 100px;', :class => 'ca-date ucase', :id => "date-#{ca.id}", :onchange => 'date_change(this)' %>
+										</td> 
+									<% else %>
+										<td><%= ca.action_date.d0? %></td>
+									<% end %>
 								</tr>
 								<% if !ca.documents.empty? %>
 									<tr>
