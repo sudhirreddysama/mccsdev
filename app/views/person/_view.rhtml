@@ -176,28 +176,30 @@
 		</table>
 	</div>	
 	
-	<% infos = o.app_infos.to_a %>
-	<% if !infos.empty? %>
-		<div class="row">
-			<table>
-				<tr>
-					<td>
-						<label>Additional Info:</label>					
-						<a href="#" onclick="jQuery(this).hide(); jQuery('#app-infos').show(); return false">Legacy PSTek Performance Test Data - Click to View</a>
-						<div id="app-infos" style="display: none;">
-							<% infos.each { |i| %>
-								<div>
-									<% if i.app_info_type %>
-										<%= h i.app_info_type.description %>&nbsp;&nbsp;&bull;&nbsp;&nbsp;
-									<% end %>
-									<%= h i.info %>
-								</div>
-							<% } %>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>	
+	<% if false %>
+		<% infos = o.app_infos.to_a %>
+		<% if !infos.empty? %>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<label>Additional Info:</label>					
+							<a href="#" onclick="jQuery(this).hide(); jQuery('#app-infos').show(); return false">Legacy PSTek Performance Test Data - Click to View</a>
+							<div id="app-infos" style="display: none;">
+								<% infos.each { |i| %>
+									<div>
+										<% if i.app_info_type %>
+											<%= h i.app_info_type.description %>&nbsp;&nbsp;&bull;&nbsp;&nbsp;
+										<% end %>
+										<%= h i.info %>
+									</div>
+								<% } %>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>	
+		<% end %>
 	<% end %>
 
 
