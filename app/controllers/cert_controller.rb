@@ -199,8 +199,9 @@ class CertController < CrudController
 	
 	
 	def check_other_certs
-		if @ca.applicant.app_status_id_changed? && @ca.applicant.app_status.appointed
-			cond = ['cert_applicants.cert_code_id is null', 'certs.certification_date is not null', 'certs.completed_date is null']
+		if @ca.applicant.app_status_id_changed? && @ca.applicant.app_status && @ca.applicant.app_status.appointed
+			logger.info "Checking other certs, from cert ID: #{@ca.cert_id}"
+			cond = ['ifnull(cert_codes.description, "") = ""', 'certs.certification_date is not null', 'certs.completed_date is null']
 			cond << 'certs.id != %d' % @ca.cert_id
 			if @obj.exam.continuous && @obj.exam.current_exam_id
 				cond << ('exams.current_exam_id = %d' % @obj.exam.current_exam_id)
@@ -209,9 +210,10 @@ class CertController < CrudController
 			end		
 			cond << 'applicants.person_id = %d' % @ca.applicant.person_id
 			CertApplicant.find(:all, {
-				:include => [{:cert => :exam}, :applicant], 
+				:include => [{:cert => :exam}, :applicant, :cert_code], 
 				:conditions => get_where(cond)
 			}).each { |ca|
+				logger.info "Setting cert code for cert ID #{ca.cert_id}"
 				users = ca.cert.agency ? ca.cert.agency.get_users(ca.cert.department) : []
 				ca.cert_code = CertCode.find_by_code 'AOA'
 				ca.save
