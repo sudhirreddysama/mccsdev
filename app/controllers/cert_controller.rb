@@ -171,8 +171,8 @@ class CertController < CrudController
 		load_obj
 		@ca = @obj.cert_applicants.find(params[:id2])
 		@ca.cert_code_id = params[:act]
-		check_other_certs
 		@ca.save
+		check_other_certs
 		render_nothing
   end
   
@@ -190,8 +190,8 @@ class CertController < CrudController
 		load_obj
 		@ca = @obj.cert_applicants.find(params[:id2])
 		@ca.applicant.app_status_id = params[:sta]
-		check_other_certs
 		@ca.applicant.save
+		check_other_certs
 		render_nothing
 	end	
 	
@@ -199,29 +199,50 @@ class CertController < CrudController
 	
 	
 	def check_other_certs
-		if @ca.applicant.app_status_id_changed? && @ca.applicant.app_status && @ca.applicant.app_status.appointed
-			logger.info "Checking other certs, from cert ID: #{@ca.cert_id}"
-			cond = ['ifnull(cert_codes.description, "") = ""', 'certs.certification_date is not null', 'certs.completed_date is null']
-			cond << 'certs.id != %d' % @ca.cert_id
-			if @obj.exam.continuous && @obj.exam.current_exam_id
-				cond << ('exams.current_exam_id = %d' % @obj.exam.current_exam_id)
-			else
-				cond << ('exams.id = %d' % @obj.exam_id)
-			end		
-			cond << 'applicants.person_id = %d' % @ca.applicant.person_id
-			CertApplicant.find(:all, {
-				:include => [{:cert => :exam}, :applicant, :cert_code], 
-				:conditions => get_where(cond)
-			}).each { |ca|
-				logger.info "Setting cert code for cert ID #{ca.cert_id}"
-				users = ca.cert.agency ? ca.cert.agency.get_users(ca.cert.department) : []
-				ca.cert_code = CertCode.find_by_code 'AOA'
-				ca.save
-				if !users.empty?
-					Notifier.deliver_cert_applicant_appointed users, ca, @ca
-				end
-			}
+		if @ca.applicant.app_status && @ca.applicant.app_status.appointed && @obj.completed_date.nil?
+			CertApplicant.appointed_from_other_cert_cron @ca.id
+# 			logger.info "Checking other certs, from cert ID: #{@ca.cert_id}"
+# 			cond = ['ifnull(cert_codes.description, "") = ""', 'certs.certification_date is not null', 'certs.completed_date is null']
+# 			cond << 'certs.id != %d' % @ca.cert_id
+# 			if @obj.exam.continuous && @obj.exam.current_exam_id
+# 				cond << ('exams.current_exam_id = %d' % @obj.exam.current_exam_id)
+# 			else
+# 				cond << ('exams.id = %d' % @obj.exam_id)
+# 			end		
+# 			cond << 'applicants.person_id = %d' % @ca.applicant.person_id
+# 			CertApplicant.find(:all, {
+# 				:include => [{:cert => :exam}, :applicant, :cert_code], 
+# 				:conditions => get_where(cond)
+# 			}).each { |ca|
+# 				logger.info "Setting cert code for cert ID #{ca.cert_id}"
+# 				users = ca.cert.agency ? ca.cert.agency.get_users(ca.cert.department) : []
+# 				ca.cert_code = CertCode.find_by_code 'AOA'
+# 				ca.save
+# 				if !users.empty?
+# 					Notifier.deliver_cert_applicant_appointed users, ca, @ca
+# 				end
+# 			}
 		end
+	end
+	
+	def other_certs
+		load_obj
+		params[:popup] = true
+		@nonav = true		
+		@ca = @obj.cert_applicants.find(params[:id2])
+		cond = []
+		#cond << 'certs.id != %d' % @obj.id
+		if @obj.exam.continuous && @obj.exam.current_exam_id
+			cond << ('exams.current_exam_id = %d' % @obj.exam.current_exam_id)
+		else
+			cond << ('exams.id = %d' % @obj.exam_id)
+		end			
+		cond << 'applicants.person_id = %d' % @ca.applicant.person_id
+		@objs = CertApplicant.find(:all, {
+			:include => [{:cert => :exam}, :applicant, :cert_code], 
+			:conditions => get_where(cond),
+			:order => 'certs.id desc'
+		})
 	end
 
 	def set_comments
@@ -240,8 +261,9 @@ class CertController < CrudController
 	
 	def set_date
 		load_obj
-		ca = @obj.cert_applicants.find(params[:id2])
-		ca.update_attribute :action_date, params[:dte]
+		@ca = @obj.cert_applicants.find(params[:id2])
+		@ca.update_attribute :action_date, params[:dte]
+		check_other_certs
 		render_nothing
 	end	
 	

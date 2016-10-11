@@ -328,7 +328,7 @@
 			
 			%>
 				<tr class="<%= cycle 'odd', 'even' %>">
-					<td><%= i + 1 %>.</td>
+					<td><div style="position: relative;"><a name="ca-<%= ca.id %>" style="position: absolute; top: -50px;"></a><%= i + 1 %>.</div></td>
 					<td>
 						<% if @current_user.agency_level? %>
 							<%= link_to "#{p.last_name} #{p.first_name}", {:controller => :cert, :action => :view_applicant, :id => @obj.id, :id2 => ca.id}, :target => '_blank' %>
@@ -414,7 +414,10 @@
 									<% if allow_action_edit %>
 										<td>
 											<% if @current_user.staff_level? %>
-												<div class="right"><%= link_to 'log', {:controller => 'cert_applicant', :action => :change_log, :id => ca.id}, :class => 'popup' %></div>
+												<div class="right">
+													<%= link_to 'others', {:controller => 'cert', :action => :other_certs, :id => @obj.id, :id2 => ca.id}, :class => 'popup', 'data-popup-title' => 'Other Certified Lists' %>
+													<%= link_to 'log', {:controller => 'cert_applicant', :action => :change_log, :id => ca.id}, :class => 'popup', 'data-popup-title' => 'Change Log' %>
+												</div>
 											<% end %>
 											<%= calendar_date_select_tag "action_dates[#{ca.id}]", ca.action_date, :style => 'width: 100px;', :class => 'ca-date ucase', :id => "date-#{ca.id}", :onchange => 'date_change(this)' %>
 										</td> 
@@ -659,6 +662,11 @@
 		}
 		
 		$('.money-mask').inputmask({alias: 'numeric', groupSeparator: ',', autoGroup: true, digits: 2, digitsOptional: true, prefix: '$', placeholder: '0'});
+		
+		var anchor = window.location.hash.substr(1);
+		if(anchor.indexOf('ca-') == 0) {
+			$('[name="' + anchor + '"]').closest('tr').effect('highlight', {duration: 2000});
+		}
 		
 	})(jQuery);
 

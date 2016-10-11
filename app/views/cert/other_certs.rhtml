@@ -1,0 +1,34 @@
+<style type="text/css">
+	.dg tr.current-cert td, .dg tr.current-cert:hover td { background-color: #000; color: #fff; }
+</style>
+<p>Applicant: <%= @ca.applicant.person.last_name %>, <%= @ca.applicant.person.first_name %>
+<br />Exam/List: <%= @ca.applicant.exam.exam_no %> <%= @ca.applicant.exam.title %></p>
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">ID</th>
+			<th width="1%">Status</th>
+			<th width="68%">Cert</th>
+			<th width="30%">Action</th>
+			<th width="1%">Date</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<% current = o.cert_id == @obj.id %>
+			<tr class="<%= cycle 'odd', 'even' %><% if current %> current-cert<% end %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= o.cert_id %></td>
+				<td><%= cert_status o.cert.status %></td>
+				<td>
+					<% if current %>
+						<%= o.cert.title %>
+					<% else %>
+						<%= link_to o.cert.title, {:action => :view, :id => o.cert_id, :anchor => "ca-#{o.id}"}, 'target' => '_parent' %>
+					<% end %>
+				</td>
+				<td><%= o.cert_code ? o.cert_code.description : '' %></td>
+				<td class="nobr"><%= o.action_date.d0? %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
