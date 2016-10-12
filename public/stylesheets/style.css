@@ -483,6 +483,7 @@ input.ucase, textarea.ucase { text-transform: uppercase; }
 .form-status.form-disapproved { background-color: #800; }
 .form-status.form-review { background-color: #880; }
 .form-status.form-info-needed { background-color: #808; }
+.form-status.form-withdrawn { background-color: #444; }
 .form-status.form-pendingNYS  { background-color: #088; }
 .form-status.form-none { background-color: #888; }
 .form-status.form-hold { background-color: #088; }

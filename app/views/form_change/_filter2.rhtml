@@ -7,6 +7,7 @@
 		<% if ft %>
 			<label><%= check_box_tag 'filter[statuses][]', 'review', @filter.statuses.include?('review') %> review</label>
 			<label><%= check_box_tag 'filter[statuses][]', 'info-needed', @filter.statuses.include?('info-needed') %> info-needed</label>
+			<label><%= check_box_tag 'filter[statuses][]', 'withdrawn', @filter.statuses.include?('withdrawn') %> withdrawn</label>
 		<% end %>
 		<label><%= check_box_tag 'filter[statuses][]', 'approved', @filter.statuses.include?('approved') %> approved</label>
 		<label><%= check_box_tag 'filter[statuses][]', 'disapproved', @filter.statuses.include?('disapproved') %> disapproved</label>

@@ -21,7 +21,7 @@
 				<td class="nobr">
 					<%= partial 'actions', :o => o %>
 					<% if !o.documents.to_a.empty? %>
-						<%= link_to(image_tag('icons/attach.png', :size => '16x16', :alt => 'docs', :title => 'Documents'), {:sc => :form_change, :sid => o.id, :controller => :document}) %>
+						<%= link_to(image_tag('icons/attach.png', :size => '16x16', :alt => 'docs', :title => 'Documents'), {:sc => :form_title, :sid => o.id, :controller => :document}) %>
 					<% end %>
 				</td>
 				<td><%= o.id %></td>

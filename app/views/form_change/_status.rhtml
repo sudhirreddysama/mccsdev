@@ -43,7 +43,7 @@
 					<% if form %>
 						<% statuses = ['started', 'submitted', 'approved', 'disapproved'] %>
 						<% if ft %>
-							<% statuses = ['started', 'submitted', 'review', 'info-needed', 'approved', 'disapproved'] %>
+							<% statuses = ['started', 'submitted', 'review', 'info-needed', 'withdrawn', 'approved', 'disapproved'] %>
 						<% end %>
 						<%= select :obj, :status, statuses %>
 					<% else %>
