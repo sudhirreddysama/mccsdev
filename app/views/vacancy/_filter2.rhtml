@@ -2,8 +2,8 @@
 	<tr>
 		<th>Agency/Dept.:</th>
 		<td>
-			<%= f.select :agency_id, Agency.find(:all, :joins => 'join vacancies v on v.agency_id = agencies.id', :group => 'agencies.id').collect { |a| [a.name, a.id] }, :include_blank => true %>
-			<%= f.select :department_id, Department.find(:all, :joins => 'join vacancies v on v.department_id = departments.id', :group => 'departments.id').collect { |d| [d.name, d.id] }, :include_blank => true %>
+			<%= f.select :agency_id, Agency.find(:all, :joins => 'join vacancies v on v.agency_id = agencies.id', :group => 'agencies.id', :order => 'agencies.name').collect { |a| [a.name, a.id] }, :include_blank => true %>
+			<%= f.select :department_id, Department.find(:all, :joins => 'join vacancies v on v.department_id = departments.id', :group => 'departments.id', :order => 'departments.name').collect { |d| [d.name, d.id] }, :include_blank => true %>
 		</td>
 	</tr>
 	<tr>
