@@ -7,9 +7,10 @@ class VacancyData < ActiveRecord::Base
 		logger.info "VacancyData.cron started #{Time.now}"
 		ftp = Net::FTP.new '10.100.224.234'
 		ftp.login 'civilservice', 's@prtf123'
-		mtime = ftp.mtime 'positon.txt', true
 		data = nil
-		if mtime.advance(:minutes => 10) < Time.now
+		# Just schedule the cron job a good time after the SAP dump. The modified time reported by FTP is unreliable. Timezone issue.
+		#mtime = ftp.mtime 'positon.txt', true
+		#if mtime.advance(:minutes => 10) < Time.now
 			logger.info 'Loading File'
 			objs = []
 			ftp.gettextfile('positon.txt', 'tmp/positon.txt') { |line|
@@ -25,7 +26,7 @@ class VacancyData < ActiveRecord::Base
 				VacancyData.delete_all
 				objs.each &:save
 			end
-		end
+		#end
 		ftp.close
 		logger.info "VacancyData.cron finished #{Time.now}"
 	end
