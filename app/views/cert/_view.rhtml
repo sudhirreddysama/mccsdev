@@ -20,7 +20,7 @@
 	<div class="clear"></div>
 </div>
 
-<% if @obj.status == 'certified' && @obj.certification_date <= Time.now.to_date %>
+<% if((@obj.status == 'certified' || @obj.status == 'overdue') && @obj.certification_date <= Time.now.to_date) %>
 	<% if @current_user.level == 'agency-head' || @current_user.level == 'liaison' || @current_user.level == 'admin' %>
 		<a href="#" onclick="jQuery('#complete').toggle();" style="color: #fff; background-color: #080; margin: 5px 5px 0 5px; padding: 5px; display: block; text-decoration: none; text-align: center;">
 			This certified list has yet to be completed and submitted to Monroe County HR. Click here to submit to MC HR Liaison.
