@@ -153,6 +153,7 @@ class EmployeeController < CrudController
 	end
 	
 	def action_edit
+		@no_destroy = true
 		load_obj
 		@act = @obj.empl_actions.find params[:id2]
 		if request.post? && @act.update_attributes(params[:act])
@@ -162,6 +163,7 @@ class EmployeeController < CrudController
 	end
 	
 	def action_delete
+		@no_destroy = true
 		load_obj
 		@act = @obj.empl_actions.find params[:id2]
 		if request.post? && @act.destroy
