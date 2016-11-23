@@ -233,6 +233,10 @@
 					<td>
 						<label>Status:</label>
 						<%= h o.promotion_status %>
+					</td>
+					<td>
+						<label>Time:</label>
+						<%= h(Const::JOB_TIMES.rassoc(o.promotion_job_time)[0]) rescue nil %>
 					&nbsp;</td>
 				</tr>
 			</table>
@@ -374,6 +378,10 @@
 					<td>
 						<label>Status:</label>
 						<%= h o.title_change_status %>
+					&nbsp;</td>
+					<td>
+						<label>Time:</label>
+						<%= h(Const::JOB_TIMES.rassoc(o.title_change_job_time)[0]) rescue nil %>
 					&nbsp;</td>
 				</tr>
 			</table>

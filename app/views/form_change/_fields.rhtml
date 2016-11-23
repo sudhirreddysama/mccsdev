@@ -182,10 +182,12 @@
 				<tr>
 					<th>Class:</th>
 					<th>Status:</th>
+					<th>Time:</th>
 				</tr>
 				<tr>
 					<td><%= f.select :promotion_class, @class_opts, :include_blank => true %></td>
 					<td><%= f.select :promotion_status, @status_opts, :include_blank => true %></td>
+					<td><% Const::JOB_TIMES.each { |t| %><label><%= f.radio_button :promotion_job_time, t[1] %> <%= h t[0] %></label>&nbsp;&nbsp;<% } %></td>
 				</tr>
 			</table>		
 			<table>
@@ -343,14 +345,22 @@
 				<tr>
 					<th>Exam No.:</th>
 					<th>Score:</th>
-					<th>Class:</th>
-					<th>Status:</th>
 				</tr>
 				<tr>
 					<td><%= f.text_field :title_change_list_no, :size => '20', :class => 'ucase' %></td>
 					<td><%= f.text_field :title_change_score, :size => '20', :class => 'ucase' %></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<th>Class:</th>
+					<th>Status:</th>
+					<th>Time:</th>
+				</tr>
+				<tr>
 					<td><%= f.select :title_change_class, @class_opts, :include_blank => true %></td>
-					<td><%= f.select :title_change_status, @status_opts, :include_blank => true %></td>					
+					<td><%= f.select :title_change_status, @status_opts, :include_blank => true %></td>
+					<td><% Const::JOB_TIMES.each { |t| %><label><%= f.radio_button :title_change_job_time, t[1] %> <%= h t[0] %></label>&nbsp;&nbsp;<% } %></td>
 				</tr>
 			</table>
 			<table>

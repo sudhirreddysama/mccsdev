@@ -27,6 +27,9 @@ class FormChange  < ActiveRecord::Base
 		if change_promotion
 			errors.add_to_base 'Please select the new job title for the promotion' if !promotion_new_title_job
 		end
+		if change_title
+			errors.add_to_base 'Please select the new job title for the title change' if !title_change_new_title_job
+		end
 	end
 	
 	def changes_string

@@ -103,7 +103,7 @@ class FormChangeController < CrudController
 			la = @empl.last_action || {}
 			@act.attributes = {
 				:employee => @empl,
-				:job_id => @obj.change_promotion ? @obj.promotion_new_title_id : la.job_id,
+				:job_id => la.job_id,
 				:agency_id => la.agency_id,
 				:department_id => la.department_id,
 				:wage => la.wage,
@@ -123,6 +123,14 @@ class FormChangeController < CrudController
 		if @obj.change_salary
 			@act.wage = @obj.salary_change_to.to_s.gsub(/[^0-9.]/, '')
 			@act.wage_per = @obj.salary_change_to_per
+		end
+		if @obj.change_promotion
+			#@act.job_time = @obj.promotion_job_time
+			@act.job_id = @obj.promotion_new_title_id
+		end
+		if @obj.change_title
+			#@act.job_time = @obj.title_change_job_time
+			@act.job_id = @obj.title_change_new_title_id
 		end
 		@act.authorization = '105E'
 		@act.received_date = @obj.submitted_at ? @obj.submitted_at.to_date : nil 
