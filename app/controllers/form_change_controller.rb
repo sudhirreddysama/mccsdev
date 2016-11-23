@@ -103,7 +103,7 @@ class FormChangeController < CrudController
 			la = @empl.last_action || {}
 			@act.attributes = {
 				:employee => @empl,
-				:job_id => la.job_id,
+				:job_id => @obj.change_promotion ? @obj.promotion_new_title_id : la.job_id,
 				:agency_id => la.agency_id,
 				:department_id => la.department_id,
 				:wage => la.wage,
