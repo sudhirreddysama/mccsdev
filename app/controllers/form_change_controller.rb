@@ -153,7 +153,14 @@ class FormChangeController < CrudController
 			@act.empl_action_type_id = EmplActionType.find_by_name('2ND PROV').id
 		end
 		if @obj.change_separation
-			@act.empl_action_type_id = EmplActionType.find_by_name('SEPARATION').id
+			@act.empl_action_type_id = EmplActionType.find_by_name({
+				'Deceased' => 'DECEASED',
+				'Layoff' => 'LAYOFF',
+				'Program Ended' => 'PROG ENDED',
+				'Resignation' => 'RESIGNED',
+				'Retirement' => 'RETIRED',
+				'Termination' => 'TERMINATED'
+			}[@obj.separation_reason]).id rescue nil
 			@act.leave_date = @obj.separation_date
 		end
 		if @obj.change_status	
