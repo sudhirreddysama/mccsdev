@@ -60,7 +60,7 @@
 		<div id="demotion">
 			<table>
 				<tr>
-					<th>New Title:</th>
+					<th>New Title: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= partial 'pop_field', :text => (@obj.demotion_title_job ? @obj.demotion_title_job.label : ''), :name => 'obj[demotion_title_id]', :id => 'obj_demotion_title_id', :url => popup_url({:controller => :job}), :value => @obj.demotion_title_id %></td>
@@ -68,16 +68,23 @@
 			</table>
 			<table>
 				<tr>
-					<th>Salary:</th>
-					<th>Per:</th>
-					<th>Class:</th>
-					<th>Status:</th>
+					<th>Salary: <span class="req">*</span></th>
+					<th>Per: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= f.text_field :demotion_salary, :size => '20', :class => 'ucase' %></td>
 					<td><%= f.select :demotion_salary_per, Const::WAGE_UNITS, :include_blank => true %></td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<th>Class: <span class="req">*</span></th>
+					<th>Status: <span class="req">*</span></th>
+					<th>Time: <span class="req">*</span></th>
+				</tr>
 					<td><%= f.select :demotion_class, @class_opts, :include_blank => true %></td>
 					<td><%= f.select :demotion_status, @status_opts, :include_blank => true %></td>
+					<td><% Const::JOB_TIMES.each { |t| %><label><%= f.radio_button :demotion_job_time, t[1] %> <%= h t[0] %></label>&nbsp;&nbsp;<% } %></td>
 				</tr>
 			</table>
 			<table>
@@ -92,7 +99,7 @@
 		<div id="loa">
 			<table>
 				<tr>
-					<th>Reason:</th>
+					<th>Reason: <span class="req">*</span></th>
 					<th></th>
 					<th></th>
 				</tr>
@@ -104,8 +111,8 @@
 			</table>
 			<table>
 				<tr>
-					<th>From:</th>
-					<th>To:</th>
+					<th>From: <span class="req">*</span></th>
+					<th>To: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= f.calendar_date_select :loa_date_from, :class => 'ucase' %></td>
@@ -121,8 +128,8 @@
 		<div id="name">
 			<table>
 				<tr>
-					<th>From:</th>
-					<th>To:</th>
+					<th>From: <span class="req">*</span></th>
+					<th>To: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= f.text_field :name_change_from, :size => '50', :class => 'ucase' %></td>
@@ -138,8 +145,8 @@
 		<div id="perm_appt">
 			<table>
 				<tr>
-					<th>Exam No.:</th>
-					<th>Score:</th>
+					<th>Exam No.: <span class="req">*</span></th>
+					<th>Score: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= f.text_field :perm_appt_list_no, :size => '20', :class => 'ucase' %></td>
@@ -160,7 +167,7 @@
 		<div id="promotion">
 			<table>
 				<tr>
-					<th>New Title:</th>
+					<th>New Title: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= partial 'pop_field', :text => (@obj.promotion_new_title_job ? @obj.promotion_new_title_job.label : ''), :name => 'obj[promotion_new_title_id]', :id => 'obj_promotion_new_title_id', :url => popup_url({:controller => :job}), :value => @obj.promotion_new_title_id %></td>
@@ -168,9 +175,9 @@
 			</table>
 			<table>
 				<tr>
-					<th>Salary/Wage:</th>
-					<th>Per:</th>
-					<th>Exam No.:</th>
+					<th>Salary/Wage: <span class="req">*</span></th>
+					<th>Per: <span class="req">*</span></th>
+					<th>Exam No.: </th>
 				</tr>
 				<tr>
 					<td><%= f.text_field :promotion_salary, :size => '20', :class => 'ucase' %></td>
@@ -180,9 +187,9 @@
 			</table>
 			<table>
 				<tr>
-					<th>Class:</th>
-					<th>Status:</th>
-					<th>Time:</th>
+					<th>Class: <span class="req">*</span></th>
+					<th>Status: <span class="req">*</span></th>
+					<th>Time: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= f.select :promotion_class, @class_opts, :include_blank => true %></td>
@@ -202,10 +209,10 @@
 		<div id="salary">
 			<table>
 				<tr>
-					<th>From:</th>
-					<th>Per:</th>
-					<th>To:</th>
-					<th>Per:</th>
+					<th>From: <span class="req">*</span></th>
+					<th>Per: <span class="req">*</span></th>
+					<th>To: <span class="req">*</span></th>
+					<th>Per: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= f.text_field :salary_change_from, :size => '20', :class => 'ucase' %></td>
@@ -223,7 +230,7 @@
 		<div id="second_provisional">
 			<table>
 				<tr>
-					<th>Date:</th>
+					<th>Date: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= f.calendar_date_select :second_provisional_date, :class => 'ucase' %></td>
@@ -241,7 +248,7 @@
 		<div id="separation">
 			<table>
 				<tr>
-					<th>Date:</th>
+					<th>Date: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= f.calendar_date_select :separation_date, :class => 'ucase' %></td>
@@ -249,7 +256,7 @@
 			</table>
 			<table>
 				<tr>
-					<th colspan="6">Reason:</th>
+					<th colspan="6">Reason: <span class="req">*</span></th>
 				<tr>
 					<td><label><%= f.radio_button :separation_reason, 'Deceased' %> Deceased</label></td>
 					<td><label><%= f.radio_button :separation_reason, 'Layoff' %> Layoff</label></td>
@@ -273,8 +280,8 @@
 		<div id="status">
 			<table>
 				<tr>
-					<th>New Status:</th>
-					<th>New Classification:</th>
+					<th>New Status: <span class="req">*</span></th>
+					<th>New Classification: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= f.select :status_type, Const::JOB_STATUSES + ['PT TO FT', 'FT TO PT'], :include_blank => true %></td>
@@ -306,7 +313,7 @@
 		<div id="suspension">
 			<table>
 				<tr>
-					<th>Reason:</th>
+					<th>Reason: <span class="req">*</span></th>
 					<th></th>
 					<th></th>
 				</tr>
@@ -318,8 +325,8 @@
 			</table>
 			<table>
 				<tr>
-					<th>From Date:</th>
-					<th>To Date:</th>
+					<th>From Date: <span class="req">*</span></th>
+					<th>To Date: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= f.calendar_date_select :suspension_from, :class => 'ucase' %></td>
@@ -335,7 +342,7 @@
 		<div id="title">
 			<table>
 				<tr>
-					<th>New Title:</th>
+					<th>New Title: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= partial 'pop_field', :text => (@obj.title_change_new_title_job ? @obj.title_change_new_title_job.label : ''), :name => 'obj[title_change_new_title_id]', :id => 'obj_title_change_new_title_id', :url => popup_url({:controller => :job}), :value => @obj.title_change_new_title_id %></td>
@@ -353,9 +360,9 @@
 			</table>
 			<table>
 				<tr>
-					<th>Class:</th>
-					<th>Status:</th>
-					<th>Time:</th>
+					<th>Class: <span class="req">*</span></th>
+					<th>Status: <span class="req">*</span></th>
+					<th>Time: <span class="req">*</span></th>
 				</tr>
 				<tr>
 					<td><%= f.select :title_change_class, @class_opts, :include_blank => true %></td>
@@ -435,16 +442,16 @@
 						if(data) {
 							$('#obj_first_name').val(data.first_name);
 							$('#obj_last_name').val(data.last_name);
-							//$('#obj_present_title').val(data.job_name);
+              $('#obj_retirement_no').val(data.pension_no);
 							$('#obj_present_provisional')[0].checked = data.provisional;
 							$('#obj_separation_provisional')[0].checked = data.provisional;
-							$('#obj_name_change_from').val(data.last_name + ', ' + data.first_name);
-							$('#obj_salary_change_from').val(data.wage);
-              $('#obj_retirement_no').val(data.pension_no);
-							set_select_value(data.wage_per, $('#obj_salary_change_from_per')[0]);
-							//set_select_value(data.job_id, $('#obj_present_title_id')[0]);
 							$('#obj_present_title_id').val(data.job_id);
 							$('#obj_present_title_id_text').val(data.job_name);
+
+							$('#obj_name_change_from').val(data.last_name + ', ' + data.first_name);
+
+							$('#obj_salary_change_from').val(data.wage);
+							set_select_value(data.wage_per, $('#obj_salary_change_from_per')[0]);
 						}
 					}
 				});

@@ -203,7 +203,9 @@ class EmployeeController < CrudController
 				:wage => e.wage,
 				:wage_per => e.wage_per,
         :pension_no => e.pension_no,
-        :date_of_birth => e.date_of_birth ? e.date_of_birth.strftime('%m/%d/%Y') : nil
+        :date_of_birth => e.date_of_birth ? e.date_of_birth.strftime('%m/%d/%Y') : nil,
+        :classification => e.classification,
+        :status => e.status
 			}
 			render :json => atr.to_json
 		else

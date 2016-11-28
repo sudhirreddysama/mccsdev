@@ -117,20 +117,70 @@ class FormChangeController < CrudController
 				:leave_date => @empl.leave_date
 			}
 		end
-		if @obj.change_separation
-			@act.leave_date = @obj.separation_date
+		if @obj.change_demotion
+			@act.empl_action_type = EmplActionType.find_by_name 'DEMOTION'
+			@act.job_id = @obj.demotion_title_id
+			@act.wage = @obj.demotion_salary.to_s.gsub(/[^0-9.]/, '')
+			@act.wage_per = @obj.demotion_salary_per
+			@act.classification = Const::JOB_CLASSES.assoc(@obj.demotion_class)[1] rescue nil
+			@act.status = Const::JOB_STATUSES.assoc(@obj.demotion_status)[1] rescue nil
+			@act.job_time = @obj.demotion_job_time
+		end
+		if @obj.change_name
+			@act.empl_action_type = EmplActionType.find_by_name 'NAME CHG'
+		end
+		if @obj.change_loa
+			@act.empl_action_type = EmplActionType.find_by_name 'LOA'
+		end
+		if @obj.change_perm_appt
+			@act.empl_action_type = EmplActionType.find_by_name 'PERM APPT'
+		end
+		if @obj.change_promotion
+			@act.empl_action_type = EmplActionType.find_by_name 'PROMOTION'
+			@act.job_id = @obj.promotion_new_title_id
+			@act.wage = @obj.promotion_salary.gsub(/[^0-9.]/, '')
+			@act.wage_per = @obj.promotion_salary_per
+			@act.classification = Const::JOB_CLASSES.assoc(@obj.promotion_class)[1] rescue nil
+			@act.status = Const::JOB_STATUSES.assoc(@obj.promotion_status)[1] rescue nil
+			@act.job_time = @obj.promotion_job_time
 		end
 		if @obj.change_salary
+			@act.empl_action_type = EmplActionType.find_by_name 'WAGE CHG'
 			@act.wage = @obj.salary_change_to.to_s.gsub(/[^0-9.]/, '')
 			@act.wage_per = @obj.salary_change_to_per
 		end
-		if @obj.change_promotion
-			#@act.job_time = @obj.promotion_job_time
-			@act.job_id = @obj.promotion_new_title_id
+		if @obj.change_second_provisional
+			@act.empl_action_type = EmplActionType.find_by_name '2ND PROV'
+		end
+		if @obj.change_separation
+			@act.empl_action_type = EmplActionType.find_by_name 'SEPARATION'
+			@act.leave_date = @obj.separation_date
+		end
+		if @obj.change_status	
+			if @obj.status_type == 'PT TO FT'
+				@act.empl_action_type = EmplActionType.find_by_name 'PT TO FT'
+				@act.job_time = 'F'
+			elsif @obj.status_type == 'FT TO PT'
+				@act.empl_action_type = EmplActionType.find_by_name 'FT TO PT'
+				@act.job_time = 'P'
+			else
+				@act.empl_action_type = EmplActionType.find_by_name 'STATUS CHG'
+				@act.status = @obj.status_type
+			end
+			@act.classification = Const::JOB_CLASSES.assoc(@obj.status_class)[1] rescue nil
+			if @act.classification != la.classification
+				@act.empl_action_type = EmplActionType.find_by_name 'CLASS CHG'
+			end
+		end
+		if @obj.change_suspension
+			@act.empl_action_type = EmplActionType.find_by_name 'SUSPENDED'
 		end
 		if @obj.change_title
-			#@act.job_time = @obj.title_change_job_time
+			@act.empl_action_type = EmplActionType.find_by_name 'TITLE CHG'
 			@act.job_id = @obj.title_change_new_title_id
+			@act.classification = Const::JOB_CLASSES.assoc(@obj.title_change_class)[1] rescue nil
+			@act.status = Const::JOB_STATUSES.assoc(@obj.title_change_status)[1] rescue nil
+			@act.job_time = @obj.title_change_job_time
 		end
 		@act.authorization = '105E'
 		@act.received_date = @obj.submitted_at ? @obj.submitted_at.to_date : nil 

@@ -132,6 +132,10 @@
 					<td>
 						<label>Status:</label>
 						<%= h o.demotion_status %>
+					</td>
+					<td>
+						<label>Time:</label>
+						<%= h(Const::JOB_TIMES.rassoc(o.demotion_job_time)[0]) rescue nil %>
 					&nbsp;</td>
 				</tr>
 			</table>
