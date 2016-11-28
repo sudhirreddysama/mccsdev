@@ -118,7 +118,7 @@ class FormChangeController < CrudController
 			}
 		end
 		if @obj.change_demotion
-			@act.empl_action_type = EmplActionType.find_by_name 'DEMOTION'
+			@act.empl_action_type_id = EmplActionType.find_by_name('DEMOTION').id
 			@act.job_id = @obj.demotion_title_id
 			@act.wage = @obj.demotion_salary.to_s.gsub(/[^0-9.]/, '')
 			@act.wage_per = @obj.demotion_salary_per
@@ -127,16 +127,16 @@ class FormChangeController < CrudController
 			@act.job_time = @obj.demotion_job_time
 		end
 		if @obj.change_name
-			@act.empl_action_type = EmplActionType.find_by_name 'NAME CHG'
+			@act.empl_action_type_id = EmplActionType.find_by_name('NAME CHG').id
 		end
 		if @obj.change_loa
-			@act.empl_action_type = EmplActionType.find_by_name 'LOA'
+			@act.empl_action_type_id = EmplActionType.find_by_name('LOA').id
 		end
 		if @obj.change_perm_appt
-			@act.empl_action_type = EmplActionType.find_by_name 'PERM APPT'
+			@act.empl_action_type_id = EmplActionType.find_by_name('PERM APPT').id
 		end
 		if @obj.change_promotion
-			@act.empl_action_type = EmplActionType.find_by_name 'PROMOTION'
+			@act.empl_action_type_id = EmplActionType.find_by_name('PROMOTION').id
 			@act.job_id = @obj.promotion_new_title_id
 			@act.wage = @obj.promotion_salary.gsub(/[^0-9.]/, '')
 			@act.wage_per = @obj.promotion_salary_per
@@ -145,38 +145,38 @@ class FormChangeController < CrudController
 			@act.job_time = @obj.promotion_job_time
 		end
 		if @obj.change_salary
-			@act.empl_action_type = EmplActionType.find_by_name 'WAGE CHG'
+			@act.empl_action_type_id = EmplActionType.find_by_name('WAGE CHG').id
 			@act.wage = @obj.salary_change_to.to_s.gsub(/[^0-9.]/, '')
 			@act.wage_per = @obj.salary_change_to_per
 		end
 		if @obj.change_second_provisional
-			@act.empl_action_type = EmplActionType.find_by_name '2ND PROV'
+			@act.empl_action_type_id = EmplActionType.find_by_name('2ND PROV').id
 		end
 		if @obj.change_separation
-			@act.empl_action_type = EmplActionType.find_by_name 'SEPARATION'
+			@act.empl_action_type_id = EmplActionType.find_by_name('SEPARATION').id
 			@act.leave_date = @obj.separation_date
 		end
 		if @obj.change_status	
 			if @obj.status_type == 'PT TO FT'
-				@act.empl_action_type = EmplActionType.find_by_name 'PT TO FT'
+				@act.empl_action_type_id = EmplActionType.find_by_name('PT TO FT').id
 				@act.job_time = 'F'
 			elsif @obj.status_type == 'FT TO PT'
-				@act.empl_action_type = EmplActionType.find_by_name 'FT TO PT'
+				@act.empl_action_type_id = EmplActionType.find_by_name('FT TO PT').id
 				@act.job_time = 'P'
 			else
-				@act.empl_action_type = EmplActionType.find_by_name 'STATUS CHG'
+				@act.empl_action_type_id = EmplActionType.find_by_name('STATUS CHG').id
 				@act.status = @obj.status_type
 			end
 			@act.classification = Const::JOB_CLASSES.assoc(@obj.status_class)[1] rescue nil
 			if @act.classification != la.classification
-				@act.empl_action_type = EmplActionType.find_by_name 'CLASS CHG'
+				@act.empl_action_type_id = EmplActionType.find_by_name('CLASS CHG').id
 			end
 		end
 		if @obj.change_suspension
-			@act.empl_action_type = EmplActionType.find_by_name 'SUSPENDED'
+			@act.empl_action_type_id = EmplActionType.find_by_name('SUSPENDED').id
 		end
 		if @obj.change_title
-			@act.empl_action_type = EmplActionType.find_by_name 'TITLE CHG'
+			@act.empl_action_type_id = EmplActionType.find_by_name('TITLE CHG').id
 			@act.job_id = @obj.title_change_new_title_id
 			@act.classification = Const::JOB_CLASSES.assoc(@obj.title_change_class)[1] rescue nil
 			@act.status = Const::JOB_STATUSES.assoc(@obj.title_change_status)[1] rescue nil
