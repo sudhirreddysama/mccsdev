@@ -23,7 +23,11 @@ class FormChange  < ActiveRecord::Base
 	
 	def form_type; '105'; end
 	
+	attr :check_validation, true
 	def validate
+		if !check_validation
+			return
+		end
 		if change_demotion
 			errors.add_to_base 'Please enter all required fields for Demotion' if !demotion_title_job || demotion_salary.blank? || demotion_salary_per.blank? || demotion_class.blank? || demotion_status.blank? || demotion_job_time.blank?
 		end

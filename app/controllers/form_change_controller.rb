@@ -50,6 +50,11 @@ class FormChangeController < CrudController
 		super
 	end
 	
+	def edit
+		@obj.check_validation = true
+		super
+  end
+	
 	def build_obj
 		super
 		if @current_user.agency_level?
