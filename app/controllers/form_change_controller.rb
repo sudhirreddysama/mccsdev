@@ -80,7 +80,10 @@ class FormChangeController < CrudController
 			if u2
 				Notifier.deliver_form_status [u2].reject(&:nil?), @obj
 			end
-			if @obj.change_separation && @obj.separation_provisional && @obj.status == 'approved' && old_status != @obj.status
+			send_prov = @obj.change_separation && @obj.separation_provisional
+			send_prov ||= @obj.change_promotion && @obj.present_provisional
+			send_prov ||= @obj.change_perm_appt && @obj.present_provisional
+			if send_prov && @obj.status == 'approved' && old_status != @obj.status
 				Notifier.deliver_form_change_separation_provisional_approved @obj
 			end
 			redirect_to
