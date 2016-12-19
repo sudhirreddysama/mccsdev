@@ -216,6 +216,7 @@
 			<th width="1%">ID</th>
 			<th width="1%">Submitted</th>
 			<th width="1%">Status</th>
+			<th width="1%">PT</th>
 			<th width="1%">Exam No.</th>
 			<th width="1%">Exam Date</th>
 			<th width="1%">Est. Date</th>
@@ -239,6 +240,7 @@
 				<td><%= a.id %></td>
 				<td class="nobr"><%= a.submitted_at.d0? %></td>
 				<td class="nobr"><% if a.app_status %><span class="<% if a.app_status.eligible == 'N' %>req<% end %>"><%= h a.app_status.name %></span><% end %></td>
+				<td class="nobr"><%= a.perf_test_status %></td>
 				<td class="nobr"><%= h exam.exam_no if exam %></td>
 				<td class="nobr"><%= exam.given_at.d0? if exam %></td>
 				<td class="nobr"><%= exam.established_date.d0? if exam %></td>
