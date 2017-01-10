@@ -65,7 +65,7 @@ class Notifier < ActionMailer::Base
 	
 	def cert_specialist c
 		recipients ['JMcCann@monroecounty.gov']
-		subject 'Certified List Pending'
+		subject "Certified List Specialist Notification - Cert #{c.status}"
 		from Thread.current[:current_user].email_with_name
 		body :c => c
 	end

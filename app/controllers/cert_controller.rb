@@ -357,9 +357,11 @@ class CertController < CrudController
 		
 	def notify_specialist
 		load_obj
-		Notifier.deliver_cert_specialist @obj
 		flash[:notice] = 'Notification email has been sent.'
-		@obj.update_attribute :pending_date, Time.now.to_date
+		if !@obj.pending_date
+			@obj.update_attribute :pending_date, Time.now.to_date
+		end
+		Notifier.deliver_cert_specialist @obj
 		redirect_to :action => :view, :id => @obj.id
 	end
 

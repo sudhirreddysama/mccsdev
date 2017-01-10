@@ -10,6 +10,9 @@
 		<% if (@obj.status == 'requested' && (@current_user.staff_level? || @current_user.liaison_level?))  %>
 			<%= tab 'Notify Certification Specialist', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist? This will change the status to "pending".', :class => 'tab-delivery' %>
 		<% end %>
+		<% if (@obj.status == 'completed' && (@current_user.staff_level? || @current_user.liaison_level?))  %>
+			<%= tab 'Notify Certification Specialist (Completed)', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist to finish this certification?', :class => 'tab-delivery' %>
+		<% end %>
 		<% if @current_user.username == 'isadmin' %>
 			<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => :cert, :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>
 		<% end %>
