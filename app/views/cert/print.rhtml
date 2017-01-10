@@ -231,7 +231,12 @@ end
 							&nbsp;<br />
 						</td>
 						<td width="11%" style="text-align: right;"><%= nwp a.final_score, 2 %></td>
-						<td width="11%" style="text-align: right;"><%= nwp a.veterans_credits, 2 %></td>
+						<td width="11%" style="text-align: right;">
+							<% if a.veterans_credits.to_f > 0 %>
+								<%= nwp a.veterans_credits, 2 %>
+								<div style="font-size: 10px; color: #444;">(have been<br>added to<br>final score)</div>
+							<% end %>
+						</td>
 						<td width="34%">
 							<% if c %>
 								<%= c.description %>&nbsp;<br />

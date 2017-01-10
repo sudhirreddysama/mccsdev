@@ -365,7 +365,12 @@
 						&nbsp;<br />
 					</td>
 					<td style="text-align: right;"><%= a.final_score %></td>
-					<td style="text-align: right;"><%= a.veterans_credits %></td>
+					<td style="text-align: right;">
+						<% if a.veterans_credits.to_f > 0 %>
+							<%= a.veterans_credits %>
+							<div style="font-size: 10px; color: #444; white-space: nowrap;">(have been<br>added to<br>final score)</div>
+						<% end %>
+					</td>
 					<td>
 						<% if @current_user.staff_level? || @current_user.liaison_level? || (@current_user.agency_level? && (@obj.status == 'certified' || @obj.status == 'overdue') && @obj.certification_date <= Time.now.to_date) %>
 							<table>
