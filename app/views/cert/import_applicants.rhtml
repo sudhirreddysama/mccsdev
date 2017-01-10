@@ -137,6 +137,9 @@
 						<% if !a.list_note.blank? %>
 							<div><span class="dim">List Note:</span> <%= h a.list_note %></div>
 						<% end %>
+						<% if p.county && p.county.name == 'OUT OF COUNTY' %>
+							<div class="req">OUT OF COUNTY</div>
+						<% end %>
 					</td>
 				</tr>
 			</tbody>
