@@ -11,7 +11,8 @@ class UserController < CrudController
 			['Name', 'users.name'],
 			['Initials', 'users.initials'],
 			['Level', 'users.level'],
-			['Agency Name', 'agencies.name']
+			['Agency Name', 'agencies.name'],
+			['Department Name', 'departments.name']
 		]
 		cond = get_search_conditions @filter[:search], {
 			'users.id' => :left,
@@ -19,13 +20,14 @@ class UserController < CrudController
 			'users.name' => :like,
 			'users.level' => :like,
 			'users.initials' => :like,
-			'agencies.name' => :like 
+			'agencies.name' => :like, 
+			'departments.name' => :like 
 		}
 		
 		@opt = {
 			:conditions => get_where(cond),
 			:order => get_order_auto,
-			:include => :agency
+			:include => [:agency, :department]
 		}
 		super
 	end

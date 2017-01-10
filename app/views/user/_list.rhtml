@@ -6,9 +6,10 @@
 			<th width="1%">Level</th>
 			<th width="1%">Initials</th>
 			<th width="1%">Username</th>
-			<th width="31%">Name</th>
-			<th width="30%">Email</th>
-			<th width="33">Agency</th>
+			<th width="25%">Name</th>
+			<th width="20%">Email</th>
+			<th width="25">Agency</th>
+			<th width="25">department</th>
 		</tr>
 	</thead>
 	<tbody id="objs">
@@ -22,6 +23,7 @@
 				<td><%= link_to o.name, :action => :view, :id => o.id %></td>
 				<td><%= mail_to o.email unless o.email.blank? %></td>
 				<td><%= h o.agency.name if o.agency %></td>
+				<td><%= h o.department.name if o.department %></td>
 			</tr>
 		<% } %>
 	</tbody>
