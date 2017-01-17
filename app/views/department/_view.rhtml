@@ -22,8 +22,9 @@
 		<table>
 			<tr>
 				<td>
-					<label>Liaison:</label>
+					<label>HR Liaison(s):</label>
 					<%= h o.liaison.name if o.liaison %>
+					<% if false && o.liaison2 %><div><%= o.liaison2.name %></div><% end %>
 				&nbsp;</td>
 				<td>
 					<label>OMB Liaison:</label>

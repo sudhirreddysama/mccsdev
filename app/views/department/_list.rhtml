@@ -16,7 +16,10 @@
 				<td><%= o.id %></td>
 				<td class="nobr"><%= h o.abbreviation %></td>
 				<td><%= link_to o.name, :action => :view, :id => o.id %></td>
-				<td><%= h o.liaison.name if o.liaison %></td>	
+				<td>
+					<%= h o.liaison.name if o.liaison %>
+					<% if false && o.liaison2 %><div><%= o.liaison2.name %></div><% end %>
+				</td>	
 				<td><%= h o.omb_liaison.name if o.omb_liaison %></td>				
 			</tr>
 		<% } %>

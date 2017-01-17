@@ -87,12 +87,13 @@ class Vacancy < ActiveRecord::Base
 		if exec_decision_changed?
 			u = Agency.get_liaison(agency, department)
 			u2 = Agency.get_omb_liaison(agency, department)
+			u3 = agency.get_users(department, true, ['users.vacancy_emails = 1']).to_a
 			if exec_decision == 'Submitted' && exec_decision_was == 'Started'
 				if user && (u || u2)
-					Notifier.deliver_vacancy_submitted [u, u2].reject(&:nil?), self
+					Notifier.deliver_vacancy_submitted(([u, u2] + u3).reject(&:nil?), self)
 				end
 			elsif %w(Started Submitted Approved Disapproved).include?(exec_decision_was) && %w(Approved Disapproved).include?(exec_decision)
-				users = [user, submitted_by, u, u2].reject(&:nil?).uniq
+				users = ([user, submitted_by, u, u2] + u3).reject(&:nil?).uniq
 				if !users.empty?
 					Notifier.deliver_vacancy_updated users, self			
 				end

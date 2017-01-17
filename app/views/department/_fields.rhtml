@@ -1,5 +1,11 @@
 <%= f.tr_text_field :name, :label => 'Name', :req => true, :class => 'ucase' %>
 <%= f.tr_text_field :abbreviation, :label => 'Abbreviation', :class => 'ucase' %>
 <% @user_opts = User.find(:all, :conditions => '(users.level not like "agency%" or users.allow_vacancy_omb) and users.level != "disabled"', :order => 'users.name asc').collect { |u| [u.name, u.id] } %>
-<%= f.tr_select :liaison_id, @user_opts, :order => 'users.name asc', :include_blank => true, :label => 'Liaison User' %>
+<tr>
+	<th>Liaison User:</th>
+	<td>
+		<%= f.select :liaison_id, @user_opts, :order => 'users.name asc', :include_blank => true %>
+		<% if false %><%= f.select :liaison2_id, @user_opts, :order => 'users.name asc', :include_blank => true %><% end %>
+	</td>
+</tr>
 <%= f.tr_select :omb_liaison_id, @user_opts, :order => 'users.name asc', :include_blank => true, :label => 'OMB Liaison User', :help => 'OMB Liaison is used in the Request to Fill Vacancy workflow.' %>

@@ -219,8 +219,10 @@ class Notifier < ActionMailer::Base
 	# DEV ONLY!
 	def recipients *args
 		if RAILS_ENV == 'development'
-			logger.info 'Development Env intercepted mail recipients:'
-			logger.info args.inspect
+			if args.size > 0
+				logger.info 'Development Env intercepted mail recipients:'
+				logger.info args.inspect
+			end
 			super ['jessesternberg@monroecounty.gov']
 		else
 			super *args

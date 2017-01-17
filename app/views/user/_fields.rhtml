@@ -23,6 +23,7 @@
 <%= f.tr_check :only_vacancy, :label => 'Only Req. to Fill Vac.?', :text => 'Check here if this user should ONLY see request to fill vacancies (no access to other agency level parts of system).' %>
 <%= f.tr_check :allow_vacancy_omb, :label => 'Req. to Fill Vac. OMB?', :text => 'Check here to allow this user to give OMB approval/disapproval for requests to fill vacancies.' %>
 <%= f.tr_check :allow_vacancy_admin, :label => 'Req. to Fill Vac. Admin?', :text => 'Check here to allow this user to give final (Exec.) approval/disapproval for requests to fill vacancies.' %>
+<%= f.tr_check :vacancy_emails, :label => 'All Vacancy Notices?', :text => 'If checked user will receive ALL vacancy notices for their department (submitted, approved, disapproved) in addition to the submitter/approver.' %>
 <%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name asc').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Agency', :help => 'Select an agency for agency and agency-head level users.' %>
 <%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name asc').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Department', :help => 'Select an department for agency and agency-head level users.' %>
 <%= f.tr_text_field :switch_username, :label => 'Switch Username', :help => 'Enter the username of a user that will always be able to "switch" to this user without logging in again.' %>
