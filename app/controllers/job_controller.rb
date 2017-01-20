@@ -28,7 +28,9 @@ class JobController < CrudController
 			'jobs.name' => :like,
 		}
 		include = nil
-		if !@filter[:agency_id].blank?
+		if @current_user.has_title_run?
+			cond << 'agency_jobs.agency_id = %d' % @current_user.agency_id
+		elsif !@filter[:agency_id].blank?
 			@filter[:agency_id] = @filter[:agency_id].to_i
 			if @agency_options.rassoc(@filter[:agency_id])
 				cond << 'agency_jobs.agency_id = %d' % @filter[:agency_id]
@@ -40,7 +42,8 @@ class JobController < CrudController
 		@opt = {
 			:conditions => get_where(cond),
 			:order => get_order_auto,
-			:include => :agency_jobs
+			:include => :agency_jobs,
+			:group => 'jobs.id'
 		}
 		@export_fields = %w(id inactive name)
 		super

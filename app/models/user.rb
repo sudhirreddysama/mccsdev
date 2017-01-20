@@ -110,6 +110,10 @@ class User < ActiveRecord::Base
   def switch_username= v
   	@switch_username = v
   end
+  
+  def has_title_run?
+  	agency_level? && agency && agency.has_title_run?
+  end
 	
 	include DbChangeHooks
 	

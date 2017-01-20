@@ -72,6 +72,14 @@ class EmployeeController < CrudController
 		super
 	end 
 	
+	def job_options
+		@filter = params[:filter]
+		if @filter[:job_ids]
+			@filter[:job_ids].map!(&:to_i)
+		end
+		render :layout => false
+	end
+	
 	def build_obj
 		super
 		if !request.post? && params[:from]

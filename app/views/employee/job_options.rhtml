@@ -1,0 +1,8 @@
+<%
+
+load_job_options @filter.status
+
+%>
+<% fields_for(:filter, @filter) { |f| %>
+<%= f.select :job_ids, @job_options, {}, :multiple => true, :style => 'width: 200px; height: 100px;' %>
+<% } %>

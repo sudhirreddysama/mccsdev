@@ -60,4 +60,8 @@ class Agency < ActiveRecord::Base
 		return u
 	end
 	
+	def has_title_run?
+		@has_title_run ||= (agency_jobs.first ? true : false)
+	end
+	
 end

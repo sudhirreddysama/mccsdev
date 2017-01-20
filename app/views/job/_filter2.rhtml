@@ -1,8 +1,10 @@
 <tr>
 	<th>Options:</th>
 	<td>
-		<label>Approved Titles For Agency: <%= f.select :agency_id, @agency_options, :include_blank => 'All Titles' %></label>
-		&nbsp;&nbsp;&nbsp;
+		<% if !@current_user.has_title_run? %>
+			<label>Approved Titles For Agency: <%= f.select :agency_id, @agency_options, :include_blank => 'All Titles' %></label>
+			&nbsp;&nbsp;&nbsp;
+		<% end %>
 		<label><%= f.check_box :inactive %> Show Inactive Titles</label>
 	</td>
 </tr>

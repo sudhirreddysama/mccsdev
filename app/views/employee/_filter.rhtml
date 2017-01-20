@@ -1,8 +1,8 @@
 <%
 
-load_job_options
+load_job_options @filter.status
 
-%><% form_for(:filter, @filter, :builder => TableFormBuilder) { |f| %>
+%><% form_for(:filter, @filter, :builder => TableFormBuilder, :html => {:id => 'employee-filter'}) { |f| %>
 	<div class="left">
 		<table class="form">
 			<tr>
@@ -49,7 +49,7 @@ load_job_options
 				</td>
 			</tr>
 			<tr>
-				<th colspan="4">
+				<th colspan="4" id="current-or-prior">
 					<label><%= f.radio_button :status, 'all' %> All Employees</label>&nbsp;&nbsp;&nbsp;
 					<label><%= f.radio_button :status, 'current' %> Current Employees</label>&nbsp;&nbsp;&nbsp;
 					<label><%= f.radio_button :status, 'prior' %> Prior Employees</label>
@@ -61,3 +61,22 @@ load_job_options
 	<%= f.submit 'Clear Filter', :name => 'filter[clear]' %>
 	<%= f.submit 'Export (xls)', :name => 'export[xls]' %></div>
 <% } %>
+<script>
+	(function($) {
+		$('#current-or-prior input').click(function(e) {
+			$('#filter_job_ids').addClass('busy-bg');
+			$.ajax({
+				url: '<%= url_for :action => :job_options %>',
+				data: $('#employee-filter').serialize(),
+				complete: function(xhr, status) {
+					$('#filter_job_ids').removeClass('busy-bg');
+				},
+				success: function(data, status, xhr) {
+					$('#filter_job_ids').replaceWith(data);
+				},
+				error: function(xhr, status, error) {
+				}
+			});
+		});
+	})(jQuery);
+</script>

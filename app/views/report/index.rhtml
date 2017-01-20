@@ -11,7 +11,11 @@ else
 	@departments = Department.find(:all, :order => 'departments.name')
 end
 
-load_job_options
+load_job_options 'current'
+
+if !@current_user.agency_level?
+	@all_job_options = Job.find(:all, {:order => 'jobs.inactive asc, jobs.name asc'}).collect { |j| [j.inactive ? "-#{j.name} (inactive)" : j.name, j.id] }
+end
 
 %>
 
@@ -155,7 +159,7 @@ load_job_options
 								<th>Title:</th>
 							</tr>
 								<td colspan="5">
-									<%= select_tag 'job_ids', options_for_select(@job_options), :multiple => true, :style => 'height: 150px;' %>
+									<%= select_tag 'job_ids', options_for_select(@all_job_options), :multiple => true, :style => 'height: 150px;' %>
 									<div>If no titles are selected, all will be used.
 								</td>
 							</tr>
@@ -202,7 +206,7 @@ load_job_options
 								<th>Title:</th>
 							</tr>
 								<td colspan="5">
-									<%= select_tag 'job_ids', options_for_select(@job_options), :multiple => true, :style => 'height: 150px;' %>
+									<%= select_tag 'job_ids', options_for_select(@all_job_options), :multiple => true, :style => 'height: 150px;' %>
 									<div>If no titles are selected, all will be used.
 								</td>
 							</tr>

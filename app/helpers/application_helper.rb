@@ -127,21 +127,39 @@ module ApplicationHelper
 		'<div class="pref-mil pref-mil-' + t + '">' + t + '</div>'
 	end
 	
-	def load_job_options
+	def load_job_options current_or_prior = nil
 		#cond = ['employees.id is not null']
-		empl_cond = []
-		if @current_user.agency_level?
-			if @current_user.agency
-				empl_cond << 'e.agency_id = %d' % @current_user.agency_id
+		# Might have to re-enable this (remove "false &&" if they end up wanting the report to be limited to title run, but that will exclude employees with erroneous titles!
+		jobs = nil
+		if false && @current_user.has_title_run? 
+			jobs = Job.find(:all, {
+				:order => 'jobs.inactive asc, jobs.name asc', 
+				:include => :agency_jobs,
+				:conditions => ['agency_jobs.agency_id = ?', @current_user.agency_id],
+				:group => 'jobs.id'
+			})
+		else
+			empl_cond = []
+			if current_or_prior == 'current'
+				empl_cond << '(e.leave_date is null or e.leave_date > date(now()))'
+			elsif current_or_prior == 'prior'
+				empl_cond << '(e.leave_date <= date(now()))'
 			end
-			if @current_user.department
-				empl_cond << 'e.department_id = %d' % @current_user.department_id
+			if @current_user.agency_level?
+				if @current_user.agency
+					empl_cond << 'e.agency_id = %d' % @current_user.agency_id
+				end
+				if @current_user.department
+					empl_cond << 'e.department_id = %d' % @current_user.department_id
+				end
 			end
+			jobs = Job.find(:all, {
+				:order => 'jobs.inactive asc, jobs.name asc', 
+				:joins => empl_cond.empty? ? nil : 'join employees e on e.job_id = jobs.id and ' + empl_cond.join(' and '), 
+				:group => 'jobs.id'
+			})
 		end
-		@job_options = Job.find(:all, {
-			:order => 'jobs.inactive asc, jobs.name asc', 
-			:joins => empl_cond.empty? ? nil : 'join employees e on e.job_id = jobs.id and ' + empl_cond.join(' and '), :group => 'jobs.id'
-		}).collect { |j| [j.inactive ? "-#{j.name} (inactive)" : j.name, j.id] }
+		@job_options = jobs.collect { |j| [j.inactive ? "-#{j.name} (inactive)" : j.name, j.id] }
 	end
 	
 end
