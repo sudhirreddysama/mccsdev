@@ -35,8 +35,10 @@
 	<%= f.tr_calendar_date_select :requested_date, :label => 'Requested Date', :class => 'ucase', :help => 'Date list is requested. If requested electronically by an agency user this will automatically be populated.' %>
 	<%= f.tr_calendar_date_select :pending_date, :label => 'Pending Date', :class => 'ucase', :help => 'Date list is forwarded from liaison to certification specialist.' %>
 	<%= f.tr_calendar_date_select :certification_date, :label => 'Certification Date', :class => 'ucase', :onchange => 'cdate_change();', :help => 'Date list is certified. Agencies will be able to enter candidate actions on/after this date.' %>	
+	<%= f.tr_calendar_date_select :notified_date, :label => 'Agency Notified Date', :class => 'ucase', :help => 'Date agency is notified that the list has been certified.' %>	
 	<%= f.tr_calendar_date_select :return_date, :label => 'Return Date', :class => 'ucase', :help => 'Date list expires and can no longer be used for hiring.' %>	
 	<%= f.tr_calendar_date_select :completed_date, :label => 'Completed Date', :class => 'ucase', :help => 'Date agency completes and returns the list. Agency will no longer be able to enter candidate actions on/after this date.' %>	
+	<%= f.tr_calendar_date_select :prefinished_date, :label => 'Prefinished Date', :class => 'ucase', :help => 'Date returned list is approved by liaison and sent to certification specialist.' %>	
 	<%= f.tr_text_field :finished, :label => 'Finished', :class => 'ucase', :help => 'Enter initials and/or date to indicate completed list returned from agency has been reviewed and approved.' %>
 	<%= f.tr_check :show_actions, :label => 'Show Actions?', :text => 'If checked, actions will be shown on the public website when exported.' %>	
 <% end %>

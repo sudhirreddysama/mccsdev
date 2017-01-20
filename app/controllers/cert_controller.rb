@@ -344,6 +344,7 @@ class CertController < CrudController
 	def notify_agency
 		load_obj
 		users = @obj.agency ? @obj.agency.get_users(@obj.department) : []
+		@obj.update_attribute :notified_date, Time.now.to_date
 		if users.empty?
 			flash[:notice] = 'No agency users to send notice to.'
 		else
@@ -360,6 +361,8 @@ class CertController < CrudController
 		flash[:notice] = 'Notification email has been sent.'
 		if !@obj.pending_date
 			@obj.update_attribute :pending_date, Time.now.to_date
+		else
+			@obj.update_attribute :prefinished_date, Time.now.to_date
 		end
 		Notifier.deliver_cert_specialist @obj
 		redirect_to :action => :view, :id => @obj.id

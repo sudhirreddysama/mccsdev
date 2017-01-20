@@ -1,4 +1,4 @@
-A Certified List request has been forwarded to you by a liaison.
+A Certified List request has been<% if @c.status == 'pending' %> forwarded to you by a liaison and is pending certification<% else %> returned from an agency and approved by a liaison<% end %>.
 
 Current Status: <%= @c.status %>
 

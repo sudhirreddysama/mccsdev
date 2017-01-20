@@ -5,13 +5,13 @@
 		<% if @obj.status == 'certified' && @current_user.staff_level? %>
 			<% users = @obj.agency ? @obj.agency.get_users(@obj.department).collect(&:username).join(', ') : '' %>
 			<% users = '(no users)' if users.blank? %>
-			<%= tab 'Notify Agency', {:action => :notify_agency, :id => @obj.id}, {}, :target => '_blank', :confirm => "Send email to all users in this agency that certified list is available?\n\nUsers are: " + users, :class => 'tab-delivery' %>
+			<%= tab 'Notify Agency' + (@obj.notified_date ? " (Sent #{@obj.notified_date.d0})" : ''), {:action => :notify_agency, :id => @obj.id}, {}, :confirm => "Send email to all users in this agency that certified list is available?\n\nUsers are: " + users, :class => 'tab-delivery' %>
 		<% end %>
 		<% if (@obj.status == 'requested' && (@current_user.staff_level? || @current_user.liaison_level?))  %>
-			<%= tab 'Notify Certification Specialist', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist? This will change the status to "pending".', :class => 'tab-delivery' %>
+			<%= tab 'Notify Certification Specialist', {:action => :notify_specialist, :id => @obj.id}, {}, :confirm => 'Send email to cerification specialist? This will change the status to "pending".', :class => 'tab-delivery' %>
 		<% end %>
-		<% if (@obj.status == 'completed' && (@current_user.staff_level? || @current_user.liaison_level?))  %>
-			<%= tab 'Notify Certification Specialist (Completed)', {:action => :notify_specialist, :id => @obj.id}, {}, :target => '_blank', :confirm => 'Send email to cerification specialist to finish this certification?', :class => 'tab-delivery' %>
+		<% if (@obj.status == 'completed' && !@obj.prefinished_date && (@current_user.staff_level? || @current_user.liaison_level?))  %>
+			<%= tab 'Notify Certification Specialist (Completed)', {:action => :notify_specialist, :id => @obj.id}, {}, :confirm => 'Send email to cerification specialist to finish this certification?', :class => 'tab-delivery' %>
 		<% end %>
 		<% if @current_user.username == 'isadmin' %>
 			<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => :cert, :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>
@@ -160,6 +160,10 @@
 					<%= o.certification_date.d0? %>
 				</td>
 				<td>
+					<label>Agency Notified Date:</label>
+					<%= o.notified_date.d0? %>
+				</td>
+				<td>
 					<label>Return Date:</label>
 					<%= h o.return_date.d0? %>
 				</td>
@@ -170,6 +174,10 @@
 				<td>
 					<label>Completed By:</label>
 					<%= h o.completed_by.name if o.completed_by %>
+				</td>
+				<td>
+					<label>Prefinished Date:</label>
+					<%= h o.prefinished_date.d0? %>
 				</td>
 				<td>
 					<label>Finished:</label>
