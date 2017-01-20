@@ -58,18 +58,18 @@ load_job_options
 			<div class="fs">
 				<table class="form">
 					<tr>
-						<th colspan="2">Agency:</th>
-						<th colspan="2">Agency Type:</th>
-						<th>Breakdown 1:</th>
-						<th>Breakdown 2:</th>
-						<th>Breakdown 3:</th>
+						<th width="1%" colspan="2">Agency:</th>
+						<th width="1%" colspan="2">Agency Type:</th>
+						<th width="1%">Breakdown 1:</th>
+						<th width="1%">Breakdown 2:</th>
+						<th width="99%">Breakdown 3:</th>
 					</tr>
 					<tr>
 						<td colspan="2"><%= select_tag 'agency_ids', options_for_select(@agencies.collect { |a| [a.name, a.id] }), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>
 						<td colspan="2"><%= select_tag 'agency_types', options_for_select(Const::AGENCY_TYPES), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>
 						<% 3.times { |i| %>
-							<td rowspan="3">
-								<label style="display: block;"><%= radio_button_tag "bd#{i}", '' %> None</label>
+							<td>
+								<label style="display: block; white=space: nowrap;"><%= radio_button_tag "bd#{i}", '' %> None</label>
 								<% @employee_bd.each { |bd| %>
 									<label style="display: block; white-space: nowrap;"><%= radio_button_tag "bd#{i}", bd[1] %> <%= h bd[0] %></label>
 								<% } %>
@@ -78,11 +78,13 @@ load_job_options
 					</tr>
 					<tr>
 						<th colspan="2">Department:</th>
-						<th colspan="2">Title:</th>				
+						<th colspan="2">Title:*</th>
+						<th></th>
 					</tr>
 					<tr>
 						<td colspan="2"><%= select_tag 'department_ids', options_for_select(@departments.collect { |a| [a.name, a.id] }), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>
 						<td colspan="2"><%= select_tag 'job_ids', options_for_select(@job_options), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>				
+						<td colspan="3"><b>*NOTE:</b> This list reflects titles currently held by employees. An approved title may not appear on this list if no employee holds that title. Additionally, an obsolete title may appear on this list if an employee still holds that title.</td>
 					</tr>
 					<tr>
 						<th>Class:</th>
