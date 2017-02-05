@@ -47,6 +47,11 @@ class Exam < ActiveRecord::Base
 		}
 	end
 	
+	def handle_before_validation
+		self.cr_group = self.cr_group.to_i
+	end
+	before_validation :handle_before_validation
+	
 	attr :save_new_exam_sites, true
 	
 	def check_new_exam_sites
