@@ -120,7 +120,7 @@ class Notifier < ActionMailer::Base
 	end
 	
 	def mailtest arg = 'test'
-		recipients ['jessesternbergmc@hotmail.com', 'jessesternberg@outlook.com', 'jesse@unicornelex.com', 'jessesternberg@monroecounty.gov', 'jessesternbergmc@gmail.com', 'jessesternbergmc@yahoo.com']
+		recipients ['Jesse D. Sternbg <jessesternbergmc@yahoo.com>']
 		subject "Test Email From MCCS (#{arg})"
 		from DEFAULT_FROM
 		body :a => 'TEST'
