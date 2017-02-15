@@ -1,7 +1,14 @@
 <%= f.tr_select :letter_id, Letter.find(:all, :order => 'letters.name asc').collect { |l| [l.name, l.id] }, :include_blank => 'Blank Template', :label => 'Letter Template' %>
 <%= f.tr_text_field :subject, :label => 'Subject', :style => 'width: 400px;', :req => true, :class => 'ucase' %>
 <%= f.tr_text_field :email_from, :label => 'From/Reply To', :style => 'width: 400px;', :req => false %>
-<%= f.tr_check :hr_letterhead, :label => 'HR Letterhead', :text => 'Check to use the HR letterhead instead of the civil service letterhead.' %>
+<tr>
+	<th>Letterhead:</th>
+	<td>
+		<label><%= f.radio_button :letterhead, '', :checked => (@obj.letterhead.to_s == '') %> Civil Service (Default)</label>&nbsp;&nbsp;&nbsp;
+		<label><%= f.radio_button :letterhead, 'hr' %> HR</label>&nbsp;&nbsp;&nbsp;
+		<label><%= f.radio_button :letterhead, 'des' %> DES</label>
+	</td>
+</tr>
 <%= f.tr_text_area :body, :label => 'Body', :style => 'width: 400px; height: 500px;', :req => true %>
 
 <script type="text/javascript">

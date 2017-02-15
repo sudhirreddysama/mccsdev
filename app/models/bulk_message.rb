@@ -92,7 +92,8 @@ class BulkMessage < ActiveRecord::Base
 				:subject => subject,
 				:body => Letter.apply(body, {:applicant => a, :person => a.person}),
 				:email_from => email_from,
-				:hr_letterhead => hr_letterhead,
+				#:hr_letterhead => hr_letterhead,
+				:letterhead => letterhead,
 				:user_id => user_id
 			})
 		}
