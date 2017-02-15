@@ -337,6 +337,14 @@
 			e = a.exam
 			c = ca.cert_code
 			
+			restricted = false
+			a.exam.exam_perfs.each { |ep|
+				taken_perf = a.taken_perfs.to_a.find { |tp| tp.perf_test_id == ep.perf_test_id }
+				if !taken_perf || !taken_perf.perf_code || !taken_perf.perf_code.pass_fail == 1
+					restricted = true
+				end
+			}			
+			
 			%>
 				<tr class="<%= cycle 'odd', 'even' %>">
 					<td><div style="position: relative;"><a name="ca-<%= ca.id %>" style="position: absolute; top: -50px;"></a><%= i + 1 %>.</div></td>
@@ -369,8 +377,10 @@
 								<%= h p.email %>&nbsp;<br />
 							<% end %>
 						<% end %>
-						Eligibility Expires: <%= e.valid_until.d0? %>&nbsp;<br />
-						&nbsp;<br />
+						Eligibility Expires: <%= e.valid_until.d0? %><br />
+						<% if restricted %>
+							* RESTRICTED *<br />
+						<% end %>	
 					</td>
 					<td style="text-align: right;"><%= a.final_score %></td>
 					<td style="text-align: right;">
