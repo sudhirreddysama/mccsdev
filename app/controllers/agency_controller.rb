@@ -28,7 +28,7 @@ class AgencyController < CrudController
 			:include => [:liaison, :omb_liaison]
 		}
 		
-		@export_fields = %w(id name)
+		@export_fields = %w(id name abbreviation agency_type address1 address2 city state zip phone fax primary_contacts_string)
 		super
   end
   
