@@ -441,7 +441,41 @@ class ReportController < ApplicationController
 	
 	def annual			
 		date = Date.parse(params[:date])	
-		if request[:overview]
+		if request[:titles]
+			
+			result = DB.query('
+				select j.name, e.classification, count(*) employee_count
+				from employees e 
+				left join jobs j on j.id = e.job_id
+				where (e.leave_date is null or e.leave_date > "%s") and e.date_hired <= "%s"
+					and (
+						(e.status = "P" and e.classification in ("N", "5", "E", "L")) or
+						(e.classification = "C" and e.status in ("P", "V", "V2", "C", "T"))
+					)
+				group by e.job_id, e.classification
+			', date.to_s, date.to_s)
+			book = Spreadsheet::Workbook.new
+			sheet = book.create_worksheet :name => 'Titles'
+			i = 0
+			tot = Hash.new { |h, k| h[k] = 0 }
+			sheet.row(0).replace(['Title', 'Class', 'Count'])
+			result.each_hash { |h|
+				i = i + 1
+				sheet.row(i).replace([h.name, h.classification, h.employee_count])
+				tot[h.classification.to_s] += h.employee_count.to_i
+			}
+			tot2 = 0
+			tot.each { |k, v|
+				i += 1
+				sheet.row(i).replace(["TOTAL CLASS #{k}", '', v])
+				tot2 += v
+			}
+			sheet.row(i + 1).replace(['TOTAL', '', tot2])
+			data = StringIO.new
+			book.write data
+			send_data data.string, :filename => 'titles.xls', :type => 'application/vnd.ms-excel'					
+			
+		elsif request[:overview]
 			
 			objs = DB.query('
 				select
