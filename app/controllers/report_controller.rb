@@ -442,16 +442,14 @@ class ReportController < ApplicationController
 	def annual			
 		date = Date.parse(params[:date])	
 		if request[:titles]
-			
+			class_cond = request[:class_all] ? '' : 
+				'and ((e.status = "P" and e.classification in ("N", "5", "E", "L")) or (e.classification = "C" and e.status in ("P", "V", "V2", "C", "T")))'
 			result = DB.query('
 				select j.name, e.classification, count(*) employee_count
 				from employees e 
 				left join jobs j on j.id = e.job_id
 				where (e.leave_date is null or e.leave_date > "%s") and e.date_hired <= "%s"
-					and (
-						(e.status = "P" and e.classification in ("N", "5", "E", "L")) or
-						(e.classification = "C" and e.status in ("P", "V", "V2", "C", "T"))
-					)
+					' + class_cond + '
 				group by e.job_id, e.classification
 			', date.to_s, date.to_s)
 			book = Spreadsheet::Workbook.new
@@ -467,7 +465,8 @@ class ReportController < ApplicationController
 			tot2 = 0
 			tot.each { |k, v|
 				i += 1
-				sheet.row(i).replace(["TOTAL CLASS #{k}", '', v])
+				k_label = k.blank? ? '(blank)' : k
+				sheet.row(i).replace(["TOTAL CLASS #{k_label}", '', v])
 				tot2 += v
 			}
 			sheet.row(i + 1).replace(['TOTAL', '', tot2])
