@@ -1,2 +1,3 @@
 <%= tab 'Contacts', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :contact}, {:action => :index, :id => nil}, {:class => 'tab-obj'} %>
 <%= tab 'Titles', {:sc => nil, :sid => nil, :controller => :agency, :action => :jobs, :id => (params[:sid] || params[:id])}, {:id2 => 'list'} %>
+<%= tab 'Documents', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>
