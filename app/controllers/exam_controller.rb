@@ -732,7 +732,7 @@ class ExamController < CrudController
 						a.exam_site_id = nil
 						sites.each { |s|
 							if !site_counts[s.id]
-								site_counts[s.id] = params[:all] ? 0 : site_stats['site_count'].to_i
+								site_counts[s.id] = params[:all] ? 0 : (@site_stats_indexed[s.exam_site_id] ? @site_stats_indexed[s.exam_site_id]['site_count'].to_i : 0)
 							end
 							site_zips = s.zip_codes.to_s.split(',').map(&:strip).reject(&:blank?)
 							person_zip = a.person.residence_different ? a.person.residence_zip : a.person.mailing_zip
