@@ -77,6 +77,11 @@ class Const
 		['PART', 'P']
 	]
 	
+	JOB_TIMES_ABBR = [
+		['FT', 'F'],
+		['PT', 'P']
+	]
+	
 	# Note: Some records from the old system have strange wage units.
 	WAGE_UNITS = [
 		['HOUR', 'H'],

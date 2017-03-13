@@ -200,11 +200,11 @@
 				</td>				
 				<td>
 					<label>Job Type:</label>
-					<%= h o.job_type %>
+					<%= h Const::JOB_STATUSES.rassoc(o.job_type)[0] rescue nil %>
 				</td>
 				<td>
 					<label>Time:</label>
-					<%= h o.job_time %>
+					<%= h Const::JOB_TIMES.rassoc(o.job_time)[0] rescue nil %>
 				</td>
 				<td>
 					<label>If Temp, Duration:</label>

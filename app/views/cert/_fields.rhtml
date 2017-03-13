@@ -85,9 +85,9 @@
 	<td>
 		<% if(@obj.general_or_residential == 'N/A') %><label><%= f.radio_button :general_or_residential, 'N/A' %>N/A</label>&nbsp;&nbsp;<% end %>
 		<label><%= f.radio_button :general_or_residential, 'General' %>General</label>&nbsp;&nbsp;
-		<label><%= f.radio_button :general_or_residential, 'Departmental' %>Departmental(MC Depts Only)</label>&nbsp;&nbsp;
+		<label><%= f.radio_button :general_or_residential, 'Departmental' %>Departmental (MC Depts Only)</label>&nbsp;&nbsp;
 
-		<label><%= f.radio_button :general_or_residential, 'Residential' %>Residential</label>&nbsp;&nbsp;
+		<label><%= f.radio_button :general_or_residential, 'Residential' %>Residential (OC Only)</label>&nbsp;&nbsp;
 	</td>
 </tr>
 <% if false %>

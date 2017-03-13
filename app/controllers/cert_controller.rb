@@ -401,6 +401,8 @@ class CertController < CrudController
 			@obj.completed_by_id = nil
 			@obj.requested_date = nil
 			@obj.pending_date = nil
+			@obj.prefinished_date = nil
+			@obj.show_actions = 0
 			@obj.finished = nil
 			@obj.recert_from_id = old.id
 			if @obj.save

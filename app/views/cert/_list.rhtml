@@ -8,7 +8,9 @@
 			<th width="1%">Cert.&nbsp;Date</th>
 			<th width="1%">Return</th>
 			<th width="93%">Cert. Title</th>
+      <th width="1%">Time</th>
       <th width="1%">Type</th>
+      <th width="1%">G/R/D</th>
 		</tr>
 	</thead>
 	<% @objs.each { |o| %>
@@ -21,12 +23,14 @@
 				<td class="nobr"><%= o.certification_date.d0? %></td>
 				<td class="nobr"><%= o.return_date.d0? %></td>
 				<td><%= link_to o.set_title, :action => :view, :id => o.id %></td>
+				<td><%= Const::JOB_TIMES_ABBR.rassoc(o.job_time)[0] rescue nil %></td>
+				<td><%= o.job_type %></td>
 				<td class="nobr"><%= [o.general_or_residential.to_s, o.months.to_s].reject(&:blank?).join('/') %></td>
 			</tr>
 			<% if !o.comments.blank? %>
 				<tr>
 					<td colspan="3"></td>
-					<td colspan="8" class="nobr"><span class="dim">Notes: </span><%= o.comments %></td>
+					<td colspan="100" class="nobr"><span class="dim">Notes: </span><%= o.comments %></td>
 				</tr>
 			<% end %>
 		</tbody>
