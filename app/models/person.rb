@@ -134,7 +134,7 @@ class Person < ActiveRecord::Base
 	before_save :fix_residence_address
 	
 	def ensure_formatta_id
-		chars = 'bcdfghjklmnpqrstvwxz0123456789'
+		chars = 'bcdfghjkmnpqrstvwxz23456789'
 		if formatta_id.blank?
 			begin
 				self.formatta_id = Array.new(9) { chars[rand(chars.length), 1] }.join()
