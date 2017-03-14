@@ -133,6 +133,17 @@ class Person < ActiveRecord::Base
 	end
 	before_save :fix_residence_address
 	
+	def ensure_formatta_id
+		chars = 'bcdfghjklmnpqrstvwxz0123456789'
+		if formatta_id.blank?
+			begin
+				self.formatta_id = Array.new(9) { chars[rand(chars.length), 1] }.join()
+			end while Person.find_by_formatta_id formatta_id
+		end
+	end
+	before_save :ensure_formatta_id
+	
+	
 	include DbChangeHooks
 	
 end
