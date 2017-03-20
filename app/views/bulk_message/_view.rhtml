@@ -21,6 +21,10 @@
 				<td>
 					<label>From/Reply To:</label>
 					<%= h o.email_from %>
+				</td>
+				<td>
+					<label>Deliver After:</label>
+					<%= h o.deliver_after.dt0? %>
 				&nbsp;</td>
 			</tr>
 		</table>

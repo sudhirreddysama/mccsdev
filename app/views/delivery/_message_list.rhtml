@@ -5,6 +5,7 @@
 			<th width="1%">Created</th>
 			<th width="1%">User</th>
 			<th width="1%">Delivery</th>
+			<th width="1%" class="nobr">Deliver&nbsp;After</th>
 			<th width="48%">Applicant</td>
 			<th width="48%">Message</td>
 		</tr>
@@ -16,6 +17,7 @@
 				<td class="nobr"><%= m.created_at.dt0? %></td>
 				<td><%= m.user.username if m.user %></td>
 				<td><%= m.delivered_via %></td>
+				<td class="nobr"><%= m.deliver_after.dt0? %></td>
 				<td><%= link_to m.person.label, :controller => :person, :action => :view, :id => m.person if m.person %></td>
 				<td><%= link_to m.subject, :sc => :person, :sid => m.person_id, :controller => :message, :id => m.id, :action => :view %></td>
 			</tr>

@@ -94,6 +94,7 @@ class BulkMessage < ActiveRecord::Base
 				:email_from => email_from,
 				#:hr_letterhead => hr_letterhead,
 				:letterhead => letterhead,
+				:deliver_after => deliver_after,
 				:user_id => user_id
 			})
 		}

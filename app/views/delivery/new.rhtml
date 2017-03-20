@@ -6,11 +6,9 @@
 		<th>Only Deliver Letters Created By (select none to deliver all):</th>
 	</tr>
 	<tr>
-		<td><%= select_tag 'user_ids', options_for_select(User.find(:all, :order => 'name', :conditions => 'level in ("staff", "admin")').collect { |u| [u.name, u.id] }, [@current_user.id]), :multiple => true, :style => 'width: 200px; height: 100px;' %></td>
+		<td><%= select_tag 'user_ids', options_for_select(User.find(:all, :order => 'name', :conditions => 'level in ("staff", "admin")').collect { |u| [u.name, u.id] }, (params[:user_ids] || [@current_user.id]).map(&:to_i)), :multiple => true, :style => 'width: 200px; height: 100px;' %></td>
 	</tr>
-	<% if @messages.size > 0 %>
-		<tr><th><%= submit_tag 'Deliver Messages' %></th></tr>
-	<% end %>
+		<tr><th><%= submit_tag 'Deliver Messages' %> <%= submit_tag 'Show Messages For Selected User(s)', :name => 'preview' %></th></tr>
 </table>
 </form>
 <%= partial 'message_list' %>
