@@ -13,6 +13,7 @@ class FormChangeController < CrudController
 			['Last Name', 'form_changes.last_name'],
 			['Agency Name', 'agencies.name'],
 			['Department Name', 'departments.name'],
+			['Present Title', 'form_changes.present_title']
 		]
 		cond = get_search_conditions @filter[:search], {
 			'form_changes.id' => :left,
@@ -21,7 +22,8 @@ class FormChangeController < CrudController
 			'form_changes.first_name' => :like,
 			'form_changes.last_name' => :like,
       'employees.ssn' => :like,
-      'employees.ssn_raw' => :like
+      'employees.ssn_raw' => :like,
+      'form_changes.present_title' => :like
 		}
 		
 		if @current_user.agency_level?
