@@ -613,14 +613,16 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 			</table>
 		</div>
 		
-		<% if !is_seasonal %>
-			<div class="row">
-				<table>
-					<tr>
-						<td><label>Were you ever removed from any type of employment?</label><%= yn? wa.removed_employment %>&nbsp;</td>
-					</tr>
-				</table>
-			</div>
+
+		<div class="row">
+			<table>
+				<tr>
+					<td><label>Were you ever removed from any type of employment?</label><%= yn? wa.removed_employment %>&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+		
+		<% if !is_seasonal %>		
 		
 			<div class="row">
 				<table>

@@ -176,9 +176,7 @@
 							<p>An answer of YES to any of the following questions does not represent an automatic bar to employment. Each case is considered and evaluated in relation to the duties and responsibilities of the position for which you are applying:</p>
 							<p>Were you ever convicted of any violation of law other than a minor traffic violation?* <b><%= @obj.law_violation ? 'YES' : 'NO' %></b></p>
 							<p>Do you currently have any criminal charges pending against you? <b><%= @obj.pending_criminal_charges ? 'YES' : 'NO' %></b></p>
-							<% if !seasonal %>
-								<p>Were you ever removed from any type of employment? <b><%= @obj.removed_employment ? 'YES' : 'NO' %></b></p>
-							<% end %>
+							<p>Were you ever removed from any type of employment? <b><%= @obj.removed_employment ? 'YES' : 'NO' %></b></p>
 							<p>* This question refers to all crimes, violations or offenses in any jurisdiction, including Federal and military offenses, except minor traffic infractions. It also includes Juvenile Offender status convictions. You do not need to include adjudications of Juvenile Delinquency or Youthful Offender status or arrests that did not lead to a conviction.</p>							
 						</td>
 					</tr>
