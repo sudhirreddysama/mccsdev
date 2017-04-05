@@ -1,0 +1,6 @@
+<%= f.select :personnel_division_id, 
+	o.personnel_area_id.blank? ? 
+		[] : 
+		PersonnelDivision.find(:all, :conditions => ['personnel_area_id = ?', o.personnel_area_id]).map { |d| [d.name, d.id] }, 
+	{:include_blank => true} 
+%>

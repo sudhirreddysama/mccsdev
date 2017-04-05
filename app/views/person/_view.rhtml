@@ -176,6 +176,36 @@
 		</table>
 	</div>	
 	
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Formatta ID</label>
+					<%= h o.formatta_id %>
+				</td>
+				<td>
+					<label>Formatta User</label>
+					<%= h o.formatta_user %>
+				</td>
+				<td>
+					<label>Personnel Area</label>
+					<%= h(o.personnel_area ? "#{o.personnel_area.no} - #{o.personnel_area.name}" : '') %>
+				</td>
+				<td>
+					<label>Division</label>
+					<%= h(o.personnel_division ? o.personnel_division.name : '') %>
+				</td>
+				<% if @current_user.admin_level? %>
+					<td>
+						<label>Login Email Sent</label>
+						<%= o.formatta_email_sent.dt0? %> <%= o.formatta_email_sent_by %>
+						<%= link_to 'Send Email', {:action => :send_formatta_login, :id => o.id}, :confirm => 'Are you sure you want to send the Formatta login email?' %>
+					</td>
+				<% end %>
+			</tr>
+		</table>
+	</div>
+	
 	<% if false %>
 		<% infos = o.app_infos.to_a %>
 		<% if !infos.empty? %>

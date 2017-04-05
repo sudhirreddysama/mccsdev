@@ -10,6 +10,13 @@ class Notifier < ActionMailer::Base
 		body :u => u, :url => url
 	end
 	
+	def formatta_login person
+		recipients person.email_with_name
+		from DEFAULT_FROM
+		subject 'Monroe County Employment Onboarding Forms'
+		body :person => person
+	end
+	
 	def message m
 		recipients m.person.email_with_name
 		if m.email_from.blank?

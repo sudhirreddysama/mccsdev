@@ -54,19 +54,61 @@
 		</script>
 	<% end %>
 <% else %>
+	<tr style="background: #e8e8e8;"><th></th><th><em>General Info.</em></th></tr>
 	<%= f.tr_text_field :ssn, :label => 'SSN', :req => true, :class => 'ucase' %>
 	<%= f.tr_text_field :first_name, :label => 'First Name', :req => true, :class => 'ucase' %>
 	<%= f.tr_text_field :last_name, :label => 'Last Name', :req => true, :class => 'ucase' %>
-	<%= f.tr_select :county_id, County.find(:all, :order => 'counties.name').collect { |c| [c.name, c.id] }, :include_blank => true, :label => 'County' %>
-	<%= f.tr_select :school_district_id, SchoolDistrict.find(:all, :order => 'school_districts.name').collect { |s| [s.name, s.id] }, :include_blank => true, :label => 'School District' %>
-	<%= f.tr_select :town_id, Town.find(:all, :order => 'towns.name').collect { |t| [t.name, t.id] }, :include_blank => true, :label => 'Town' %>
-	<%= f.tr_select :village_id, Village.find(:all, :order => 'villages.name').collect { |v| [v.name, v.id] }, :include_blank => true, :label => 'Village' %>
-	<%= f.tr_select :fire_district_id, FireDistrict.find(:all, :order => 'fire_districts.name').collect { |d| [d.name, d.id] }, :include_blank => true, :label => 'Fire District' %>
+
 	<%= f.tr_text_field :home_phone, :label => 'Home Phone', :class => 'ucase' %>
 	<%= f.tr_text_field :work_phone, :label => 'Work Phone', :class => 'ucase' %>
 	<%= f.tr_text_field :cell_phone, :label => 'Cell Phone', :class => 'ucase' %>
 	<%= f.tr_text_field :fax, :label => 'Fax', :class => 'ucase' %>
 	<%= f.tr_text_field :email, :label => 'Email' %>
+	<%= f.tr_calendar_date_select :date_of_birth, :label => 'Date of Birth', :class => 'ucase' %>
+	<tr>
+		<th>Contact Via:</th>
+			<td>
+				<label><%= f.radio_button :contact_via, 'postal' %> POSTAL MAIL</label>&nbsp;&nbsp;
+				<label><%= f.radio_button :contact_via, 'email' %> EMAIL</label>&nbsp;&nbsp;
+				<label><%= f.radio_button :contact_via, 'both' %> BOTH</label>&nbsp;&nbsp;
+			</td>
+	</tr>	
+	
+	<tr style="background: #e8e8e8;"><th></th><th><em>Personnel Area/Division (For Formatta)</em></th></tr>
+	<tr>
+		<%= f.tr_select :personnel_area_id, PersonnelArea.find(:all).map { |a| ["#{a.no} - #{a.name}", a.id] }, {:include_blank => true, :label => 'Personnel Area'} %>
+		<tr>
+			<th>Personnel Division:</th>
+			<td><%= partial 'personnel_division_select', :o => o, :f => f %></td>
+		</tr>
+		<script type="text/javascript">
+			(function($) {
+				$('#obj_personnel_area_id').change(function(e) {
+					$('#obj_personnel_division_id').parent().addClass('busy-bg');
+					$.ajax({
+						url: '<%= url_for :controller => :person, :action => :personnel_division_select %>',
+						data: {'obj[personnel_area_id]': $('#obj_personnel_area_id').val()},
+						complete: function(xhr, status) {
+							$('#obj_personnel_division_id').parent().removeClass('busy-bg');
+						},
+						success: function(data, status, xhr) {
+							$('#obj_personnel_division_id').replaceWith(data);
+						},
+						error: function(xhr, status, error) {}
+					});
+				});
+			})(jQuery);
+		</script>
+	</tr>
+	
+	<tr style="background: #e8e8e8;"><th></th><th><em>Residency</em></th></tr>
+	<%= f.tr_select :county_id, County.find(:all, :order => 'counties.name').collect { |c| [c.name, c.id] }, :include_blank => true, :label => 'County' %>
+	<%= f.tr_select :school_district_id, SchoolDistrict.find(:all, :order => 'school_districts.name').collect { |s| [s.name, s.id] }, :include_blank => true, :label => 'School District' %>
+	<%= f.tr_select :town_id, Town.find(:all, :order => 'towns.name').collect { |t| [t.name, t.id] }, :include_blank => true, :label => 'Town' %>
+	<%= f.tr_select :village_id, Village.find(:all, :order => 'villages.name').collect { |v| [v.name, v.id] }, :include_blank => true, :label => 'Village' %>
+	<%= f.tr_select :fire_district_id, FireDistrict.find(:all, :order => 'fire_districts.name').collect { |d| [d.name, d.id] }, :include_blank => true, :label => 'Fire District' %>
+	
+	<tr style="background: #e8e8e8;"><th></th><th><em>Mailing Address</em></th></tr>
 	<%= f.tr_text_field :mailing_address, :label => 'Mailing Address', :class => 'ucase' %>
 	<%= f.tr_text_field :mailing_address2, :label => 'Mailing Address Line 2', :class => 'ucase' %>
 	<tr>
@@ -82,6 +124,8 @@
 		</td>
 	</tr>
 	<%= f.tr_select :mailing_county, ['MONROE', 'OUT OF COUNTY'], :label => 'Mailing County' %>
+	
+	<tr style="background: #e8e8e8;"><th></th><th><em>Residence Address</em></th></tr>
 	<%= f.tr_check :residence_different, :label => 'Residence Different?', :text => 'Check here if residence address is different than mailing' %>
 	<%= f.tr_text_field :residence_address, :label => 'Residence Address', :class => 'ucase', :tr_class => 'res' %>
 	<tr class="res">
@@ -116,19 +160,12 @@
 
 	</script>
 
-	<%= f.tr_calendar_date_select :date_of_birth, :label => 'Date of Birth', :class => 'ucase' %>
-	<tr>
-		<th>Contact Via:</th>
-			<td>
-				<label><%= f.radio_button :contact_via, 'postal' %> POSTAL MAIL</label>&nbsp;&nbsp;
-				<label><%= f.radio_button :contact_via, 'email' %> EMAIL</label>&nbsp;&nbsp;
-				<label><%= f.radio_button :contact_via, 'both' %> BOTH</label>&nbsp;&nbsp;
-			</td>
-	</tr>
+	<tr style="background: #e8e8e8;"><th></th><th><em>EEO Data</em></th></tr>
 	<% races = [['White', 'white'], ['Black', 'black'], ['Hispanic', 'hispanic'], ['Asian', 'asian'], ['Hawaiian/Pacific Islander', 'pacific'], ['American Indian', 'americanindian'], ['Two or More', 'plural']] %>
 	<%= f.tr_select :gender, ['M', 'F'], :include_blank => true, :label => 'Gender' %>
 	<%= f.tr_select :race, races, :include_blank => true, :label => 'EEO Race' %>
-	<%= f.tr_text_area :comments, :label => 'Comments', :size => '60x3' %>
+	
+	<tr style="background: #e8e8e8;"><th></th><th><em>Exam Special Accomodations</em></th></tr>
 	<tr>
 		<th>Sabbath Observer:</th>
 		<td>
@@ -144,6 +181,9 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><%= f.check_box :special_accommodations_docs %>Documentation On File</label>
 		</td>
 	</tr>
+	
+	<tr style="background: #e8e8e8;"><th></th><th><em>Comments &amp; Documents</em></th></tr>
+	<%= f.tr_text_area :comments, :label => 'Comments', :size => '60x3' %>
 	<% 
 
 	city_zips = {} 

@@ -8,6 +8,9 @@ class Person < ActiveRecord::Base
 	belongs_to :town
 	belongs_to :fire_district
 	
+	belongs_to :personnel_area
+	belongs_to :personnel_division
+	
 	has_many :applicants
 	has_many :app_infos
 	has_many :taken_perfs

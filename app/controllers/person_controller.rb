@@ -233,5 +233,18 @@ class PersonController < CrudController
 	def ssn_merge_bad
 		@objs = Person.find(:all, :conditions => ['ssn in (?)', BAD_SSNS], :order => 'id desc')
 	end
+	
+	def personnel_division_select
+		@obj = params[:obj]
+		render :inline => "<% fields_for(:obj) { |f| %><%= partial 'personnel_division_select', :f => f, :o => @obj %><% } %>"
+	end
+	
+	def send_formatta_login
+		load_obj
+		Notifier.deliver_formatta_login @obj
+		@obj.update_attributes :formatta_email_sent => Time.now, :formatta_email_sent_by => @current_user.username
+		redirect_to :action => :view, :id => @obj.id
+		flash[:notice] = 'Formatta login email has been sent.'
+	end
 
 end
