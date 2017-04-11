@@ -195,6 +195,10 @@
 					<label>Division</label>
 					<%= h(o.personnel_division ? o.personnel_division.name : '') %>
 				</td>
+				<td>
+					<label>EMPID</label>
+					<%= h(o.formatta_empid) %>
+				</td>
 				<% if @current_user.admin_level? %>
 					<td>
 						<label>Login Email Sent</label>

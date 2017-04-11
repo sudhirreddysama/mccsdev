@@ -29,7 +29,7 @@ class DepartmentController < CrudController
 			:include => [:liaison, :liaison2, :omb_liaison]
 		}
 		
-		@export_fields = %w{id name}
+		@export_fields = %w{id abbreviation name}
 		super
 	end
 
