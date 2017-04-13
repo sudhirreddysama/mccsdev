@@ -146,6 +146,16 @@ class Person < ActiveRecord::Base
 	end
 	before_save :ensure_formatta_id
 	
+	def set_personnel_fields
+		if personnel_area_id_changed?
+			self.personnel_area_no = personnel_area ? personnel_area.no : ''
+			self.personnel_area_name = personnel_area ? personnel_area.name : ''
+		end
+		if personnel_division_id_changed?
+			self.personnel_division_name = personnel_division ? personnel_division.name : ''
+		end
+	end
+	before_save :set_personnel_fields
 	
 	include DbChangeHooks
 	
