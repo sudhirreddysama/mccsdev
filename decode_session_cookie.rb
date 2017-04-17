@@ -19,13 +19,14 @@ def secure_compare(a, b)
 	end
 end
 
-# Dummy class for unmarshalling error.
+# Dummy classes for unmarshalling errors.
 class ActionController
 	class Flash
 		class FlashHash < Hash
 		end
 	end
 end
+class HashWithIndifferentAccess < Hash; end
 
 
 #session_cookie = 'BAh7CjoUY3VycmVudF91c2VyX2lkaQGjIhZleGFtX2luZGV4X2ZpbHRlcnsHOgpzb3J0MSINZXhhbXMuaWQ6CWRpcjEiCWRlc2MiCmZsYXNoSUM6J0FjdGlvbkNvbnRyb2xsZXI6OkZsYXNoOjpGbGFzaEhhc2h7AAY6CkB1c2VkewA6D3Nlc3Npb25faWQiJTU4ZDBkNTcxNDI5NzlmMTA5M2FhZDlkMmU5ZGM4ZTljOhRzd2l0Y2hfdXNlcl9pZHNbGGkBo2kGaRRpGmkdaSRpJWlOaVRpcmkBlGkBlmkBsGkCQgFpAdZpAfFpAg8BaQISAWkCEwE=--4684a541a9576e0c1ad2741ca308827012b26ff2'
