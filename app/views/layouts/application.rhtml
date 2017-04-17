@@ -34,6 +34,7 @@
 		</style>
 		<script type="text/javascript">
 			var root_url = '<%= root_url %>';
+			var ROOT_PATH = '<%= root_path %>';
 			var obj_id = <%= @obj && !@obj.new_record? && @obj.id ? @obj.id : 'null' %>;
 			var super_id = <%= params[:sid] || 'null' %>;
 			var super_c = <%= params[:sc] ? "'#{params[:sc]}'" : 'null' %>;

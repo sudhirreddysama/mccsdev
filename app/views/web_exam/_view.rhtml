@@ -100,6 +100,10 @@
 					<label>License Req.:</label>
 					&nbsp;<%= h o.license_requirement %>
 				</td>
+				<td>
+					<label>Salary:</label>
+					&nbsp;<%= nl2br_h o.salary %>
+				</td>
 			</tr>
 		</table>
 	</div>
@@ -110,6 +114,30 @@
 				<td>
 					<label>Description:</label>
 					<%= o.description %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Min. Qualifications:</label>
+					<%= o.min_qualifications %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Announcement File:</label>
+					<% if !o.announcement_file.blank? %>
+						<%= link_to(o.announcement_file, o.announcement_file, :target => '_blank') %>
+					<% end %>
 				&nbsp;</td>
 			</tr>
 		</table>

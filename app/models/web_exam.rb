@@ -1,5 +1,12 @@
 class WebExam < ActiveRecord::Base
-
+	
+	WHO_MAY_APPLY_PRESETS = [
+		'Promotional', 
+		'Promotional - MC', 
+		'Open to Public',
+		'Open to Public - Residency Waived'
+	]
+	
 	has_many :documents
 	has_many :bulk_messages
 	has_many :applicants

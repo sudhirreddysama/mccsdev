@@ -14,15 +14,15 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'links' },
-		'/',
+		//'/',
 		{ name: 'tools' },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
 		{ name: 'others' },
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		'/',
+		//'/',
 		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align' ] },
 		{ name: 'insert' },
-		'/',
+		//'/',
 		{ name: 'styles' },
 		{ name: 'colors' }
 	];

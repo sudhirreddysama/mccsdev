@@ -26,7 +26,9 @@
 <%= f.tr_calendar_date_select :publish, :label => 'Publish Date/Time' %>
 <%= f.tr_calendar_date_select :deadline, :label => 'Appl. Deadline Date/Time' %>
 <%= f.tr_calendar_date_select :exam_date, :label => 'Exam Date' %>
-<%= f.tr_text_area :description, :label => 'Description', :size => '70x15' %>
+<%= f.tr_text_area :salary, :label => 'Salary', :size => '60x3' %>
+<%= f.tr_text_area :description, :label => 'Description', :size => '70x9' %>
+<%= f.tr_text_area :min_qualifications, :label => 'Min. Qualifications', :size => '70x9' %>
 <% if false %>
 	<%= f.tr_check :ask_loans, :label => 'Ask Loans Question?', :text => 'Present the outstanding loans made or guaranteed by NYS question' %>
 <% end %>
@@ -35,7 +37,15 @@
 <%= f.tr_check :require_degree, :label => 'Require Degree?', :text => 'Require at least one college with a graduation date' %>
 <%= f.tr_text_field :license_requirement, :label => 'License Requirement', :help => 'If a license requirement is specified applicants will be required to enter at least one license and will be presented this text if no license is entered.'  %>
 <%= f.tr_text_field :minimum_age, :size => 6, :label => 'Minimum Age', :help => 'If specified applicants will be forced to enter a date of birth and will be presented an error if below this age. NOTE: This checks age on the exam date. If no exam date is given this field will do nothing.' %>
-<%= f.tr_text_area :who_may_apply, :label => 'Who May Apply', :size => '60x2' %>
+<tr>
+	<th>Who May Apply:</th>
+	<td><%= select_tag 'who_may_apply_preset', options_for_select([['Select Preset...', nil]] + WebExam::WHO_MAY_APPLY_PRESETS) %></td>
+</tr>
+<tr>
+	<th></th>
+	<td><%= f.text_area :who_may_apply, :label => 'Who May Apply', :size => '60x2' %></td>
+</tr>
+<%= f.tr_text_field :announcement_file, :label => 'Announcement File' %>
 <tr>
 	<th>Liaison User(s):</th>
 	<td>
@@ -45,24 +55,31 @@
 		<div>Liaison(s) will be notified by email on the deadline for this web post.</div>
 	</td>
 </tr>
-
-
 <script type="text/javascript">
 
-	(function($){
-	
-		 var ck = CKEDITOR.replace('obj_description', {
-		 	filebrowserBrowseUrl: 'https://cs.monroecounty.gov/hrapply/javascripts/fckeditor/editor/filemanager/browser/default/browser.html?Connector=/hrapply/fckeditor/command',
-		 	customConfig: '/mccs/javascripts/ckeditor/config_custom.js'
-		 });
-        var ckf = CKEDITOR.replace('obj_facebook_description', {
-            filebrowserBrowseUrl: 'https://cs.monroecounty.gov/hrapply/javascripts/fckeditor/editor/filemanager/browser/default/browser.html?Connector=/hrapply/fckeditor/command',
-            customConfig: '/mccs/javascripts/ckeditor/config_custom.js'
-        });
-				
-	})(jQuery);
-    function toggle_twitter() {
-            jQuery('twitter_description')[$('obj_social_media_twitter').checked ? 'show' : 'hide']();
-    }
+(function($){
+	elfinder_field('#obj_announcement_file');
+	$('#who_may_apply_preset').change(function(e) {
+		var v = $(this).val();
+		if(v) {
+			$('#obj_who_may_apply').val(v).effect('highlight');
+		}
+		$(this).val('');
+	});
+	opt = {
+		filebrowserBrowseUrl: 'https://cs.monroecounty.gov/hrapply/javascripts/fckeditor/editor/filemanager/browser/default/browser.html?Connector=/hrapply/fckeditor/command',
+		customConfig: '/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/javascripts/ckeditor/config_custom.js'
+	}
+	var ck = CKEDITOR.replace('obj_description', opt);
+	var ck2 = CKEDITOR.replace('obj_min_qualifications', opt);
+	/*var ckf = CKEDITOR.replace('obj_facebook_description', {
+		filebrowserBrowseUrl: 'https://cs.monroecounty.gov/hrapply/javascripts/fckeditor/editor/filemanager/browser/default/browser.html?Connector=/hrapply/fckeditor/command',
+		customConfig: '/mccs/javascripts/ckeditor/config_custom.js'
+	});*/
+})(jQuery);
+
+function toggle_twitter() {
+	jQuery('twitter_description')[$('obj_social_media_twitter').checked ? 'show' : 'hide']();
+}
 	
 </script>

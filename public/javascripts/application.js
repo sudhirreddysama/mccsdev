@@ -325,3 +325,16 @@ function enable_arrow_keys_for_table_inputs(col_count, opt) {
 }
 
 
+function elfinder_field(f) {
+	var $ = jQuery;
+	f = $(f);
+	var l = $('<a style="margin-left: 4px;" href="#">Browse/Choose File</a>');
+	f.after(l);
+	l.click(function(e) {
+		e.preventDefault();
+		window.open(ROOT_PATH + 'elfinder-custom/elfinder.html', 'elfinder');
+		window._elfinder_path = function(p) {
+			f.val(p).effect('highlight');
+		}
+	});
+}
