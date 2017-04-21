@@ -32,7 +32,7 @@
 	<% end %>
 </div>
 <div id="date">
-	<%= Time.now.fmt %>
+	<%= @obj.deliver_after ? @obj.deliver_after.fmt : Time.now.fmt %>
 </div>
 <div id="body">
 	<%= o.body %>

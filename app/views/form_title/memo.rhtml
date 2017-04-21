@@ -1,5 +1,11 @@
-<tr style="background: #e8e8e8;">
-	<th></th>
-	<th>7. Memo of Explanation</th>
+<% table_form_for(:obj) { |f| %>
+<tr>
+	<th>Memo of Explanation <span class="req">*</span></th>
 </tr>	
-<%= f.tr_text_area :memo_of_explanation, :label => 'Memo of Explanation', :size => '80x7', :req => true %>
+<tr>
+	<td><%= f.td_text_area :memo_of_explanation, :size => '80x15' %></td>
+</tr>
+<tr>
+	<td><%= f.tr_submit 'Submit' %></td>
+</tr>
+<% } %>
