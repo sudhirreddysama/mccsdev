@@ -125,6 +125,8 @@ class Letter < ActiveRecord::Base
 		ERB::Util.html_escape(s.to_s).to_s.gsub(/\n/, '<br />')
 	end
 	
+	def deliver_after; nil; end
+	
 	include DbChangeHooks
 	
 end
