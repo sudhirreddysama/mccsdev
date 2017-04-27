@@ -15,6 +15,12 @@
 					<label>Name:</label>
 					<%= h o.label %>
 				&nbsp;</td>
+				<% if !o.middle_name.blank? %>
+					<td>
+						<label>Middle Name/Initial:</label>
+						<%= h o.middle_name %>
+					</td>
+				<% end %>
 			</tr>
 		</table>
 	</div>
