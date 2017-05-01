@@ -7,7 +7,8 @@ class LetterController < CrudController
 		})
 		@orders = [
 			['ID', 'letters.id'],
-			['Name', 'letters.name']
+			['Name', 'letters.name'],
+			['Subject (Public)', 'letters.public_name']
 		]
 		cond = get_search_conditions @filter[:search], {
 			'letters.id' => :left,
@@ -77,7 +78,7 @@ class LetterController < CrudController
 		
 		@obj = Letter.find params[:id]
 		txt = Letter.apply(@obj.body, objs)
-		render :text => {:subject => @obj.name, :body => txt}.to_json
+		render :text => {:subject => @obj.name, :body => txt, :public_name => @obj.public_name}.to_json
 	end
 	
 

@@ -85,7 +85,7 @@ class Letter < ActiveRecord::Base
 		]
 	}
 
-	validates_presence_of :name
+	validates_presence_of :name, :public_name
 	
 	def label; name_was; end
 	

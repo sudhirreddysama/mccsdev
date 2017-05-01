@@ -7,7 +7,7 @@ class Message < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :bulk_message
 	
-	validates_presence_of :subject, :body
+	validates_presence_of :subject, :body, :public_name
 	
 	def label; subject_was; end
 	

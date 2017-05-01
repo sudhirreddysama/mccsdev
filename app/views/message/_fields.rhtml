@@ -1,5 +1,6 @@
 <%= f.tr_select :letter_id, Letter.find(:all, :order => 'letters.name asc').collect { |l| [l.name, l.id] }, :include_blank => 'Blank Template', :label => 'Letter Template' %>
-<%= f.tr_text_field :subject, :label => 'Subject', :style => 'width: 400px;', :req => true, :class => 'ucase' %>
+<%= f.tr_text_field :subject, :label => 'Subject', :style => 'width: 400px;', :req => true, :class => 'ucase', :after => '<div>Administrative label</div>' %>
+<%= f.tr_text_field :public_name, :label => 'Subject (Public)', :style => 'width: 400px;', :req => true, :class => 'ucase', :after => '<div>What candidate sees as letter subject</div>' %>
 <%= f.tr_text_field :email_from, :label => 'From/Reply To', :style => 'width: 400px;', :req => false %>
 <tr>
 	<th>Letterhead:</th>
@@ -31,8 +32,9 @@
 				data: {obj_type: super_c, obj_id: super_id},
 				dataType: 'json',
 				success: function(data, status, xhr) {
-					$('#obj_subject, #obj_body').removeClass('busy-bg');
+					$('#obj_subject, #obj_public_name, #obj_body').removeClass('busy-bg');
 					$('#obj_subject').val(data.subject);
+					$('#obj_public_name').val(data.public_name);
 					$('#obj_body').val(data.body);
 					ck.setData(data.body);
 				},

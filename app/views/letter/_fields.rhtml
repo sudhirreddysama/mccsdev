@@ -1,4 +1,5 @@
 <%= f.tr_text_field :name, :label => 'Name', :req => true, :class => 'ucase' %>
+<%= f.tr_text_field :public_name, :label => 'Subject (Public)', :req => true, :class => 'ucase' %>
 <tr>
 	<th>Body: <span class="req">*</span></th>
 	<td>
@@ -38,6 +39,13 @@
 		
 		$('#tplvars a').click(function(e) {
 			ck.insertHtml($(this).text());
+		});
+		
+		$('#obj_public_name').autocomplete({
+			source: <%= Letter.find(:all, :select => 'distinct public_name', :order => 'public_name').map(&:public_name).to_json %>,
+			minLength: 0
+		}).focus(function(e) {
+			$(this).autocomplete('search', $(this).val());
 		});
 		
 	})(jQuery);

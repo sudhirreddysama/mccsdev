@@ -4,6 +4,7 @@
 			<td width="1%">Actions</td>
 			<th width="1%">ID</th>
 			<th width="98%">Name</th>
+			<th width="1%" class="nobr">Subject (Public)</th>
 		</tr>
 	</thead>
 	<tbody id="objs">
@@ -12,6 +13,7 @@
 				<td class="nobr"><%= partial 'actions', :o => o %></td>
 				<td><%= o.id %></td>
 				<td><%= link_to o.name, :action => :view, :id => o.id %></td>
+				<td class="nobr"><%= o.public_name %></td>
 			</tr>
 		<% } %>
 	</tbody>

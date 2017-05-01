@@ -8,7 +8,7 @@ class BulkMessage < ActiveRecord::Base
 	belongs_to :web_exam
 	belongs_to :user
 	
-	validates_presence_of :subject, :body
+	validates_presence_of :subject, :body, :public_name
 	
 	has_and_belongs_to_many :app_statuses
 	has_and_belongs_to_many :disapprovals
@@ -90,6 +90,7 @@ class BulkMessage < ActiveRecord::Base
 				:person => a.person,
 				:letter_id => letter_id,
 				:subject => subject,
+				:public_name => public_name,
 				:body => Letter.apply(body, {:applicant => a, :person => a.person}),
 				:email_from => email_from,
 				#:hr_letterhead => hr_letterhead,
