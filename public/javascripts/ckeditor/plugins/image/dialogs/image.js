@@ -1165,8 +1165,8 @@
 									aMatchW = ( width ? width : '' ).match( regexGetSize );
 
 								this.attributesInStyle = {
-									height: !!aMatchH,
-									width: !!aMatchW
+									height: false,//!!aMatchH,
+									width: false,//!!aMatchW
 								};
 							}
 						},
