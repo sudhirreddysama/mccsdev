@@ -1,4 +1,11 @@
-<%= f.tr_text_field :exam_no, :label => 'Exam No.', :req => true %>
+<tr>
+	<th>Exam No. <span class="req">*</span></th>
+	<td>
+		<%= f.text_field :exam_no %>
+		<label><%= f.check_box :exhausted %> Exhausted</label>
+	</td>
+</tr>
+
 <tr>
 	<th>Title: <span class="req">*</span></th>
 	<td><%= partial 'pop_field', :text => (@obj.job ? @obj.job.label : ''), :name => 'obj[job_id]', :id => 'obj_job_id', :url => popup_url({:controller => :job, :agency_id => ''}), :value => @obj.job_id %></td>

@@ -9,6 +9,7 @@
 			<th width="1%">Given</th>
 			<th width="1%">Est.</th>
 			<th width="1%">Expire</th>
+			<th width="1%">Exh.</th>
 		</tr>
 	</thead>
 	<tbody id="objs">
@@ -28,6 +29,7 @@
 						<% if o.given_at && o.given_at < Time.now.to_date && !o.applicants.to_a.find { |a| a.app_status && a.app_status.eligible != 'N' } %> <span class="req">(NO LIST)</span><% end %>
 					<% end %>
 				</td>
+				<td><%= o.exhausted ? 'YES' : '' %></td>
 			</tr>
 		<% } %>
 	</tbody>
