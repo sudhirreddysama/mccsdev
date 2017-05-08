@@ -93,6 +93,7 @@ class VacancyController < CrudController
 		if @current_user.agency_level? && !@current_user.allow_vacancy_omb && !@current_user.allow_vacancy_admin
 			@filter.agency_id = @current_user.agency_id
 			@filter.department_id = @current_user.department_id
+			@filter.division_id = @current_user.division_id unless @current_user.division_id.blank?
 			#cond << 'agencies.id = %d' % @current_user.agency_id
 			#cond << 'departments.id = %d' % @current_user.department_id if @current_user.department_id
 		end
@@ -111,6 +112,10 @@ class VacancyController < CrudController
 		if !@filter.agency_id.blank?
 			@filter.agency_id = @filter.agency_id.to_i
 			cond << 'vacancies.agency_id = %d' % @filter.agency_id
+		end
+		if !@filter.division_id.blank?
+			@filter.division_id = @filter.division_id.to_i
+			cond << 'vacancies.division_id = %d' % @filter.division_id
 		end
 		@date_types = [
 			['Received Date', 'vacancies.received_date'],
@@ -191,6 +196,7 @@ class VacancyController < CrudController
 		if @current_user.agency_level?
 			@obj.agency = @current_user.agency if @current_user.agency
 			@obj.department = @current_user.department if @current_user.department
+			@obj.division = @current_user.division if @current_user.division
 		end
 		@obj.exec_decision = 'Started'
 		@obj.user = @current_user

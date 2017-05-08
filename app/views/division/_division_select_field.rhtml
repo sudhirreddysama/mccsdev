@@ -1,0 +1,11 @@
+<% if department_id.blank? %>
+	<span class="dim">(select department to view divisions)</span>
+<% else %>
+	<% opts = Division.find(:all, :conditions => ['divisions.department_id = ?', department_id]).map { |d| [d.name, d.id] } %>
+	<% if opts.empty? %>
+		<span class="dim">(no divisions for department)</span>
+	<% else %>
+		<% opts = [['Select Division...', '']] + opts %>
+		<%= select_tag "#{field_name}[division_id]", options_for_select(opts, division_id) %>
+	<% end %>
+<% end %>

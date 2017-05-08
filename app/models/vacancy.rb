@@ -4,6 +4,7 @@ class Vacancy < ActiveRecord::Base
 	
 	belongs_to :agency
 	belongs_to :department
+	belongs_to :division
 	belongs_to :user
 	belongs_to :submitted_by, :class_name => 'User', :foreign_key => 'submitter_id'
 	has_many :documents

@@ -1,0 +1,21 @@
+<div class="viewer">
+	<div class="header">General Info.</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Name:</label>
+					<%= h o.name %>
+				</td>
+				<td>
+					<label>Department:</label>
+					<% if o.department %><%= h o.department.name %><% end %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>

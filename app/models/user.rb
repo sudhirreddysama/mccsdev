@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
 		
 	belongs_to :agency
 	belongs_to :department
+	belongs_to :division
 	
 	belongs_to :switch_user, :class_name => 'User', :foreign_key => 'switch_user_id'
 	has_many :switch_users, :class_name => 'User', :foreign_key => 'switch_user_id', :conditions => 'users.level != "disabled"'

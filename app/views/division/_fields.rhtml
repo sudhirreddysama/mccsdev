@@ -1,0 +1,2 @@
+<%= f.tr_text_field :name, :label => 'Name', :req => true, :class => 'ucase' %>
+<%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name').map { |d| [d.name, d.id] }, :include_blank => true, :label => 'Department' %>

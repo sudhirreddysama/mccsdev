@@ -26,4 +26,8 @@
 <%= f.tr_check :vacancy_emails, :label => 'All Vacancy Notices?', :text => 'If checked user will receive ALL vacancy notices for their department (submitted, approved, disapproved) in addition to the submitter/approver.' %>
 <%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name asc').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Agency', :help => 'Select an agency for agency and agency-head level users.' %>
 <%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name asc').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Department', :help => 'Select an department for agency and agency-head level users.' %>
+<tr>
+	<th>Division:</th>
+	<td><%= partial 'division/division_select', :f => f, :o => o, :field_name => 'obj' %></td>
+</tr>
 <%= f.tr_text_field :switch_username, :label => 'Switch Username', :help => 'Enter the username of a user that will always be able to "switch" to this user without logging in again.' %>
