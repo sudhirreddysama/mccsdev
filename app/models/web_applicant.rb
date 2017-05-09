@@ -40,11 +40,11 @@ class WebApplicant < ActiveRecord::Base
 				wa.previous_last_name.to_s.upcase.strip
 			])
 			
-			first_name = wa.first_name.to_s.upcase.strip
+			#first_name = wa.first_name.to_s.upcase.strip
 			
-			unless wa.middle_name.blank?
-				first_name += ' ' + wa.middle_name.to_s.upcase.strip[0..0] + '.'
-			end
+			#unless wa.middle_name.blank?
+			#	first_name += ' ' + wa.middle_name.to_s.upcase.strip[0..0] + '.'
+			#end
       a = wa.residence_different ? wa.res_address : wa.address
       z = wa.residence_different ? wa.res_zip : wa.zip
       a = a.gsub("STREET","ST");
@@ -102,7 +102,8 @@ class WebApplicant < ActiveRecord::Base
       end
 
 			attr = {
-				:first_name => first_name,
+				:first_name => wa.first_name.to_s.upcase.strip,
+				:middle_name => wa.middle_name.to_s.upcase.strip,
 				:last_name => wa.last_name.to_s.upcase.strip,
 				:ssn => wa.ssn.to_s.upcase.strip,
 				:home_phone => wa.home_phone.to_s.upcase.strip,
