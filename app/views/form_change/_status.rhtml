@@ -12,16 +12,23 @@
 
 	<% if @current_user.agency_level? %>
 		<% if @obj.status == 'started' || @obj.status == 'disapproved' %>
-			<% if @current_user.level == 'agency-head' %>
-				<%= link_to('This form has not yet been submitted to HR. Click here to submit.', 
-					{:action => :submit, :id => @obj.id},
-					:confirm => 'Are you sure you want to submit this form? No changes can be made after submitting. Please make sure all required information and documents have been provided.',
-					:style => 'display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: underline;') 
+			<% if @obj.class == FormTitle && @obj.memo_of_explanation.blank? %>
+				<%= link_to 'Before submitting this 222 form please fill out the Justification Memo by clicking here or the &quot;Justification Memo&quot; tab above.', 
+					{:action => :memo, :id => @obj.id},
+					:style => 'display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: underline;' 
 				%>
 			<% else %>
-				<div style="display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: none;">
-					This form has not yet been submitted to HR. An agency-head level user must submit it from this page.
-				</div>
+				<% if @current_user.level == 'agency-head' %>
+					<%= link_to('This form has not yet been submitted to HR. Click here to submit.', 
+						{:action => :submit, :id => @obj.id},
+						:confirm => 'Are you sure you want to submit this form? No changes can be made after submitting. Please make sure all required information and documents have been provided.',
+						:style => 'display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: underline;') 
+					%>
+				<% else %>
+					<div style="display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: none;">
+						This form has not yet been submitted to HR. An agency-head level user must submit it from this page.
+					</div>
+				<% end %>
 			<% end %>
 		<% end %>
 	<% end %>

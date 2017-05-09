@@ -1,11 +1,20 @@
-<% table_form_for(:obj) { |f| %>
-<tr>
-	<th>Memo of Explanation <span class="req">*</span></th>
-</tr>	
-<tr>
-	<td><%= f.td_text_area :memo_of_explanation, :size => '80x15' %></td>
-</tr>
-<tr>
-	<td><%= f.tr_submit 'Submit' %></td>
-</tr>
-<% } %>
+<%= partial 'nav' %>
+<% if @current_user.agency_level? && @obj.status != 'started' && @obj.status != 'disapproved' %>
+	<table class="form">
+		<tr><th>Justification Memo <span class="req">*</span></th></tr>	
+		<tr>
+			<td><%= nl2br_h @obj.memo_of_explanation %></td>
+		</tr>
+	</table>
+<% else %>
+	<%= partial 'errors', :errors => @obj.errors.full_messages %>
+	<% table_form_for(:obj) { |f| %>
+		<tr><th>Justification Memo <span class="req">*</span></th></tr>	
+		<tr>
+			<td><%= f.text_area :memo_of_explanation, :size => '100x20' %></td>
+		</tr>
+		<tr>
+			<td><%= f.submit 'Submit Justification Memo' %></td>
+		</tr>
+	<% } %>
+<% end %>

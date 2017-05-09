@@ -16,6 +16,9 @@
 			<% if o.status == 'started' || o.status == 'disapproved' %>
 				<%= tab 'Edit', {:controller => c, :action => :edit, :id => o.id} %>
 			<% end %>
+			<% if @obj.class == FormTitle %>
+				<%= tab 'Justification Memo', {:controller => 'form_title', :sc => nil, :sid => nil, :action => 'memo', :id => o.id}, {}, {:class => 'tab-permit'} %>
+			<% end %>
 			<% if o.status == 'started' %>
 				<%= tab 'Delete', {:controller => c, :action => :delete, :id => o.id} %>
 			<% end %>

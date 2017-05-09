@@ -61,6 +61,11 @@ class FormTitleController < CrudController
 		@obj.status = 'started'
 	end
 	
+	def memo
+		load_obj
+		edit
+	end
+	
 	def view
 		#@obj.status_notify = @obj.user && @obj.user.email
 		if request.post?

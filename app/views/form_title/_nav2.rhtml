@@ -1,1 +1,2 @@
+<%= tab 'Justification Memo', {:controller => 'form_title', :sc => nil, :sid => nil, :action => 'memo', :id => params[:sid] || @obj.id}, {}, {:class => 'tab-permit'} %>
 <%= tab 'Documents', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>
