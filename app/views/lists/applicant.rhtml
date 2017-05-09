@@ -49,7 +49,7 @@
 				
 				list_notes = o.list_notes.find(:all)
 				
-				activity = (actions.to_a + list_notes.to_a).sort_by(&:date).reverse
+				activity = (actions.to_a + list_notes.to_a).sort_by { |act| act.date || Time.now.to_date }.reverse
 			
 			%>
 			<tr>
