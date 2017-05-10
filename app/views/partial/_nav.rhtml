@@ -6,7 +6,7 @@ cert_controllers = %w{cert}
 @allow_liaison = @current_user.liaison_level? && (empl_controllers.include?(params[:controller]) || empl_controllers.include?(params[:sc]) )
 
 @allow_liaison = @allow_liaison || (@current_user.liaison_level? && (params[:controller] == 'cert' || params[:sc] == 'cert'))
-
+@allow_liaison = @allow_liaison || params[:controller] == 'delivery'
 
 
 @allow_cert = @current_user.liaison_level? && cert_controllers.include?(params[:controller])
