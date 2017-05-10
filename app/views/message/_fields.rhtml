@@ -8,6 +8,7 @@
 		<label><%= f.radio_button :letterhead, '', :checked => (@obj.letterhead.to_s == '') %> Civil Service (Default)</label>&nbsp;&nbsp;&nbsp;
 		<label><%= f.radio_button :letterhead, 'hr' %> HR</label>&nbsp;&nbsp;&nbsp;
 		<label><%= f.radio_button :letterhead, 'des' %> DES</label>
+		<label><%= f.radio_button :letterhead, 'dhs' %> DHS</label>
 	</td>
 </tr>
 <%= f.tr_calendar_date_select :deliver_after, :label => 'Deliver After', :default_time => Time.parse('1:00am'), :after => '<div>Enter a date to delay delivery. Letter will not be available to deliver until after this date.</div>' %>
