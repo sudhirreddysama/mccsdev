@@ -1,10 +1,45 @@
-Visit the URL below to begin completing Monroe County's onboarding forms.
-
-https://welcome2mc.monroecounty.gov/iFiller/iFiller.jsp?fref=4383ba8c-4966-4362-a56d-5270ea453864
-
-Enter the value below in the "Temp ID Number" field to fill in your personal information, then choose a User ID and Password. You will then be able to complete all of Monroe County's onboarding forms.
-
-Temp ID Number: <%= @person.formatta_id %>
-
-Thank You,
-Monroe County Human Resources
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title><span style="font-weight: bold; font-style: italic;"><b><i>Welcome2MC</i></b></span></title>
+<style type="text/css">
+</style>
+</head>
+<body style="font-size: 14px; font-family: sans-serif;">
+<div style="font-size: 14px; font-family: sans-serif;">
+<span style="text-align: center;"><center>
+<img src="http://cs.monroecounty.gov/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/images/mclogo-120x120.gif" width="120" height="120"><br>
+<span style="font-size: 18px; font-weight: bold;"><b>Welcome2MC</b></span></span></center><br>
+&nbsp;<br>
+Dear <%= @person.first_name %> <%= @person.last_name %><br>
+&nbsp;<br>
+Welcome to Monroe County! You may have or soon will receive an official offer letter for employment 
+with Monroe County in the Department of <%= @person.personnel_area_name %><br>
+&nbsp;<br>
+To continue with your new hire process, please go to the <span style="font-weight: bold; font-style: italic;"><b><i>Welcome2MC</i></b></span> on-boarding webpage by 
+clicking the hyperlink below. Then, use your Temp# <span style="font-weight: bold;"><b><%= @person.formatta_id %></b></span> to create a User ID and 
+Password. Please be sure to retain the User ID and Password because you will need it throughout the 
+on-boarding process each time you log into <span style="font-weight: bold; font-style: italic;"><b><i>Welcome2MC</i></b></span>.<br>
+&nbsp;<br>
+After creating your User ID and Password, you will receive a second e-mail which will contain a 
+hyperlink to the <span style="font-weight: bold; font-style: italic;"><b><i>Welcome2MC</i></b></span> On-Boarding portal. You will be requested to enter the User ID and 
+Password you created. Once logged in, you will be required to electronically complete pre-hire 
+documents, read and acknowledge various County policies, and watch several important safety videos.<br>
+&nbsp;<br>
+<a href="https://welcome2mc.monroecounty.gov/start">https://welcome2mc.monroecounty.gov/start</a><br>
+&nbsp;<br>
+If you have any questions or experience any issues accessing <span style="font-weight: bold; font-style: italic;"><b><i>Welcome2MC</i></b></span>, please contact:<br>
+&nbsp;<br>
+Department of Human Resources<br>
+585 753-1700<br>
+&nbsp;<br>
+Sincerely,<br>
+<img src="http://cs.monroecounty.gov/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/images/brayton-signature-253x100.gif" width="253" height="100"><br>
+Brayton McK. Connard, SPHR<br>
+Director of Human Resources<br>
+&nbsp;<br>
+</div>
+</body>
+</html>
