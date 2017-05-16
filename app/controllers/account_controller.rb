@@ -45,6 +45,25 @@ class AccountController < ApplicationController
 		end
 	end
 	
+	def formatta
+		if request.post?
+			user = params[:u]
+			pass = params[:p]
+			if !user.blank? && !pass.blank?
+				p = Person.find_by_formatta_user_and_formatta_pass(user, pass)
+				render :json => {
+					:first_name => p.first_name,
+					:last_name => p.last_name,
+					:personnel_area_no => p.personnel_area_no,
+					:personnel_area_name => p.personnel_area_name,
+					:personnel_division_name => p.personnel_division_name
+				}.to_json
+				return
+			end
+		end
+		render :nothing => true
+	end
+	
 	def switch
 		if request.post?
 			@login = params[:login]
