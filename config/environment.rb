@@ -64,6 +64,7 @@ require 'spreadsheet'
 require 'net/pop'
 require 'net/ftp'
 require 'shellwords'
+require 'securerandom'
 
 #require 'twitter'
 #require 'oauth' 

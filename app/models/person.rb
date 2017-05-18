@@ -136,15 +136,18 @@ class Person < ActiveRecord::Base
 	end
 	before_save :fix_residence_address
 	
-	def ensure_formatta_id
+	def ensure_random_fields
 		chars = 'bcdfghjkmnpqrstvwxz23456789'
 		if formatta_id.blank?
 			begin
 				self.formatta_id = Array.new(9) { chars[rand(chars.length), 1] }.join()
 			end while Person.find_by_formatta_id formatta_id
 		end
+		if formatta_salt.blank?
+			self.formatta_salt = SecureRandom.hex
+		end
 	end
-	before_save :ensure_formatta_id
+	before_save :ensure_random_fields
 	
 	def set_personnel_fields
 		if personnel_area_id_changed?
