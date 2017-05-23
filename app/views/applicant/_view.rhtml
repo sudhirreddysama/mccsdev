@@ -429,12 +429,15 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 	
 	<% if o.web_exam %>
 		<div class="viewer">
-			<div class="header">Web Post Description/Minimum Requirements</div>
+			<div class="header">Web Post Minimum Qualifications</div>
 			<div class="row">
 				<table>
 					<tr>
 						<td>
-							<%= o.web_exam.description %>
+							<%= o.web_exam.min_qualifications %>
+							<% unless o.web_exam.announcement_file.blank? %>
+								<div><a href="<%= o.web_exam.announcement_file %>" target="_blank">View Full Announcement</a></div>
+							<% end %>
 						</td>
 					</tr>
 				</table>
