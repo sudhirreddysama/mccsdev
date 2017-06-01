@@ -50,7 +50,7 @@ class AccountController < ApplicationController
 			user = params[:u]
 			pass = params[:p]
 			if !user.blank? && !pass.blank?
-				p = Person.find_by_formatta_user_and_formatta_pass(user, pass)
+				p = Person.find(:first, :conditions => ['formatta_user = ? and formatta_pass = sha1(concat(?, formatta_salt))', user, pass])
 				render :json => {
 					:first_name => p.first_name,
 					:last_name => p.last_name,
