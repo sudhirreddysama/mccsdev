@@ -155,7 +155,7 @@
 					<label>Pending Date:</label>
 					<%= o.pending_date.d0? %>
 				</td>
-				<td>
+				<td<% if o.certification_date %> style="background-color: #ffc; font-weight: bold;"<% end %>>
 					<label>Cert. Date:</label>
 					<%= o.certification_date.d0? %>
 				</td>
@@ -163,7 +163,7 @@
 					<label>Agency Notified Date:</label>
 					<%= o.notified_date.d0? %>
 				</td>
-				<td>
+				<td<% if o.return_date %> style="background-color: #ffc; font-weight: bold;"<% end %>>
 					<label>Return Date:</label>
 					<%= h o.return_date.d0? %>
 				</td>
