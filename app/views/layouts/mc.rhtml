@@ -11,6 +11,7 @@
 		<%= javascript_include_tag 'public', 
 			'coolfieldset/js/jquery.coolfieldset.js' %>
 		<%= stylesheet_link_tag '/javascripts/coolfieldset/css/jquery.coolfieldset.css', :media => 'all' %>
+		<%= yield :head %>
 	</head>
 	<body class="page path-hr">
 		<% if RAILS_ENV == 'development' %><div id="dev-bar">DEVELOPMENT SITE</div><% end %>
@@ -73,10 +74,6 @@
 					<p style="text-align: center;">
 						<small>Official Site of Monroe County, New York. Copyright © 2013 Monroe County. All Rights Reserved.<br>
 						Comments or suggestions? Please e-mail the MonroeCounty.gov <a href="mailto:webmaster@monroecounty.gov">webmaster</a>.</small>
-					</p>
-					<p style="text-align: center;">
-						<small><a href="http://www.adobe.com/products/acrobat/readstep2.html"><img alt="Get Adobe Reader free from Adobe.com." src="https://www.monroecounty.gov/files/images/get_adobe_reader.gif"></a>&nbsp;
-						<a href="http://www.adobe.com/products/flashplayer.html"><img border="0" alt="Get the free Flash Player from Adobe.com." src="https://www.monroecounty.gov/files/images/get_flash_player.gif"></a></small>
 					</p>
 
 					
