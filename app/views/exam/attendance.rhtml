@@ -20,6 +20,7 @@
 			}
 			if(from && to) {
 				$('#report_exam_ids').addClass('busy-bg');
+				$('#report_exam_site_ids').addClass('busy-bg');
 				$.ajax({
 					url: <%= url_for(:action => :attendance_autocomplete).to_json %>,
 					data: {
@@ -29,9 +30,11 @@
 					},
 					complete: function() {
 						$('#report_exam_ids').removeClass('busy-bg');
+						$('#report_exam_site_ids').removeClass('busy-bg');
 					},
 					success: function(data, status, xhr) {
-						$('#report_exam_ids').replaceWith(data);
+						$('#report_exam_ids').replaceWith(data.exam_ids);
+						$('#report_exam_site_ids').replaceWith(data.exam_site_ids);
 					},
 					error: function() {
 						alert('Error loading exam options.');
@@ -44,9 +47,9 @@
 
 </script>
 <%= partial 'errors', :errors => @errors %>
-<% table_form_for(:report) { |f| %>
+<% table_form_for(:report, :html => {:target => '_blank'}) { |f| %>
 	<%= f.tr_calendar_date_select :from_date, :label => 'From Date', :onchange => 'date_change()', :req => true %>
-	<%= f.tr_calendar_date_select :to_date, :label => 'To Date', :onchange => 'date_change()', :help => 'Select a from and to date to view available exams.', :req => true %>
+	<%= f.tr_calendar_date_select :to_date, :label => 'To Date', :onchange => 'date_change()', :help => 'Select a from and to date to view exams given and exam sites used during that date range.', :req => true %>
 	<tr>
 		<th>State/Local:</th>
 		<td>
@@ -63,6 +66,13 @@
 		</td>
 	</tr>
 	<tr>
+		<th>Exam Sites: <span class="req">*</span></th>
+		<td>
+			<%= partial 'attendance_exam_site_ids' %>
+			<div>Ctrl/Shift click to select multiple. If no site is selected, all will be included.</div>
+		</td>
+	</tr>	
+	<tr>
 		<th></th>
 		<td>
 			<label style="display: block;"><%= f.check_box :alternate_exam_date %> Only include applicants with an alternate exam date.</label>
@@ -70,6 +80,7 @@
 	</tr>
 	<%= f.tr_submit 'Generate Statistics Report', :name => 'statistics' %>
 	<%= f.tr_submit 'Generate Exams/Exam Sites Report', :name => 'exam_sites' %>
+	<%= f.tr_submit 'Generate Exam Booklet Count Spreadsheet (NEW)', :name => 'exam_sites_grid' %>
 	<%= f.tr_submit 'Generate Contact Preference Report', :name => 'contact_preference' %>
 	<%= f.tr_submit 'Generate Veterans Credit Report', :name => 'veterans' %>
 	<tr>

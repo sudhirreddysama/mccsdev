@@ -1,6 +1,7 @@
 class ExamSite < ActiveRecord::Base
 	
 	validates_presence_of :name
+	has_many :applicants
 	
 	def label; name_was; end
 	

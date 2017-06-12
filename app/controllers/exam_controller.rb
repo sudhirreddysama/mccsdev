@@ -211,6 +211,7 @@ class ExamController < CrudController
 			if !@errors
 				cond = [DB.escape('date(exams.given_at) between "%s" and "%s"', @report.from_date.to_s, @report.to_date.to_s)]
 				cond << 'exams.id in (%s)' % @report.exam_ids.map(&:to_i).join(', ') if !@report.exam_ids.blank?
+				cond << 'applicants.exam_site_id in (%s)' % @report.exam_site_ids.map(&:to_i).join(', ') if !@report.exam_site_ids.blank?
 				
 				@report.given_by.map!(&:to_i)
 				
@@ -332,7 +333,30 @@ class ExamController < CrudController
 						:conditions => get_where(cond),
 						:order => 'exam_sites.name, exams.exam_no, people.last_name asc, people.first_name asc',
 						:include => [:applicants => [:exam, :exam_site, :app_status, :person]]
-					})					
+					})
+					
+				elsif params[:exam_sites_grid]
+				
+					cond << 'applicants.approved = "Y"'
+					cond << 'exams.program_no != ""'
+					objs = DB.query(
+						'select s.name site_name, p.id person_id, p.first_name first_name, p.last_name last_name, exams.program_no booklet, count(*) c 
+						from exams
+						join applicants on applicants.exam_id = exams.id
+						join exam_sites s on s.id = applicants.exam_site_id
+						join people p on p.id = applicants.person_id
+						where ' + get_where(cond) + ' 
+						group by s.name, p.id, exams.program_no 
+						order by s.name, p.last_name, p.first_name, exams.program_no'
+					)
+					@objs = Hash.new { |h, k| h[k] = {} }
+					@people = Hash.new { |h, k| h[k] = OrderedHash.new }
+					@booklets = Hash.new { |h, k| h[k] = OrderedHash.new }
+					objs.each_hash { |h|
+						@people[h.site_name][h.person_id] = h if !@people[h.site_name][h.person_id]
+						@booklets[h.site_name][h.booklet] = h if !@booklets[h.site_name][h.booklet]
+						@objs[h.site_name][[h.person_id, h.booklet]] = h.c
+					}
 				
 				elsif params[:attendance] || params[:performance] || params[:performance_excel]
 
@@ -434,7 +458,66 @@ class ExamController < CrudController
 						}
 						data = StringIO.new
 						book.write data
-						send_data data.string, :filename => 'export.xls', :type => 'application/vnd.ms-excel'			
+						send_data data.string, :filename => 'export.xls', :type => 'application/vnd.ms-excel'
+					elsif params[:exam_sites_grid]
+						book = Spreadsheet::Workbook.new
+						name_format = Spreadsheet::Format.new :align => :left, :weight => :bold
+						head_format = Spreadsheet::Format.new :align => :center, :weight => :bold
+						num_format = Spreadsheet::Format.new :align => :right
+						@objs.keys.sort.each { |site_name| objs = @objs[site_name]
+							booklets = @booklets[site_name]
+							people = @people[site_name]
+							sheet = book.create_worksheet :name => site_name
+							sheet[0, 0] = site_name
+							col = 1
+							btot = Hash.new { |h, v| h[v] = 0 }
+							booklets.each { |b, h|
+								sheet[2, col] = b
+								col += 1
+							}
+							sheet.rows[2].default_format = head_format
+							sheet[2, col] = 'TOTAL'
+							sheet.column(0).width = 40
+							row = 3
+							footnote = false
+							people.each { |p, h|
+								sheet[row, 0] = "#{h.last_name}, #{h.first_name}"
+								sheet.rows[row].set_format 0, name_format
+								sheet.rows[row].default_format = num_format
+								col = 1
+								ptot = 0
+								booklets.each { |b, h|
+									v = objs[[p, b]]
+									if v 
+										btot[b] += 1
+										ptot += 1
+										if v.to_i > 1
+											footnote = true
+											v = "#{v}*"
+										end
+										sheet[row, col] = v
+									end
+									col += 1
+								}
+								sheet[row, col] = ptot
+								row += 1
+							}
+							col = 1
+							sheet[row, 0] = 'TOTAL'
+							sheet.rows[row].set_format 0, name_format
+							sheet.rows[row].default_format = num_format
+							booklets.each { |b, h|
+								sheet[row, col] = btot[b]
+								col += 1
+							}
+							sheet[row, col] = btot.values.sum &:to_i
+							if footnote
+								sheet[row + 2, 0] = '* Only counted once in totals'
+							end
+						}
+						data = StringIO.new
+						book.write data
+						send_data data.string, :filename => 'export.xls', :type => 'application/vnd.ms-excel'
 					else
 						html = render_to_string :action => :attendance_print, :layout => false
 						render_pdf html, 'report.pdf'
@@ -458,8 +541,20 @@ class ExamController < CrudController
 			:conditions => get_where(cond),
 			:order => 'exams.exam_no'
 		});
+		
+		sites = ExamSite.find(:all, {
+			:include => {:applicants => :exam},
+			:conditions => get_where(cond),
+			:order => 'exam_sites.name',
+			:group => 'exam_sites.id',
+			:order => 'exam_sites.name'
+		});		
+		
 		@options = exams.collect { |e| ["#{e.exam_no} - #{e.title}", e.id] }
-		render :inline => '<%= partial "attendance_exam_ids" %>'
+		exam_ids = render_to_string(:inline => '<%= partial "attendance_exam_ids" %>')
+		@options = sites.map { |s| [s.name, s.id] }
+		exam_site_ids = render_to_string(:inline => '<%= partial "attendance_exam_site_ids" %>')
+		render :json => {:exam_ids => exam_ids, :exam_site_ids => exam_site_ids}.to_json
 	end
 	
 	def load_exam_sites_stats
