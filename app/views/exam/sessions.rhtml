@@ -1,0 +1,9 @@
+<%= partial 'nav' %>
+<div class="tabs buttons">
+	<%= tab 'Check For New Exams/Dates/Sites', {:controller => :exam, :action => :sessions_refresh}, {}, :target => '_blank', :class => 'tab-rerank' %>		
+	<div class="clear"></div>
+</div>
+<%= partial 'filter' %>
+<%= partial 'pages' %>
+<%= partial 'sessions_list', :objs => @objs %>
+<%= partial 'pages' %>

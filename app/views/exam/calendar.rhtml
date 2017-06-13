@@ -1,0 +1,48 @@
+<%= partial 'nav' %>
+<% @nojs = true %>
+<% content_for(:head) { %>
+	<%= javascript_include_tag('/fullcalendar-3.4.0/lib/jquery.min.js') %>
+	<%= javascript_include_tag('/fullcalendar-3.4.0/lib/moment.min.js') %>
+	<%= javascript_include_tag('/fullcalendar-3.4.0/fullcalendar.js') %>
+	<%= stylesheet_link_tag('/fullcalendar-3.4.0/fullcalendar.css', :media => 'all') %>
+	<style type="text/css">
+		.fc-scroller { height: auto !important; }
+		.fc-toolbar.fc-header-toolbar { margin-bottom: 8px; }
+		.fc .fc-toolbar > * > * { margin-left: 8px; }
+		#calendar { margin: 5px; }
+		#calendar h2 { border-bottom: none; }
+	</style>
+<% } %>
+<div id="calendar"></div>
+<script type="text/javascript">
+	(function($) {
+		var cal = $('#calendar');
+		cal.fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,listMonth agendaWeek,listWeek agendaDay'
+			},
+			editable: false,
+			weekNumbers: true,
+			eventLimit: false,
+			navLinks: true,
+			lazyFetching: false,
+			height: 'auto',
+			contentHeight: 'auto',
+			events: function(start, end, tz, cb) {
+				$.ajax({
+					url: '<%= url_for :action => :calendar_data %>',
+					data: {from: start.format('M/D/YYYY'), to: end.format('M/D/YYYY')},
+					success: function(data, status, xhr) {
+						cb(data);
+					},
+					complete: function(xhr, status) {
+					},
+					error: function(xhr, status, error) {
+					}
+				});
+			}
+		});
+	})(jQuery);
+</script>

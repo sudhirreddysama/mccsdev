@@ -19,7 +19,7 @@ module DateTimeExt
 	end
 	
 	def t0
-		to_time.srftime '%I:%M%p' rescue '12:00am'
+		to_time.strftime '%I:%M%p' rescue '12:00am'
 	end
 	
 	def fmt

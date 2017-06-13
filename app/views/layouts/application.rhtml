@@ -2,34 +2,38 @@
 <html>
 	<head><meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<title>Admin <%= RAILS_ENV %></title>
-		<%= javascript_include_tag(
-			:defaults, 
-			#'jquery-1.11.2.js',
-			'jquery-1.6.1.js', 
-			#'jquery-migrate-1.2.1.js',
-			'jquery-ui-1.8.13.custom/js/jquery-ui-1.8.13.custom.min',
-			'thead.js',
-			#'plupload/js/plupload.full.min.js',
-			#'plupload/js/jquery.plupload.queue.min.js',
-			'plupload-2.1.2/js/plupload.full.min.js',
-			'jquery.transform-0.9.3.js',
-			'date.js',
-			'jquery.blockUI.js',
-			'ckeditor/ckeditor.js',
-			'jquery.form.js',
-			'jquery.caret.1.02.js',
-			'coolfieldset/js/jquery.coolfieldset.js',
-			'jquery.inputmask-3.x/jquery.inputmask.js',
-			'jquery.inputmask-3.x/jquery.inputmask.numeric.extensions.js',
-			'jquery.tokeninput/jquery.tokeninput.js'
-		) %>
-		<script type="text/javascript">jQuery.noConflict();</script>
+		<% unless @nojs %>
+			<%= javascript_include_tag(
+				:defaults, 
+				#'jquery-1.11.2.js',
+				'jquery-1.6.1.js', 
+				#'jquery-migrate-1.2.1.js',
+				'jquery-ui-1.8.13.custom/js/jquery-ui-1.8.13.custom.min',
+				'thead.js',
+				#'plupload/js/plupload.full.min.js',
+				#'plupload/js/jquery.plupload.queue.min.js',
+				'plupload-2.1.2/js/plupload.full.min.js',
+				'jquery.transform-0.9.3.js',
+				'date.js',
+				'jquery.blockUI.js',
+				'ckeditor/ckeditor.js',
+				'jquery.form.js',
+				'jquery.caret.1.02.js',
+				'coolfieldset/js/jquery.coolfieldset.js',
+				'jquery.inputmask-3.x/jquery.inputmask.js',
+				'jquery.inputmask-3.x/jquery.inputmask.numeric.extensions.js',
+				'jquery.tokeninput/jquery.tokeninput.js'
+			) %>
+			<script type="text/javascript">
+				jQuery.noConflict();
+			</script>
+			<%= calendar_date_select_includes @cds_style || :default %>
+		<% end %>
 		<%= stylesheet_link_tag '/javascripts/jquery-ui-1.8.9.custom/css/smoothness/jquery-ui-1.8.9.custom.css', :media => 'screen' %>
 		<%= stylesheet_link_tag 'plupload.queue.css', :media => 'screen' %>
 		<%= stylesheet_link_tag 'style', :media => 'all' %>
 		<%= stylesheet_link_tag '/javascripts/coolfieldset/css/jquery.coolfieldset.css', :media => 'all' %>
 		<%= stylesheet_link_tag '/javascripts/jquery.tokeninput/token-input-mccs.css', :media => 'all' %>
-		<%= calendar_date_select_includes @cds_style || :default %>
 		<%= yield :head %>
 		</style>
 		<script type="text/javascript">

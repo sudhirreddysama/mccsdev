@@ -39,6 +39,7 @@ class ExamController < CrudController
 		
 		super
 	end
+	
   def get_job
     load_obj
     if @obj
@@ -50,6 +51,7 @@ class ExamController < CrudController
       render_nothing
     end
   end
+  
 	def set_review
 		load_obj
 		@obj.reviewed_by = params[:reviewed_by]
@@ -57,6 +59,71 @@ class ExamController < CrudController
 		@obj.save
 		redirect_to :action => :view, :id => @obj.id
 		flash[:notice] = 'Review information updated.'
+	end
+	
+	def calendar
+	end
+	
+	def calendar_data
+		from = Date.parse(params.from)
+		to = Date.parse(params.to)
+		objs = Exam.find(:all, :conditions => ['exams.given_at between ? and ?', from, to])
+		events = []
+		objs.each { |e|
+			duration = e.exam_length.to_f
+			endt = duration > 0 ? e.given_at + duration.hours : nil
+			events << {
+				:id => e.id,
+				:title => e.title, 
+				:start => e.given_at.strftime('%Y-%m-%d %H:%M:%S'),
+				:end => endt ? endt.strftime('%Y-%m-%d %H:%M:%S') : nil,
+				:url => url_for(:controller => :exam, :action => :view, :id => e.id)
+			}
+		}
+		render :json => events.to_json
+	end
+	
+	def sessions
+		@filter = get_filter({
+			:sort1 => 'exam_site_sessions.given_on',
+			:dir1 => 'desc',
+		})
+		@orders = [
+			['ID', 'exam_site_sessions.id'],
+			['Exam Site', 'exam_sites.name'],
+			['Given On', 'exam_site_sessions.given_on'],
+		]
+		cond = get_search_conditions @filter[:search], {
+			'exam_site_sessions.id' => :left,
+			'exam_sites.name' => :like,
+			'exam_site_sessions.label' => :like
+		}
+		@date_types = [
+			['Given On', 'exam_site_sessions.given_on'],
+		]
+		cond << get_date_condx
+		@opt = {
+			:conditions => get_where(cond),
+			:order => get_order_auto,
+			:include => :exam_site
+		}	
+		@opt[:per_page] ||= 25
+		@opt[:page] ||= params[:page]
+		@objs = ExamSiteSession.paginate(:all, @opt)
+	end
+	
+	def sessions_refresh
+		ExamSiteSession.refresh
+		redirect_to :action => :sessions
+		flash[:notice] = 'New exams/dates/sites have been loaded.'
+	end
+	
+	def session_edit
+		@obj = ExamSiteSession.find params.id
+		if request.post?
+			@obj.update_attributes(params.obj)
+		end
+		render_nothing
 	end
 	
 	def set_agency_department

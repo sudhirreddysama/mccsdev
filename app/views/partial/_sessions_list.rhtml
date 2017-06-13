@@ -1,0 +1,48 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">ID</th>
+			<th width="1%">Proctor</th>
+			<th width="1%">Site</th>
+			<th width="1%">Given&nbsp;On</th>
+			<th width="99%">Exams</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td><%= o.id %></td>
+				<td><input type="text" name="sessions[<%= o.id %>][proctor]" value="<%= o.proctor %>" id="sessions-<%= o.id %>-proctor" class="proctor"></td>
+				<td class="nobr"><%= o.exam_site.name if o.exam_site %></td>
+				<td class="nobr"><%= o.given_on.strftime('%m/%d/%y') %></td>
+				<td><%= o.label %></td>
+				<td></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>
+<script type="text/javascript">
+(function($) {	
+	$('.proctor').change(function(e) {
+		var $this = $(this);
+		$this.addClass('busy-bg');
+		var id = $this.attr('id').split('-')[1];
+		$.ajax({
+			url: '<%= url_for :action => :session_edit %>/' + id,
+			data: {'obj[proctor]': $this.val()},
+			type: 'POST',
+			complete: function(xhr, status) {
+				$this.removeClass('busy-bg');
+			},
+			success: function(data, status, xhr) {
+				$this.effect('highlight');
+			},
+			error: function(xhr, status, error) {
+				alert('Could not save data! Error: ' + error);
+			}
+		});
+		$(this).val();
+	});
+})(jQuery);
+	
+</script>

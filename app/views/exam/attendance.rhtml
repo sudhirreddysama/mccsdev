@@ -79,7 +79,13 @@
 		</td>
 	</tr>
 	<%= f.tr_submit 'Generate Statistics Report', :name => 'statistics' %>
-	<%= f.tr_submit 'Generate Exams/Exam Sites Report', :name => 'exam_sites' %>
+	<tr>
+		<th></th>
+		<td>
+			<%= f.submit 'Generate Exams/Exam Sites Report (Single Date Only)', :name => 'exam_sites' %>&nbsp;&nbsp;&nbsp;
+			<label><%= f.check_box 'face_sheet' %> Include Face Sheets</label>
+		</td>
+	</tr>
 	<%= f.tr_submit 'Generate Exam Booklet Count Spreadsheet (NEW)', :name => 'exam_sites_grid' %>
 	<%= f.tr_submit 'Generate Contact Preference Report', :name => 'contact_preference' %>
 	<%= f.tr_submit 'Generate Veterans Credit Report', :name => 'veterans' %>

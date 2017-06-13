@@ -10,9 +10,13 @@
 			td, th { text-align: left; padding: 3px 5px; vertical-align: top; border-bottom: 1px solid #888; }
 			th { font-weight: bold; white-space: nowrap; border-top: 1px solid #888; vertical-align: bottom; }
 			h1 { text-align: center; font-size: 100%; }
+			h1.big { font-size: 16px; line-height: 18px; }
 			tr.small th { font-size: 8px; border-top: none; }
 			/* thead, tfoot { display: table-row-group } */
 			tr { page-break-inside: avoid; }
+			.nobr { white-space: nowrap; }
+			.face-sheet th, .face-sheet td { border: none; padding-left: 0; }
+			.face-fill { border-bottom: 1px solid #000; text-align: center; }
 		</style>
 	</head>
 	<body>
@@ -133,10 +137,14 @@
 				grouped = {}
 				room_totals = {}
 				exam_totals = {}
+				room_objs = {}
+				exam_objs = {}
 				@objs.each { |o|
 					exam = "#{o.exam_no} #{o.title}"
+					exam_objs[exam] = o
 					o.applicants.each { |a|
 						room = a.exam_site ? a.exam_site.name : 'UNKNOWN SITE'
+						room_objs[room] = a.exam_site
 						grouped[room] ||= {}
 						grouped[room][exam] ||= []
 						grouped[room][exam] << a
@@ -147,8 +155,61 @@
 					}
 				}
 			%>
-			<% grouped.keys.sort.each { |r| exams = grouped[r] %>
-				<% exams.keys.sort.each { |e| objs = exams[e] %>
+			<% grouped.keys.sort.each { |r| exams = grouped[r]; exam_keys = exams.keys.sort %>				
+				<% room = room_objs[r] %>
+				<% if room && @report.face_sheet.to_i != 0 %>
+					<% session = ExamSiteSession.find_by_exam_site_id_and_given_on(room.id, @report[:from_date]) || {} %>
+					<h1 class="big" <% unless first %> style="page-break-before: always;"<% end %>><%= room.name %><br>
+					PLEASE PICK UP AND RETURN MATERIALS TO ROOM _______</h1>
+					<div class="face-sheet">
+						<% first = false %>
+						<table width="100%">
+							<tr>
+								<th width="1%">PROCTOR</td>
+								<td width="80%"><div class="face-fill"><%= session.proctor %>&nbsp;</div></td>
+								<th width="1%">ROOM&nbsp;NUMBER</th>
+								<td width="20%"><div class="face-fill">&nbsp;</div></td>
+							</tr>
+							<tr>
+								<th>EXAM&nbsp;SERIES&nbsp;DATE</th>
+								<td><div class="face-fill"><%= @report[:from_date].strftime '%B %d, %Y' %>&nbsp;</div></td>
+								<th>EXAM&nbsp;START:</th>
+								<td><div class="face-fill"><%= exam_keys.map { |k| exam_objs[k].given_at }.min.t0? %>&nbsp;</div></td>
+							</tr>
+						</table>
+						<p>Arithmetic CALCULATORS and slide rules allowed: YES ___ NO ___</p>
+						<table width="100%">
+							<tr>
+								<th width="70%">EXAM&nbsp;TITLE&nbsp;REVIEW</th>
+								<th width="10%">EXAM&nbsp;#</th>
+								<th width="10%">BOOK&nbsp;#</th>
+								<th width="10%">TIME&nbsp;LIMIT</th>
+							</tr>
+							<%= cross_counter = Hash.new { |h, k| h[k] = 0 } %>
+							<% exam_keys.each { |k| e = exam_objs[k] %>
+								<% book_nos = e.program_no.to_s.split(',') %>
+								<tr>
+									<td>
+										<%= e.title %> (<%= exams[k].size %>)<br>
+										<% exams[k].each { |a| cross_counter[a.person_id] += 1 } %>
+										<%= book_nos.size %> orange answer sheet<br>
+										1 green candidate ID sheet
+									</td>
+									<td class="nobr"><%= e.exam_no %></td>
+									<td class="nobr"><%= book_nos.join('<br>') %></td>
+									<td class="nobr"><% if e.exam_length.to_f > 0 %><%= e.exam_length %> hours<% end %></td>
+								</tr>
+							<% } %>
+						</table>
+						<p><b><%= cross_counter.values.select { |cc| cc > 1 }.size %> Crossfilers - Same/Different Series</b></p>
+						<p>Purple Bio Data Sheet, completion of PART B - Check candidate directions.</p>
+						<p>Veteran credit forms due in 1 month: <%= (@report[:from_date] + 1.month).strftime '%B %d, %Y' %></p>
+						<p><b><u>Note:</u> If a discrepancy exists between this sheet and the information provided by NYS on the exam booklet or candidate 
+						directions you should always follow the information provided by New York State.</b></p>
+					</div>
+				<% end %>
+				
+				<% exam_keys.each { |e| objs = exams[e] %>
 					
 					<h1<% unless first %> style="page-break-before: always;"<% end %>>
 						Exams/Sites For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %><br />
