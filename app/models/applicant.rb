@@ -192,7 +192,7 @@ class Applicant < ActiveRecord::Base
 				logger.info "Assigning Applicant ID #{o.id} to Exam ID #{exam.id}"
 				o.exam_id = exam.id
 				o.save
-			}
+			end
 		}
 		logger.info "#{Time.now.to_s} Done With Applicant.assign_continuous_recruitment_exam_cron()"
 		logger.flush
