@@ -1,0 +1,22 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<td width="1%">Proc</td>
+			<th width="32%">Name</th>
+			<th width="32%">Address</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr"><%= partial 'actions', :o => o %></td>
+				<td><%= o.id %></td>
+				<td class="nobr"><%= o.head_proctor_room %></td>
+				<td><%= link_to o.name, :action => :view, :id => o.id %></td>
+				<td><%= h o.full_address(', ') %>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

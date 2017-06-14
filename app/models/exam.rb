@@ -123,7 +123,9 @@ class Exam < ActiveRecord::Base
 		certs.find(:all, :conditions => '(certs.certification_date is null or certs.certification_date > date(now())) and certs.pending_date <= date(now())')
 	end
 	
-	
+	def calculator_prohibited?
+		calculator == 'PROHIBITED'
+	end
 	
 	
 	

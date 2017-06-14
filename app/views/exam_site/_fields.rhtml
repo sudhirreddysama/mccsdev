@@ -1,6 +1,24 @@
 <%= f.tr_text_field :name, :label => 'Name', :req => true, :class => 'ucase' %>
+<% @groups = ExamSiteGroup.find(:all, :order => 'exam_site_groups.name') %>
+<%= f.tr_select :exam_site_group_id, @groups.map { |g| [g.name, g.id] }, :label => 'Exam Location', :include_blank => true %>
 <%= f.tr_text_field :address, :label => 'Address 1', :class => 'ucase' %>
 <%= f.tr_text_field :address2, :label => 'Address 2', :class => 'ucase' %>
 <%= f.tr_text_field :address3, :label => 'Address 3', :class => 'ucase' %>
 <%= f.tr_text_field :capacity, :label => 'Capacity', :size => 5, :class => 'ucase' %>
 <%= f.tr_text_area :notes, :label => 'Notes', :size => '60x2' %>
+<script type="text/javascript">
+ (function($) {
+ 	var groups = <%= @groups.collect(&:attributes).index_by(&:id).to_json %>;
+ 	$('#obj_exam_site_group_id').change(function(e) {
+ 		var id = $(this).val();
+ 		if(id) {
+			var grp = groups[id];
+			if(grp) {
+				$('#obj_address').val(grp.address);
+				$('#obj_address2').val(grp.address2);
+				$('#obj_address3').val(grp.address3);
+			}
+		}
+ 	});
+ })(jQuery);
+</script>

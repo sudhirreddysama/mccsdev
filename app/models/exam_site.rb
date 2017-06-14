@@ -2,6 +2,7 @@ class ExamSite < ActiveRecord::Base
 	
 	validates_presence_of :name
 	has_many :applicants
+	belongs_to :exam_site_group
 	
 	def label; name_was; end
 	

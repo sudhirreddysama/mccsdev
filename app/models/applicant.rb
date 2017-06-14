@@ -188,9 +188,11 @@ class Applicant < ActiveRecord::Base
 				:conditions => ['exams.exam_no like ? and exams.deadline >= ? and exams.continuous = 1', no_like, o.submitted_at],
 				:order => 'exams.deadline asc'
 			})
-			logger.info "Assigning Applicant ID #{o.id} to Exam ID #{exam.id}"
-			o.exam_id = exam.id
-			o.save
+			if exam
+				logger.info "Assigning Applicant ID #{o.id} to Exam ID #{exam.id}"
+				o.exam_id = exam.id
+				o.save
+			}
 		}
 		logger.info "#{Time.now.to_s} Done With Applicant.assign_continuous_recruitment_exam_cron()"
 		logger.flush

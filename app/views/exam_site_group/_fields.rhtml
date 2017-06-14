@@ -1,0 +1,11 @@
+<%= f.tr_text_field :name, :label => 'Name', :req => true, :class => 'ucase' %>
+<%= f.tr_text_field :address, :label => 'Address 1', :class => 'ucase' %>
+<%= f.tr_text_field :address2, :label => 'Address 2', :class => 'ucase' %>
+<%= f.tr_text_field :address3, :label => 'Address 3', :class => 'ucase' %>
+<% unless @obj.new_record? %>
+	<tr>
+		<th></th>
+		<td>NOTE: Exam sites linked to this location (that have the same address as this location) will also be updated when the above address fields are updated.</td>
+	</tr>
+<% end %>
+<%= f.tr_text_field :head_proctor_room, :label => 'Head Proctor Room', :class => 'ucase' %>

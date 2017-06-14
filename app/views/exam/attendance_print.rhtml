@@ -16,7 +16,8 @@
 			tr { page-break-inside: avoid; }
 			.nobr { white-space: nowrap; }
 			.face-sheet th, .face-sheet td { border: none; padding-left: 0; }
-			.face-fill { border-bottom: 1px solid #000; text-align: center; }
+			.xline, .face-fill { border-bottom: 1px solid #000; text-align: center; }
+			.xline { width: 30px; display: inline-block; }
 		</style>
 	</head>
 	<body>
@@ -158,9 +159,13 @@
 			<% grouped.keys.sort.each { |r| exams = grouped[r]; exam_keys = exams.keys.sort %>				
 				<% room = room_objs[r] %>
 				<% if room && @report.face_sheet.to_i != 0 %>
-					<% session = ExamSiteSession.find_by_exam_site_id_and_given_on(room.id, @report[:from_date]) || {} %>
-					<h1 class="big" <% unless first %> style="page-break-before: always;"<% end %>><%= room.name %><br>
-					PLEASE PICK UP AND RETURN MATERIALS TO ROOM _______</h1>
+					<% 
+						session = ExamSiteSession.find_by_exam_site_id_and_given_on(room.id, @report[:from_date]) || {} 
+						room_name = room.name.split('-').map(&:strip)
+					%>
+					
+					<h1 class="big" <% unless first %> style="page-break-before: always;"<% end %>><%= room_name[0].to_s.strip %><br>
+					PLEASE PICK UP AND RETURN MATERIALS TO ROOM <span class="xline" style="width: 120px;">&nbsp;<%= room.exam_site_group ? room.exam_site_group.head_proctor_room.to_s.sub(/^ROOM\s*/, '') : '' %>&nbsp;</span></h1>
 					<div class="face-sheet">
 						<% first = false %>
 						<table width="100%">
@@ -168,7 +173,7 @@
 								<th width="1%">PROCTOR</td>
 								<td width="80%"><div class="face-fill"><%= session.proctor %>&nbsp;</div></td>
 								<th width="1%">ROOM&nbsp;NUMBER</th>
-								<td width="20%"><div class="face-fill">&nbsp;</div></td>
+								<td width="20%"><div class="face-fill">&nbsp;<%= room_name[1].to_s.strip.sub(/^ROOM\s*/, '') %>&nbsp;</div></td>
 							</tr>
 							<tr>
 								<th>EXAM&nbsp;SERIES&nbsp;DATE</th>
@@ -177,7 +182,20 @@
 								<td><div class="face-fill"><%= exam_keys.map { |k| exam_objs[k].given_at }.min.t0? %>&nbsp;</div></td>
 							</tr>
 						</table>
-						<p>Arithmetic CALCULATORS and slide rules allowed: YES ___ NO ___</p>
+						<% 
+							# Make sure calculator_prohibited? is the same for all exams
+							calc_allowed = true
+							cp0 = exam_objs[exam_keys[0]].calculator_prohibited?
+							calc_same = exam_keys.all? { |k| 
+								cp = exam_objs[k].calculator_prohibited?
+								calc_allowed &&= !cp
+								cp0 == cp
+							} 
+						%>
+						<p>Arithmetic CALCULATORS and slide rules allowed: 
+							YES <span class="xline">&nbsp;<% if calc_same && calc_allowed %>X<% end %>&nbsp;</span>
+							NO <span class="xline">&nbsp;<% if calc_same && !calc_allowed %>X<% end %>&nbsp;</span>
+						</p>
 						<table width="100%">
 							<tr>
 								<th width="70%">EXAM&nbsp;TITLE&nbsp;REVIEW</th>
