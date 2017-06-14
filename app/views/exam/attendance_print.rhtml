@@ -219,7 +219,12 @@
 								</tr>
 							<% } %>
 						</table>
-						<p><b><%= cross_counter.values.select { |cc| cc > 1 }.size %> Crossfilers - Same/Different Series</b></p>
+						<% cross_counter = cross_counter.values.select { |cc| cc > 1 }.size %>
+						<p><b><% if cross_counter > 0 %><%= cross_counter %> Crossfilers - Same/Different Series<% else %>NO CROSSFILERS<% end %></b></p>
+						<% if exam_keys.any? { |k| exam_objs[k].high_security } %>
+							<p><b><u>Special Monitor Instructions - NO SCRATCH PAPER</u></b></p>
+							<p><b><u>VERY IMPORTANT - This is a high security exam with serial numbered booklets. Please follow the Monitors  instructions from State carefully.</u></b></p>
+						<% end %>
 						<p>Purple Bio Data Sheet, completion of PART B - Check candidate directions.</p>
 						<p>Veteran credit forms due in 1 month: <%= (@report[:from_date] + 1.month).strftime '%B %d, %Y' %></p>
 						<p><b><u>Note:</u> If a discrepancy exists between this sheet and the information provided by NYS on the exam booklet or candidate 

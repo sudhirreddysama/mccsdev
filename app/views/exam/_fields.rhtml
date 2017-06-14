@@ -91,6 +91,7 @@
 <%= f.tr_text_field :fee, :label => 'Application Fee', :size => 10, :style => 'text-align: right;' %>
 <%= f.tr_select :calculator, Const::CALCULATOR_TEXT, :include_blank => true, :label => 'Calculator' %>
 <%= f.tr_text_field :exam_length, :label => 'Exam Length', :size => 10 %>
+<%= f.tr_check :high_security, :label => 'High Security', :text => 'Check to include the &quot;High Security&quot; verbiage on the exam face sheet.' %>
 <%= f.tr_text_area :comments, :label => 'Comments', :size => '60x2' %>
 <tr>
 	<th>Exam Sites:</th>
