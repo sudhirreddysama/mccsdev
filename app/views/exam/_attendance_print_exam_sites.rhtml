@@ -24,13 +24,34 @@ grouped.keys.sort.each { |r|
 		exams = grouped[r][d];
 		exam_keys = exams.keys.sort
 		room = room_objs[r]
-		%>	
-		<% if room && @report.face_sheet.to_i != 0 %>
-			<% 
-				session = ExamSiteSession.find_by_exam_site_id_and_given_on(room.id, @report[:from_date]) || {} 
-				room_name = room.name.split('-').map(&:strip)
-			%>
-		
+	
+		if room && @report.face_sheet.to_i != 0
+
+			session = ExamSiteSession.find_by_exam_site_id_and_given_on(room.id, @report[:from_date]) || {} 
+			room_name = room.name.split('-').map(&:strip)
+
+			cross_counter = Hash.new { |h, k| h[k] = 0 } 
+			special_acc = {}
+			
+			# Make sure calculator_prohibited? is the same for all exams
+			calc_allowed = true
+			cp0 = exam_objs[exam_keys[0]].calculator_prohibited?			
+			calc_same = exam_keys.all? { |k| 
+				cp = exam_objs[k].calculator_prohibited?
+				calc_allowed &&= !cp
+				cp0 == cp
+			} 			
+			
+			exam_keys.each { |k| e = exam_objs[k]
+				exams[k].each { |a|
+					cross_counter[a.person_id] += 1 
+					if !a.person.special_acc_face_sheet.blank?
+						special_acc[a.person_id] = a.person
+					end				
+				}
+			}
+			
+			%>		
 			<h1 class="big" <% unless first %> style="page-break-before: always;"<% end %>><span class="yelo"><%= room_name[0].to_s.strip %></span><br>
 			<% proc_room = room.exam_site_group ? room.exam_site_group.head_proctor_room.to_s.sub(/^ROOM\s*/, '') : '' %>
 			PLEASE PICK UP AND RETURN MATERIALS TO ROOM <span class="xline<% if !proc_room.blank? %> yelo<% end %>" style="width: 120px;">&nbsp;<%= proc_room %>&nbsp;</span></h1>
@@ -56,22 +77,11 @@ grouped.keys.sort.each { |r|
 						<td><div class="face-fill"><%= exam_keys.map { |k| exam_objs[k].given_at }.min.t0? %>&nbsp;</div></td>
 					</tr>
 				</table>
-				<% 
-					# Make sure calculator_prohibited? is the same for all exams
-					calc_allowed = true
-					cp0 = exam_objs[exam_keys[0]].calculator_prohibited?
-					calc_same = exam_keys.all? { |k| 
-						cp = exam_objs[k].calculator_prohibited?
-						calc_allowed &&= !cp
-						cp0 == cp
-					} 
-					cross_counter = Hash.new { |h, k| h[k] = 0 } 
-					special_acc = {}
-				%>
 				<p><span class="<% if !calc_allowed %>yelo<% end %>">Arithmetic CALCULATORS and slide rules allowed: 
 					YES <span class="xline">&nbsp;<% if calc_same && calc_allowed %>X<% end %>&nbsp;</span>
 					NO <span class="xline">&nbsp;<% if calc_same && !calc_allowed %>X<% end %>&nbsp;</span>
 				</span></p>
+				<p><b><%= cross_counter.size %> Candidates</b></p>
 				<table width="100%">
 					<tr>
 						<th width="70%">EXAM&nbsp;TITLE&nbsp;REVIEW</th>
@@ -84,12 +94,6 @@ grouped.keys.sort.each { |r|
 						<tr>
 							<td>
 								<%= e.title %> (<%= exams[k].size %>)<br>
-								<% exams[k].each { |a| 
-									cross_counter[a.person_id] += 1 
-									if !a.person.special_acc_face_sheet.blank?
-										special_acc[a.person_id] = a.person
-									end
-								} %>
 								<%= book_nos.size %> orange answer sheet<br>
 								1 green candidate ID sheet
 							</td>
