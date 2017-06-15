@@ -184,6 +184,7 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><%= f.check_box :special_accommodations_docs %>Documentation On File</label>
 		</td>
 	</tr>
+	<%= f.tr_text_field :special_acc_face_sheet, :size => 60, :class => 'ucase', :label => 'Face Sheet Special Acc.', :after => '<div>Alternate special accomodations text to show on the exam face sheet.</div>' %>
 	
 	<tr style="background: #e8e8e8;"><th></th><th><em>Comments &amp; Documents</em></th></tr>
 	<%= f.tr_text_area :comments, :label => 'Comments', :size => '60x3' %>

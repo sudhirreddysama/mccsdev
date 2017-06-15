@@ -1,0 +1,167 @@
+<%
+first = true
+grouped = Hash.new { |h, k| h[k] = Hash.new { |h2, k2| h2[k2] = Hash.new { |h3, k3| h3[k3] = [] } }  }
+room_totals = Hash.new(0)
+exam_totals = Hash.new(0)
+room_objs = {}
+exam_objs = {}
+@objs.each { |o|
+	exam = "#{o.exam_no} #{o.title}"
+	exam_objs[exam] = o
+	o.applicants.each { |a|
+		room = a.exam_site ? a.exam_site.name : 'UNKNOWN SITE'
+		room_objs[room] = a.exam_site
+		d = (a.alternate_exam_date || exam_objs[exam].given_at.to_date).to_s
+		grouped[room][d][exam] << a
+		exam_totals[exam] += 1
+		room_totals[room] += 1
+	}
+}
+
+grouped.keys.sort.each { |r| 
+	grouped[r].keys.sort.each { |d|
+
+		exams = grouped[r][d];
+		exam_keys = exams.keys.sort
+		room = room_objs[r]
+		%>	
+		<% if room && @report.face_sheet.to_i != 0 %>
+			<% 
+				session = ExamSiteSession.find_by_exam_site_id_and_given_on(room.id, @report[:from_date]) || {} 
+				room_name = room.name.split('-').map(&:strip)
+			%>
+		
+			<h1 class="big" <% unless first %> style="page-break-before: always;"<% end %>><span class="yelo"><%= room_name[0].to_s.strip %></span><br>
+			<% proc_room = room.exam_site_group ? room.exam_site_group.head_proctor_room.to_s.sub(/^ROOM\s*/, '') : '' %>
+			PLEASE PICK UP AND RETURN MATERIALS TO ROOM <span class="xline<% if !proc_room.blank? %> yelo<% end %>" style="width: 120px;">&nbsp;<%= proc_room %>&nbsp;</span></h1>
+			<div class="face-sheet">
+				<% first = false %>
+				<table width="100%">
+					<tr>
+						<th width="1%">PROCTOR</td>
+						<td width="80%"><div class="face-fill"><%= session.proctor %>&nbsp;</div></td>
+						<th width="1%">ROOM&nbsp;NUMBER</th>
+						<% actual_room = room_name[1].to_s.strip.sub(/^ROOM\s*/, '') %>
+						<td width="20%"><div class="face-fill<% if !actual_room.blank? %> yelo<% end %>">&nbsp;<%= actual_room %>&nbsp;</div></td>
+					</tr>
+					<tr>
+						<th>EXAM&nbsp;SERIES&nbsp;DATE</th>
+						<%
+							show_date = Date.parse(d)
+							exam_date = exam_objs[exam_keys.first].given_at.to_date
+							alt = show_date != exam_date
+						%>
+						<td><div class="face-fill"><%= show_date.strftime '%B %d, %Y' %><% if alt %> <b class="">(ALT DATE)</b><% end %>&nbsp;</div></td>
+						<th>EXAM&nbsp;START:</th>
+						<td><div class="face-fill"><%= exam_keys.map { |k| exam_objs[k].given_at }.min.t0? %>&nbsp;</div></td>
+					</tr>
+				</table>
+				<% 
+					# Make sure calculator_prohibited? is the same for all exams
+					calc_allowed = true
+					cp0 = exam_objs[exam_keys[0]].calculator_prohibited?
+					calc_same = exam_keys.all? { |k| 
+						cp = exam_objs[k].calculator_prohibited?
+						calc_allowed &&= !cp
+						cp0 == cp
+					} 
+					cross_counter = Hash.new { |h, k| h[k] = 0 } 
+					special_acc = {}
+				%>
+				<p><span class="<% if !calc_allowed %>yelo<% end %>">Arithmetic CALCULATORS and slide rules allowed: 
+					YES <span class="xline">&nbsp;<% if calc_same && calc_allowed %>X<% end %>&nbsp;</span>
+					NO <span class="xline">&nbsp;<% if calc_same && !calc_allowed %>X<% end %>&nbsp;</span>
+				</span></p>
+				<table width="100%">
+					<tr>
+						<th width="70%">EXAM&nbsp;TITLE&nbsp;REVIEW</th>
+						<th width="10%">EXAM&nbsp;#</th>
+						<th width="10%">BOOK&nbsp;#</th>
+						<th width="10%">TIME&nbsp;LIMIT</th>
+					</tr>
+					<% exam_keys.each { |k| e = exam_objs[k] %>
+						<% book_nos = e.program_no.to_s.split(',') %>
+						<tr>
+							<td>
+								<%= e.title %> (<%= exams[k].size %>)<br>
+								<% exams[k].each { |a| 
+									cross_counter[a.person_id] += 1 
+									if !a.person.special_acc_face_sheet.blank?
+										special_acc[a.person_id] = a.person
+									end
+								} %>
+								<%= book_nos.size %> orange answer sheet<br>
+								1 green candidate ID sheet
+							</td>
+							<td class="nobr"><%= e.exam_no %></td>
+							<td class="nobr"><%= book_nos.join('<br>') %></td>
+							<td class="nobr"><% if e.exam_length.to_f > 0 %><%= e.exam_length %> hours<% end %></td>
+						</tr>
+					<% } %>
+				</table>
+				<% cross_counter = cross_counter.values.select { |cc| cc > 1 }.size %>
+				<p><span class="yelo"><b><% if cross_counter > 0 %><%= cross_counter %> Crossfilers - Same/Different Series<% else %>NO CROSSFILERS<% end %></b></span></p>
+				<% if exam_keys.any? { |k| exam_objs[k].high_security } %>
+					<p><span class="yelo"><b><u>Special Monitor Instructions - NO SCRATCH PAPER</u></b></span></p>
+					<p><span class="yelo"><b><u>VERY IMPORTANT - This is a high security exam with serial numbered booklets. Please follow the Monitors  instructions from State carefully.</u></b></span></p>
+				<% end %>
+				<p>Purple Bio Data Sheet, completion of PART B - Check candidate directions.</p>
+				<p>Veteran credit forms due in 1 month: <%= (@report[:from_date] + 1.month).strftime '%B %d, %Y' %></p>
+				<% if !special_acc.empty? %>
+					<p><span class="yelo"><b>Special Accomodations:</b></span><br>
+					<%= special_acc.map { |pid, person| h "#{person.last_name}, #{person.first_name} - #{person.special_acc_face_sheet}" }.join('<br>') %>
+				<% end %>
+				<p><b><u>Note:</u> If a discrepancy exists between this sheet and the information provided by NYS on the exam booklet or candidate 
+				directions you should always follow the information provided by New York State.</b></p>
+			</div>
+		<% end %>
+	
+		<% exam_keys.each { |e| objs = exams[e] %>
+		
+			<h1<% unless first %> style="page-break-before: always;"<% end %>>
+				Exams/Sites For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %><br />
+				Exam: <%= h e %><br />
+				Site: <%= h r %>
+			</h1>
+			<% first = false %>
+			<table>
+				<tr>
+					<th width="48%">Applicant</th>
+					<th width="1">Present</th>
+					<th width="1">FTA</th>
+					<th width="48%">Applicant</th>
+					<th width="1">Present</th>
+					<th width="1">FTA</th>
+				</tr>
+			</table>
+			<% tfirst = true %>
+			<% sgrps = objs.in_groups_of(48, false) { |sgrp| %>
+				<table<% if !tfirst %> style="page-break-before: always;"<% end %> width="100%">
+					<% tfirst = false %>
+					<% grps = sgrp.in_groups(2) %>
+					<% 0.upto(grps[0].size - 1) { |j| %>
+						<tr>
+							<% 0.upto(1) { |i| %>
+								<% a = grps[i][j] %>
+								<% if a %>
+									<td width="50%">
+										<%= h a.person.last_name %>, <%= h a.person.first_name %><br />
+										xxxx-xx-<%= h a.person.ssn_last4 %>
+									</td>
+								<% else %>
+									<td width="50%"></td>
+								<% end %>
+							<% } %>
+						</tr>
+					<% } %>
+				</table>
+			<% } %>
+			<p>
+				<%= h e %> / <%= h r %> TOTAL: <%= objs.size %><br />
+				<%= h e %> TOTAL: <%= exam_totals[e] %><br />
+				<%= h r %> TOTAL: <%= room_totals[r] %>
+			</p>
+		
+		<% } %>
+	<% } %>
+<% } %>
