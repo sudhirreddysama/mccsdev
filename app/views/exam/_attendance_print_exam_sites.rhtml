@@ -59,11 +59,11 @@ grouped.keys.sort.each { |r|
 				<% first = false %>
 				<table width="100%">
 					<tr>
-						<th width="1%">PROCTOR</td>
-						<td width="80%"><div class="face-fill"><%= session.proctor %>&nbsp;</div></td>
-						<th width="1%">ROOM&nbsp;NUMBER</th>
+						<th width="1%" style="vertical-align: bottom;">PROCTOR</td>
+						<td width="80%" style="vertical-align: bottom;"><div class="face-fill"><%= session.proctor %>&nbsp;</div></td>
+						<th width="1%" style="vertical-align: bottom;">ROOM&nbsp;NUMBER</th>
 						<% actual_room = room_name[1].to_s.strip.sub(/^ROOM\s*/, '') %>
-						<td width="20%"><div class="face-fill<% if !actual_room.blank? %> yelo<% end %>">&nbsp;<%= actual_room %>&nbsp;</div></td>
+						<td width="20%" style="vertical-align: bottom;"><div class="face-fill<% if !actual_room.blank? %> yelo<% end %>">&nbsp;<%= actual_room %>&nbsp;</div></td>
 					</tr>
 					<tr>
 						<th>EXAM&nbsp;SERIES&nbsp;DATE</th>
@@ -94,8 +94,9 @@ grouped.keys.sort.each { |r|
 						<tr>
 							<td>
 								<%= e.title %> (<%= exams[k].size %>)<br>
-								<%= book_nos.size %> orange answer sheet<br>
-								1 green candidate ID sheet
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= book_nos.size %> orange answer sheet<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 green candidate ID sheet<br>
+								&nbsp;
 							</td>
 							<td class="nobr"><%= e.exam_no %></td>
 							<td class="nobr"><%= book_nos.join('<br>') %></td>
