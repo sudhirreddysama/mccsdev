@@ -528,29 +528,31 @@ class ExamController < CrudController
 						send_data data.string, :filename => 'export.xls', :type => 'application/vnd.ms-excel'
 					elsif params[:exam_sites_grid]
 						book = Spreadsheet::Workbook.new
-						name_format = Spreadsheet::Format.new :align => :left, :weight => :bold
-						head_format = Spreadsheet::Format.new :align => :center, :weight => :bold
-						num_format = Spreadsheet::Format.new :align => :right
+						name_format = Spreadsheet::Format.new :align => :left, :weight => :bold, :border => :thin
+						head_format = Spreadsheet::Format.new :align => :center, :weight => :bold, :border => :thin, :text_wrap => true
+						num_format = Spreadsheet::Format.new :align => :right, :border => :thin
 						@objs.keys.sort.each { |site_name| objs = @objs[site_name]
 							booklets = @booklets[site_name]
 							people = @people[site_name]
 							sheet = book.create_worksheet :name => site_name
+							sheet.pagesetup[:orientation] = :landscape
 							sheet[0, 0] = site_name
 							col = 1
 							btot = Hash.new { |h, v| h[v] = 0 }
 							booklets.each { |b, h|
-								sheet[2, col] = b
+								sheet[2, col] = b.split(',').map(&:strip).join("\n")
+								sheet.rows[2].set_format col, head_format
 								col += 1
 							}
-							sheet.rows[2].default_format = head_format
 							sheet[2, col] = 'TOTAL'
+							sheet.rows[2].set_format 0, head_format
+							sheet.rows[2].set_format col, head_format
 							sheet.column(0).width = 40
 							row = 3
 							footnote = false
 							people.each { |p, h|
 								sheet[row, 0] = "#{h.last_name}, #{h.first_name}"
 								sheet.rows[row].set_format 0, name_format
-								sheet.rows[row].default_format = num_format
 								col = 1
 								ptot = 0
 								booklets.each { |b, h|
@@ -562,24 +564,32 @@ class ExamController < CrudController
 											footnote = true
 											v = "#{v}*"
 										end
-										sheet[row, col] = v
 									end
+									sheet[row, col] = v
+									sheet.rows[row].set_format col, num_format
 									col += 1
 								}
 								sheet[row, col] = ptot
+								sheet.rows[row].set_format col, num_format
 								row += 1
 							}
 							col = 1
 							sheet[row, 0] = 'TOTAL'
-							sheet.rows[row].set_format 0, name_format
-							sheet.rows[row].default_format = num_format
 							booklets.each { |b, h|
 								sheet[row, col] = btot[b]
+								sheet[row + 1, col] = b.split(',').map(&:strip).join("\n")
+								sheet.rows[row].set_format col, num_format
+								sheet.rows[row + 1].set_format col, head_format
 								col += 1
 							}
 							sheet[row, col] = btot.values.sum &:to_i
+							sheet[row + 1, col] = 'TOTAL'
+							sheet.rows[row].set_format col, num_format
+							sheet.rows[row + 1].set_format col, head_format
+							sheet.rows[row].set_format 0, head_format
+							sheet.rows[row + 1].set_format 0, head_format
 							if footnote
-								sheet[row + 2, 0] = '* Only counted once in totals'
+								sheet[row + 3, 0] = '* Only counted once in totals'
 							end
 						}
 						data = StringIO.new

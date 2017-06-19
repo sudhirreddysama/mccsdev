@@ -28,6 +28,8 @@ grouped.keys.sort.each { |r|
 		if room && @report.face_sheet.to_i != 0
 
 			session = ExamSiteSession.find_by_exam_site_id_and_given_on(room.id, @report[:from_date]) || {} 
+			proctors = session.proctor.to_s.split(',').map(&:strip)
+			first_proctor = proctors.shift
 			room_name = room.name.split('-').map(&:strip)
 
 			cross_counter = Hash.new { |h, k| h[k] = 0 } 
@@ -60,11 +62,19 @@ grouped.keys.sort.each { |r|
 				<table width="100%">
 					<tr>
 						<th width="1%" style="vertical-align: bottom;">PROCTOR</td>
-						<td width="80%" style="vertical-align: bottom;"><div class="face-fill"><%= session.proctor %>&nbsp;</div></td>
+						<td width="80%" style="vertical-align: bottom;"><div class="face-fill"><%= first_proctor %>&nbsp;</div></td>
 						<th width="1%" style="vertical-align: bottom;">ROOM&nbsp;NUMBER</th>
 						<% actual_room = room_name[1].to_s.strip.sub(/^ROOM\s*/, '') %>
 						<td width="20%" style="vertical-align: bottom;"><div class="face-fill<% if !actual_room.blank? %> yelo<% end %>">&nbsp;<%= actual_room %>&nbsp;</div></td>
 					</tr>
+					<% if !proctors.empty? %>
+						<% proctors.each { |proctor| %>
+							<tr>
+								<th width="1%" style="vertical-align: bottom;" class="nobr">ASST. PROCTOR</td>
+								<td width="80%" style="vertical-align: bottom;"><div class="face-fill"><%= proctor %>&nbsp;</div></td>
+							</tr>
+						<% } %>
+					<% end %>
 					<tr>
 						<th>EXAM&nbsp;SERIES&nbsp;DATE</th>
 						<%
