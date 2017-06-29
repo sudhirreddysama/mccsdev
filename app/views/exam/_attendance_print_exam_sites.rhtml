@@ -109,7 +109,7 @@ grouped.keys.sort.each { |r|
 								&nbsp;
 							</td>
 							<td class="nobr"><%= e.exam_no %></td>
-							<td class="nobr"><%= book_nos.join('<br>') %></td>
+							<td class="nobr"><%= book_nos.join('<br>') %><% if !e.test_plan.blank? %><br><%= e.test_plan %><% end %></td>
 							<td class="nobr"><% if e.exam_length.to_f > 0 %><%= e.exam_length %> hours<br><% end %><%= e.exam_review %></td>
 						</tr>
 					<% } %>
