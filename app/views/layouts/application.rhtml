@@ -63,6 +63,9 @@
 						<%= tab 'Pref. Lists', {:controller => :preferred_list, :sc => nil}, {}, {:class => 'tab-preferred' + (params[:sc] == 'preferred_list' || params[:controller] == 'preferred_list' ? ' active' : ''), :title => 'Preferred Lists'} %>
 						<%= tab 'Cert. Lists', {:controller => :cert, :sc => nil}, {}, {:class => 'tab-cert' + (params[:sc] == 'cert' ? ' active' : ''), :title => 'Certified Eligible Lists'} %>												
 					<% end %>
+					<% if @current_user.allow_applicants %>
+						<%= tab 'Applicants', {:controller => :person, :sc => nil}, {}, {:class => 'tab-person' + (params[:sc] == 'person' ? ' active' : ''), :title => 'Applicants'} %>				
+					<% end %>
 					<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (params[:sc] == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>				
 				<% else %>
 					<%= tab 'Employees', {:controller => :employee, :sc => nil}, {}, {:class => 'tab-employee' + (params[:sc] == 'employee' || params[:controller] == 'pay_cert' || params[:sc] == 'pay_cert' || params[:controller] == 'form_change' || params[:sc] == 'form_change' || params[:controller] == 'form_hire' || params[:sc] == 'form_hire' || params[:controller] == 'form_title' || params[:sc] == 'form_title' || params[:controller] == 'vacancy' || params[:sc] == 'vacancy' ? ' active' : ''), :title => 'Employees + History'} %>

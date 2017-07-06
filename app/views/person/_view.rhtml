@@ -205,7 +205,7 @@
 					<label>EMPID</label>
 					<%= h(o.formatta_empid) %>
 				</td>
-				<% if @current_user.admin_level? %>
+				<% if @current_user.admin_level? || @current_user.allow_applicants %>
 					<td>
 						<label>Login Email Sent</label>
 						<%= o.formatta_email_sent.dt0? %> <%= o.formatta_email_sent_by %>
@@ -244,157 +244,159 @@
 
 
 </div>
+<% if !@current_user.agency_level? %>
 
-<h2>Applications</h2>
+	<h2>Applications</h2>
 
-<% apps = o.applicants.find(:all, :order => 'applicants.submitted_at desc') %>
+	<% apps = o.applicants.find(:all, :order => 'applicants.submitted_at desc') %>
 
-<table class="dg">
-	<thead>
-		<tr>
-			<th width="1%">View</th>
-			<th width="1%">ID</th>
-			<th width="1%">Submitted</th>
-			<th width="1%">Status</th>
-			<th width="1%">PT</th>
-			<th width="1%">Exam No.</th>
-			<th width="1%">Bk#</th>
-			<th width="1%">Exam Date</th>
-			<th width="1%">Est. Date</th>
-			<th width="1%">Exp. Date</th>
-			<th width="46%">Title</th>
-			<th width="46%">Web Post</th>
-			</tr>
-		</tr>
-	</thead>
-	<tbody id="objs">
-		<% apps.each { |a| %>
-			<% exam = a.exam(:include => :applicants) %>
-			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= a.id %>">
-				<td class="nobr">
-					<%= link_to 'Application', :controller => :applicant, :action => :view, :id => a.id %>
-					<% if a.web_applicant_id %>
-						<a href="https://www.monroecounty.gov/hrapply/applications/general/<%= a.web_applicant_id %>" target="_blank">(web)</a>
-					<% end %> &bull;
-					<%= link_to 'Exam', :controller => :exam, :action => :view, :id => a.exam_id if a.exam %>
-				</td>
-				<td><%= a.id %></td>
-				<td class="nobr"><%= a.submitted_at.d0? %></td>
-				<td class="nobr"><% if a.app_status %><span class="<% if a.app_status.eligible == 'N' %>req<% end %>"><%= h a.app_status.name %></span><% end %></td>
-				<td class="nobr"><%= a.perf_test_status %></td>
-				<td class="nobr"><%= h exam.exam_no if exam %></td>
-				<td class="nobr"><%= h exam.program_no if exam %></td>
-				<td class="nobr"><%= exam.given_at.d0? if exam %></td>
-				<td class="nobr"><%= exam.established_date.d0? if exam %></td>
-				<td class="nobr">
-					<% if exam %>
-						<% if exam.valid_until %>
-							<span class="<% if exam.valid_until < Time.now.to_date %>req<% end %>"><%= exam.valid_until.d0? %></span>
-						<% else %>
-							<% if exam.given_at && exam.given_at < Time.now.to_date && !exam.applicants.to_a.find { |a| a.app_status && a.app_status.eligible != 'N' } %> <span class="req">(NO LIST)</span><% end %>
-						<% end %>
-					<% end %>
-				</td>
-				<td><%= h a.exam.title if a.exam %></td>
-				<td><%= link_to a.web_exam.name, :controller => 'web_exam', :action => :view, :id => a.web_exam_id, :sc => nil, :sid => nil if a.web_exam %></td>
-			</tr>
-		<% } %>
-	</tbody>
-</table>
-
-<h2>Performance Tests</h2>
-
-<% ptaken = o.taken_perfs.find(:all, :order => 'taken_perfs.date_taken desc', :include => [:exam, :perf_code, :perf_test]) %>
-
-<table class="dg">
-	<thead>
-		<tr>
-			<th width="1%">ID</th>
-			<th width="1%">Status</th>
-			<th width="1%">Taken</th>
-			<th width="32%">Test</th>
-			<th width="31%">Note</th>
-			<th width="1%">Exam&nbsp;No.</th>
-			<th width="31%">Exam Title (click to view exam)</th>
-		</tr>
-	</thead>
-	<tbody>
-		<% ptaken.each { |pt| %>
-			<% p = pt.perf_test %>
-			<% pc = pt.perf_code %>
-			<% e = pt.exam %>
-			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= pt.id %>">
-				<td><%= pt.id %></td>
-				<td class="nobr"><%= h pc.label if pc %></td>
-				<td class="nobr"><%= pt.date_taken.d0? %></td>
-				<td><%= p.name if p %></td>
-				<td><%= h pt.notes %></td>
-				<td class="nobr"><%= h e.exam_no if e %></td>
-				<td><%= link_to(e.title, :controller => :exam, :action => :view, :id => e.id) if e %></td>
-			</tr>
-		<% } %>
-	</tbody>
-</table>
-
-<h2>Certifications</h2>
-
-<% certs = o.cert_applicants.find(:all, :order => 'certs.certification_date desc', :include => [:cert, :cert_code]) %>
-
-<table class="dg">
-	<thead>
-		<tr>
-			<th width="1%">ID</th>
-			<th width="1%" class="nobr">Cert. Date</th>
-			<th width="1%">Action</th>
-			<th width="38%">Title (click to view)</th>
-			<th width="1%">Exam&nbsp;No.</th>
-			<th width="29%">Exam Title</th>
-			<th width="29%">Comment</th>
-		</tr>
-	</thead>
-	<tbody id="objs">
-		<% certs.each { |ca| %>
-			<% c = ca.cert %>
-			<% co = ca.cert_code %>
-			<% e = c.exam %>
-			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
-				<td class="nobr"><%= ca.id %></td>
-				<td class="nobr"><%= c.certification_date.d0? if c %></td>
-				<td class="nobr"><%= co.label if co %></td>
-				<td><%= link_to(c.title, :controller => :cert, :action => :view, :id => c.id) %></td>
-				<td class="nobr"><%= h e.exam_no if e %></td>
-				<td><%= h e.title if e %></td>
-				<td><%= h ca.comments %></td>
-			</tr>
-		<% } %>
-	</tbody>
-</table>
-
-
-
-
-
-
-<h2>Change Log</h2>
-<% if @obj.person_updates.empty? %>
-	<div class="marg">Nothing found.</div>
-<% else %>
 	<table class="dg">
 		<thead>
 			<tr>
-				<th width="1%">Timestamp</th>
-				<th width="1%">User</th>
-				<th>Activity</th>
+				<th width="1%">View</th>
+				<th width="1%">ID</th>
+				<th width="1%">Submitted</th>
+				<th width="1%">Status</th>
+				<th width="1%">PT</th>
+				<th width="1%">Exam No.</th>
+				<th width="1%">Bk#</th>
+				<th width="1%">Exam Date</th>
+				<th width="1%">Est. Date</th>
+				<th width="1%">Exp. Date</th>
+				<th width="46%">Title</th>
+				<th width="46%">Web Post</th>
+				</tr>
 			</tr>
 		</thead>
-		<tbody>
-			<% @obj.person_updates.each { |u| %>
-				<tr class="<%= cycle 'odd', 'even' %>">
-					<td class="nobr"><%= u.created_at.dt0? %></td>
-					<td class="nobr"><%= u.user ? u.user.username : '---' %></td>
-					<td><%= u.text %></td>
+		<tbody id="objs">
+			<% apps.each { |a| %>
+				<% exam = a.exam(:include => :applicants) %>
+				<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= a.id %>">
+					<td class="nobr">
+						<%= link_to 'Application', :controller => :applicant, :action => :view, :id => a.id %>
+						<% if a.web_applicant_id %>
+							<a href="https://www.monroecounty.gov/hrapply/applications/general/<%= a.web_applicant_id %>" target="_blank">(web)</a>
+						<% end %> &bull;
+						<%= link_to 'Exam', :controller => :exam, :action => :view, :id => a.exam_id if a.exam %>
+					</td>
+					<td><%= a.id %></td>
+					<td class="nobr"><%= a.submitted_at.d0? %></td>
+					<td class="nobr"><% if a.app_status %><span class="<% if a.app_status.eligible == 'N' %>req<% end %>"><%= h a.app_status.name %></span><% end %></td>
+					<td class="nobr"><%= a.perf_test_status %></td>
+					<td class="nobr"><%= h exam.exam_no if exam %></td>
+					<td class="nobr"><%= h exam.program_no if exam %></td>
+					<td class="nobr"><%= exam.given_at.d0? if exam %></td>
+					<td class="nobr"><%= exam.established_date.d0? if exam %></td>
+					<td class="nobr">
+						<% if exam %>
+							<% if exam.valid_until %>
+								<span class="<% if exam.valid_until < Time.now.to_date %>req<% end %>"><%= exam.valid_until.d0? %></span>
+							<% else %>
+								<% if exam.given_at && exam.given_at < Time.now.to_date && !exam.applicants.to_a.find { |a| a.app_status && a.app_status.eligible != 'N' } %> <span class="req">(NO LIST)</span><% end %>
+							<% end %>
+						<% end %>
+					</td>
+					<td><%= h a.exam.title if a.exam %></td>
+					<td><%= link_to a.web_exam.name, :controller => 'web_exam', :action => :view, :id => a.web_exam_id, :sc => nil, :sid => nil if a.web_exam %></td>
 				</tr>
 			<% } %>
 		</tbody>
 	</table>
+
+	<h2>Performance Tests</h2>
+
+	<% ptaken = o.taken_perfs.find(:all, :order => 'taken_perfs.date_taken desc', :include => [:exam, :perf_code, :perf_test]) %>
+
+	<table class="dg">
+		<thead>
+			<tr>
+				<th width="1%">ID</th>
+				<th width="1%">Status</th>
+				<th width="1%">Taken</th>
+				<th width="32%">Test</th>
+				<th width="31%">Note</th>
+				<th width="1%">Exam&nbsp;No.</th>
+				<th width="31%">Exam Title (click to view exam)</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% ptaken.each { |pt| %>
+				<% p = pt.perf_test %>
+				<% pc = pt.perf_code %>
+				<% e = pt.exam %>
+				<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= pt.id %>">
+					<td><%= pt.id %></td>
+					<td class="nobr"><%= h pc.label if pc %></td>
+					<td class="nobr"><%= pt.date_taken.d0? %></td>
+					<td><%= p.name if p %></td>
+					<td><%= h pt.notes %></td>
+					<td class="nobr"><%= h e.exam_no if e %></td>
+					<td><%= link_to(e.title, :controller => :exam, :action => :view, :id => e.id) if e %></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+
+	<h2>Certifications</h2>
+
+	<% certs = o.cert_applicants.find(:all, :order => 'certs.certification_date desc', :include => [:cert, :cert_code]) %>
+
+	<table class="dg">
+		<thead>
+			<tr>
+				<th width="1%">ID</th>
+				<th width="1%" class="nobr">Cert. Date</th>
+				<th width="1%">Action</th>
+				<th width="38%">Title (click to view)</th>
+				<th width="1%">Exam&nbsp;No.</th>
+				<th width="29%">Exam Title</th>
+				<th width="29%">Comment</th>
+			</tr>
+		</thead>
+		<tbody id="objs">
+			<% certs.each { |ca| %>
+				<% c = ca.cert %>
+				<% co = ca.cert_code %>
+				<% e = c.exam %>
+				<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+					<td class="nobr"><%= ca.id %></td>
+					<td class="nobr"><%= c.certification_date.d0? if c %></td>
+					<td class="nobr"><%= co.label if co %></td>
+					<td><%= link_to(c.title, :controller => :cert, :action => :view, :id => c.id) %></td>
+					<td class="nobr"><%= h e.exam_no if e %></td>
+					<td><%= h e.title if e %></td>
+					<td><%= h ca.comments %></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+
+
+
+
+
+
+	<h2>Change Log</h2>
+	<% if @obj.person_updates.empty? %>
+		<div class="marg">Nothing found.</div>
+	<% else %>
+		<table class="dg">
+			<thead>
+				<tr>
+					<th width="1%">Timestamp</th>
+					<th width="1%">User</th>
+					<th>Activity</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @obj.person_updates.each { |u| %>
+					<tr class="<%= cycle 'odd', 'even' %>">
+						<td class="nobr"><%= u.created_at.dt0? %></td>
+						<td class="nobr"><%= u.user ? u.user.username : '---' %></td>
+						<td><%= u.text %></td>
+					</tr>
+				<% } %>
+			</tbody>
+		</table>
+	<% end %>
 <% end %>
