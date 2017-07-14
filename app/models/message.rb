@@ -34,7 +34,10 @@ class Message < ActiveRecord::Base
 			if letterhead == 'dhs'
 				foot = 'letter-footer-no-address.html'
 			end
-			`wkhtmltopdf --footer-html /home/rails/mccs#{RAILS_ENV == 'development' ? 'dev' : ''}/#{foot} -s Letter -O Portrait --margin-left 1in --margin-right 1in --margin-top .5in --margin-bottom .5in #{f.path} #{path}`			
+			if letterhead == 'des'
+				foot = 'letter-footer-des.html'
+			end
+			`wkhtmltopdf --disable-smart-shrinking --footer-html /home/rails/mccs#{RAILS_ENV == 'development' ? 'dev' : ''}/#{foot} -s Letter -O Portrait --margin-left 1in --margin-right 1in --margin-top .5in --margin-bottom .5in #{f.path} #{path}`			
 			update_attribute :rendered_pdf, true
 		end
 	end

@@ -168,7 +168,7 @@ class ApplicationController < ActionController::Base
 		p.close
 		marg = opt[:margin] || '.5in'
 		orient = @print_orient || 'Portrait'
-		`wkhtmltopdf -s Letter -O #{orient} #{opt[:flags]} --margin-left #{marg} --margin-right #{marg} --margin-top #{marg} --margin-bottom #{marg} #{f.path} #{p.path}`
+		`wkhtmltopdf --disable-smart-shrinking -s Letter -O #{orient} #{opt[:flags]} --margin-left #{marg} --margin-right #{marg} --margin-top #{marg} --margin-bottom #{marg} #{f.path} #{p.path}`
 		send_file p.path, :filename => fname, :disposition => 'inline', :type => 'application/pdf'
 	end	
 	
@@ -177,7 +177,7 @@ class ApplicationController < ActionController::Base
 		f.write html
 		f.close
 		orient = opt[:orient] || @print_orient || 'Portrait'
-		`wkhtmltopdf -s Letter -O #{orient} --margin-left 1in --margin-right 1in --margin-top .5in --margin-bottom .5in #{f.path} #{fname}`
+		`wkhtmltopdf --disable-smart-shrinking -s Letter -O #{orient} --margin-left 1in --margin-right 1in --margin-top .5in --margin-bottom .5in #{f.path} #{fname}`
 	end
 	
 	def render_pdf_to_file2 html, fname, opt = {}
@@ -186,7 +186,7 @@ class ApplicationController < ActionController::Base
 		f.close
 		marg = opt[:margin] || '.5in'
 		orient = opt[:orient] || @print_orient || 'Portrait'
-		`wkhtmltopdf #{opt[:arg]} -s Letter -O #{orient} --margin-left #{marg} --margin-right #{marg} --margin-top #{marg} --margin-bottom #{marg} #{f.path} #{fname}`
+		`wkhtmltopdf --disable-smart-shrinking #{opt[:arg]} -s Letter -O #{orient} --margin-left #{marg} --margin-right #{marg} --margin-top #{marg} --margin-bottom #{marg} #{f.path} #{fname}`
 	end		
 	
 end

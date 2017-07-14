@@ -32,7 +32,7 @@ class LetterController < CrudController
 		f.write html
 		f.close
 		f2 = TempfileExt.open 'wkhtmltopdf.pdf', 'tmp'
-		`wkhtmltopdf --footer-html /home/rails/mccs/letter-footer.html -s Letter -O Portrait --margin-left 1in --margin-right 1in --margin-top .5in --margin-bottom .5in #{f.path} #{f2.path}`
+		`wkhtmltopdf --disable-smart-shrinking --footer-html /home/rails/mccs/letter-footer.html -s Letter -O Portrait --margin-left 1in --margin-right 1in --margin-top .5in --margin-bottom .5in #{f.path} #{f2.path}`
 		f2.close
 		send_file f2.path, :filename => "preview.pdf", :disposition => 'inline', :type => 'application/pdf'
 	end
