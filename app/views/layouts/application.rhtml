@@ -77,7 +77,7 @@
 					<%= tab 'Delivery', {:controller => :delivery, :sc => nil}, {}, {:class => 'tab-delivery' + (params[:sc] == 'delivery' ? ' active' : ''), :title => 'Deliver Letters to Applicants'} %>				
 					<%= tab 'Agencies', {:controller => :agency, :sc => nil}, {}, {:class => 'tab-person' + (params[:sc] == 'agency' ? ' active' : ''), :title => 'Agency Maintenance'} %>
 					<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (params[:sc] == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>
-					<% is_misc = %w{cert_code letter job exam_site exam_site_group perf_test department division town village county user fire_district school_district empl_action_type db_change disapproval top_text}.include?(params[:controller]) %>
+					<% is_misc = %w{cert_code letter job exam_site exam_site_group perf_test department division town village county user fire_district school_district empl_action_type db_change disapproval top_text personnel_area personnel_division}.include?(params[:controller]) %>
 					<%= tab 'Misc.', {:controller => :job, :sc => nil}, {}, {:class => 'tab-misc' + (is_misc ? ' active' : ''), :title => 'Manage Other Tables (Users, Agencies, etc.)'} %>
 				<% end %>
 				<div class="right tabs-menu">
@@ -103,20 +103,22 @@
 				<div class="tabs" id="misc-tabs">
 					<%= tab 'Letter', {:controller => :letter, :sc => nil}, {}, {:class => 'tab-letter' + (params[:sc] == 'letter' ? ' active' : ''), :title => 'Letter Templates'} %>
 					<%= tab 'Title', {:controller => :job, :sc => nil}, {}, {:class => 'tab-job' + (params[:sc] == 'job' ? ' active' : ''), :title => 'Job Title Definitions'} %>
-					<%= tab 'Exam Site', {:controller => :exam_site, :sc => nil}, {}, {:class => 'tab-exam_site' + (params[:sc] == 'exam_site' ? ' active' : ''), :title => 'Exam Sites'} %>
-					<%= tab 'Exam Loc', {:controller => :exam_site_group, :sc => nil}, {}, {:class => 'tab-exam_site' + (params[:sc] == 'exam_site_group' ? ' active' : ''), :title => 'Exam Locations'} %>
+					<%= tab 'Ex Site', {:controller => :exam_site, :sc => nil}, {}, {:class => 'tab-exam_site' + (params[:sc] == 'exam_site' ? ' active' : ''), :title => 'Exam Sites'} %>
+					<%= tab 'Ex Loc', {:controller => :exam_site_group, :sc => nil}, {}, {:class => 'tab-exam_site' + (params[:sc] == 'exam_site_group' ? ' active' : ''), :title => 'Exam Locations'} %>
 					<%= tab 'Dept', {:controller => :department, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'department' ? ' active' : ''), :title => 'Departments'} %>
 					<%= tab 'Div', {:controller => :division, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'division' ? ' active' : ''), :title => 'Divisions'} %>
 					<%= tab 'Town', {:controller => :town, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'town' ? ' active' : ''), :title => 'Towns'} %>				
-					<%= tab 'Vil', {:controller => :village, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'town' ? ' active' : ''), :title => 'Villages'} %>				
-					<%= tab 'Cnty', {:controller => :county, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'town' ? ' active' : ''), :title => 'Counties'} %>				
-					<%= tab 'Fire', {:controller => :fire_district, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'town' ? ' active' : ''), :title => 'Fire Districts'} %>				
-					<%= tab 'Schl', {:controller => :school_district, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'town' ? ' active' : ''), :title => 'School Districts'} %>				
+					<%= tab 'Vil', {:controller => :village, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'village' ? ' active' : ''), :title => 'Villages'} %>				
+					<%= tab 'Cnty', {:controller => :county, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'county' ? ' active' : ''), :title => 'Counties'} %>				
+					<%= tab 'Fire', {:controller => :fire_district, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'fire_district' ? ' active' : ''), :title => 'Fire Districts'} %>				
+					<%= tab 'Schl', {:controller => :school_district, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'school_distrinct' ? ' active' : ''), :title => 'School Districts'} %>				
 					<%= tab 'Perf Test', {:controller => :perf_test, :sc => nil}, {}, {:class => 'tab-perf_test' + (params[:sc] == 'perf_test' ? ' active' : ''), :title => 'Performance Tests'} %>
 					<%= tab 'Hist Acts', {:controller => :empl_action_type, :sc => nil}, {}, {:class => 'tab-empl_action_type' + (params[:sc] == 'empl_action' ? ' active' : ''), :title => 'History Actions'} %>
 					<%= tab 'Dispvl', {:controller => :disapproval, :sc => nil}, {}, {:class => 'tab-disapproval' + (params[:sc] == 'disapproval' ? ' active' : ''), :title => 'Disapproval Reasons'} %>
 					<%= tab 'Cert Act', {:controller => :cert_code, :sc => nil}, {}, {:class => 'tab-cert_code' + (params[:sc] == 'cert_code' ? ' active' : ''), :title => 'Certified List Actions'} %>
 					<%= tab 'Top Txt', {:controller => :top_text, :sc => nil}, {}, {:class => 'tab-top_text' + (params[:sc] == 'top_text' ? ' active' : ''), :title => 'Text that displays at top of window in various parts of application.'} %>									
+					<%= tab 'P Area', {:controller => :personnel_area, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'personnel_area' ? ' active' : ''), :title => 'Personnel Areas - assigned to applicants and used to specify Formatta email recipients.'} %>									
+					<%= tab 'P Div', {:controller => :personnel_division, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'personnel_division' ? ' active' : ''), :title => 'Personnel Divisions - assigned to applicants and used to specify Formatta email recipients.'} %>									
 					<% if @current_user.admin_level? %>
 						<%= tab 'Log', {:controller => :db_change, :sc => nil}, {}, {:class => 'tab-change_log' + (params[:sc] == 'db_change' ? ' active' : ''), :title => 'Change Log'} %>
 						<%= tab 'Users', {:controller => :user, :sc => nil}, {}, {:class => 'tab-town' + (params[:sc] == 'town' ? ' active' : ''), :title => 'Personnel Users'} %>									
