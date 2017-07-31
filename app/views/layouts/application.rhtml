@@ -60,8 +60,12 @@
 						<% if @current_user.agency && @current_user.agency.show_web_posts %>
 							<%= tab 'Web Posts', {:controller => :web_exam, :sc => nil}, {}, {:class => 'tab-web_exam' + (params[:sc] == 'web_exam' ? ' active' : ''), :title => 'Exams/Vacancies Posted to Website'} %>
 						<% end %>
-						<%= tab 'Pref. Lists', {:controller => :preferred_list, :sc => nil}, {}, {:class => 'tab-preferred' + (params[:sc] == 'preferred_list' || params[:controller] == 'preferred_list' ? ' active' : ''), :title => 'Preferred Lists'} %>
-						<%= tab 'Cert. Lists', {:controller => :cert, :sc => nil}, {}, {:class => 'tab-cert' + (params[:sc] == 'cert' ? ' active' : ''), :title => 'Certified Eligible Lists'} %>												
+						<% if @current_user.show_pref_lists %>
+							<%= tab 'Pref. Lists', {:controller => :preferred_list, :sc => nil}, {}, {:class => 'tab-preferred' + (params[:sc] == 'preferred_list' || params[:controller] == 'preferred_list' ? ' active' : ''), :title => 'Preferred Lists'} %>
+						<% end %>
+						<% if @current_user.show_cert_lists %>
+							<%= tab 'Cert. Lists', {:controller => :cert, :sc => nil}, {}, {:class => 'tab-cert' + (params[:sc] == 'cert' ? ' active' : ''), :title => 'Certified Eligible Lists'} %>												
+						<% end %>
 					<% end %>
 					<% if @current_user.allow_applicants %>
 						<%= tab 'Applicants', {:controller => :person, :sc => nil}, {}, {:class => 'tab-person' + (params[:sc] == 'person' ? ' active' : ''), :title => 'Applicants'} %>				

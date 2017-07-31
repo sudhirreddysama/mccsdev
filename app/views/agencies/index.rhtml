@@ -19,14 +19,14 @@
 		
 			<p>This page lists any vacancies/exams/summer jobs that HR has given your agency/department direct access to. Click a post's name to view it, then click the applicants tab to view applications for that post.</p>
 		<% end %>	
-	
-		<h4><%= link_to 'Pref. Lists', :sc => nil, :sid => nil, :controller => :preferred_list %></h4>
-	
-		<p>This page lists all preferred lists (lists of employees that have been laid off and are eligible for rehire) for your agency.</p>
-	
-		<h4><%= link_to 'Cert. Lists', :sc => nil, :sid => nil, :controller => :cert %></h4>
-	
-		<p>This page lists all certified lists for your agency. To request a new certified list, click this tab, then &quot;New.&quot;</p>
+		<% if @current_user.show_pref_lists %>
+			<h4><%= link_to 'Pref. Lists', :sc => nil, :sid => nil, :controller => :preferred_list %></h4>	
+			<p>This page lists all preferred lists (lists of employees that have been laid off and are eligible for rehire) for your agency.</p>
+		<% end %>
+		<% if @current_user.show_cert_lists %>
+			<h4><%= link_to 'Cert. Lists', :sc => nil, :sid => nil, :controller => :cert %></h4>	
+			<p>This page lists all certified lists for your agency. To request a new certified list, click this tab, then &quot;New.&quot;</p>
+		<% end %>
 		
 	<% end %>
 	
