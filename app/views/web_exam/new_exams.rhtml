@@ -99,11 +99,11 @@
 				</tr>
 				<% @promo.each { |o| %>
 					<tr>
-						<td><%= h o.who_may_apply %></td>
+						<td><%= h(o.promotional_agencies.blank? ? o.who_may_apply : o.promotional_agencies) %></td>
 						<td><%= h o.name %></td>
 						<td class="nobr"><%= h o.no %></td>
-						<td class="c nobr"><%= h o.exam_date.strftime '%B %d' rescue nil %></td>
-						<td class="c nobr"><%= h o.deadline.strftime '%B %d' rescue nil %></td>
+						<td class="c nobr"><%= h o.exam_date.strftime '%b %d' rescue nil %></td>
+						<td class="c nobr"><%= h o.deadline.strftime '%b %d' rescue nil %></td>
 						<td class="r nobr"><% if o.price.to_f > 0 %>$<%= nwp o.price, 0 %><% else %>None<% end %></td>
 					</tr>
 				<% } %>
