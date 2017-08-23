@@ -28,7 +28,7 @@ class LetterController < CrudController
 	def print
 		f = TempfileExt.open 'wkhtmltopdf.html', 'tmp'
 		html = render_to_string :template => 'message/print_pdf', :layout => false
-		html = html.gsub 'src="/hrapply/uploads', 'src="/home/rails/hrapply/public/uploads'
+		html = html.gsub('src="/hrapply/uploads', 'src="/home/rails/hrapply/public/uploads').gsub("<strong", "\n<strong") # fix for weird bug where bold text was smooshed against previous word.
 		f.write html
 		f.close
 		f2 = TempfileExt.open 'wkhtmltopdf.pdf', 'tmp'
