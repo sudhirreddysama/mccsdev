@@ -28,7 +28,7 @@ class Message < ActiveRecord::Base
 		if !body_full.blank? # Race condition where the HTML hasn't been saved yet but cron is running.
 			create_directories
 			f = TempfileExt.open 'wkhtmltopdf.html', 'tmp'			
-			f.write body_full
+			f.write body_full.gsub("<strong", "\n<strong") # fix for weird bug where bold text was smooshed against previous word.
 			f.close
 			foot = 'letter-footer.html'
 			if letterhead == 'dhs'
