@@ -3,7 +3,7 @@ class FormHireController < CrudController
 	def index
 		@filter = get_filter({
 			:sort1 => 'form_hires.created_at',
-			:dir1 => 'asc'
+			:dir1 => 'desc'
 		})
 		@orders = [
 			['ID', 'form_hires.id'],
@@ -27,9 +27,22 @@ class FormHireController < CrudController
 		}
 		
 		if @current_user.agency_level?
-			cond << 'agencies.id = %d' % @current_user.agency_id
-			cond << 'departments.id = %d' % @current_user.department_id if @current_user.department_id
+			@filter.agency_id = @current_user.agency_id if !@current_user.agency_id.blank?
+			@filter.department_id = @current_user.department_id if !@current_user.department_id.blank?
+			@filter.division_id = @current_user.division_id if !@current_user.division_id.blank?
 		end
+		if !@filter.department_id.blank?
+			@filter.department_id = @filter.department_id.to_i
+			cond << 'form_hires.department_id = %d' % @filter.department_id
+		end
+		if !@filter.agency_id.blank?
+			@filter.agency_id = @filter.agency_id.to_i
+			cond << 'form_hires.agency_id = %d' % @filter.agency_id
+		end
+		if !@filter.division_id.blank?
+			@filter.division_id = @filter.division_id.to_i
+			cond << 'form_hires.division_id = %d' % @filter.division_id
+		end	
 		
 		@date_types = [
 			['Created Date', 'form_hires.created_at'],
@@ -57,6 +70,7 @@ class FormHireController < CrudController
 		if @current_user.agency_level?
 			@obj.agency = @current_user.agency if @current_user.agency
 			@obj.department = @current_user.department if @current_user.department
+			@obj.division = @current_user.division if @current_user.division
 		end
 		if !request.post? && @obj.agency
 			@obj.department = Department.find_by_name @obj.agency.name

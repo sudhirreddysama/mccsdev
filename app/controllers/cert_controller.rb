@@ -38,9 +38,22 @@ class CertController < CrudController
 		}
 
 		if @current_user.agency_level?
-			cond << 'agencies.id = %d' % @current_user.agency_id
-			cond << 'departments.id = %d' % @current_user.department_id if @current_user.department
+			@filter.agency_id = @current_user.agency_id if !@current_user.agency_id.blank?
+			@filter.department_id = @current_user.department_id if !@current_user.department_id.blank?
+			@filter.division_id = @current_user.division_id if !@current_user.division_id.blank?
 		end
+		if !@filter.department_id.blank?
+			@filter.department_id = @filter.department_id.to_i
+			cond << 'certs.department_id = %d' % @filter.department_id
+		end
+		if !@filter.agency_id.blank?
+			@filter.agency_id = @filter.agency_id.to_i
+			cond << 'certs.agency_id = %d' % @filter.agency_id
+		end
+		if !@filter.division_id.blank?
+			@filter.division_id = @filter.division_id.to_i
+			cond << 'certs.division_id = %d' % @filter.division_id
+		end	
 		
 		@filter.statuses ||= []
 		
@@ -341,19 +354,29 @@ class CertController < CrudController
 		end
 	end
 	
+	def view
+		load_notify_agency_users
+		super
+	end
+	
 	def notify_agency
 		load_obj
-		users = @obj.agency ? @obj.agency.get_users(@obj.department) : []
+		load_notify_agency_users
 		@obj.update_attribute :notified_date, Time.now.to_date
-		if users.empty?
+		if @notify_agency_users.empty?
 			flash[:notice] = 'No agency users to send notice to.'
 		else
-			users.each { |u|
+			@notify_agency_users.each { |u|
 				Notifier.deliver_cert [u], @obj
 			}
 			flash[:notice] = 'Notification email has been sent.'
 		end		
 		redirect_to :action => :view, :id => @obj.id
+	end
+	
+	def load_notify_agency_users
+		cond = [@obj.division ? 'users.division_id is null or users.division_id = %d' % @obj.division.id : 'users.division_id is null']
+		@notify_agency_users = @obj.agency ? @obj.agency.get_users(@obj.department, false, cond) : []	
 	end
 		
 	def notify_specialist

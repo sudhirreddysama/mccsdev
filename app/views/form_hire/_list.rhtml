@@ -33,7 +33,7 @@
 				<td><%= link_to "#{o.last_name}, #{o.first_name}", :action => :view, :id => o.id %></td>
 				<% if !@current_user.agency_level? %>
 					<td><%= h o.agency.name if o.agency %></td>
-					<td><%= h o.department.name if o.department %></td>
+					<td><%= h o.department.name if o.department %><% if o.division %> (<%= o.division.name %>)<% end %></td>
 				<% end %>
 				<td><%= h o.title %></td>
 			</tr>

@@ -3,7 +3,7 @@
 		<%= tab 'Printable Version', {:action => :print, :id => @obj.id}, {}, :target => '_blank' %>
 		<%= tab 'Export to Excel', {:action => :excel, :id => @obj.id}, {}, :target => '_blank' %>
 		<% if @obj.status == 'certified' && @current_user.staff_level? %>
-			<% users = @obj.agency ? @obj.agency.get_users(@obj.department).collect(&:username).join(', ') : '' %>
+			<% users = @notify_agency_users.map(&:name).join(', ') %>
 			<% users = '(no users)' if users.blank? %>
 			<%= tab 'Notify Agency' + (@obj.notified_date ? " (Sent #{@obj.notified_date.d0})" : ''), {:action => :notify_agency, :id => @obj.id}, {}, :confirm => "Send email to all users in this agency that certified list is available?\n\nUsers are: " + users, :class => 'tab-delivery' %>
 		<% end %>
@@ -130,7 +130,7 @@
 			<tr>
 				<td>
 					<label>Department:</label>
-					<%= o.department.name if o.department %>
+					<%= h o.department.name if o.department %><% if o.division %> (<%= h o.division.name %>)<% end %>
 				</td>
 				<td>
 					<label>Agency:</label>

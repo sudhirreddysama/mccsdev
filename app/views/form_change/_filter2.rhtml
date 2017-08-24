@@ -13,3 +13,4 @@
 		<label><%= check_box_tag 'filter[statuses][]', 'disapproved', @filter.statuses.include?('disapproved') %> disapproved</label>
 	</td>
 </tr>
+<%= partial 'cert/agen_dept_div_filter', :f => f %>

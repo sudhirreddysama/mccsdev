@@ -22,7 +22,7 @@
 				<td class="nobr"><%= h o.exam.exam_no if o.exam %></td>
 				<td class="nobr"><%= o.certification_date.d0? %></td>
 				<td class="nobr"><%= o.return_date.d0? %></td>
-				<td><%= link_to o.set_title, :action => :view, :id => o.id %></td>
+				<td><%= link_to o.set_title, :action => :view, :id => o.id %><% if o.division %> (<%= o.division.name %>)<% end %></td>
 				<td><%= Const::JOB_TIMES_ABBR.rassoc(o.job_time)[0] rescue nil %></td>
 				<td><%= o.job_type %></td>
 				<td class="nobr"><%= [o.general_or_residential.to_s, o.months.to_s].reject(&:blank?).join('/') %></td>

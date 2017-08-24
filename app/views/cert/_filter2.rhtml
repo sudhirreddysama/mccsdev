@@ -10,3 +10,4 @@
 		<label><%= check_box_tag 'filter[statuses][]', 'overdue', @filter.statuses.include?('overdue') %> overdue</label>
 	</td>
 </tr>
+<%= partial 'cert/agen_dept_div_filter', :f => f %>

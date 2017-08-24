@@ -3,6 +3,7 @@ class Cert < ActiveRecord::Base
 	belongs_to :exam
 	belongs_to :department
 	belongs_to :agency
+	belongs_to :division
 	belongs_to :job
 	belongs_to :school_district
 	belongs_to :county

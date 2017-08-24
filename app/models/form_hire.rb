@@ -2,6 +2,7 @@ class FormHire  < ActiveRecord::Base
 
 	belongs_to :agency
 	belongs_to :department
+	belongs_to :division
 	belongs_to :employee
 	belongs_to :user
 	belongs_to :status_user, :class_name => 'User', :foreign_key => 'status_user_id'

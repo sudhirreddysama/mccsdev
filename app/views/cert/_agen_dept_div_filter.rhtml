@@ -1,0 +1,20 @@
+<% if !@current_user.agency_level? %>
+	<tr>
+		<th>Agency/Dept/Div:</th>
+		<td>
+			<%= f.select :agency_id, Agency.find(:all, :joins => 'join ' + @model.table_name + ' v on v.agency_id = agencies.id', :group => 'agencies.id', :order => 'agencies.name').collect { |a| [a.name, a.id] }, :include_blank => true %>
+			<%= f.select :department_id, Department.find(:all, :joins => 'join ' + @model.table_name + ' v on v.department_id = departments.id', :group => 'departments.id', :order => 'departments.name').collect { |d| [d.name, d.id] }, :include_blank => true %>
+			<%= partial 'division/division_select', :f => f, :o => @filter, :field_name => 'filter' %>
+		</td>
+	</tr>
+<% else %>
+	<% if @current_user.division_id.blank? %>
+		<% divs = Division.find(:all, :conditions => ['divisions.department_id = ?', @current_user.department_id]).map { |d| [d.name, d.id] } %>
+		<% if !divs.empty? %>
+			<tr>
+				<th>Division:</th>
+				<td><%= f.select :division_id, divs, :include_blank => true %></td>
+			</tr>
+		<% end %>
+	<% end %>
+<% end %>

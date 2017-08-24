@@ -16,6 +16,12 @@
 %>
 <%= f.tr_select :agency_id, @agency_opts, :label => 'Agency', :req => true, :include_blank => !@current_user.agency_id %>
 <%= f.tr_select :department_id, @department_opts, :label => 'Department', :req => true, :include_blank => !@current_user.department_id %>
+<% if !@current_user.agency_level? || !@current_user.division %>
+	<tr>
+		<th>Division:</th>
+		<td><%= partial 'division/division_select', :f => f, :o => o, :field_name => 'obj' %></td>
+	</tr>
+<% end %>
 <% if @current_user.agency_level? %>
 	<%= f.tr_select :exam_id, Exam.find(:all, :conditions => 'valid_until >= date(now())', :order => 'exams.title').collect { |e| ["#{e.title} - #{e.exam_no}", e.id] }, :include_blank => true, :label => 'Exam', :req => true %>
 <% else %>

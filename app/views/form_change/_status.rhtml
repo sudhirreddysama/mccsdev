@@ -4,13 +4,13 @@
 		<% if @obj.employee %>
 			<%= tab 'Employee History Details', {:controller => :employee, :action => :print, :id => @obj.employee_id}, {}, :target => '_blank' %>
 		<% end %>
-		<% if @current_user.username == 'isadmin' %>
+		<% if false || @current_user.username == 'isadmin' %>
 			<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => params[:controller], :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>		
 		<% end %>		
 		<div class="clear"></div>
 	</div>
 
-	<% if @current_user.agency_level? %>
+	<% if true || @current_user.agency_level? %>
 		<% if @obj.status == 'started' || @obj.status == 'disapproved' %>
 			<% if @obj.class == FormTitle && @obj.memo_of_explanation.blank? %>
 				<%= link_to 'Before submitting this 222 form please fill out the Justification Memo by clicking here or the &quot;Justification Memo&quot; tab above.', 
@@ -18,7 +18,7 @@
 					:style => 'display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: underline;' 
 				%>
 			<% else %>
-				<% if @current_user.level == 'agency-head' %>
+				<% if @current_user.level == 'agency-head' || @current_user.admin_level? %>
 					<%= link_to('This form has not yet been submitted to HR. Click here to submit.', 
 						{:action => :submit, :id => @obj.id},
 						:confirm => 'Are you sure you want to submit this form? No changes can be made after submitting. Please make sure all required information and documents have been provided.',

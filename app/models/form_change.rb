@@ -2,6 +2,7 @@ class FormChange  < ActiveRecord::Base
 
 	belongs_to :agency
 	belongs_to :department
+	belongs_to :division
 	belongs_to :user
 	belongs_to :employee
 	belongs_to :cert

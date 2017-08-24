@@ -26,6 +26,12 @@
 <% if !@current_user.agency_level? || !@current_user.department %>
 	<%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name').collect { |a| [a.name, a.id] }, :label => 'Department', :req => true, :include_blank => true %>
 <% end %>
+<% if !@current_user.agency_level? || !@current_user.division %>
+	<tr>
+		<th>Division:</th>
+		<td><%= partial 'division/division_select', :f => f, :o => o, :field_name => 'obj' %></td>
+	</tr>
+<% end %>
 <tr>
 	<th>County Departments:</th>
 	<td class="subform">

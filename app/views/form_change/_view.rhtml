@@ -68,7 +68,7 @@
 				</td>
 				<td>
 					<label>Department:</label>
-					<%= h o.department.name if o.department %>
+					<%= h o.department.name if o.department %><% if o.division %> (<%= h o.division.name %>)<% end %>
 				&nbsp;</td>
 			</tr>
 		</table>
