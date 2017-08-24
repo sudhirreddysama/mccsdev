@@ -148,6 +148,7 @@ class CertController < CrudController
 		if @current_user.agency_level?
 			@obj.agency = @current_user.agency if @current_user.agency
 			@obj.department = @current_user.department if @current_user.department
+			@obj.division = @current_user.division if @current_user.division
 			@obj.requested_date = Time.now.to_date
 			@obj.requestor = @current_user.name
 		end		
