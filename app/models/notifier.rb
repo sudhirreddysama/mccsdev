@@ -12,7 +12,7 @@ class Notifier < ActionMailer::Base
 	
 	def formatta_login person
 		recipients person.email_with_name
-		from DEFAULT_FROM
+		from 'welcome2mc@monroecounty.gov'
 		subject 'Monroe County Employment Onboarding Forms'		
 		content_type 'text/html'
 		#attachment :content_type => 'image/gif', :body => File.read('public/images/mclogo-120x120.gif'), :filename => 'mc.gif'
