@@ -194,7 +194,9 @@ class CertController < CrudController
     load_obj
     @ca = @obj.cert_applicants.find(:all)
     @ca.each_with_index { |o, i|
-      o.update_attribute :cert_code_id, params[:act]
+    	if !o.cert_code
+				o.update_attribute :cert_code_id, params[:act]
+			end
     }
     render_nothing
   end
