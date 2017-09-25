@@ -10,17 +10,14 @@ Agency: <%= @c.agency ? @c.agency.name : 'None' %>
 Department: <%= @c.department ? @c.department.name : 'None' %>
 
 Agency Comments:
-<% unless @c.agency_comments.blank? -%>
-<%= @c.agency_comments %>
-<% end -%>
+<%= @c.agency_comments.blank? ? '(blank)' : @c.agency_comments %>
 
 Internal Notes:
-<% unless @c.internal_notes.blank? -%>
-<%= @c.internal_notes %>
-<% end -%>
+<%= @c.internal_notes.blank? ? '(blank)' : @c.internal_notes %>
 
-Type:
-<%= [@c.general_or_residential.to_s, @c.months.to_s].reject(&:blank?).join('/') %>
+Time: <%= Const::JOB_TIMES_ABBR.rassoc(@c.job_time)[0] rescue nil %>
+Type: <%= @c.job_type %>
+G/R/D: <%= [@c.general_or_residential.to_s, @c.months.to_s].reject(&:blank?).join('/') %>
 
 Attached Documents:
 <% if @c.documents.empty? -%>
