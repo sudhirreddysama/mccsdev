@@ -30,7 +30,7 @@ grouped.keys.sort.each { |r|
 			session = ExamSiteSession.find_by_exam_site_id_and_given_on(room.id, @report[:from_date]) || {} 
 			proctors = session.proctor.to_s.split(',').map(&:strip)
 			first_proctor = proctors.shift
-			room_name = room.name.split('-').map(&:strip)
+			room_name = room.name.split(' - ').map(&:strip)
 
 			cross_counter = Hash.new { |h, k| h[k] = 0 } 
 			special_acc = {}
