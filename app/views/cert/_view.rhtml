@@ -338,8 +338,9 @@
 			c = ca.cert_code
 			
 			restricted = false
+			taken_perfs = a.taken_perfs.index_by &:perf_test_id
 			a.exam.exam_perfs.each { |ep|
-				taken_perf = a.taken_perfs.to_a.find { |tp| tp.perf_test_id == ep.perf_test_id }
+				taken_perf = taken_perfs[ep.perf_test_id]
 				if !taken_perf || !taken_perf.perf_code || !taken_perf.perf_code.pass_fail == 1
 					restricted = true
 				end
@@ -379,8 +380,16 @@
 						<% end %>
 						Eligibility Expires: <%= e.valid_until.d0? %><br />
 						<% if restricted %>
-							* RESTRICTED *<br />
+							<b>* RESTRICTED *</b><br />
 						<% end %>	
+						<% a.exam.exam_perfs.each { |ep| taken_perf = taken_perfs[ep.perf_test_id] %>
+							<% if ep.perf_test %>
+								<%= ep.perf_test.name %>: 
+								<% if taken_perf && taken_perf.perf_code %> <%= taken_perf.perf_code.label %><% else %><% end %>
+								<% if taken_perf && taken_perf.date_taken %>(<%= taken_perf.date_taken.d0 %>)<% else %><% end %>
+								<br />
+							<% end %>
+						<% } %>
 					</td>
 					<td style="text-align: right;"><%= a.final_score %></td>
 					<td style="text-align: right;">
