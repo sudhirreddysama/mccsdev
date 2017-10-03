@@ -10,9 +10,9 @@
 		<table class="dg">
 			<thead>
 				<tr>
-					<th colspan="4">
+					<th colspan="5">
 						Site Numbers:
-						<%= h @sites.collect { |s| "#{s.sort + 1}: #{s.exam_site.name}" }.join(', ') %>
+						<span style="font-weight: normal;"><% @sites.map { |s| %><b class="pill"><%= s.sort + 1 %></b> <%= s.exam_site.name %>&nbsp;&nbsp; <% } %></span>
 					</th>
 				</tr>
 				<tr>

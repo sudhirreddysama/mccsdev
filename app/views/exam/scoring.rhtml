@@ -8,7 +8,7 @@
 	<% if @exam_perfs.empty? %>
 		<p class="marg">This exam does not have any performance tests associated with it.</p>
 	<% else %>
-		
+		<% @save_bar_only_data_changed = true %>
 		<%= partial 'save_bar', {:url => url_for(:action => :perf_save, :id => @obj.id)} %>	
 		<% perf_codes = PerfCode.find(:all, :order => 'perf_codes.label') %>
 		<form id="review-form" onsubmit="return false;">
@@ -120,8 +120,8 @@
 			
 			
 
-<% else %>
-	
+<% else %>	
+	<% @save_bar_only_data_changed = true %>
 	<%= partial 'save_bar', {:url => url_for(:action => :applicants_save, :id => @obj.id)} %>
 	<form id="review-form" onsubmit="return false;">
 		<%= partial 'pages' %>

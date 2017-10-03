@@ -265,6 +265,7 @@ function enable_arrow_keys_for_table_inputs(col_count, opt) {
 		
 		$('.cell').change(function(e) {
 			var cell = $(this);
+			cell.attr('data-changed', '1');
 			var id = cell.attr('id');
 			var parts = id.split('-');
 			var row = parseInt(parts[1]);

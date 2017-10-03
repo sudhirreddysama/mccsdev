@@ -7,7 +7,11 @@
 	
 		$('#review-save').click(function(e) {
 			$('#review-save').addClass('busy-bg-i');
-			var post_data = $('#review-form').serialize();
+			<% if @save_bar_only_data_changed %>
+				var post_data = $('#review-form [data-changed]').serialize();
+			<% else %>
+				var post_data = $('#review-form').serialize();
+			<% end %>
 			//console.log(post_data);
 			$.ajax({
 				url: '<%= url %>',

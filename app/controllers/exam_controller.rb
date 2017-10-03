@@ -811,30 +811,33 @@ class ExamController < CrudController
 	def perf_save
 		load_obj
 		perf = params[:perf]
+		appls = params[:applicant]
 		
-		if request.post? && perf
-			perf.each { |i, attr|
-				parts = i.split('-')
-				applicant_id = parts[0]
-				perf_test_id = parts[1]
-				tp = @obj.taken_perfs.find_by_perf_test_id_and_applicant_id(perf_test_id, applicant_id)
+		if request.post? && (perf || appls)
+			if perf 
+				perf.each { |i, attr|
+					parts = i.split('-')
+					applicant_id = parts[0]
+					perf_test_id = parts[1]
+					tp = @obj.taken_perfs.find_by_perf_test_id_and_applicant_id(perf_test_id, applicant_id)
 				
-				blank = attr[:date_taken].blank? && attr[:time_taken].blank? && attr[:result_code].blank? && attr[:notes].blank?
+					blank = attr[:date_taken].blank? && attr[:time_taken].blank? && attr[:result_code].blank? && attr[:notes].blank?
 				
-				if !tp && !blank
-					a = Applicant.find applicant_id
-					tp = @obj.taken_perfs.build :perf_test_id => perf_test_id, :applicant_id => a.id, :person_id => a.person_id
-				end
-				if blank && tp
-					tp.destroy
-				end
-				if tp && !blank
-					tp.attributes = attr
-					tp.save
-				end
-			}
-			if params[:applicant]
-				params[:applicant].each { |id, attr|
+					if !tp && !blank
+						a = Applicant.find applicant_id
+						tp = @obj.taken_perfs.build :perf_test_id => perf_test_id, :applicant_id => a.id, :person_id => a.person_id
+					end
+					if blank && tp
+						tp.destroy
+					end
+					if tp && !blank
+						tp.attributes = attr
+						tp.save
+					end
+				}
+			end
+			if appls
+				appls.each { |id, attr|
 					a = @obj.applicants.find(id)
 					a.update_attributes attr
 				}			
