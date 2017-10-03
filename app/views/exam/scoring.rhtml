@@ -16,9 +16,15 @@
 			<table class="dg keynav">
 				<thead>
 					<tr>
-						<th colspan="10">
-						Valid Result Codes:
-						<%= perf_codes.collect { |s| "#{s.code}:&nbsp;#{s.label}" }.join(', ') %>
+						<th colspan="11">
+						Valid Result<sup class="ref">**</sup> Codes:
+						<span style="font-weight: normal"><% perf_codes.each { |s| %><b class="pill"><%= s.code %></b> <%= s.label %> <% } %></span>
+						</th>
+					</tr>
+					<tr>					
+						<th colspan="11">
+						Valid Status<sup class="ref">*</sup> Codes:					
+						<span style="font-weight: normal"><% @statuses.each { |s| %><b class="pill"><%= s.code %></b> <%= s.name %> <% } %></span>
 						</th>
 					</tr>
 					<tr>
@@ -26,10 +32,11 @@
 						<th class="nobr" width="1%">Name</th>
 						<th width="1%">Score</th>
 						<th width="1%">Pos</th>
+						<th width="1%">St.<sup class="ref">*</sup></th>
 						<th width="1%">Performance&nbsp;Test</th>
 						<th width="1%">Taken</th>
 						<th width="1%">Time</th>
-						<th width="1%">Result</th>
+						<th width="1%">Result<sup class="ref">**</sup></th>
 						<th width="1%">P. Test Notes</th>
 						<th width="91%">History</th>
 					</tr>
@@ -58,8 +65,9 @@
 									</td>									
 									<td><%= o.final_score %></td>
 									<td><%= o.pos %></td>
+									<td><%= text_field_tag "applicant[#{o.id}][status_code]", o.status_code, :size => 3, :id => "cell-#{row}-0", :class => "cell row-#{row} col-0 ucase" %></td>
 								<% else %>
-									<td colspan="4"></td>
+									<td colspan="5"></td>
 								<% end %>
 								<td class="nobr"><%= h e.perf_test.name %></td>
 								<% tp = o.taken_perfs.find_by_exam_id_and_perf_test_id(@obj.id, e.perf_test_id) || TakenPerf.new %>
@@ -121,14 +129,13 @@
 			<thead>
 				<tr>
 					<th colspan="9">
-					Valid Status Codes:
-					<%= @statuses.collect { |s| "#{s.code}:&nbsp;#{s.name}" }.join(', ') %>
-					</th>
+						Valid Status<sup class="ref">*</sup> Codes:					
+						<span style="font-weight: normal"><% @statuses.each { |s| %><b class="pill"><%= s.code %></b> <%= s.name %> <% } %></span>
 				</tr>
 				<tr>
 					<th width="1%">SSN</th>
 					<th width="1%">Name (click to view application)</th>
-					<th width="1%">St.</th>
+					<th width="1%">St.<sup class="ref">*</sup></th>
 					<th width="1%">LScore</th>
 					<th width="1%">Base</th>
 					<th width="1%">VC</th>

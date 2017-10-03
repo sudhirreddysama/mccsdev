@@ -281,11 +281,20 @@ function enable_arrow_keys_for_table_inputs(col_count, opt) {
 			var col = parseInt(parts[2]);
 			var go = null;
 			var caret = cell.caret();
+			
+			/// This has been hacked for the performance test scoring table which MIGHT have a column zero for SOME ROWS.
+			
 			switch(e.which) {
 				case 37: // left
 					if(!typing || caret.start == 0) {
-						if(col == 1) {
+						if(col == 0) {
 							go = $('#cell-' + (row - 1) + '-' + col_count);
+						}
+						else if(col == 1) {
+							go = $('#cell-' + row + '-' + (col - 1));
+							if(!go[0]) {
+								go = $('#cell-' + (row - 1) + '-' + col_count);
+							}
 						}
 						else { 
 							go = $('#cell-' + row + '-' + (col - 1));
@@ -301,7 +310,10 @@ function enable_arrow_keys_for_table_inputs(col_count, opt) {
 					}
 				case 13: // return
 					if(col == col_count) {
-						go = $('#cell-' + (row + 1) + '-1');
+						go = $('#cell-' + (row + 1) + '-0');
+						if(!go[0]) {
+							go = $('#cell-' + (row + 1) + '-1');
+						}
 					}
 					else { 
  						go = $('#cell-' + row + '-' + (col + 1));

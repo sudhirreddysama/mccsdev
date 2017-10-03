@@ -811,6 +811,7 @@ class ExamController < CrudController
 	def perf_save
 		load_obj
 		perf = params[:perf]
+		
 		if request.post? && perf
 			perf.each { |i, attr|
 				parts = i.split('-')
@@ -832,6 +833,12 @@ class ExamController < CrudController
 					tp.save
 				end
 			}
+			if params[:applicant]
+				params[:applicant].each { |id, attr|
+					a = @obj.applicants.find(id)
+					a.update_attributes attr
+				}			
+			end
 		end
 		render_nothing
 	end

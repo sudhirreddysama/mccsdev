@@ -561,3 +561,6 @@ a.submit-message:hover { background-color: #500; }
 
 span.ac-extra { font-size: 9px; }
 span.ac-extra i { color: #aaa; font-style: normal; }
+
+.pill { display: inline-block; padding: 0 3px; background: #ddd; color: #000; border-radius: 5px; white-space: nowrap; }
+sup.ref { line-height: 0; font-size: 8px; font-weight: normal; }
