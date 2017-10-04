@@ -74,7 +74,7 @@
 		$(this).val('');
 	});
 	opt = {
-		filebrowserBrowseUrl: 'https://cs.monroecounty.gov/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/elfinder-custom/elfinder.html',
+		filebrowserBrowseUrl: 'https://cs.monroecounty.gov/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/elfinder-custom/elfinder.html?v=2',
 		customConfig: '/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/javascripts/ckeditor/config_custom.js'
 	}
 	var ck = CKEDITOR.replace('obj_description', opt);
