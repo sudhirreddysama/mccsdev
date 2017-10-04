@@ -3,12 +3,12 @@
   <tr>
     <td width="1%">Actions</td>
     <th width="1%">ID</th>
-    <th width="18%">Last Name</th>
-    <th width="18%">First Name</th>
-    <th width="16%">Title</th>
-    <th width="16%">Email</th>
-    <th width="16%">Phone</th>
-    <th width="16%">Fax</th>
+    <th width="30%">Name</th>
+    <th width="30%">Title</th>
+    <th width="1%">Email</th>
+    <th width="1%">Phone</th>
+    <th width="1%">Fax</th>
+    <th width="30%">Department</th>
   </tr>
   </thead>
   <tbody id="objs">
@@ -16,13 +16,12 @@
       <tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
         <td class="nobr"><%= partial 'actions', :o => o %></td>
         <td><%= o.id %><% if o.primary %><b>(P)</b><% end %></td>
-        <td><%= link_to o.lastname, :action => :view, :id => o.id %></td>
-        <td><%= link_to o.firstname, :action => :view, :id => o.id %></td>
+        <td><%= link_to "#{o.lastname}, #{o.firstname}", :action => :view, :id => o.id %></td>
         <td><%= o.title %></td>
-        <td><%= o.email %></td>
-        <td><%= o.phone %></td>
-        <td><%= o.fax %></td>
-
+        <td class="nobr"><%= o.email %></td>
+        <td class="nobr"><%= o.phone %></td>
+        <td class="nobr"><%= o.fax %></td>
+				<td><%= o.department.name if o.department %></td>
       </tr>
   <% } %>
   </tbody>

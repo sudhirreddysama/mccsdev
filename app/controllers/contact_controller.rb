@@ -7,16 +7,18 @@ class ContactController < CrudController
                          })
     @orders = [
         ['Last Name', 'contacts.lastname'],
-        ['First Name', 'contacts.firstname']
+        ['First Name', 'contacts.firstname'],
+        ['Department', 'departments.name']
     ]
     cond = get_search_conditions @filter[:search], {
         'contacts.lastname' => :like,
-        'contacts.firstname' => :like
+        'contacts.firstname' => :like,
+        'departments.name' => :like
     }
     @opt = {
         :conditions => get_where(cond),
         :order => get_order_auto,
-        :include => nil,
+        :include => :department,
     }
     super
   end

@@ -37,7 +37,15 @@
 			lang: lang,                        // auto detected language (optional)
 			getFileCallback : function(file) {
 				if(window.opener) {
-					window.opener._elfinder_path(file.url);
+					console.log('HERE!!!');
+					var m = window.location.href.match(/CKEditorFuncNum=(\d*)/);
+					console.log(m);
+					if(m && m[1]) {						
+						window.opener.CKEDITOR.tools.callFunction(m[1], file.url);
+					}
+					else {
+						window.opener._elfinder_path(file.url);
+					}
 				}
 				window.close();
 			},

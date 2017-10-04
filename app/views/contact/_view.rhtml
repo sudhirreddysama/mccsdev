@@ -18,7 +18,7 @@
         <td>
           <label>Email:</label>
           <%= o.email %>
-        </td>
+        &nbsp;</td>
       </tr>
     </table>
   </div>
@@ -34,7 +34,10 @@
           <label>Fax:</label>
           <%= o.fax %>
         </td>
-
+				<td>
+					<label>Department</label>
+					<%= o.department.name if o.department %>
+				&nbsp;</td>
       </tr>
     </table>
   </div>

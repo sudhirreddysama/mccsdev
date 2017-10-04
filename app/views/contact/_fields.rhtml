@@ -1,3 +1,6 @@
+<%= f.tr_select :department_id, Department.find(:all, {
+	:order => 'departments.name'
+}).collect { |a| [a.name, a.id] }, :label => 'Department', :include_blank => true %>
 <%= f.tr_text_field :lastname, :label => 'Last Name', :req => true, :class => 'ucase' %>
 <%= f.tr_text_field :firstname, :label => 'First Name',  :req => true, :class => 'ucase' %>
 <%= f.tr_text_field :title, :label => 'Title',  :class => 'ucase' %>

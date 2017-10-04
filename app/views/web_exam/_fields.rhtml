@@ -74,7 +74,7 @@
 		$(this).val('');
 	});
 	opt = {
-		filebrowserBrowseUrl: 'https://cs.monroecounty.gov/hrapply/javascripts/fckeditor/editor/filemanager/browser/default/browser.html?Connector=/hrapply/fckeditor/command',
+		filebrowserBrowseUrl: 'https://cs.monroecounty.gov/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/elfinder-custom/elfinder.html',
 		customConfig: '/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/javascripts/ckeditor/config_custom.js'
 	}
 	var ck = CKEDITOR.replace('obj_description', opt);

@@ -97,7 +97,7 @@
             <td>
               <label>Email:</label>
               <%= d.email %>
-            </td>
+            &nbsp;</td>
           </tr>
         </table>
       </div>
@@ -113,6 +113,10 @@
               <label>Fax:</label>
               <%= d.fax %>
             </td>
+						<td>
+							<label>Department</label>
+							<%= d.department.name if d.department %>
+						&nbsp;</td>
 
           </tr>
         </table>
