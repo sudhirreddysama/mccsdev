@@ -67,7 +67,6 @@ class ListsController < ApplicationController
 			end
 			
 		end		
-		logger.info 'HERE?????'
 		@objs = PublicApplicant.find(:all, {
 			:order => 'public_applicants.pos',
 			:conditions => get_where(cond),

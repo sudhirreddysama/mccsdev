@@ -219,6 +219,7 @@
 			seniority = function(i, p) {
 				var c = $('#cell-'+ i + '-5');
 				c.val(p);
+				c.attr('data-changed', '1');
 				c.change();
 				new Effect.Highlight(c[0]);
 			}
@@ -238,6 +239,7 @@
 				if(col != 1 && col != 7) {
 					var v = parseFloat(val);
 					cell.val(isNaN(v) ? '' : v.toFixed(2));
+					cell.attr('data-changed', '1');
 				}
 			
 				if((col == 2 && bandscore) || col == 3 || col == 4 || col == 5) {	
@@ -264,18 +266,21 @@
 									if(use_score >= from) { //&& use_score <= to) {
 										base = toFloat(gd);
 										$(pre + '3').val(gd);
+										$(pre + '3').attr('data-changed', '1');
 										bs_found = true;
 									}
 								}
 							}
 						}
 					}
+					var score_cell = $('#cell-' + row + '-6');
 					if(bs_found) {
-						$('#cell-' + row + '-6').val((base + vc).toFixed(2));
+						score_cell.val((base + vc).toFixed(2));
 					}
 					else {
-						$('#cell-' + row + '-6').val((base + vc + oc).toFixed(2));
+						score_cell.val((base + vc + oc).toFixed(2));
 					}
+					score_cell.attr('data-changed', '1');
 				}
 			}
 			
