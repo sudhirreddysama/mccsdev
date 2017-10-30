@@ -423,7 +423,7 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 	</div>
 </div>
 
-
+<div id="tab-pad">
 
 <% if wa %>
 	
@@ -446,328 +446,358 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 	
 	<% end %>
 	
-	<div class="viewer">
-		<div class="header">Web Data</div>
-		<div class="row">
-			<table>
-				<tr>
-					<td>
-						<label>Web Id:</label>
-						<% if is_agency %>
-							<%= wa.id %>
-						<% else %>
-							<a href="https://www.monroecounty.gov/hrapply/applications/view/<%= wa.id %>"><%= wa.id %></a>
-						<% end %>
-					</td>
-					<td>
-						<label>Name:</label>
-						<%= wa.label %>
-					&nbsp;<td>	
-				</tr>
-			</table>
-		</div>
-		
-		<% if is_seasonal %>
-			<div class="row">
-				<table>
-					<tr>
-						<td><label>Are you 18 years of age or older?</label><%= yn? wa.over_18 %>&nbsp;</td>
-					</tr>
-				</table>
-			</div>
-
-			<div class="row">
-				<table>
-					<tr>
-						<td><label>When can you begin work?</label><%= h wa.begin_work %>&nbsp;</td>
-					</tr>
-				</table>
-			</div>	
-					
-			<div class="row">
-				<table>
-					<tr>
-						<td><label>When do you need to end work?</label><%= h wa.end_work %>&nbsp;</td>
-					</tr>
-				</table>
-			</div>			
-			
-			<div class="row">
-				<table>
-					<tr>
-						<td><label>Can you work weekends?</label><%= yn? wa.work_weekends %>&nbsp;</td>
-					</tr>
-				</table>
-			</div>			
-		<% end %>
-		
-		<% if !is_seasonal %>
-			<div class="row">
-				<table>
-					<tr>
-						<td><label>Have you been a resident of Monroe County for the past four months?</label><%= yn? wa.county_resident_4_mo %>&nbsp;</td>
-					</tr>
-				</table>
-			</div>
-			
-			<div class="row">
-				<table>
-					<tr>
-						<td><label>Are you a citizen of the united states?</label><%= yn? wa.us_citizen %>&nbsp;</td>
-					</tr>
-				</table>
-			</div>
-	
-			<div class="row">
-				<table>
-					<tr>
-						<td>
-							<label>If no, do you have a legal right</label>
-							<%= yn? wa.us_right_to_work %>
-							<% unless wa.us_right_to_work_class.blank? %>
-								class: <%= h wa.us_right_to_work_class %>
-							<% end %>
-						&nbsp;</td>
-					</tr>
-				</table>
-			</div>
-		<% end %>
-	
-		<div class="row">
-			<table>
-				<tr>
-					<td><label>Do you have a valid New York State Driver's license?</label><%= yn? wa.state_drivers_license %>&nbsp;</td>
-				</tr>
-			</table>
-		</div>
-		
-		<% if is_seasonal %>
-			<div class="row">
-				<table>
-					<tr>
-						<td><label>Drivers license class:</label><%= h wa.drivers_license_class %>&nbsp;</td>
-					</tr>
-				</table>
-			</div>			
-			<div class="row">
-				<table>
-					<tr>
-						<td><label>Can you obtain daily transportation to any work site in Monroe County?</label><%= yn wa.has_transportation %>&nbsp;</td>
-					</tr>
-				</table>
-			</div>			
-		<% end %>
-	
-		<% if !is_seasonal %>
-			<div class="row">
-				<table>
-					<tr>
-						<td><label>Will you accept part-time work?</label><%= yn? wa.accept_part_time_work %>&nbsp;</td>
-					</tr>
-				</table>
-			</div>
-		
-			<div class="row">
-				<table>
-					<tr>
-						<td><label>Will you accept temporary work?</label><%= yn? wa.accept_temp_work %>&nbsp;</td>
-					</tr>
-				</table>
-			</div>
-		<% end %>
-		
-		<div class="row">
-			<table>
-				<tr>
-					<td><label>Have you applied for a position/exam at Monroe County before?</label><%= yn? wa.applied_before %>&nbsp;</td>
-				</tr>
-			</table>
-		</div>
-	
-		<div class="row">
-			<table>
-				<tr>
-					<td><label>Has your first or last name changed since your last application?</label><%= yn? wa.name_changed %>&nbsp;</td>
-				</tr>
-			</table>
-		</div>
-	
-		<div class="row">
-			<table>
-				<tr>
-					<td><label>Previous Name:</label><%= h [wa.last_name, wa.first_name].reject(&:blank?).join(', ') %>&nbsp;</td>
-				</tr>
-			</table>
-		</div>
-	
-		<div class="row">
-			<table>
-				<tr>
-					<td><label>Were you ever convicted of any violation of law other than a minor traffic violation?</label><%= yn? wa.law_violation %>&nbsp;</td>
-				</tr>
-			</table>
-		</div>
-		
-		<div class="row">
-			<table>
-				<tr>
-					<td><label>Do you currently have any criminal charges pending against you?</label><%= yn? wa.pending_criminal_charges %>&nbsp;</td>
-				</tr>
-			</table>
-		</div>
-		
-
-		<div class="row">
-			<table>
-				<tr>
-					<td><label>Were you ever removed from any type of employment?</label><%= yn? wa.removed_employment %>&nbsp;</td>
-				</tr>
-			</table>
-		</div>
-		
-		<% if !is_seasonal %>		
-		
-			<div class="row">
-				<table>
-					<tr>
-						<td>
-							<label>Requested Typing Waiver?</label>
-							<%= yn wa.typing_waiver %>
-							<% if wa.typing_waiver %>
-								<%
-								reas = []
-								reas << 'Previously Tested' if wa.typing_waiver_1
-								reas << "County Employee (#{wa.typing_waiver_2_dept} #{wa.typing_waiver_2_title})" if wa.typing_waiver_2
-								%>
-								- <%= reas.join(', ') %>
-							<% end %>
-						&nbsp;</td>
-					</tr>
-				</table>
-			</div>		
-		<% end %>
-		
-		<div class="row">
-			<table>
-				<tr>
-					<td><label>Additional Info/Comments</label><%= nl2br_h wa.info %>&nbsp;</td>
-				</tr>
-			</table>
-		</div>
-		
-		<div class="row">
-			<table>
-				<tr>
-					<td>
-						<label>Date of Birth</label>
-						<%= wa.dob.d0? %>
-					</td>
-					<td>
-						<label>Age (at exam date)</label>
-						<% now = o.web_exam.exam_date ? o.web_exam.exam_date.to_date : nil %>
-						<% if now && wa.dob %>
-							<% now = now.to_date %>
-							<%= now.year - wa.dob.year - ((now.month > wa.dob.month || (now.month == wa.dob.month && now.day >= wa.dob.day)) ? 0 : 1) %>
-						<% end %>
-						&nbsp;</td>
-				</tr>
-			</table>
-		</div>
-		
+	<div class="tabs" id="sect-nav">
+		<a href=".sect" class="active"><span>All</span></a>
+		<a href="#sect-web"><span>General Info</span></a>
+		<a href="#sect-emp"><span>Employment</span></a>
+		<a href="#sect-edu"><span>Education</span></a>
+		<a href="#sect-cer"><span>Licenses/Certifications</span></a>
+		<a href="#sect-tra"><span>Training/Programs</span></a>
+		<div class="clear"></div>
 	</div>
+	<script type="text/javascript">
+		(function($) {
+			$(function() {
+				var sect_tabs = $('#sect-nav a');
+				var sects = $('.sect');
+				sect_tabs.click(function(e) {
+					e.preventDefault();
+					var $this = $(this);
+					sect_tabs.removeClass('active');
+					$this.addClass('active');
+					sects.hide();
+					var show = $this.attr('href');
+					$(show).show();
+					$('#tab-pad').css({'padding-bottom': show == '.sect' ? '0' : '800px'});
+				});
+			});
+		})(jQuery);
+	</script>
+	<div class="sect" id="sect-web">
 	
-	<% if !is_seasonal && is_staff %>
 		<div class="viewer">
-			<div class="header">Equal Employment Opportunity Data Collection Form</div>
+			<div class="header">Web Data</div>
 			<div class="row">
 				<table>
 					<tr>
 						<td>
-							<label>Race:</label>
-							<%= h wa.race %>&nbsp;
+							<label>Web Id:</label>
+							<% if is_agency %>
+								<%= wa.id %>
+							<% else %>
+								<a href="https://www.monroecounty.gov/hrapply/applications/view/<%= wa.id %>"><%= wa.id %></a>
+							<% end %>
 						</td>
+						<td>
+							<label>Name:</label>
+							<%= wa.label %>
+						&nbsp;<td>	
 					</tr>
 				</table>
 			</div>
-		</div>
-	<% end %>
-	
+		
+			<% if is_seasonal %>
+				<div class="row">
+					<table>
+						<tr>
+							<td><label>Are you 18 years of age or older?</label><%= yn? wa.over_18 %>&nbsp;</td>
+						</tr>
+					</table>
+				</div>
 
+				<div class="row">
+					<table>
+						<tr>
+							<td><label>When can you begin work?</label><%= h wa.begin_work %>&nbsp;</td>
+						</tr>
+					</table>
+				</div>	
+					
+				<div class="row">
+					<table>
+						<tr>
+							<td><label>When do you need to end work?</label><%= h wa.end_work %>&nbsp;</td>
+						</tr>
+					</table>
+				</div>			
+			
+				<div class="row">
+					<table>
+						<tr>
+							<td><label>Can you work weekends?</label><%= yn? wa.work_weekends %>&nbsp;</td>
+						</tr>
+					</table>
+				</div>			
+			<% end %>
+		
+			<% if !is_seasonal %>
+				<div class="row">
+					<table>
+						<tr>
+							<td><label>Have you been a resident of Monroe County for the past four months?</label><%= yn? wa.county_resident_4_mo %>&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+			
+				<div class="row">
+					<table>
+						<tr>
+							<td><label>Are you a citizen of the united states?</label><%= yn? wa.us_citizen %>&nbsp;</td>
+						</tr>
+					</table>
+				</div>
 	
-	<div class="viewer">
-		<div class="header">Fee Waiver Information</div>
-		<% if wa.total.to_f > 0 %>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>If no, do you have a legal right</label>
+								<%= yn? wa.us_right_to_work %>
+								<% unless wa.us_right_to_work_class.blank? %>
+									class: <%= h wa.us_right_to_work_class %>
+								<% end %>
+							&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+			<% end %>
+	
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Do you have a valid New York State Driver's license?</label><%= yn? wa.state_drivers_license %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		
+			<% if is_seasonal %>
+				<div class="row">
+					<table>
+						<tr>
+							<td><label>Drivers license class:</label><%= h wa.drivers_license_class %>&nbsp;</td>
+						</tr>
+					</table>
+				</div>			
+				<div class="row">
+					<table>
+						<tr>
+							<td><label>Can you obtain daily transportation to any work site in Monroe County?</label><%= yn wa.has_transportation %>&nbsp;</td>
+						</tr>
+					</table>
+				</div>			
+			<% end %>
+	
+			<% if !is_seasonal %>
+				<div class="row">
+					<table>
+						<tr>
+							<td><label>Will you accept part-time work?</label><%= yn? wa.accept_part_time_work %>&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+		
+				<div class="row">
+					<table>
+						<tr>
+							<td><label>Will you accept temporary work?</label><%= yn? wa.accept_temp_work %>&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+			<% end %>
+		
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Have you applied for a position/exam at Monroe County before?</label><%= yn? wa.applied_before %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+	
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Has your first or last name changed since your last application?</label><%= yn? wa.name_changed %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+	
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Previous Name:</label><%= h [wa.last_name, wa.first_name].reject(&:blank?).join(', ') %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+	
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Were you ever convicted of any violation of law other than a minor traffic violation?</label><%= yn? wa.law_violation %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Do you currently have any criminal charges pending against you?</label><%= yn? wa.pending_criminal_charges %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		
+
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Were you ever removed from any type of employment?</label><%= yn? wa.removed_employment %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		
+			<% if !is_seasonal %>		
+		
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Requested Typing Waiver?</label>
+								<%= yn wa.typing_waiver %>
+								<% if wa.typing_waiver %>
+									<%
+									reas = []
+									reas << 'Previously Tested' if wa.typing_waiver_1
+									reas << "County Employee (#{wa.typing_waiver_2_dept} #{wa.typing_waiver_2_title})" if wa.typing_waiver_2
+									%>
+									- <%= reas.join(', ') %>
+								<% end %>
+							&nbsp;</td>
+						</tr>
+					</table>
+				</div>		
+			<% end %>
+		
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Additional Info/Comments</label><%= nl2br_h wa.info %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		
 			<div class="row">
 				<table>
 					<tr>
 						<td>
-							<label>Waiver?</label>
-							<%= yn wa.waiver_requested %>
+							<label>Date of Birth</label>
+							<%= wa.dob.d0? %>
 						</td>
 						<td>
-							<label>Reason:</label>
-							<% if wa.waiver_requested %>
-								<%
+							<label>Age (at exam date)</label>
+							<% now = o.web_exam.exam_date ? o.web_exam.exam_date.to_date : nil %>
+							<% if now && wa.dob %>
+								<% now = now.to_date %>
+								<%= now.year - wa.dob.year - ((now.month > wa.dob.month || (now.month == wa.dob.month && now.day >= wa.dob.day)) ? 0 : 1) %>
+							<% end %>
+							&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		
+		</div>
+	
+		<% if !is_seasonal && is_staff %>
+			<div class="viewer">
+				<div class="header">Equal Employment Opportunity Data Collection Form</div>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Race:</label>
+								<%= h wa.race %>&nbsp;
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		<% end %>
+	
+
+	
+		<div class="viewer">
+			<div class="header">Fee Waiver Information</div>
+			<% if wa.total.to_f > 0 %>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Waiver?</label>
+								<%= yn wa.waiver_requested %>
+							</td>
+							<td>
+								<label>Reason:</label>
+								<% if wa.waiver_requested %>
+									<%
 								
-								reasons = []
-								reasons << 'Unemployed & Household Primary' if wa.waiver_unemployed
-								reasons << 'Medicaid Eligible' if wa.waiver_medicaid
-								reasons << 'SSI Payments' if wa.waiver_ssi
-								reasons << "Receiving Public Assistance (#{wa.waiver_case_number})" if wa.waiver_public_assistance
-								reasons << 'Job Training Partnership Act/Workforce Investment' if wa.waiver_wia
-								reasons << "County Employee (#{wa.waiver_county_job})" if wa.waiver_county
-								reasons << "Federation of Social Workers (#{wa.waiver_social_workers_job})" if wa.waiver_social_workers
+									reasons = []
+									reasons << 'Unemployed & Household Primary' if wa.waiver_unemployed
+									reasons << 'Medicaid Eligible' if wa.waiver_medicaid
+									reasons << 'SSI Payments' if wa.waiver_ssi
+									reasons << "Receiving Public Assistance (#{wa.waiver_case_number})" if wa.waiver_public_assistance
+									reasons << 'Job Training Partnership Act/Workforce Investment' if wa.waiver_wia
+									reasons << "County Employee (#{wa.waiver_county_job})" if wa.waiver_county
+									reasons << "Federation of Social Workers (#{wa.waiver_social_workers_job})" if wa.waiver_social_workers
 								
 								
-								%>
-								<%= h reasons.join(', ') %>
+									%>
+									<%= h reasons.join(', ') %>
+								<% end %>
+							</td>
+						</tr>
+					</table>
+				</div>
+			<% else %>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>&nbsp;</label>
+								No Application Fees
+							</td>
+						</tr>
+					</table>
+				</div>
+			<% end %>
+		</div>
+	
+		<div class="viewer">
+			<div class="header">Attachments</div>
+			<div class="row">
+				<table>
+					<tr>
+						<td>
+							<% if wa.web_attachments.empty? %>
+								<label>&nbsp;</label>
+								No Attachments
+							<% else %>
+								<label>Click to Download/View:</label>
+								<% wa.web_attachments.each { |a| %>
+									<div>
+										<%= link_to a.name, {:controller => :applicant, :action => :web_attachment, :id => o.id, :id2 => a.id} %>
+										&nbsp;&nbsp;&nbsp;&nbsp;<%= link_to 'save to person', {:action => :web_attachment_copy, :id => o.id, :id2 => a.id}, {:class => 'dim', :style => 'font-size: 9px;'} %>
+									</div>
+								<% } %>
 							<% end %>
 						</td>
 					</tr>
 				</table>
 			</div>
-		<% else %>
-			<div class="row">
-				<table>
-					<tr>
-						<td>
-							<label>&nbsp;</label>
-							No Application Fees
-						</td>
-					</tr>
-				</table>
-			</div>
-		<% end %>
-	</div>
-	
-	<div class="viewer">
-		<div class="header">Attachments</div>
-		<div class="row">
-			<table>
-				<tr>
-					<td>
-						<% if wa.web_attachments.empty? %>
-							<label>&nbsp;</label>
-							No Attachments
-						<% else %>
-							<label>Click to Download/View:</label>
-							<% wa.web_attachments.each { |a| %>
-								<div>
-									<%= link_to a.name, {:controller => :applicant, :action => :web_attachment, :id => o.id, :id2 => a.id} %>
-									&nbsp;&nbsp;&nbsp;&nbsp;<%= link_to 'save to person', {:action => :web_attachment_copy, :id => o.id, :id2 => a.id}, {:class => 'dim', :style => 'font-size: 9px;'} %>
-								</div>
-							<% } %>
-						<% end %>
-					</td>
-				</tr>
-			</table>
 		</div>
 	</div>
 	
 
 	
 	<% employments = wa.web_employments.find(:all, :order => 'ifnull(end_date, now()) asc') %>
-	<div class="viewer">
+	<div class="viewer sect" id="sect-emp">
 		<div class="header">Employment Timeline</div>
 		<div class="row">
 			<table width="100%">
@@ -975,7 +1005,7 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 
 
 
-	<div class="viewer">
+	<div class="viewer sect" id="sect-edu">
 		<div class="header">Education</div>
 		<div class="row">
 			<table>
@@ -1055,7 +1085,7 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 
 
 	
-	<div class="viewer">
+	<div class="viewer sect" id="sect-cer">
 		<% if wa.web_certifications.empty? %>
 			<div class="header">Certifications</div>
 			<div class="row">
@@ -1138,7 +1168,7 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 	
 	
 	
-	<div class="viewer">
+	<div class="viewer sect" id="sect-tra">
 		<% if wa.web_trainings.empty? %>
 			<div class="header">Training Courses/Programs</div>
 			<div class="row">
@@ -1163,7 +1193,7 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 							</td>
 							<td>
 								<label>Hours:</label>
-								&nbsp;<%= t t.hours %>
+								&nbsp;<%= h t.hours %>
 							</td>
 						</tr>
 					</table>
@@ -1195,7 +1225,7 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 		
 <% end %>
 
-
+<div id="sect-upd">
 <% unless @obj.app_updates.empty? %>
 	<table class="dg">
 		<thead>
@@ -1216,3 +1246,6 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 		</tbody>
 	</table>
 <% end %>
+</div>
+
+</div>
