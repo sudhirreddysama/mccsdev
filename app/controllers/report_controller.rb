@@ -127,6 +127,7 @@ class ReportController < ApplicationController
 		@department_ids = params[:department_ids]
 		@job_ids = params[:job_ids]
 		@agency_types = params[:agency_types]
+		@empl_action_type_ids = params[:empl_action_type_ids]
 		
 		@classes = params[:classes]
 		@statuses = params[:statuses]
@@ -140,6 +141,12 @@ class ReportController < ApplicationController
 		
 		cond << 'e.classification in ("%s")' % @classes.join('","') unless @classes.blank?
 		cond << 'e.status in ("%s")' % @statuses.join('","') unless @statuses.blank?
+		
+		extra_join = []
+		if !@empl_action_type_ids.blank?
+			cond << 'ea.empl_action_type_id in (%s)' % @empl_action_type_ids.map(&:to_i).join(',')
+			extra_join << 'join empl_actions ea on ea.employee_id = e.id'
+		end
 		
 		if @current_user.agency_level? && @current_user.agency
 			cond << 'e.agency_id = %d' % @current_user.agency_id
@@ -162,9 +169,11 @@ class ReportController < ApplicationController
 			from employees e
 			join agencies a on a.id = e.agency_id
 			join departments d on d.id = e.department_id
-			join jobs j on j.id = e.job_id where ' + 
+			join jobs j on j.id = e.job_id ' + 
+			(extra_join * ' ') +
+			' where ' +
 			get_where(cond) +
-			' order by ' + get_order(employee_sort_options, [[params[:sort1], params[:dir1]], [params[:sort2], params[:dir2]], [params[:sort3], params[:dir3]]])
+			'group by e.id order by ' + get_order(employee_sort_options, [[params[:sort1], params[:dir1]], [params[:sort2], params[:dir2]], [params[:sort3], params[:dir3]]])
 		)
 		
 		objs = []

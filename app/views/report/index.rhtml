@@ -63,14 +63,14 @@ end
 				<table class="form">
 					<tr>
 						<th width="1%" colspan="2">Agency:</th>
-						<th width="1%" colspan="2">Agency Type:</th>
+						<th width="1%" colspan="2">Department:</th>
 						<th width="1%">Breakdown 1:</th>
 						<th width="1%">Breakdown 2:</th>
 						<th width="99%">Breakdown 3:</th>
 					</tr>
 					<tr>
 						<td colspan="2"><%= select_tag 'agency_ids', options_for_select(@agencies.collect { |a| [a.name, a.id] }), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>
-						<td colspan="2"><%= select_tag 'agency_types', options_for_select(Const::AGENCY_TYPES), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>
+						<td colspan="2"><%= select_tag 'department_ids', options_for_select(@departments.collect { |a| [a.name, a.id] }), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>
 						<% 3.times { |i| %>
 							<td>
 								<label style="display: block; white=space: nowrap;"><%= radio_button_tag "bd#{i}", '' %> None</label>
@@ -81,12 +81,14 @@ end
 						<% } %>
 					</tr>
 					<tr>
-						<th colspan="2">Department:</th>
+						<th>Agency Type:</th>
+						<th>Has In History:</th>
 						<th colspan="2">Title:*</th>
 						<th></th>
 					</tr>
 					<tr>
-						<td colspan="2"><%= select_tag 'department_ids', options_for_select(@departments.collect { |a| [a.name, a.id] }), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>
+						<td><%= select_tag 'agency_types', options_for_select(Const::AGENCY_TYPES), :multiple => true, :style => 'width: 150px; height: 100px;' %></td>
+						<td><%= select_tag 'empl_action_type_ids', options_for_select(EmplActionType.find(:all, :order => 'name asc').map { |t| [t.name, t.id] }), :multiple => true, :style => 'width: 150px; height: 100px;' %></td>
 						<td colspan="2"><%= select_tag 'job_ids', options_for_select(@job_options), :multiple => true, :style => 'width: 310px; height: 100px;' %></td>				
 						<td colspan="3"><b>*NOTE:</b> This list reflects titles currently held by employees. An approved title may not appear on this list if no employee holds that title. Additionally, an obsolete title may appear on this list if an employee still holds that title.</td>
 					</tr>
