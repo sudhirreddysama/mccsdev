@@ -189,6 +189,65 @@ class ApplicationController < ActionController::Base
 		`wkhtmltopdf --disable-smart-shrinking #{opt[:arg]} -s Letter -O #{orient} --margin-left #{marg} --margin-right #{marg} --margin-top #{marg} --margin-bottom #{marg} #{f.path} #{fname}`
 	end		
 	
+	
+	def parse_advanced_applicant_filter
+		extra_joins = []
+		include_web_applicant = false
+		cond = []	
+		if !@filter.wem_search.blank? || @filter.wem_current == '1'
+			cond += get_search_conditions @filter[:wem_search], {
+				'wem.name' => :like,
+				'wem.title' => :like,
+				'wem.description' => :like,
+			}
+			cond << 'wem.currently_employed = 1' if @filter.wem_current == '1'
+			extra_joins << 'join ' + HRAPPLYDB + '.employments wem on wem.applicant_id = wa.id'
+		end
+		if !@filter.wce_search.blank? || @filter.wce_valid == '1'
+			cond += get_search_conditions @filter[:wce_search], {
+				'wce.name' => :like,
+				'wce.agency' => :like,
+			}
+			cond << 'wce.permanent = 1 or wce.to_date > date(now())' if @filter.wce_valid == '1'
+			extra_joins << 'join ' + HRAPPLYDB + '.certifications wce on wce.applicant_id = wa.id'
+		end	
+		wed_sem_h = @filter.wed_sem_hours.to_i
+		wed_qua_h = @filter.wed_qua_hours.to_i	
+		if !@filter.wed_search.blank? || wed_sem_h != 0 || wed_qua_h != 0
+			cond += get_search_conditions @filter[:wed_search], {
+				'wed.school_name' => :like,
+				'wed.major' => :like,
+				'wed.degree' => :like,
+			}
+			h_cond = [
+				('wed.credits_semester >= %d' % wed_sem_h if wed_sem_h != 0),
+				('wed.credits_quarter >= %d' % wed_qua_h if wed_qua_h != 0)
+			].compact
+			cond << h_cond.join(' or ') if !h_cond.empty?
+			extra_joins << 'join ' + HRAPPLYDB + '.educations wed on wed.applicant_id = wa.id'
+		end	
+		wtr_h = @filter.wtr_hours.to_f
+		if !@filter.wtr_search.blank? || wtr_h != 0
+			cond += get_search_conditions @filter[:wtr_search], {
+				'wtr.description' => :like,
+			}
+			cond << 'wtr.hours >= %f' % wtr_h if wtr_h != 0
+			extra_joins << 'join ' + HRAPPLYDB + '.trainings wtr on wtr.applicant_id = wa.id '
+		end
+		if !@filter.wed_level.blank?
+			lvls = WebApplicant::EDUCATION_LEVELS.map &:last
+			cond << 'case wa.education ' + 
+				lvls.each_with_index.map { |v, i| DB.escape 'when "%s" then %d', v, i }.join(' ') + 
+				(' end >= %d' % lvls.index(@filter.wed_level))
+			include_web_applicant = true
+		end				
+		if !extra_joins.empty? || include_web_applicant
+			extra_joins.unshift 'join ' + HRAPPLYDB + '.applicants wa on wa.id = applicants.web_applicant_id'
+			@adv_search = true
+		end
+		return cond, extra_joins
+	end
+	
 end
 
 

@@ -141,12 +141,20 @@ class WebExamController < CrudController
 			load_obj
 			@assoc = @obj.applicants
 		end
+		
+		adv_cond, extra_joins = parse_advanced_applicant_filter
+		cond += adv_cond
+		join = ([join] + extra_joins).compact * ' '
+		
 		@opt = {
 			:conditions => get_where(cond),
 			:order => get_order_auto,
 			:include => include,
 			:joins => join
 		}
+		if @adv_search
+			@opt[:group] = 'applicants.id'
+		end
 		
 		@export_fields = %w{approved app_status.name pos rank person.ssn person.last_name person.first_name person.home_phone person.work_phone person.fax person.cell_phone person.email person.mailing_address person.mailing_address2 person.mailing_city person.mailing_state person.mailing_zip raw_score base_score veterans_credits other_credits final_score}
 		@export_fields += %w{person.residence_different person.residence_address person.residence_city person.residence_state person.residence_zip person.town.name person.village.name person.fire_district.name person.school_district.name exam.valid_until person.date_of_birth.d0?}			

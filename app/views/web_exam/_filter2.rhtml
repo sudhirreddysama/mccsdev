@@ -10,3 +10,10 @@
 		</tr>
 	<% end %>
 <% end %>
+<% if params[:action] == 'applicants' || params[:action] == 'all_applicants' %>
+	<tr>
+		<th style="width: 90px;">Options:</th>
+		<td><a href="#" onclick="jQuery('.adv').toggle(); return false;">Toggle Advanced Options</a></td>
+	</tr>
+	<%= partial 'applicant_adv_filter', {:f => f} %>	
+<% end %>

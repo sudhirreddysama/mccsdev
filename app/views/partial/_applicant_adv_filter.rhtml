@@ -1,0 +1,34 @@
+<% adv = @adv_search ? '' : ' style="display: none;"' %>
+<tr class="adv"<%= adv %>>
+	<th>Employment:</th>
+	<td>
+		<%= f.text_field :wem_search, :placeholder => 'Employer, Title, Description' %>
+		<label><%= f.check_box :wem_current %> Currently Employed (as of application date)</label>
+	</td>
+</tr>
+<tr class="adv"<%= adv %>>
+	<th>Education:</th>
+	<td>
+		<%= f.text_field :wed_search, :placeholder => 'School, Major, Degree' %>
+		<label>Min Sem Hrs: <%= f.text_field :wed_sem_hours, :size => 4 %></label>
+		-or- <label>Min Qtr Hrs: <%= f.text_field :wed_qua_hours, :size => 4 %></label>
+	</td>
+</tr>
+<tr class="adv"<%= adv %>>
+	<th></th>
+	<td><%= f.select :wed_level, WebApplicant::EDUCATION_LEVELS, :include_blank => 'Min Education Level...' %></td>
+</tr>
+<tr class="adv"<%= adv %>>
+	<th>License/Cert.:</th>
+	<td>
+		<%= f.text_field :wce_search, :placeholder => 'Cert. Name, Agency' %>
+		<label><%= f.check_box :wce_valid %> Only Valid (permanent or not-expired)</label>
+	</td>
+</tr>
+<tr class="adv"<%= adv %>>
+	<th>Course/Prog.:</th>
+	<td>
+		<%= f.text_field :wtr_search, :placeholder => 'Description' %>
+		<label>Min Hours: <%= f.text_field :wtr_hours, :size => 4 %></label>
+	</td>
+</tr>
