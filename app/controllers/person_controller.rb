@@ -220,7 +220,9 @@ class PersonController < CrudController
 				select
 				p1.ssn ssn,
 				p1.id old_id, p1.first_name old_first_name, p1.last_name old_last_name,
-				p2.id new_id, p2.first_name new_first_name, p2.last_name new_last_name
+				p2.id new_id, p2.first_name new_first_name, p2.last_name new_last_name,
+				(select max(submitted_at) from applicants a where a.person_id = p1.id) old_submitted_at,
+				(select max(submitted_at) from applicants a where a.person_id = p2.id) new_submitted_at		
 				from people p1
 				join people p2 on p1.ssn = p2.ssn and p2.id > p1.id
 				where p1.ssn not in ("' + BAD_SSNS.join('","') + '")
@@ -228,6 +230,21 @@ class PersonController < CrudController
 			')
 		end
 	end
+	
+	def dup_email
+		@objs = DB.query('
+			select
+			p1.email email,
+			p1.id old_id, p1.first_name old_first_name, p1.last_name old_last_name,
+			p2.id new_id, p2.first_name new_first_name, p2.last_name new_last_name,
+			(select max(submitted_at) from applicants a where a.person_id = p1.id) old_submitted_at,
+			(select max(submitted_at) from applicants a where a.person_id = p2.id) new_submitted_at			
+			from people p1
+			join people p2 on p1.email = p2.email and p2.id > p1.id
+			where p1.email != ""
+			order by p1.last_name asc, p1.first_name asc
+		')
+	end	
 	
 	#adding this to catch the "spoof" ssn's that are flushed out of the ssn_merge
 	def ssn_merge_bad

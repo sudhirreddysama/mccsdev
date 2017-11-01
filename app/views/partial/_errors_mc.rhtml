@@ -1,0 +1,9 @@
+<% unless errors.nil? or errors.empty? or errors.all?(&:blank?) %>
+	<div class="messages error">
+		<ul>
+			<% errors.each { |e| %>
+				<li><%= e.split('^').last %></li>
+			<% } %>
+		</ul>
+	</div>
+<% end %>

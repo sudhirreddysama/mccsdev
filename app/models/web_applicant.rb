@@ -3,6 +3,7 @@ class WebApplicant < ActiveRecord::Base
 	set_table_name "#{HRAPPLYDB}.applicants"
 	
 	belongs_to :web_user, :foreign_key => 'user_id'
+	has_one :app_survey
 	
 	has_many :web_exam_prices, :foreign_key => 'applicant_id'
 	has_many :web_attachments, :foreign_key => 'applicant_id'

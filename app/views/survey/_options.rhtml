@@ -1,0 +1,8 @@
+<div class="form-radios">
+	<div class="form-item"><label><%= f.radio_button field, '', :class => 'form-radio' %><label class="option" for="obj_<%= field %>_"> NA</label></div>
+	<div class="form-item"><%= f.radio_button field, '5', :class => 'form-radio' %><label class="option" for="obj_<%= field %>_5"> Strongly Agree</label></div>
+	<div class="form-item"><%= f.radio_button field, '4', :class => 'form-radio' %><label class="option" for="obj_<%= field %>_4"> Agree</label></div>
+	<div class="form-item"><%= f.radio_button field, '3', :class => 'form-radio' %><label class="option" for="obj_<%= field %>_3"> Neither Agree nor Disagree</label></div>
+	<div class="form-item"><%= f.radio_button field, '2', :class => 'form-radio' %><label class="option" for="obj_<%= field %>_2"> Disagree</label></div>
+	<div class="form-item"><%= f.radio_button field, '1', :class => 'form-radio' %><label class="option" for="obj_<%= field %>_1"> Strongly Disagree</label></div>
+</div>

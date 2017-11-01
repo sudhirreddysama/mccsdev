@@ -1,6 +1,9 @@
 <html>
 	<head>		
 		<script type="text/javascript" src="https://www2.monroecounty.gov/modules/jquery_update/replace/jquery/jquery.min.js?v=1.5.2"></script>
+		<link type="text/css" rel="stylesheet" media="all" href="https://www2.monroecounty.gov/modules/system/system.base.css" />
+		<link type="text/css" rel="stylesheet" media="all" href="https://www2.monroecounty.gov/modules/system/system.theme.css" />
+		<link type="text/css" rel="stylesheet" media="all" href="https://www2.monroecounty.gov/modules/system/system.messages.css" />
 		<link type="text/css" rel="stylesheet" media="all" href="https://www2.monroecounty.gov/themes/mc/style.css" />
 		<link type="text/css" rel="stylesheet" media="all" href="https://www2.monroecounty.gov/themes/mc/header.css" />
 		<link type="text/css" rel="stylesheet" media="all" title="small" href="https://www2.monroecounty.gov/themes/mc/small.css" />
@@ -56,6 +59,7 @@
 		
 			<div id="center-col">
 				<div id="center-inner">
+					<% if flash[:notice] %><div class="messages status"><%= flash[:notice] %></div><% end %>
 					<%= yield %>
 					
 

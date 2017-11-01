@@ -230,6 +230,7 @@ a img { border: none; }
 
 .tabs a.tab-mismatch span { background-image: url(../images/icons/status_offline.png); }
 .tabs a.tab-calendar span { background-image: url(../images/icons/calendar.png); }
+.tabs a.tab-dup_email span { background-image: url(../images/icons/email_error.png); }
 
 #misc-tabs a span { background-image: none; padding-left: 5px; }
 

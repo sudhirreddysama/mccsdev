@@ -1,0 +1,39 @@
+<h1>Application Survey</h1>
+<%= partial 'errors_mc', :errors => @obj.errors.full_messages %>
+<p><b>Application #:</b> <%= @app.id %><br />
+<b>Completed:</b> <%= @app.submitted_at.d0 %><br />
+<b>Exams/Jobs:</b> <%= h @app.web_exam_prices.map { |wep| e = wep.web_exam; [e.no, e.name].reject(&:blank?).join(': ') }.join(',') %>
+</p>
+<% if !@obj.new_record? %>
+	<p>We have received your survey submission. Thank you for your feedback!</p>
+<% else %>
+	<% form_for(:obj) { |f| %>
+	<div class="form-item">
+		<label>The on-line application process was easy to use.</label>
+		<%= partial 'options', :f => f, :field => :q1 %>
+	</div>
+
+	<div class="form-item">
+		<label>I will refer a friend or colleague to the website for Monroe County Civil Service.</label>
+		<%= partial 'options', :f => f, :field => :q2 %>
+	</div>
+
+	<div class="form-item">
+		<label>The civil service staff was informed and courteous. (If you did not have contact with staff please skip this question)</label>
+		<%= partial 'options', :f => f, :field => :q3 %>
+	</div>
+
+	<div class="form-item">
+		<label>How did you hear about Monroe County Civil Service?</label>
+		<div class="form-textarea-wrapper"><%= f.text_area :c1, :size => '60x3', :class => 'form-textarea' %></div>
+	</div>
+
+	<div class="form-item">
+		<label>Any additional comments/compliments/suggestions?</label>
+		<div class="form-textarea-wrapper"><%= f.text_area :c2, :size => '60x3', :class => 'form-textarea' %></div>
+	</div>
+	<div class="form-item">
+		<%= submit_tag 'Submit', :class => 'form-submit' %>
+	</div>
+	<% } %>
+<% end %>
