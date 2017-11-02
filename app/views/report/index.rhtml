@@ -367,6 +367,21 @@ end
 			</fieldset>
 		</form>
 		
+		<%= form_tag({:action => 'survey'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Survey Responses</legend>
+				<div class="fs">
+					<table class="form">
+						<th>Survey Taken From Date:</th>
+						<td><%= calendar_date_select_tag :from_date %></td>
+						<th>To Date:</th>
+						<td><%= calendar_date_select_tag :to_date %></td>
+						<td><%= submit_tag 'Run Report' %></td>
+					</table>
+				</div>
+			</fieldset>
+		</form>
+		
 	<% end %>
 
 </div>

@@ -9,27 +9,23 @@
 <% else %>
 	<% form_for(:obj) { |f| %>
 	<div class="form-item">
-		<label>The on-line application process was easy to use.</label>
+		<label><%= AppSurvey::QUESTIONS[0] %></label>
 		<%= partial 'options', :f => f, :field => :q1 %>
 	</div>
-
 	<div class="form-item">
-		<label>I will refer a friend or colleague to the website for Monroe County Civil Service.</label>
+		<label><%= AppSurvey::QUESTIONS[1] %></label>
 		<%= partial 'options', :f => f, :field => :q2 %>
 	</div>
-
 	<div class="form-item">
-		<label>The civil service staff was informed and courteous. (If you did not have contact with staff please skip this question)</label>
+		<label><%= AppSurvey::QUESTIONS[2] %></label>
 		<%= partial 'options', :f => f, :field => :q3 %>
 	</div>
-
 	<div class="form-item">
-		<label>How did you hear about Monroe County Civil Service?</label>
+		<label><%= AppSurvey::QUESTIONS[3] %></label>
 		<div class="form-textarea-wrapper"><%= f.text_area :c1, :size => '60x3', :class => 'form-textarea' %></div>
 	</div>
-
 	<div class="form-item">
-		<label>Any additional comments/compliments/suggestions?</label>
+		<label><%= AppSurvey::QUESTIONS[4] %></label>
 		<div class="form-textarea-wrapper"><%= f.text_area :c2, :size => '60x3', :class => 'form-textarea' %></div>
 	</div>
 	<div class="form-item">

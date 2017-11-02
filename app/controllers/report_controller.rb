@@ -809,4 +809,25 @@ class ReportController < ApplicationController
 		render_pdf render_to_string(:layout => false), 'perf-test.pdf'
 	end
 	
+	def survey
+
+		@from_date = Date.parse(params[:from_date]) rescue nil
+		@to_date = Date.parse(params[:to_date]) rescue nil
+		
+		cond = []
+		cond << DB.escape('date(created_at) >= "%s"', @from_date.to_s(:db)) if @from_date
+		cond << DB.escape('date(created_at) <= "%s"', @to_date.to_s(:db)) if @to_date
+		
+		@objs = AppSurvey.find(:all, :order => 'created_at', :include => :web_applicant, :conditions => get_where(cond))
+		@totals = Array.new(3) { |i| Hash.new { |h, k| h[k] = 0 } }
+		@total = 0
+		@objs.each { |o|
+			@total += 1
+			@totals[0][o.q1.to_i] += 1
+			@totals[1][o.q2.to_i] += 1
+			@totals[2][o.q3.to_i] += 1
+		}
+		render :layout => false
+	end
+	
 end

@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<style>
+html, body { padding: 0; margin: 0; font: 12px/1.5 "Trebuchet MS", Tahoma, sans-serif; box-sizing: border-box; }
+*, *:before, *:after { font-size: inherit; line-height: inherit; font-family: inherit; box-sizing: inherit; }
+.tc { text-align: center; }
+body { padding: 10px; }
+h1 { font-size: 16px; font-weight: bold; margin: 0 0 1em 0; padding: 0; }
+h2 { font-size: 16px; font-weight: bold; margin: 1em 0; padding: 0; }
+p, table { margin: 1em 0; }
+table { border-collapse: collapse; }
+td, th { border: 1px solid #888; padding: 1px 5px; text-align: left; vertical-align: top; }
+th { background-color: #f8f8f8; }
+.nobr { white-space: nowrap; }
+tr.line td { border-top: 2px solid #444; }
+</style>
+</head>
+<body>
+<h1>Survey Report</h1>
+<p><b>From Date: <%= @from_date ? @from_date.d0 : '(blank)' %><br>
+To Date: <%= @to_date ? @to_date.d0 : '(blank)' %></b>
+</p>
+<h2>Total Surveys Taken: <%= nwp @total %></h2>
+
+<% (0...3).each { |i| %>
+	<p><b>Q<%= i + 1 %>. <%= AppSurvey::QUESTIONS[i] %></b></p>
+	<table>
+		<thead><tr><th>Response</th><th class="tc">Total</th></tr></thead>
+		<tr>
+			<tr><td>0. NA</td>
+				<td class="tc"><%= nwp @totals[i][0] %></td></tr>
+			<tr><td>5. Strongly Agree</td>
+				<td class="tc"><%= nwp @totals[i][1] %></td></tr>
+			<tr><td>4. Agree</td>
+				<td class="tc"><%= nwp @totals[i][2] %></td></tr>
+			<tr><td>3. Neither Agree nor Disagree</td>
+				<td class="tc"><%= nwp @totals[i][3] %></td></tr>
+			<tr><td>2. Disagree</td>
+				<td class="tc"><%= nwp @totals[i][4] %></td></tr>
+			<tr><td>1. Strongly Disagree</td>
+				<td class="tc"><%= nwp @totals[i][5] %></td></tr>
+		</tr>
+	</table>
+<% } %>
+
+<h2>Responses</h2>
+
+<table style="width: 100%;">
+	<thead>
+		<tr>
+			<th width="1%">Taken</th>
+			<th>Name</th>
+			<th class="tc">Q1</th>
+			<th class="tc">Q2</th>
+			<th class="tc">Q3</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @objs.each { |o| %>
+			<tr class="line">
+				<td class="nobr"><%= o.created_at.dt0 %></td>
+				<td><%= o.web_applicant.last_name %>, <%= o.web_applicant.first_name %></td>
+				<td class="tc"><%= o.q1 %></td>
+				<td class="tc"><%= o.q2 %></td>
+				<td class="tc"><%= o.q3 %></td>
+			</tr>
+			<% if !o.c1.blank? %>
+				<tr><td colspan="5"><b>Q4.</b> <%= nl2br_h o.c1 %></td></tr>
+			<% end %>
+			<% if !o.c2.blank? %>
+				<tr><td colspan="5"><b>Q5.</b> <%= nl2br_h o.c2 %></td></tr>
+			<% end %>
+		<% } %>
+	</tbody>
+</table>
+</body>
+</html>
+
+
+
