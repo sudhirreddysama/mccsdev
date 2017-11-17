@@ -127,6 +127,7 @@ class TableFormBuilder < ActionView::Helpers::FormBuilder
 			'</th>' +
 			'<td>' +
 				'<label for="' + object_name.to_s + '_' + method.to_s + '">' + check_box(method, trim_opts(options)) + ' ' + options[:text].to_s + '</label>' +
+				options[:after].to_s +
 				(options[:help].nil? ? '' : '<div class="help">' + options[:help].to_s + '</div>') +
 			'</td>' +
 		'</tr>'

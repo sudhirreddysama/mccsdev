@@ -116,9 +116,22 @@ grouped.keys.sort.each { |r|
 				</table>
 				<% cross_counter = cross_counter.values.select { |cc| cc > 1 }.size %>
 				<p><span class="yelo"><b><% if cross_counter > 0 %><%= cross_counter %> Crossfilers - Same/Different Series<% else %>NO CROSSFILERS<% end %></b></span></p>
-				<% if exam_keys.any? { |k| exam_objs[k].high_security } %>
-					<p><span class="yelo"><b><u>Special Monitor Instructions - NO SCRATCH PAPER</u></b></span></p>
-					<p><span class="yelo"><b><u>VERY IMPORTANT - This is a high security exam with serial numbered booklets. Please follow the Monitors  instructions from State carefully.</u></b></span></p>
+				<% 
+					high_security = false 
+					high_security_text = nil
+					exam_keys.each { |k|
+						high_security ||= exam_objs[k].high_security
+						# Doesn't work well if more than 1 exam has high security texts, since only 1 will be used.
+						high_security_text = exam_objs[k].high_security_text if !exam_objs[k].high_security_text.blank?
+					}
+				%>
+				<% if high_security %>
+					<% if high_security_text %>
+						<p><span class="yelo"><b><u><%= nl2br_h(high_security_text) %></u></b></span></p>
+					<% else %>
+						<p><span class="yelo"><b><u>Special Monitor Instructions - NO SCRATCH PAPER</u></b></span></p>
+						<p><span class="yelo"><b><u>VERY IMPORTANT - This is a high security exam with serial numbered booklets. Please follow the Monitors  instructions from State carefully.</u></b></span></p>
+					<% end %>
 				<% end %>
 				<p>Purple Bio Data Sheet, completion of PART B - Check candidate directions.</p>
 				<p>Veteran credit forms due in 1 month: <%= (show_date + 1.month).strftime '%B %d, %Y' %></p>
