@@ -5,6 +5,7 @@ class PreferredList < ActiveRecord::Base
 	belongs_to :department
 	
 	has_many :preferred_candidates
+	has_many :documents
 	
 	def label; "#{established_date.d0?} #{title}"; end
 	

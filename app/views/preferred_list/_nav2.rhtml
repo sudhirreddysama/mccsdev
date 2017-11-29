@@ -1,3 +1,4 @@
+<%= tab 'Documents', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>
 <% if @current_user.staff_level? %>
 	<%= tab 'New Candidate', {:action => 'new_candidate', :id => params[:id]}, {}, :class => 'tab-new' %>
 <% end %>

@@ -19,6 +19,7 @@ class Document < ActiveRecord::Base
 	belongs_to :notice
 	belongs_to :vacancy
 	belongs_to :agency
+	belongs_to :preferred_list
 	
 	attr :uploaded_file, true
 	
