@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th { font: 10px/15px Trebuchet MS, Verdana, Arial, sans-serif; }
+			
+			table { border-collapse: collapse; width: 100%; }
+			td, th { vertical-align: top; text-align: left; padding: 0px 2px 0 0; }
+			th { font-weight: bold; border-bottom: 2px solid #000; }
+			td { border-bottom: 1px solid #888; }
+			
+			.r { text-align: right; }
+			
+			.nobr { white-space: nowrap; }
+			tr { page-break-inside: avoid; }
+			
+		</style>
+	</head>
+	<h3>Performance Test Results Report</h3>
+	<p>
+		<b>Current Date/Time:</b> <%= Time.now.dt0 %><br>
+		<b>Exam Date Range: From:</b> <%= @from_date ? @from_date.d0 : '(blank)' %>, <b>To:</b> <%= @to_date ? @to_date.d0 : '(blank)' %><br>
+		<% pt = @perf_tests.map(&:name).join(', ') %>
+		<b>Performance Tests:</b> <% if pt.blank? %>(all)<% else %><%= pt %><% end %><br>
+		<% 
+			pc = @perf_codes.map(&:label) 
+			pc = ['(NO RESULT)'] + pc if @include_no_result
+			pc = pc.join(', ')
+		%>
+		<b>Test Results:</b> <% if pc.blank? %>(all)<% else %><%= pc %><% end %><br>
+	</p>
+	<p></p>
+	<body>
+		<table>
+			<tr><th>Exam&nbsp;Date</th><th>Exam</th><th>Name</th></tr>
+			<% @objs.keys.map(&:to_s).sort.each { |name| perf_objs = @objs[name] %>
+				<% perf_objs.keys.map(&:to_s).sort.each { |label| objs = perf_objs[label] %>
+					<tr><th colspan="3"><%= name %> - <%= label.blank? ? '(NO RESULT)' : label %> (<%= objs.size %>)</th></tr>
+					<% objs.each { |o| %>
+						<% d = Date.parse(o.given_at) rescue nil %>
+						<tr><td><%= d.d0 %></td><td><%= o.exam_no %> <%= o.title %></td><td><%= o.first_name %> <%= o.last_name %></td></tr>
+					<% } %>
+				<% } %>
+			<% } %>
+		</table>
+	</body>
+</html>

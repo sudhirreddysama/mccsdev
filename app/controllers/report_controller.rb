@@ -809,6 +809,40 @@ class ReportController < ApplicationController
 		render_pdf render_to_string(:layout => false), 'perf-test.pdf'
 	end
 	
+	def perf_test_results
+
+		@from_date = Date.parse(params[:from_date]) rescue nil
+		@to_date = Date.parse(params[:to_date]) rescue nil
+		@perf_tests = params.perf_test_ids.empty? ? [] : PerfTest.find(params.perf_test_ids)
+		cond = ['a.approved = "Y"']
+		cond << DB.escape('date(e.given_at) >= "%s"', @from_date.to_s) if @from_date
+		cond << DB.escape('date(e.given_at) <= "%s"', @to_date.to_s) if @to_date
+		cond << DB.escape('pt.id in (%s)', params.perf_test_ids.map(&:to_i) * ',') if !params.perf_test_ids.empty?
+		pci = params.perf_code_ids || []
+		pci_cond = []
+		@include_no_result = pci.include?('')
+		pci_cond << '(pc.id is null)' if @include_no_result
+		pci = pci.reject(&:blank?).map(&:to_i)
+		pci_cond << DB.escape('(pc.id in (%s))', pci * ',') if !pci.empty?
+		@perf_codes = pci.empty? ? [] : PerfCode.find(pci)
+		cond << pci_cond * ' or '
+		result = DB.query(q = 'select e.exam_no, e.title, e.given_at, pt.name, p.first_name, p.last_name, pc.label from exams e
+			join exam_perfs ep on ep.exam_id = e.id
+			join perf_tests pt on pt.id = ep.perf_test_id
+			join applicants a on a.exam_id = e.id
+			join people p on p.id = a.person_id
+			left join taken_perfs tp on tp.exam_id = e.id and tp.applicant_id = a.id and tp.perf_test_id = pt.id
+			left join perf_codes pc on pc.id = tp.perf_code_id where ' + 
+			get_where(cond) + ' order by pt.name, pc.label, p.first_name, p.last_name'
+		)
+		@objs = Hash.new { |h, k| h[k] = Hash.new { |h2, k2| h2[k2] = [] } }
+		result.each_hash { |h|
+			@objs[h.name.to_s][h.label.to_s] << h
+		}
+
+		render_pdf render_to_string(:layout => false), 'perf-test-results.pdf'
+	end
+	
 	def survey
 
 		@from_date = Date.parse(params[:from_date]) rescue nil

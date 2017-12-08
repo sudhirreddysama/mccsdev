@@ -355,7 +355,7 @@ end
 					<table class="form">
 						<tr>
 							<th>Perf. Test:</th>
-							<td><%= select_tag :perf_test_id, options_for_select([['ALL', nil]] + PerfTest.find(:all, :order => 'name').collect { |p| [p.name, p.id] }) %>
+							<td><%= select_tag :perf_test_id, options_for_select([['ALL', nil]] + PerfTest.find(:all, :order => 'name').collect { |p| [p.name, p.id] }) %></td>
 							<th>From Date:</th>
 							<td><%= calendar_date_select_tag :from_date %></td>
 							<th>To Date:</th>
@@ -366,6 +366,32 @@ end
 				</div>
 			</fieldset>
 		</form>
+		
+		<%= form_tag({:action => 'perf_test_results'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Performance Test Results Report</legend>
+				<div class="fs">
+					<table class="form">
+						<tr>
+							<th>Perf. Tests:</th>
+							<th>Results:</th>
+							<td class="subform" rowspan="2">
+								<table class="form">
+									<tr><th>From Exam Date:</th></tr>
+									<tr><td><%= calendar_date_select_tag :from_date %></td></tr>
+									<tr><th>To Exam Date:</th></tr>
+									<tr><td><%= calendar_date_select_tag :to_date %></td></tr>
+									<tr><td><%= submit_tag 'Run Report' %></td></tr>
+								</table>
+							</tr>
+						<tr>
+							<td><%= select_tag 'perf_test_ids[]', options_for_select(PerfTest.find(:all, :order => 'name').collect { |p| [p.name, p.id] }), :multiple => true, :style => 'width: 150px; height: 150px;' %></td>
+							<td><%= select_tag 'perf_code_ids[]', options_for_select([['(NO RESULT)', '']] + PerfCode.find(:all, :order => 'label').collect { |p| [p.label, p.id] }), :multiple => true, :style => 'width: 150px; height: 150px;' %></td>
+						</tr>
+					</table>
+				</div>
+			</fieldset>
+		</form>		
 		
 		<%= form_tag({:action => 'survey'}, :target => '_blank') %>
 			<fieldset class="coolfieldset">
