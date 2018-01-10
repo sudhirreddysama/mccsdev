@@ -89,8 +89,8 @@ class Applicant < ActiveRecord::Base
 	end
 	
 	def generate_tiebreaker
-		if tiebreaker.blank?
-			if person && exam && exam.continuous
+		if tiebreaker.blank? && exam
+			if person && exam.continuous
 				prev = person.applicants.find(:first, {
 					:include => :exam, 
 					:conditions => ['exams.valid_until >= date(now()) and exams.title = ? and exams.exam_type = ? and applicants.tiebreaker != ""', exam.title, exam.exam_type],

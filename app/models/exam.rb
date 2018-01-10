@@ -148,7 +148,7 @@ class Exam < ActiveRecord::Base
 		end
 		
 		# Find all applicants, not just those that passed, include the tiebreaker for sorting.
-		# If an applicant has taken a CR exam more than once (with overlapping eligibility), their tiebreaker should be the same.
+		# If an applicant has taken a CR exam more than once (with overlapping eligibility), their tiebreaker should be the same (I don't think this is true).
 		apps = Applicant.find(:all, {
 			:conditions => cond,
 			:order => 'applicants.final_score desc, applicants.tiebreaker desc, exams.valid_until desc',
