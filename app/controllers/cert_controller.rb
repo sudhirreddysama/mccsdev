@@ -385,9 +385,9 @@ class CertController < CrudController
 	def notify_specialist
 		load_obj
 		flash[:notice] = 'Notification email has been sent.'
-		if !@obj.pending_date
+		if @obj.status == 'requested'
 			@obj.update_attribute :pending_date, Time.now.to_date
-		else
+		elsif @obj.status == 'completed'
 			@obj.update_attribute :prefinished_date, Time.now.to_date
 		end
 		Notifier.deliver_cert_specialist @obj
