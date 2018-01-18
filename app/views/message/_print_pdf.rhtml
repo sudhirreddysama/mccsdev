@@ -12,13 +12,13 @@
 <body>
 	<% lh = @obj.class == Letter ? '' : @obj.letterhead.to_s %>
 	<% if lh == '' %>
-		<img id="head" src="<%= `pwd`.strip %>/public/user/letter-head2.png" width="100%" />
+		<img id="head" src="<%= RAILS_ROOT.strip %>/public/user/letter-head2.png" width="100%" />
 	<% elsif lh == 'hr' || lh == 'dhs' %>
-		<img id="head" src="<%= `pwd`.strip %>/public/user/letter-head3.jpg" width="100%" />
+		<img id="head" src="<%= RAILS_ROOT.strip %>/public/user/letter-head3.jpg" width="100%" />
 	<% elsif lh == 'des' %>
-		<img id="head" src="<%= `pwd`.strip %>/public/user/letter-head-des.png" width="100%" />
+		<img id="head" src="<%= RAILS_ROOT.strip %>/public/user/letter-head-des.png" width="100%" />
 	<% elsif lh == 'dot' %>
-		<img id="head" src="<%= `pwd`.strip %>/public/user/letter-head-dot.png" width="100%" />
+		<img id="head" src="<%= RAILS_ROOT.strip %>/public/user/letter-head-dot.png" width="100%" />
 	<% end %>
 <div id="address">
 	<% if @obj.class == Letter %>
