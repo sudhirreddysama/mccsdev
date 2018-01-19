@@ -427,7 +427,7 @@
 								<tr>
 									<td class="nobr">Status:</td>
 									<% if @current_user.agency_level? %>
-										<td><%= ca.applicant.app_status.name %></td>
+										<td><%= ca.applicant.app_status ? ca.applicant.app_status.name : '' %></td>
 									<% else %>
 										<td><%= select_tag "statuses[#{ca.id}]", options_for_select([[]] + @app_statuses, ca.applicant.app_status_id), :style => 'width: 300px;', :class => 'ca-status', :id => "status-#{ca.id}" %></td>
 									<% end %>
