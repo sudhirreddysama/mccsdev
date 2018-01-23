@@ -67,6 +67,7 @@
 	<%= f.tr_text_field :fax, :label => 'Fax', :class => 'ucase' %>
 	<%= f.tr_text_field :email, :label => 'Email' %>
 	<%= f.tr_calendar_date_select :date_of_birth, :label => 'Date of Birth', :class => 'ucase' %>
+	<%= f.tr_select :gender, ['M', 'F'], :include_blank => true, :label => 'Gender' %>
 	<tr>
 		<th>Contact Via:</th>
 			<td>

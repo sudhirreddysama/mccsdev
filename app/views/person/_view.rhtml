@@ -15,16 +15,20 @@
 					<label>Name:</label>
 					<%= h o.label %>
 				</td>
-				<td>
-					<label>DOB:</label>
-					<%= o.date_of_birth.d0? %>
-				&nbsp;</td>
 				<% if !o.middle_name.blank? %>
 					<td>
 						<label>Middle Name/Initial:</label>
 						<%= h o.middle_name %>
 					</td>
 				<% end %>
+				<td>
+					<label>DOB:</label>
+					<%= o.date_of_birth.d0? %>
+				</td>
+				<td>
+					<label>Gender:</label>
+					<%= h o.gender %>
+				&nbsp;</td>
 			</tr>
 		</table>
 	</div>
