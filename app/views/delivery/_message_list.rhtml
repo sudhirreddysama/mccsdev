@@ -6,7 +6,7 @@
 			<th width="1%">User</th>
 			<th width="1%">Delivery</th>
 			<th width="1%" class="nobr">Deliver&nbsp;After</th>
-			<th width="48%">Applicant</td>
+			<th width="48%">Applicant<% if false %>/Agency Contact (AC)<% end %></td>
 			<th width="48%">Message</td>
 		</tr>
 	</thead>
@@ -18,8 +18,13 @@
 				<td><%= m.user.username if m.user %></td>
 				<td><%= m.delivered_via %></td>
 				<td class="nobr"><%= m.deliver_after.dt0? %></td>
-				<td><%= link_to m.person.label, :controller => :person, :action => :view, :id => m.person if m.person %></td>
-				<td><%= link_to m.subject, :sc => :person, :sid => m.person_id, :controller => :message, :id => m.id, :action => :view %></td>
+				<% if m.person_id %>
+					<td><%= link_to m.person.label, :controller => :person, :action => :view, :id => m.person_id if m.person %></td>
+					<td><%= link_to m.subject, :sc => :person, :sid => m.person_id, :controller => :message, :id => m.id, :action => :view %></td>
+				<% else %>
+					<td><%= link_to m.contact.name, :controller => :contact, :action => :view, :id => m.contact_id if m.contact %> (AC)</td>
+					<td><%= link_to m.subject, :sc => :contact, :sid => m.contact_id, :controller => :message, :id => m.id, :action => :view %></td>
+				<% end %>
 			</tr>
 		<% } %>
 	</tbody>

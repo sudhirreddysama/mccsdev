@@ -58,7 +58,11 @@
 		<% @obj.messages.each { |m| %>
 			<tr class="<%= cycle 'odd', 'even' %>">
 				<td class="nobr">
-					<% opt = {:sc => :applicant, :sid => m.applicant_id, :controller => :message, :id => m.id, :action => :view} %>
+					<%
+						opt = m.applicant_id ? 
+							{:sc => :applicant, :sid => m.applicant_id, :controller => :message, :id => m.id, :action => :view} :
+							{:sc => :contact, :sid => m.contact_id, :controller => :message, :id => m.id, :action => :view}
+					%>
 					<%= link_to image_tag('icons/zoom.png', :size => '16x16', :alt => 'view', :title => 'View'), opt %>
 					<%= link_to image_tag('icons/pencil.png', :size => '16x16', :alt => 'edit', :title => 'Edit'), opt.merge(:action => :edit) %>				
 				</td>

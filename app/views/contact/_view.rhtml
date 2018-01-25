@@ -8,6 +8,10 @@
           <%= o.id %>
         </td>
         <td>
+          <label>Primary:</label>
+          <%= yn o.primary %>
+        </td>
+        <td>
           <label>Name:</label>
           <%= o.lastname %>, <%=o.firstname%>
         </td>
@@ -17,7 +21,7 @@
           </td>
         <td>
           <label>Email:</label>
-          <%= o.email %>
+          <%= mail_to o.email %>
         &nbsp;</td>
       </tr>
     </table>
@@ -25,7 +29,14 @@
   <div class="row">
     <table>
       <tr>
-
+				<td>
+					<label>Agency</label>
+					<%= link_to(o.agency.name, :controller => :agency, :action => :view, :id => o.agency_id, :sc => nil, :sid => nil) if o.agency %>
+				</td>
+				<td>
+					<label>Department</label>
+					<%= link_to(o.department.name, :controller => :department, :action => :view, :id => o.department_id) if o.department %>
+				</td>
         <td>
           <label>Phone:</label>
           <%= o.phone %>
@@ -33,12 +44,8 @@
         <td>
           <label>Fax:</label>
           <%= o.fax %>
-        </td>
-				<td>
-					<label>Department</label>
-					<%= o.department.name if o.department %>
-				&nbsp;</td>
+        &nbsp;</td>
       </tr>
     </table>
   </div>
-    </div>
+</div>

@@ -82,6 +82,26 @@ class Letter < ActiveRecord::Base
 			'user.fax',
 			'user.email',
 			'user.email2'
+		],
+		'Agency Contact' => [
+			'contact.firstname',
+			'contact.lastname',
+			'contact.name',
+			'contact.title',
+			'contact.email',
+			'contact.phone',
+			'contact.fax',
+			'contact.agency.name',
+			'contact.agency.address1',
+			'contact.agency.address2',
+			'contact.agency.city',
+			'contact.agency.state',
+			'contact.agency.city',
+			'contact.agency.zip',
+			'contact.agency.phone',
+			'contact.department.name',
+			'contact.liaison.name',
+			'contact.liaison.email'
 		]
 	}
 
@@ -97,6 +117,7 @@ class Letter < ActiveRecord::Base
 		web = objs[:web_exam]
 		cert = objs[:cert]
 		user = objs[:user]
+		contact = objs[:contact]
 		
 		exam = cert.exam if cert && !exam
 		person = applicant.person if applicant && !person
@@ -109,6 +130,7 @@ class Letter < ActiveRecord::Base
 		vars << 'Certification' if cert
 		vars << 'Web Post' if web
 		vars << 'User' if user
+		vars << 'Agency Contact' if contact
 		
 		vars.each { |scope|
 			VARS[scope].each { |var|

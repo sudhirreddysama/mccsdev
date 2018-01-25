@@ -2,7 +2,7 @@ module ApplicationHelper
 
 	def tab txt, p1, p2 = {}, opt = {}
 		opt[:class] ||= ''
-		opt[:class] += ' active' if p1.all? { |k, v| !v or params[k].to_s == v.to_s }
+		opt[:class] += ' active' if p1.all? { |k, v| !v or params[k].to_s == v.to_s } && !opt[:inactive]
 		p = p1.merge(p2)
 		opt[:class] += ' tab-' + p[:action].to_s if p[:action] and !opt[:class].include?('tab-')
 		

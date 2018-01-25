@@ -1,3 +1,12 @@
+<%
+
+c = params[:controller]
+sc = params[:sc]
+
+is_misc = %w{cert_code letter job exam_site exam_site_group perf_test division town village county user fire_district school_district empl_action_type db_change disapproval top_text personnel_area personnel_division}.include?(sc || c)
+is_agency = %w{agency department contact}.include?(sc || c)
+
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head><meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -31,7 +40,7 @@
 		<% end %>
 		<%= stylesheet_link_tag '/javascripts/jquery-ui-1.8.9.custom/css/smoothness/jquery-ui-1.8.9.custom.css', :media => 'screen' %>
 		<%= stylesheet_link_tag 'plupload.queue.css', :media => 'screen' %>
-		<%= stylesheet_link_tag 'style', :media => 'all' %>
+		<%= stylesheet_link_tag 'style.css?v2', :media => 'all' %>
 		<%= stylesheet_link_tag '/javascripts/coolfieldset/css/jquery.coolfieldset.css', :media => 'all' %>
 		<%= stylesheet_link_tag '/javascripts/jquery.tokeninput/token-input-mccs.css', :media => 'all' %>
 		<%= yield :head %>
@@ -41,7 +50,7 @@
 			var ROOT_PATH = '<%= root_path %>';
 			var obj_id = <%= @obj && !@obj.new_record? && @obj.id ? @obj.id : 'null' %>;
 			var super_id = <%= params[:sid] || 'null' %>;
-			var super_c = <%= params[:sc] ? "'#{params[:sc]}'" : 'null' %>;
+			var super_c = <%= sc ? "'#{sc}'" : 'null' %>;
 		</script>
 	</head>
 	<body class="<%= 'pop' if params[:popup] %>">
@@ -52,36 +61,35 @@
 		<% unless @notabs or params[:popup] %>
 			<div id="tabs" class="tabs">
 				<% if @current_user.only_vacancy %>
-					<%= tab 'Req. Fill Vac.', {:controller => :vacancy, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'vacancy' ? ' active' : ''), :title => 'Requests to Fill Vacancies'} %>
+					<%= tab 'Req. Fill Vac.', {:controller => :vacancy, :sc => nil}, {}, {:class => 'tab-form' + (sc == 'vacancy' ? ' active' : ''), :title => 'Requests to Fill Vacancies'} %>
 				<% elsif @current_user.agency_level? %>
 					<%= tab 'Home', {:controller => :agencies, :sc => nil, :sid => nil, :id => nil}, {}, {:class => 'tab-agencies', :title => 'Agency Portal Home'} %>
-					<%= tab 'Employees', {:controller => :employee, :sc => nil}, {}, {:class => 'tab-employee' + (params[:sc] == 'employee' || params[:controller] == 'pay_cert' || params[:sc] == 'pay_cert' || params[:controller] == 'form_change' || params[:sc] == 'form_change' || params[:controller] == 'form_hire' || params[:sc] == 'form_hire' || params[:controller] == 'form_title' || params[:sc] == 'form_title' || params[:controller] == 'vacancy' || params[:sc] == 'vacancy' ? ' active' : ''), :title => 'Employees + History'} %>					
+					<%= tab 'Employees', {:controller => :employee, :sc => nil}, {}, {:class => 'tab-employee' + (sc == 'employee' || c == 'pay_cert' || sc == 'pay_cert' || c == 'form_change' || sc == 'form_change' || c == 'form_hire' || sc == 'form_hire' || c == 'form_title' || sc == 'form_title' || c == 'vacancy' || sc == 'vacancy' ? ' active' : ''), :title => 'Employees + History'} %>					
 					<% if @current_user.level != 'agency-employees' %>
 						<% if @current_user.agency && @current_user.agency.show_web_posts %>
-							<%= tab 'Web Posts', {:controller => :web_exam, :sc => nil}, {}, {:class => 'tab-web_exam' + (params[:sc] == 'web_exam' ? ' active' : ''), :title => 'Exams/Vacancies Posted to Website'} %>
+							<%= tab 'Web Posts', {:controller => :web_exam, :sc => nil}, {}, {:class => 'tab-web_exam' + (sc == 'web_exam' ? ' active' : ''), :title => 'Exams/Vacancies Posted to Website'} %>
 						<% end %>
 						<% if @current_user.show_pref_lists %>
-							<%= tab 'Pref. Lists', {:controller => :preferred_list, :sc => nil}, {}, {:class => 'tab-preferred' + (params[:sc] == 'preferred_list' || params[:controller] == 'preferred_list' ? ' active' : ''), :title => 'Preferred Lists'} %>
+							<%= tab 'Pref. Lists', {:controller => :preferred_list, :sc => nil}, {}, {:class => 'tab-preferred' + (sc == 'preferred_list' || c == 'preferred_list' ? ' active' : ''), :title => 'Preferred Lists'} %>
 						<% end %>
 						<% if @current_user.show_cert_lists %>
-							<%= tab 'Cert. Lists', {:controller => :cert, :sc => nil}, {}, {:class => 'tab-cert' + (params[:sc] == 'cert' ? ' active' : ''), :title => 'Certified Eligible Lists'} %>												
+							<%= tab 'Cert. Lists', {:controller => :cert, :sc => nil}, {}, {:class => 'tab-cert' + (sc == 'cert' ? ' active' : ''), :title => 'Certified Eligible Lists'} %>												
 						<% end %>
 					<% end %>
 					<% if @current_user.allow_applicants %>
-						<%= tab 'Applicants', {:controller => :person, :sc => nil}, {}, {:class => 'tab-person' + (params[:sc] == 'person' ? ' active' : ''), :title => 'Applicants'} %>				
+						<%= tab 'Applicants', {:controller => :person, :sc => nil}, {}, {:class => 'tab-person' + (sc == 'person' ? ' active' : ''), :title => 'Applicants'} %>				
 					<% end %>
-					<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (params[:sc] == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>				
+					<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (sc == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>				
 				<% else %>
-					<%= tab 'Employees', {:controller => :employee, :sc => nil}, {}, {:class => 'tab-employee' + (params[:sc] == 'employee' || params[:controller] == 'pay_cert' || params[:sc] == 'pay_cert' || params[:controller] == 'form_change' || params[:sc] == 'form_change' || params[:controller] == 'form_hire' || params[:sc] == 'form_hire' || params[:controller] == 'form_title' || params[:sc] == 'form_title' || params[:controller] == 'vacancy' || params[:sc] == 'vacancy' ? ' active' : ''), :title => 'Employees + History'} %>
-					<%= tab 'Exams/Lists', {:controller => :exam, :sc => nil}, {}, {:class => 'tab-exam' + (params[:sc] == 'exam' || params[:controller] == 'provisional' || params[:sc] == 'provisional' || params[:controller] == 'preferred_list' ? ' active' : ''), :title => 'Exams + Eligible Lists'} %>				
-					<%= tab 'Certifications', {:controller => :cert, :sc => nil}, {}, {:class => 'tab-cert' + (params[:sc] == 'cert' ? ' active' : ''), :title => 'Certified Eligible Lists'} %>								
-					<%= tab 'Web Posts', {:controller => :web_exam, :sc => nil}, {}, {:class => 'tab-web_exam' + (params[:sc] == 'web_exam' ? ' active' : ''), :title => 'Exams/Vacancies Posted to Website'} %>
-					<%= tab 'Applications', {:controller => :applicant, :sc => nil}, {}, {:class => 'tab-applicant' + (params[:sc] == 'applicant' ? ' active' : ''), :title => 'All Submitted Applications'} %>							
-					<%= tab 'Applicants', {:controller => :person, :sc => nil}, {}, {:class => 'tab-person' + (params[:sc] == 'person' ? ' active' : ''), :title => 'Applicants'} %>				
-					<%= tab 'Delivery', {:controller => :delivery, :sc => nil}, {}, {:class => 'tab-delivery' + (params[:sc] == 'delivery' ? ' active' : ''), :title => 'Deliver Letters to Applicants'} %>				
-					<%= tab 'Agencies', {:controller => :agency, :sc => nil}, {}, {:class => 'tab-person' + (params[:sc] == 'agency' ? ' active' : ''), :title => 'Agency Maintenance'} %>
-					<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (params[:sc] == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>
-					<% is_misc = %w{cert_code letter job exam_site exam_site_group perf_test department division town village county user fire_district school_district empl_action_type db_change disapproval top_text personnel_area personnel_division}.include?(params[:controller]) %>
+					<%= tab 'Employees', {:controller => :employee, :sc => nil}, {}, {:class => 'tab-employee' + (sc == 'employee' || c == 'pay_cert' || sc == 'pay_cert' || c == 'form_change' || sc == 'form_change' || c == 'form_hire' || sc == 'form_hire' || c == 'form_title' || sc == 'form_title' || c == 'vacancy' || sc == 'vacancy' ? ' active' : ''), :title => 'Employees + History'} %>
+					<%= tab 'Exams/Lists', {:controller => :exam, :sc => nil}, {}, {:class => 'tab-exam' + (sc == 'exam' || c == 'provisional' || sc == 'provisional' || c == 'preferred_list' ? ' active' : ''), :title => 'Exams + Eligible Lists'} %>				
+					<%= tab 'Certifications', {:controller => :cert, :sc => nil}, {}, {:class => 'tab-cert' + (sc == 'cert' ? ' active' : ''), :title => 'Certified Eligible Lists'} %>								
+					<%= tab 'Web Posts', {:controller => :web_exam, :sc => nil}, {}, {:class => 'tab-web_exam' + (sc == 'web_exam' ? ' active' : ''), :title => 'Exams/Vacancies Posted to Website'} %>
+					<%= tab 'Applications', {:controller => :applicant, :sc => nil}, {}, {:class => 'tab-applicant' + (sc == 'applicant' ? ' active' : ''), :title => 'All Submitted Applications'} %>							
+					<%= tab 'Applicants', {:controller => :person, :sc => nil}, {}, {:class => 'tab-person' + (sc == 'person' ? ' active' : ''), :title => 'Applicants'} %>				
+					<%= tab 'Delivery', {:controller => :delivery, :sc => nil}, {}, {:class => 'tab-delivery' + (sc == 'delivery' ? ' active' : ''), :title => 'Deliver Letters to Applicants'} %>				
+					<%= tab 'Agencies', {:controller => :agency, :sc => nil}, {}, {:class => 'tab-agency' + (is_agency ? ' active' : ''), :title => 'Agency/Departments & Contacts'} %>
+					<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (sc == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>
 					<%= tab 'Misc.', {:controller => :job, :sc => nil}, {}, {:class => 'tab-misc' + (is_misc ? ' active' : ''), :title => 'Manage Other Tables (Users, Agencies, etc.)'} %>
 				<% end %>
 				<div class="right tabs-menu">
@@ -103,29 +111,38 @@
 			</div>			
 			<div style="height: 0px; overflow: hidden;">&nbsp;</div> <!-- FF hack? -->
 			
+			<% if is_agency %>
+				<div class="tabs">
+					<%= tab 'Agencies', {:controller => :agency, :sc => nil}, {}, {:class => 'tab-agency' + (sc == 'agency' ? ' active' : '')} %>
+					<%= tab 'All Contacts', {:controller => :contact, :sc => nil}, {}, {:class => 'tab-contact' + (sc == 'contact' ? ' active' : ''), :inactive => sc && sc != 'contact'} %>
+					<%= tab 'Departments', {:controller => :department, :sc => nil}, {}, {:class => 'tab-department' + (sc == 'department' ? ' active' : '')} %>
+					<div class="clear"></div>
+				</div>
+			<% end %>
+			
 			<% if is_misc %>
 				<div class="tabs" id="misc-tabs">
-					<%= tab 'Letter', {:controller => :letter, :sc => nil}, {}, {:class => 'tab-letter' + (params[:sc] == 'letter' ? ' active' : ''), :title => 'Letter Templates'} %>
-					<%= tab 'Title', {:controller => :job, :sc => nil}, {}, {:class => 'tab-job' + (params[:sc] == 'job' ? ' active' : ''), :title => 'Job Title Definitions'} %>
-					<%= tab 'Ex Site', {:controller => :exam_site, :sc => nil}, {}, {:class => 'tab-exam_site' + (params[:sc] == 'exam_site' ? ' active' : ''), :title => 'Exam Sites'} %>
-					<%= tab 'Ex Loc', {:controller => :exam_site_group, :sc => nil}, {}, {:class => 'tab-exam_site' + (params[:sc] == 'exam_site_group' ? ' active' : ''), :title => 'Exam Locations'} %>
-					<%= tab 'Dept', {:controller => :department, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'department' ? ' active' : ''), :title => 'Departments'} %>
-					<%= tab 'Div', {:controller => :division, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'division' ? ' active' : ''), :title => 'Divisions'} %>
-					<%= tab 'Town', {:controller => :town, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'town' ? ' active' : ''), :title => 'Towns'} %>				
-					<%= tab 'Vil', {:controller => :village, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'village' ? ' active' : ''), :title => 'Villages'} %>				
-					<%= tab 'Cnty', {:controller => :county, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'county' ? ' active' : ''), :title => 'Counties'} %>				
-					<%= tab 'Fire', {:controller => :fire_district, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'fire_district' ? ' active' : ''), :title => 'Fire Districts'} %>				
-					<%= tab 'Schl', {:controller => :school_district, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'school_distrinct' ? ' active' : ''), :title => 'School Districts'} %>				
-					<%= tab 'Perf Test', {:controller => :perf_test, :sc => nil}, {}, {:class => 'tab-perf_test' + (params[:sc] == 'perf_test' ? ' active' : ''), :title => 'Performance Tests'} %>
-					<%= tab 'Hist Acts', {:controller => :empl_action_type, :sc => nil}, {}, {:class => 'tab-empl_action_type' + (params[:sc] == 'empl_action' ? ' active' : ''), :title => 'History Actions'} %>
-					<%= tab 'Dispvl', {:controller => :disapproval, :sc => nil}, {}, {:class => 'tab-disapproval' + (params[:sc] == 'disapproval' ? ' active' : ''), :title => 'Disapproval Reasons'} %>
-					<%= tab 'Cert Act', {:controller => :cert_code, :sc => nil}, {}, {:class => 'tab-cert_code' + (params[:sc] == 'cert_code' ? ' active' : ''), :title => 'Certified List Actions'} %>
-					<%= tab 'Top Txt', {:controller => :top_text, :sc => nil}, {}, {:class => 'tab-top_text' + (params[:sc] == 'top_text' ? ' active' : ''), :title => 'Text that displays at top of window in various parts of application.'} %>									
-					<%= tab 'P Area', {:controller => :personnel_area, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'personnel_area' ? ' active' : ''), :title => 'Personnel Areas - assigned to applicants and used to specify Formatta email recipients.'} %>									
-					<%= tab 'P Div', {:controller => :personnel_division, :sc => nil}, {}, {:class => 'tab-misc2' + (params[:sc] == 'personnel_division' ? ' active' : ''), :title => 'Personnel Divisions - assigned to applicants and used to specify Formatta email recipients.'} %>									
+					<%= tab 'Letter', {:controller => :letter, :sc => nil}, {}, {:class => 'tab-letter' + (sc == 'letter' ? ' active' : ''), :title => 'Letter Templates'} %>
+					<%= tab 'Title', {:controller => :job, :sc => nil}, {}, {:class => 'tab-job' + (sc == 'job' ? ' active' : ''), :title => 'Job Title Definitions'} %>
+					<%= tab 'Ex Site', {:controller => :exam_site, :sc => nil}, {}, {:class => 'tab-exam_site' + (sc == 'exam_site' ? ' active' : ''), :title => 'Exam Sites'} %>
+					<%= tab 'Ex Loc', {:controller => :exam_site_group, :sc => nil}, {}, {:class => 'tab-exam_site' + (sc == 'exam_site_group' ? ' active' : ''), :title => 'Exam Locations'} %>
+					
+					<%= tab 'Div', {:controller => :division, :sc => nil}, {}, {:class => 'tab-misc2' + (sc == 'division' ? ' active' : ''), :title => 'Divisions'} %>
+					<%= tab 'Town', {:controller => :town, :sc => nil}, {}, {:class => 'tab-misc2' + (sc == 'town' ? ' active' : ''), :title => 'Towns'} %>				
+					<%= tab 'Vil', {:controller => :village, :sc => nil}, {}, {:class => 'tab-misc2' + (sc == 'village' ? ' active' : ''), :title => 'Villages'} %>				
+					<%= tab 'Cnty', {:controller => :county, :sc => nil}, {}, {:class => 'tab-misc2' + (sc == 'county' ? ' active' : ''), :title => 'Counties'} %>				
+					<%= tab 'Fire', {:controller => :fire_district, :sc => nil}, {}, {:class => 'tab-misc2' + (sc == 'fire_district' ? ' active' : ''), :title => 'Fire Districts'} %>				
+					<%= tab 'Schl', {:controller => :school_district, :sc => nil}, {}, {:class => 'tab-misc2' + (sc == 'school_distrinct' ? ' active' : ''), :title => 'School Districts'} %>				
+					<%= tab 'Perf Test', {:controller => :perf_test, :sc => nil}, {}, {:class => 'tab-perf_test' + (sc == 'perf_test' ? ' active' : ''), :title => 'Performance Tests'} %>
+					<%= tab 'Hist Acts', {:controller => :empl_action_type, :sc => nil}, {}, {:class => 'tab-empl_action_type' + (sc == 'empl_action' ? ' active' : ''), :title => 'History Actions'} %>
+					<%= tab 'Dispvl', {:controller => :disapproval, :sc => nil}, {}, {:class => 'tab-disapproval' + (sc == 'disapproval' ? ' active' : ''), :title => 'Disapproval Reasons'} %>
+					<%= tab 'Cert Act', {:controller => :cert_code, :sc => nil}, {}, {:class => 'tab-cert_code' + (sc == 'cert_code' ? ' active' : ''), :title => 'Certified List Actions'} %>
+					<%= tab 'Top Txt', {:controller => :top_text, :sc => nil}, {}, {:class => 'tab-top_text' + (sc == 'top_text' ? ' active' : ''), :title => 'Text that displays at top of window in various parts of application.'} %>									
+					<%= tab 'P Area', {:controller => :personnel_area, :sc => nil}, {}, {:class => 'tab-misc2' + (sc == 'personnel_area' ? ' active' : ''), :title => 'Personnel Areas - assigned to applicants and used to specify Formatta email recipients.'} %>									
+					<%= tab 'P Div', {:controller => :personnel_division, :sc => nil}, {}, {:class => 'tab-misc2' + (sc == 'personnel_division' ? ' active' : ''), :title => 'Personnel Divisions - assigned to applicants and used to specify Formatta email recipients.'} %>									
 					<% if @current_user.admin_level? %>
-						<%= tab 'Log', {:controller => :db_change, :sc => nil}, {}, {:class => 'tab-change_log' + (params[:sc] == 'db_change' ? ' active' : ''), :title => 'Change Log'} %>
-						<%= tab 'Users', {:controller => :user, :sc => nil}, {}, {:class => 'tab-town' + (params[:sc] == 'town' ? ' active' : ''), :title => 'Personnel Users'} %>									
+						<%= tab 'Log', {:controller => :db_change, :sc => nil}, {}, {:class => 'tab-change_log' + (sc == 'db_change' ? ' active' : ''), :title => 'Change Log'} %>
+						<%= tab 'Users', {:controller => :user, :sc => nil}, {}, {:class => 'tab-town' + (sc == 'town' ? ' active' : ''), :title => 'Personnel Users'} %>									
 					<% end %>
 					<div class="clear"></div>
 				</div>

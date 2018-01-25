@@ -135,7 +135,11 @@ a img { border: none; }
 
 .tabs a.tab-category span { background-image: url(../images/icons/tag_blue.png); }
 .tabs a.tab-letter span { background-image: url(../images/icons/email.png); }
+
 .tabs a.tab-agency span { background-image: url(../images/icons/building.png); }
+.tabs a.tab-department span { background-image: url(../images/icons/house.png); }
+.tabs a.tab-contact span { background-image: url(../images/icons/group.png); }
+
 .tabs a.tab-list span { background-image: url(../images/icons/script.png); }
 
 .tabs a.tab-new_list span { background-image: url(../images/icons/script_add.png); }
@@ -315,6 +319,7 @@ body.pop .viewer { margin: 5px 0; }
 .viewer table { border-collapse: collapse; }
 .viewer td { padding: 0 20px 2px 5px; border-left: 1px solid #888; vertical-align: top; }
 .viewer td label { display: block; font-size: 9px; color: #888; }
+.viewer td td { border: none; }
 
 div.grid { margin: 5px; }
 div.grid table { border-collapse: collapse; }

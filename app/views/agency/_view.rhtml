@@ -71,54 +71,13 @@
       <tr>
         <td>
           <label>Notes:</label>
-          <%= h o.notes %>
-        </td>
+          <%= nl2br_h o.notes %>
+        &nbsp;</td>
 
       </tr>
     </table>
   </div>
-  <% o.contacts.each { |d| %>
-      <div class="header">Contact</div>
-      <div class="row">
-        <table>
-          <tr>
-            <td>
-              <label>ID:</label>
-              <%= d.id %><% if d.primary %><b>(Primary)</b><% end %>
-            </td>
-            <td>
-              <label>Name:</label>
-              <%= d.lastname %>, <%=d.firstname%>
-            </td>
-            <td>
-              <label>Title:</label>
-              <%= d.title %>
-            </td>
-            <td>
-              <label>Email:</label>
-              <%= d.email %>
-            &nbsp;</td>
-          </tr>
-        </table>
-      </div>
-      <div class="row">
-        <table>
-          <tr>
-
-            <td>
-              <label>Phone:</label>
-              <%= d.phone %>
-            </td>
-            <td>
-              <label>Fax:</label>
-              <%= d.fax %>
-            </td>
-						<td>
-							<label>Department</label>
-							<%= d.department.name if d.department %>
-						&nbsp;</td>
-
-          </tr>
-        </table>
-      </div>  <% } %>
 </div>
+<% o.contacts.each { |c| %>
+	<%= partial 'contact/view', :o => c %>
+<% } %>

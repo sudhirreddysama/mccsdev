@@ -1,27 +1,23 @@
+<style type="text/css">
+	tr.contact-primary td { font-weight: bold; }
+</style>
 <table class="dg">
   <thead>
   <tr>
     <td width="1%">Actions</td>
-    <th width="1%">ID</th>
-    <th width="30%">Name</th>
-    <th width="30%">Title</th>
-    <th width="1%">Email</th>
-    <th width="1%">Phone</th>
-    <th width="1%">Fax</th>
-    <th width="30%">Department</th>
+    <td width="1%">ID</td>
+    <th width="33%">Name (* Primary)<br>Title</th>
+    <th width="33%">Agency<br>Department</th>
+    <th width="33%">Email<br>Phone</th>
   </tr>
   </thead>
   <tbody id="objs">
   <% @objs.each { |o| %>
-      <tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
-        <td class="nobr"><%= partial 'actions', :o => o %></td>
-        <td><%= o.id %><% if o.primary %><b>(P)</b><% end %></td>
-        <td><%= link_to "#{o.lastname}, #{o.firstname}", :action => :view, :id => o.id %></td>
-        <td><%= o.title %></td>
-        <td class="nobr"><%= o.email %></td>
-        <td class="nobr"><%= o.phone %></td>
-        <td class="nobr"><%= o.fax %></td>
-				<td><%= o.department.name if o.department %></td>
+      <tr class="<%= cycle 'odd', 'even' %><% if o.primary %> contact-primary<% end %>" id="obj_<%= o.id %>">
+        <td class="nobr"><%= partial 'actions', :o => o %></td><td><%= o.id %></td>
+        <td><%= link_to "#{o.primary ? '* ' : ''}#{o.lastname}, #{o.firstname}", :action => :view, :id => o.id %><br><%= o.title %></td>
+				<td><%= o.agency.name if o.agency %>&nbsp;<br><%= o.department.name if o.department %></td>
+        <td><%= o.email %><br><%= o.phone %></td>
       </tr>
   <% } %>
   </tbody>

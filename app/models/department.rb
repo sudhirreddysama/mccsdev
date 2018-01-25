@@ -7,6 +7,7 @@ class Department < ActiveRecord::Base
 	belongs_to :omb_liaison, :class_name => 'User', :foreign_key => 'omb_liaison_id'
 	
 	has_many :divisions
+	has_many :contacts
 	
 	validates_presence_of :name
 	

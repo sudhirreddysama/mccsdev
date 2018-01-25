@@ -1,3 +1,6 @@
+<%= f.tr_select :agency_id, Agency.find(:all, {
+	:order => 'agencies.name'
+}).collect { |a| [a.name, a.id] }, :label => 'Agency', :include_blank => true %>
 <%= f.tr_select :department_id, Department.find(:all, {
 	:order => 'departments.name'
 }).collect { |a| [a.name, a.id] }, :label => 'Department', :include_blank => true %>

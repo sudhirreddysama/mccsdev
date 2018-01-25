@@ -18,6 +18,14 @@ class Agency < ActiveRecord::Base
 
 	include DbChangeHooks
 	
+	def full_address j = "\n"
+		[address1.to_s.strip, address2.to_s.strip, csz].reject(&:blank?).join(j)
+	end
+	
+	def csz
+		[[city.to_s.strip, state.to_s.strip].reject(&:blank?).join(', '), zip.to_s.strip].reject(&:blank?).join(' ')
+	end
+	
 	def self.get_liaison a, d
 		if a.nil? && d
 			return d.liaision

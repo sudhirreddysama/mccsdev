@@ -4,7 +4,8 @@
 		<td id="select_via">
 			<label><%= f.radio_button :select_via, 'status' %> Status</label>&nbsp;&nbsp;&nbsp;
 			<label><%= f.radio_button :select_via, 'disapproval' %> Disapproval</label>&nbsp;&nbsp;&nbsp;
-			<label><%= f.radio_button :select_via, 'agency' %> Agency</label>
+			<label><%= f.radio_button :select_via, 'agency' %> Candidate Agency</label>&nbsp;&nbsp;&nbsp;
+			<label><%= f.radio_button :select_via, 'contact' %> Agency Contact</label>
 		</td>
 	</tr>
 	<tr id="select-status" class="selects">
@@ -29,21 +30,34 @@
 			<div class="req">NOTE: Selecting by agency will ONLY select ACTIVE candidates.</div>
 		</td>
 	</tr>
-	<tr>
+	<tr id="select-contact" class="selects">
+		<th>Contacts:</th>
+		<td>
+			<%= hidden_field_tag 'obj[save_new_contact_ids]', 1  %>
+			<% if @sobj.respond_to?(:agency) %>
+				<%= f.select :new_contact_ids, @sobj.agency.contacts.find(:all, :order => 'firstname, lastname').collect { |c| [c.name, c.id] }, {}, {:multiple => true, :style => 'width: 300px; height: 100px;'} %>		
+			<% else %>
+				<%= select_tag 'obj[new_contact_ids]', option_groups_from_collection_for_select(
+					Agency.find(:all, :include => :contacts, :conditions => 'contacts.id is not null'), :contacts, :name, :id, :name, @obj.new_contact_ids
+				), {:multiple => true, :style => 'width: 300px; height: 100px;'} %>
+			<% end %>
+		</td>
+	</tr>	
+	<tr class="applicant-select">
 		<th>Score Range:</th>
 		<td>
 			From: <%= f.text_field :min_score, :size => 4 %>
 			To: <%= f.text_field :max_score, :size => 4 %> (select by status/disapproval/agency FIRST)
 		</td>
 	</tr>
-	<tr>
+	<tr class="applicant-select">
 		<th></th>
 		<td>						
 			Select from the statuses/disapprovals above to auto select the applicants below.<br />
 			Use shift/ctrl click to select multiple.
 		</td>
 	</tr>
-	<tr>
+	<tr class="applicant-select">
 		<th>Recipients:</th>
 		<td>
 			<%= hidden_field_tag 'obj[save_new_applicant_ids]', 1  %>
@@ -176,6 +190,7 @@
 				$('.selects').hide();
 				var via = $('#select_via input:checked').val();
 				$('#select-' + via).show();
+				$('.applicant-select').toggle(via != 'contact');
 			}
 			toggle_selects();
 			

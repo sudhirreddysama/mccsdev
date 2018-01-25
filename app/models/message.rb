@@ -6,6 +6,7 @@ class Message < ActiveRecord::Base
 	belongs_to :delivery
 	belongs_to :user
 	belongs_to :bulk_message
+	belongs_to :contact
 	
 	validates_presence_of :subject, :body, :public_name
 	

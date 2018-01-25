@@ -13,6 +13,7 @@ class DeliveryController < CrudController
 			params[:user_ids] ||= []
 		end
 		cond = ['deliveries.id is null' + ((request.post? && !preview) ? ' and (deliver_after is null or deliver_after <= now())' : '')]
+		cond << 'messages.contact_id is null'
 		cond << 'messages.user_id in (%s)' % params[:user_ids].map(&:to_i).join(',') unless params[:user_ids].blank?
 		@messages = Message.find(:all, {
 			:include => [:delivery, :applicant, :person],

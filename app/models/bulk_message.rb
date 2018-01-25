@@ -14,6 +14,7 @@ class BulkMessage < ActiveRecord::Base
 	has_and_belongs_to_many :disapprovals
 	has_and_belongs_to_many :agencies
 	has_and_belongs_to_many :applicants
+	has_and_belongs_to_many :contacts
 	
 	def label; subject_was; end
 	
@@ -56,13 +57,22 @@ class BulkMessage < ActiveRecord::Base
 		@new_applicant_ids = v.map(&:to_i)
 	end
 	
+	def new_contact_ids
+		@new_contact_ids ||= contact_ids
+	end
+	
+	def new_contact_ids= v
+		@new_contact_ids = v.map(&:to_i)
+	end
+	
 	attr :save_new_app_status_ids, true
 	attr :save_new_disapproval_ids, true
 	attr :save_new_agency_ids, true
 	attr :save_new_applicant_ids, true
+	attr :save_new_contact_ids, true
 
 	def validate
-		if @save_new_applicant_ids && @new_applicant_ids.blank?
+		if @save_new_applicant_ids && @new_applicant_ids.blank? && @new_contact_ids.blank?
 			errors.add_to_base 'You must select at least one recipient.'
 		end
 	end
@@ -75,30 +85,43 @@ class BulkMessage < ActiveRecord::Base
 		self.disapproval_ids = @new_disapproval_ids || [] if @save_new_disapproval_ids
 		self.applicant_ids = @new_applicant_ids || [] if @save_new_applicant_ids
 		self.agency_ids = @new_agency_ids || [] if @save_new_agency_ids
+		self.contact_ids = @new_contact_ids || [] if @save_new_contact_ids
 		
 		o = bulk_object
-		
 		cond = []
-		cond << 'applicants.id in (%s)' % applicant_ids.join(',') unless applicant_ids.empty?
-		
-		apps = o.applicants.find(:all, :conditions => cond.join(' and '))
-		update_attribute :message_count, apps.size
 		messages.clear
-		apps.each { |a|
-			m = messages.create({
-				:applicant => a,
-				:person => a.person,
-				:letter_id => letter_id,
-				:subject => subject,
-				:public_name => public_name,
-				:body => Letter.apply(body, {:applicant => a, :person => a.person}),
-				:email_from => email_from,
-				#:hr_letterhead => hr_letterhead,
-				:letterhead => letterhead,
-				:deliver_after => deliver_after,
-				:user_id => user_id
-			})
+		attr = {
+			:letter_id => letter_id,
+			:subject => subject,
+			:public_name => public_name,
+			:email_from => email_from,
+			#:hr_letterhead => hr_letterhead,
+			:letterhead => letterhead,
+			:deliver_after => deliver_after,
+			:user_id => user_id
 		}
+		if select_via == 'contact'
+			cond << 'contacts.id in (%s)' % contact_ids.join(',') unless contact_ids.empty?
+			conts = Contact.find(:all, :conditions => cond.join(' and '))
+			update_attribute :message_count, conts.size
+			conts.each { |c|
+				m = messages.create(attr + {
+					:contact => c,
+					:body => Letter.apply(body, {:contact => c}),
+				})
+			}
+		else
+			cond << 'applicants.id in (%s)' % applicant_ids.join(',') unless applicant_ids.empty?		
+			apps = o.applicants.find(:all, :conditions => cond.join(' and '))
+			update_attribute :message_count, apps.size
+			apps.each { |a|
+				m = messages.create(attr + {
+					:applicant => a,
+					:person => a.person,
+					:body => Letter.apply(body, {:applicant => a, :person => a.person}),
+				})
+			}
+		end
 	end
 	after_save :handle_after_save
 

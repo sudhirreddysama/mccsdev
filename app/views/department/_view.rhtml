@@ -34,3 +34,6 @@
 		</table>
 	</div>
 </div>
+<% o.contacts.each { |c| %>
+	<%= partial 'contact/view', :o => c %>
+<% } %>

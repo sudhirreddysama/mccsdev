@@ -19,7 +19,7 @@ addtest = request.url
 @allow_add = (@current_user.agency_level? || @current_user.liaison_level?) && addtest.include?('web_exam') && addtest.include?('document')
 
 if @current_user.liaison_level?
-	if(params[:sc] == 'agency') # && @sobj && @sobj.liaison_id == @current_user.id
+	if(params[:sc] == 'agency' || params[:sc] == 'department') # && @sobj && @sobj.liaison_id == @current_user.id
 		@allow_edit = true
 		@no_create = true
 	end
@@ -38,10 +38,10 @@ end
 			<% if @current_user.staff_level? || @allow_liaison || @allow_agency %>
 				<%= tab 'New', :controller => params[:sc], :action => :new, :sc => nil %>
 			<% end %>
-			<%= partial "#{params[:sc]}/nav1" if File.exists? "app/views/#{params[:sc]}/_nav1.rhtml" %>
 			<% unless params[:popup] %>
 				<%= tab truncate(@sobj.label.to_s), {:controller => params[:sc], :action => :view, :id => @sobj.id, :sc => nil}, {}, :class => 'tab-obj active' %>
 			<% end %>
+			<%= partial "#{params[:sc]}/nav1" if File.exists? "app/views/#{params[:sc]}/_nav1.rhtml" %>
 			<div class="clear"></div>
 		</div>
 		<div class="tabs">
