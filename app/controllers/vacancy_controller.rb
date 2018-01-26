@@ -5,6 +5,44 @@ class VacancyController < CrudController
 	end
 	before_filter :expire_vacancy_requests
 	
+	def notify
+		render(:nothing => true) && return if !@current_user.admin_level?
+		if request.post?
+			@email = params.email
+			@errors = []
+			@errors << 'Subject is required' if @email.subject.blank?
+			@errors << 'Body is required' if @email.body.blank?
+			@errors << 'From is required' if @email.from.blank?
+			recipients = @email.recipients.to_s.split(/[\r,\n]/).reject(&:blank?)
+			@errors << 'Recipients is required' if recipients.empty?
+			if @errors.empty?
+				recipients.each { |to|
+					Notifier.deliver_custom_email to, @email.subject, @email.from, @email.body
+				}
+				flash[:notice] = 'Email has been sent.'
+				redirect_to
+			end
+		else
+			emails = []
+			DB.query('select u.email from users u
+				left join vacancies v on u.id in (v.submitter_id, v.user_id)
+				where v.id is not null or u.only_vacancy = 1 or u.allow_vacancy_omb = 1 or u.allow_vacancy_admin = 1 or u.vacancy_emails = 1
+				group by u.email'
+			).each_hash { |h|
+				emails << h.email
+			}
+			logger.info emails
+			
+			tt = TopText.find_by_path('/vacancy%')
+			@email = {
+				:subject => tt ? tt.name : 'Request to Fill Vacancy Information',
+				:from => @current_user.email,
+				:body => tt ? tt.text : '',
+				:recipients => emails.join("\r")
+			}
+		end
+	end
+	
 	def index
 		if @current_user.agency_level?
 			@filter = get_filter({

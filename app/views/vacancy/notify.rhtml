@@ -1,0 +1,10 @@
+<%= partial 'nav' %>
+<%= partial 'errors', :errors => @errors %>
+<p class="marg">The default recipient list includes all users who have created or approved a request to fill vacancy, and all users who have either the &quot;RTFV OMB&quot;, &quot;RTFV Admin&quot;, &quot;Only RTFV&quot;, or &quot;RTFV Emails&quot; permissions.</p>
+<% table_form_for(:email) { |f| %>
+	<%= f.tr_text_area :recipients, :label => 'Recipients', :help => 'Enter emails, one per line.', :req => true %>
+	<%= f.tr_text_field :from, :label => 'From', :req => true %>
+	<%= f.tr_text_field :subject, :label => 'Subject', :req => true %>
+	<%= f.tr_text_area :body, :label => 'Body', :req => true %>
+	<%= f.tr_submit 'Send Email Notice' %>
+<% } %>

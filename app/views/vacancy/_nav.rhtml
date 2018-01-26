@@ -11,6 +11,9 @@ allow_new = do_anything || @current_user.allow_vacancy_admin || @current_user.ag
 <div class="tabs">
 	<%= tab 'List', :controller => :vacancy, :action => :index, :id => nil %>	
 	<%= tab 'New', :controller => :vacancy, :action => :new if allow_new %>
+	<% if @current_user.admin_level? %>
+		<%= tab 'Email Vacancy Users', {:controller => :vacancy, :action => :notify, :id => nil}, {}, :class => 'tab-deliver_email' %>
+	<% end %>
 	<%= tab truncate(@obj.label), {:controller => :vacancy}, {:action => :view, :id => @obj.id}, {:class => 'tab-obj'} if @obj and !@obj.new_record? %>
 	<div class="clear"></div>
 </div>
