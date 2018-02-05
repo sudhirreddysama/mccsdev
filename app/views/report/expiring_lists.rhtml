@@ -33,6 +33,7 @@
 				<th class="r">Inactive</th>
 				<th class="r">Disapproved</th>
 				<th class="r">Failed</th>
+				<th class="r">FTA</th>
 			</tr>
 			<% @objs.each_hash { |o| %>
 				<tr>
@@ -47,6 +48,7 @@
 					<td class="r"><%= nwp o.no_inactive %></td>
 					<td class="r"><%= nwp o.no_disapproved %></td>
 					<td class="r"><%= nwp o.no_failed %></td>
+					<td class="r"><%= nwp o.no_fta %></td>
 				</tr>
 			<% } %>
 		</table>
