@@ -33,18 +33,22 @@ class ReportController < ApplicationController
 		
 		@from_date = Date.parse(params[:from_date])
 		@to_date = Date.parse(params[:to_date])
+		@date = params[:date]
 		
 		@objs = DB.query(
 			'select 
 				e.*,
 				j.name job_name,
 				sum((s.eligible = "A" or s.eligible = "I") and (a.perf_test_status is null or a.perf_test_status != "F")) no_on_list,
-				sum(s.eligible = "I") no_inactive
+				sum(s.eligible = "I") no_inactive,
+				sum(s.code = "D" or a.approved = "N") no_disapproved,
+				sum(s.code = "F" or a.perf_test_status = "F") no_failed,
+				sum(s.code = "-") no_fta
 			from exams e
 			left join jobs j on j.id = e.job_id
 			left join applicants a on a.exam_id = e.id
 			left join app_statuses s on s.id = a.app_status_id
-			where e.valid_until between "%s" and "%s"
+			where e.' + (@date == 'establish' ? 'established_date' : 'valid_until') + ' between "%s" and "%s"
 			group by e.id
 			order by e.valid_until',
 			@from_date.to_s,
@@ -54,7 +58,7 @@ class ReportController < ApplicationController
 		if params[:export]
 			book = Spreadsheet::Workbook.new
 			@sheet = book.create_worksheet
-			@export_fields = %w{exam_date title exam_no type cr established expires no_on_list no_inactive}
+			@export_fields = %w{exam_date title exam_no type cr established expires no_on_list no_inactive no_disapproved no_failed no_fta}
 			@sheet.row(0).concat(@export_fields)
 			i = 1
 			@objs.each_hash { |o|
@@ -67,7 +71,10 @@ class ReportController < ApplicationController
 					(Date.parse(o.established_date).d0? rescue nil),
 					(Date.parse(o.valid_until).d0? rescue nil),
 					o.no_on_list,
-					o.no_inactive
+					o.no_inactive,
+					o.no_disapproved,
+					o.no_failed,
+					o.no_fta
 				])
 				i += 1
 			}

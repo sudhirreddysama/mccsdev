@@ -25,15 +25,24 @@ end
 	
 		<%= form_tag({:action => 'expiring_lists'}, :target => '_blank') %>
 			<fieldset class="coolfieldset">
-				<legend>Expiring Eligible Lists</legend>
+				<legend>Established/Expiring Eligible Lists</legend>
 				<div class="fs">
 					<table class="form">
-						<th>Expiring From Date:</th>
-						<td><%= calendar_date_select_tag :from_date %></td>
-						<th>To Date:</th>
-						<td><%= calendar_date_select_tag :to_date %></td>
-						<td><%= submit_tag 'Run Report' %></td>
-						<td><%= submit_tag 'Export to Excel', :name => 'export' %></td>
+						<tr>
+							<th>Date:</th>
+							<td colspan="5">
+								<label><%= radio_button_tag 'date', 'establish', false %> Established</label>
+								<label><%= radio_button_tag 'date', 'expire', true %> Expiring</label>
+							</td>
+						</tr>
+						<tr>
+							<th>From:</th>
+							<td><%= calendar_date_select_tag :from_date %></td>
+							<th>To:</th>
+							<td><%= calendar_date_select_tag :to_date %></td>
+							<td><%= submit_tag 'Run Report' %></td>
+							<td><%= submit_tag 'Export to Excel', :name => 'export' %></td>
+						</tr>
 					</table>
 				</div>
 			</fieldset>

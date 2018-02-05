@@ -1,3 +1,4 @@
+<% estab = @date == 'establish' %>
 <html>
 	<head>
 		<style type="text/css">
@@ -16,20 +17,22 @@
 	<body>
 		<div style="float: right;"><%= Time.now.d0? %></div>
 		<h3>
-			Eligible Lists Expiring<br />
+			Eligible Lists <% if estab %>Established<% else %>Expiring<% end %><br />
 			From <%= @from_date.d0? %> to <%= @to_date.d0? %>
 		</h3>
 		<table>
 			<tr style="border-top: 1px solid #000; border-bottom: 1px solid #000;">
-				<th>Exam Date</th>
+				<th>Exam&nbsp;Date</th>
 				<th>Title</th>
-				<th>Exam Number</th>
+				<th>Exam&nbsp;No</th>
 				<th>Type</th>
 				<th>CR?</th>
 				<th>Established</th>
 				<th>Expires</th>
-				<th class="r"># On List</th>
-				<th class="r"># Inactive</th>
+				<th class="r">On&nbsp;List</th>
+				<th class="r">Inactive</th>
+				<th class="r">Disapproved</th>
+				<th class="r">Failed</th>
 			</tr>
 			<% @objs.each_hash { |o| %>
 				<tr>
@@ -42,6 +45,8 @@
 					<td><%= Date.parse(o.valid_until).d0? rescue nil %></td>
 					<td class="r"><%= nwp o.no_on_list %></td>
 					<td class="r"><%= nwp o.no_inactive %></td>
+					<td class="r"><%= nwp o.no_disapproved %></td>
+					<td class="r"><%= nwp o.no_failed %></td>
 				</tr>
 			<% } %>
 		</table>
