@@ -1,3 +1,4 @@
+<tr style="background: #e8e8e8;"><th></th><th><em>Contact Information</em></th></tr>
 <%= f.tr_select :agency_id, Agency.find(:all, {
 	:order => 'agencies.name'
 }).collect { |a| [a.name, a.id] }, :label => 'Agency', :include_blank => true %>
@@ -11,3 +12,19 @@
 <%= f.tr_text_field :phone, :label => 'Phone',  :class => 'ucase' %>
 <%= f.tr_text_field :fax, :label => 'Fax',  :class => 'ucase' %>
 <%= f.tr_check :primary, :label => 'Primary Contact?',:text=> 'Check here if this is your primary contact' %>
+<tr style="background: #e8e8e8;"><th></th><th><em>Address (agency address will be used if fields left blank)</em></th></tr>
+<%= f.tr_text_field :organization_name, :label => 'Org. Name', :class => 'ucase' %>
+<%= f.tr_text_field :address, :label => 'Address', :class => 'ucase' %>
+<%= f.tr_text_field :address2, :label => 'Address Line 2', :class => 'ucase' %>
+<tr>
+	<th>Mailing City, State, Zip:</th>
+	<td class="subform">
+		<table>
+			<tr>
+				<td><%= f.text_field :city, :size => '40', :class => 'ucase' %></td>
+				<td><%= f.select :state, USState::UNAMES %></td>
+				<td><%= f.text_field :zip, :size => '10', :class => 'ucase' %></td>
+			</tr>
+		</table>
+	</td>
+</tr>

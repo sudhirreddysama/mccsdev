@@ -17,8 +17,14 @@ class Contact < ActiveRecord::Base
 	end
 	
 	def full_address  j = "\n"
-		# department address?
-		agency ? agency.full_address : ''
+		addr = [organization_name.to_s.strip, address.to_s.strip, address2.to_s.strip, csz].reject(&:blank?).join(j)
+		addr = [agency.name.to_s.strip, agency.full_address(j)].reject(&:blank?).join(j) if agency && addr.blank?
+		return addr
+	end
+	
+	def csz
+		return '' if city.blank? && zip.blank?
+		[[city.to_s.strip, state.to_s.strip].reject(&:blank?).join(', '), zip.to_s.strip].reject(&:blank?).join(' ')
 	end
 	
 end

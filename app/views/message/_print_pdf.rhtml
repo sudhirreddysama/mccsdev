@@ -32,7 +32,6 @@
 			<%= nl2br_h @obj.person.full_mailing_address %>
 		<% elsif @obj.contact %>
 			<%= h @obj.contact.name %><% if @obj.contact.title %>, <%= @obj.contact.title %><% end %><br />
-			<% if @obj.contact.agency %><%= @obj.contact.agency.name %><br /><% end %>
 			<%= nl2br_h @obj.contact.full_address %>
 		<% end %>
 	<% end %>
