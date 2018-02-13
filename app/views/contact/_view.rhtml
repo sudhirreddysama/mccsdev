@@ -8,10 +8,6 @@
           <%= o.id %>
         </td>
         <td>
-          <label>Primary:</label>
-          <%= yn o.primary %>
-        </td>
-        <td>
           <label>Name:</label>
           <%= o.lastname %>, <%=o.firstname%>
         </td>
@@ -22,6 +18,14 @@
         <td>
           <label>Email:</label>
           <%= mail_to o.email %>
+        </td>
+        <td>
+          <label>Primary:</label>
+          <%= yn o.primary %>
+        </td>
+        <td>
+          <label>Provisional Letters:</label>
+          <%= yn o.provisional_contact %>
         &nbsp;</td>
       </tr>
     </table>

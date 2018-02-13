@@ -35,10 +35,10 @@
 		<td>
 			<%= hidden_field_tag 'obj[save_new_contact_ids]', 1  %>
 			<% if @sobj.respond_to?(:agency) %>
-				<%= f.select :new_contact_ids, @sobj.agency.contacts.find(:all, :order => 'firstname, lastname').collect { |c| [c.name, c.id] }, {}, {:multiple => true, :style => 'width: 300px; height: 100px;'} %>		
+				<%= f.select :new_contact_ids, @sobj.agency.contacts.find(:all, :order => 'firstname, lastname').collect { |c| [c.letter_label, c.id] }, {}, {:multiple => true, :style => 'width: 300px; height: 100px;'} %>		
 			<% else %>
 				<%= select_tag 'obj[new_contact_ids]', option_groups_from_collection_for_select(
-					Agency.find(:all, :include => :contacts, :conditions => 'contacts.id is not null'), :contacts, :name, :id, :name, @obj.new_contact_ids
+					Agency.find(:all, :include => :contacts, :conditions => 'contacts.id is not null'), :contacts, :name, :id, :letter_label, @obj.new_contact_ids
 				), {:multiple => true, :style => 'width: 300px; height: 100px;'} %>
 			<% end %>
 		</td>

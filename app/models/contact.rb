@@ -7,6 +7,7 @@ class Contact < ActiveRecord::Base
   def label; lastname; end
 
 	def name; "#{firstname} #{lastname}"; end
+	def name_clean; "#{firstname_clean} #{lastname_clean}"; end
 	
 	validates_presence_of :firstname, :lastname
 	
@@ -25,6 +26,18 @@ class Contact < ActiveRecord::Base
 	def csz
 		return '' if city.blank? && zip.blank?
 		[[city.to_s.strip, state.to_s.strip].reject(&:blank?).join(', '), zip.to_s.strip].reject(&:blank?).join(' ')
+	end
+	
+	def letter_label
+		[name, primary ? '(Primary)' : nil, provisional_contact ? '(Prov.)' : nil].reject(&:blank?).join(' ')
+	end
+	
+	def lastname_clean
+		lastname.to_s.strip.gsub(/[^a-zA-Z.'-]/, '')
+	end
+	
+	def firstname_clean
+		firstname.to_s.strip.gsub(/[^a-zA-Z.'-]/, '')
 	end
 	
 end

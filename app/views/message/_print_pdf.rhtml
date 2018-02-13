@@ -31,7 +31,7 @@
 			<%= h @obj.person.full_name %><br />
 			<%= nl2br_h @obj.person.full_mailing_address %>
 		<% elsif @obj.contact %>
-			<%= h @obj.contact.name %><% if @obj.contact.title %>, <%= @obj.contact.title %><% end %><br />
+			<%= h @obj.contact.name_clean %><% if @obj.contact.title %>, <%= @obj.contact.title %><% end %><br />
 			<%= nl2br_h @obj.contact.full_address %>
 		<% end %>
 	<% end %>

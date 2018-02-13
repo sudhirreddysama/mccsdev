@@ -85,8 +85,11 @@ class Letter < ActiveRecord::Base
 		],
 		'Agency Contact' => [
 			'contact.firstname',
+			'contact.firstname_clean',
 			'contact.lastname',
+			'contact.lastname_clean',
 			'contact.name',
+			'contact.name_clean',
 			'contact.title',
 			'contact.email',
 			'contact.phone',
