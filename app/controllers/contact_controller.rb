@@ -20,7 +20,7 @@ class ContactController < CrudController
 			:order => get_order_auto,
 			:include => :department,
     }
-		@export_fields = %w{id agency_id agency.name lastname firstname title email phone fax primary department_id department.name organization_name address address2 city state zip provisional_contact}
+		@export_fields = %w{id agency_id agency.name lastname firstname lastname_clean firstname_clean title email phone fax primary department_id department.name organization_name address address2 city state zip provisional_contact}
     super
   end
 
