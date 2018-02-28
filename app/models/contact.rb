@@ -3,6 +3,7 @@ class Contact < ActiveRecord::Base
   belongs_to :agency
   belongs_to :department
   has_many :messages
+  has_many :documents
   
   def label; lastname; end
 

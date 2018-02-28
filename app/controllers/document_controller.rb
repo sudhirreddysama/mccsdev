@@ -95,6 +95,14 @@ class DocumentController < CrudController
 	end
 	before_filter :load_copy_document
 	
+	def new_from_message
+		m = Message.find params[:id]
+		m.ensure_rendered
+		@sobj.documents.create :uploaded_file => m
+		flash[:notice] = 'Letter has been copied to documents.'
+		redirect_to :action => :index
+	end
+	
 	def copy
 		load_obj
 		session[:copy_document_id] = @obj.id

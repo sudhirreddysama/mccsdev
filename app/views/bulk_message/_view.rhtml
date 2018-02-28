@@ -52,6 +52,7 @@
 			<th width="1%" class="nobr">View PDF</th>
 			<th width="48%">Message</th>
 			<th width="49%">Applicant/Agency Contact (AC)</th>
+			<th width="1%" class="nobr">To Docs</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -76,6 +77,7 @@
 						<%= link_to m.contact.name, :sc => nil, :sid => nil, :controller => :contact, :action => :view, :id => m.contact_id %> (AC)
 					<% end %>
 				</td>
+				<td width="1%" class="nobr"><%= link_to 'To Docs', :sc => params[:sc], :sid => params[:sid], :controller => :document, :action => :new_from_message, :id => m.id %></td>
 			</tr>
 		<% } %>
 	</tbody>
