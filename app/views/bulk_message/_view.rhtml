@@ -71,7 +71,7 @@
 				<td><%= link_to 'View PDF', opt.merge(:action => :print_pdf), :target => '_blank' %></td>
 				<td><%= link_to m.subject, opt.merge(:action => :view) %></td>
 				<td>
-					<% if m.applicant %>asd
+					<% if m.applicant %>
 						<%= link_to m.applicant.label, :sc => nil, :sid => nil, :controller => :applicant, :action => :view, :id => m.applicant_id %>
 					<% elsif m.contact %>
 						<%= link_to m.contact.name, :sc => nil, :sid => nil, :controller => :contact, :action => :view, :id => m.contact_id %> (AC)
