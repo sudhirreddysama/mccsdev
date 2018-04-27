@@ -105,6 +105,8 @@ class ListsController < ApplicationController
 	end
 
 	def msg
+		render :text => 'Letters are currently unavailable. Please check back later.'
+		return
 		@obj = Message.find_by_id_and_download_key params[:id], (params[:k] || params[:id2])
 		if @obj
 			@obj.ensure_rendered
