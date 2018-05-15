@@ -53,7 +53,7 @@ class FormTitle  < ActiveRecord::Base
 		errors.add_to_base s
 	end	
 	
-	def label; "#222 #{title}"; end
+	def label; "222 #{title}"; end
 	
 	def title
 		t = final_title

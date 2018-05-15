@@ -23,7 +23,7 @@ class FormHire  < ActiveRecord::Base
 	validates_inclusion_of :exempt_vol_firefighter,
 		:veteran, :employed_4years, :in => [true, false], :message => 'is required', :if => :http_posted
 	
-	def label; "#330 #{last_name_was}, #{first_name_was}"; end
+	def label; "330 #{last_name_was}, #{first_name_was}"; end
 	
 	def form_type; '330'; end
 	

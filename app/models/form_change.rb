@@ -20,7 +20,7 @@ class FormChange  < ActiveRecord::Base
 	
 	validates_presence_of :agency, :department, :first_name, :last_name, :present_title_job, :effective_date, :if => :http_posted
 	
-	def label; "#105 #{last_name_was}, #{first_name_was}"; end
+	def label; "105 #{last_name_was}, #{first_name_was}"; end
 	
 	def form_type; '105'; end
 	
