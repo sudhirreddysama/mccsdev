@@ -32,7 +32,7 @@ class Notifier < ActionMailer::Base
 	end
 
 	def form_change_separation_provisional_approved f
-		recipients ['ndobson@monroecounty.gov']
+		recipients ['ahenning@monroecounty.gov']
 		from Thread.current[:current_user].email_with_name
 		subject '105 Form Provisional Separation/Promotion/Perm. Appt. Approved'
 		body :o => f
@@ -123,7 +123,7 @@ class Notifier < ActionMailer::Base
 	end
 	
 	def expiring_cr exams
-		recipients ['kconklin@monroecounty.gov', 'NDobson@monroecounty.gov', 'JToland@monroecounty.gov']
+		recipients ['kconklin@monroecounty.gov', 'ahenning@monroecounty.gov', 'JToland@monroecounty.gov']
 		from DEFAULT_FROM
 		subject 'Continuous Recruitment Exams Expiring!'
 		body :exams => exams
