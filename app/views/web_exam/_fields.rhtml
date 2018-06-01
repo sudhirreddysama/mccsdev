@@ -53,6 +53,7 @@
 	</td>
 </tr>
 <%= f.tr_text_field :announcement_file, :label => 'Announcement File' %>
+<%= f.tr_text_field :recruitment_brochure, :label => 'Reruitment Brochure' %>
 <tr>
 	<th>Liaison User(s):</th>
 	<td>
@@ -66,6 +67,7 @@
 
 (function($){
 	elfinder_field('#obj_announcement_file');
+	elfinder_field('#obj_recruitment_brochure');
 	$('#who_may_apply_preset').change(function(e) {
 		var v = $(this).val();
 		if(v) {

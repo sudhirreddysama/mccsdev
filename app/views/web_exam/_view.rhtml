@@ -151,6 +151,17 @@
 				&nbsp;</td>
 			</tr>
 		</table>
+	</div><div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Recruitment Brochure:</label>
+					<% if !o.recruitment_brochure.blank? %>
+						<%= link_to(o.recruitment_brochure, o.recruitment_brochure, :target => '_blank') %>
+					<% end %>
+				&nbsp;</td>
+			</tr>
+		</table>
 	</div>
 </div>
 
