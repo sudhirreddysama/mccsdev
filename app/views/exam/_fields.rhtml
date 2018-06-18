@@ -132,7 +132,17 @@
 		<% } %>
 	</td>
 </tr>
-<%= f.tr_text_field :program_no, :label => 'Booklet#-Letter', :after => ' Ex: 996-E', :size => 10 %>
+<tr>
+	<th>Booklet#-Letter</th>
+	<td>
+		<%= f.text_field :program_no, :style => 'width: 100px;' %>
+		# Orange Sheets:
+		<%= f.text_field :num_orange, :style => 'width: 30px;' %>
+		# Green Sheets:
+		<%= f.text_field :num_green, :style => 'width: 30px;' %>
+		<div>Example: 421-H, 422-H (separate multiple with commas). # Orange defaults to # booklets. # Green defaults to 1. </div>
+	</td>
+</tr>
 <%= f.tr_text_field :test_plan, :label => 'Test Plan', :after => ' Ex: &quot;Test Plan 2&quot;', :size => 20 %>
 <%= f.tr_check :include_on_master, :label => 'Master List', :text => 'Check here to include this list on the exam master list report.' %>
 <%= f.tr_text_field :ordered_date, :label => 'Next Exams Ordered', :style => 'width: 110px;' %>
