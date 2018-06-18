@@ -10,42 +10,66 @@ class CertApplicant < ActiveRecord::Base
 	def date; 
 		cert.certification_date; 
 	end
+
+# Old, broken way to handle AoA. Can be deleted.	
+# 	def self.appointed_from_other_cert_cron id = nil
+# 		DB.query('
+# 			select ca.id ca_id, ca2.id ca2_id from applicants a
+# 			join cert_applicants ca on ca.applicant_id = a.id
+# 				and ca.action_date <= date(now())
+# 				' + (id ? 'and ca.id = ' + id.to_i.to_s : '') + '
+# 			join app_statuses s on s.id = a.app_status_id	
+# 				and s.appointed = 1
+# 			join cert_codes cc on cc.id = ca.cert_code_id and cc.description != ""
+# 			join certs c on c.id = ca.cert_id
+# 				and c.completed_date is null
+# 			join exams e on e.id = c.exam_id
+# 			join exams e2 on if(e.continuous, e.current_exam_id = e2.current_exam_id, e.id = e2.id)
+# 			join certs c2 on c2.exam_id = e2.id
+# 				and c2.id != c.id
+# 				and c2.completed_date is null
+# 				and c2.certification_date <= date(now())
+# 			join cert_applicants ca2 on ca2.cert_id = c2.id
+# 			join applicants a2 on a2.id = ca2.applicant_id
+# 				and a.person_id = a2.person_id
+# 			left join cert_codes cc2 on cc2.id = ca2.cert_code_id 
+# 				and cc2.description != ""
+# 			where cc2.id is null
+# 		').each_hash { |h|
+# 			aoa ||= CertCode.find_by_code 'AOA'
+# 			ca = CertApplicant.find(h.ca_id)
+# 			ca2 = CertApplicant.find(h.ca2_id)
+# 			logger.info "Setting Cert Code From CA #{ca.id} (#{ca.cert_id}) For CA #{ca2.id} (#{ca2.cert_id})"
+# 			users = ca2.cert.agency ? ca2.cert.agency.get_users(ca2.cert.department) : []
+# 			ca2.cert_code = aoa
+# 			ca2.action_date = ca.action_date
+# 			ca2.save
+# 			if !users.empty?
+# 				Notifier.deliver_cert_applicant_appointed users, ca2, ca
+# 			end
+# 		}
+# 	end
 	
-	def self.appointed_from_other_cert_cron id = nil
-		DB.query('
-			select ca.id ca_id, ca2.id ca2_id from applicants a
-			join cert_applicants ca on ca.applicant_id = a.id
-				and ca.action_date <= date(now())
-				' + (id ? 'and ca.id = ' + id.to_i.to_s : '') + '
-			join app_statuses s on s.id = a.app_status_id	
-				and s.appointed = 1
-			join cert_codes cc on cc.id = ca.cert_code_id and cc.description != ""
-			join certs c on c.id = ca.cert_id
-				and c.completed_date is null
-			join exams e on e.id = c.exam_id
-			join exams e2 on if(e.continuous, e.current_exam_id = e2.current_exam_id, e.id = e2.id)
-			join certs c2 on c2.exam_id = e2.id
-				and c2.id != c.id
-				and c2.completed_date is null
-				and c2.certification_date <= date(now())
-			join cert_applicants ca2 on ca2.cert_id = c2.id
-			join applicants a2 on a2.id = ca2.applicant_id
-				and a.person_id = a2.person_id
-			left join cert_codes cc2 on cc2.id = ca2.cert_code_id 
-				and cc2.description != ""
-			where cc2.id is null
-		').each_hash { |h|
+	def self.appointed_from_other_cert_cron
+		aoa = nil
+		DB.query('select c.id, ca.id ca_id, p.first_name, p.last_name, a.submitted_at from cert_applicants ca
+			join certs c on c.id = ca.cert_id and c.completed_date is null
+			left join cert_codes cc on cc.id = ca.cert_code_id
+			join applicants a on a.id = ca.applicant_id
+			join people p on p.id = a.person_id
+			join app_statuses s on s.id = a.app_status_id and s.appointed = 1
+			where cc.id is null'
+		).each_hash { |h|
 			aoa ||= CertCode.find_by_code 'AOA'
 			ca = CertApplicant.find(h.ca_id)
-			ca2 = CertApplicant.find(h.ca2_id)
-			logger.info "Setting Cert Code From CA #{ca.id} (#{ca.cert_id}) For CA #{ca2.id} (#{ca2.cert_id})"
-			users = ca2.cert.agency ? ca2.cert.agency.get_users(ca2.cert.department) : []
-			ca2.cert_code = aoa
-			ca2.action_date = ca.action_date
-			ca2.save
+			logger.info "Setting Cert Code CA #{h.ca_id} Cert #{h.id} For #{h.first_name} #{h.last_name}"
+			users = ca.cert.agency ? ca.cert.agency.get_users(ca.cert.department) : []
+			ca.cert_code = aoa
+			ca.action_date = ca.action_date
+			ca.save
 			if !users.empty?
-				Notifier.deliver_cert_applicant_appointed users, ca2, ca
-			end
+				#Notifier.deliver_cert_applicant_appointed users, ca
+			end			
 		}
 	end
 	

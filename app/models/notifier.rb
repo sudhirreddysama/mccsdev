@@ -66,11 +66,11 @@ class Notifier < ActionMailer::Base
 		body :c => c
 	end
 	
-	def cert_applicant_appointed u, ca, ca_appointed
+	def cert_applicant_appointed u, ca
 		recipients u.collect { |u| u.email_with_name }
 		subject 'Candidate Appointed From Other Certified List'
 		from DEFAULT_FROM
-		body :ca => ca, :ca_appointed => ca_appointed
+		body :ca => ca
 	end
 	
 	def cert_specialist c
