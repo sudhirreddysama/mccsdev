@@ -68,7 +68,7 @@ class CertApplicant < ActiveRecord::Base
 			ca.action_date = ca.action_date
 			ca.save
 			if !users.empty?
-				#Notifier.deliver_cert_applicant_appointed users, ca
+				Notifier.deliver_cert_applicant_appointed users, ca
 			end			
 		}
 	end
