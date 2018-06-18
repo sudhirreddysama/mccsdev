@@ -104,8 +104,8 @@ grouped.keys.sort.each { |r|
 						<tr>
 							<td>
 								<%= e.title %> (<%= exams[k].size %>)<br>
-								<% num_green = e.num_green || book_nos.size %>
-								<% num_orange = e.num_orange || 1 %>
+								<% num_green = e.num_green || 1 %>
+								<% num_orange = e.num_orange || book_nos.size %>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= num_orange %> orange answer sheet<% if num_orange != 1 %>s<% end %><br>
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= num_green %> green candidate ID sheet<% if num_green != 1 %>s<% end %><br>
 								&nbsp;
