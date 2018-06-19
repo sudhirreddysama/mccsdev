@@ -331,7 +331,9 @@ class WebExamController < CrudController
 	
 	def twitter_oauth
 		get_twitter_client
-		request_token = @twitter_client.authentication_request_token(:oauth_callback => url_for(:action => :twitter_callback))
+		callback_url = url_for(:action => :twitter_callback)
+		logger.info callback_url
+		request_token = @twitter_client.authentication_request_token(:oauth_callback => callback_url)
 		session[:twitter_token] = request_token.token
 		session[:twitter_secret] = request_token.secret
 		redirect_to request_token.authorize_url
