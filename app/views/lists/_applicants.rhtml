@@ -15,13 +15,19 @@
 			<th width="1%" style="text-align: right;">Residency</th>
 		</tr>
 	</thead>
+	<% last_active = true %>
 	<% objs.each_with_index { |o, i| p = o.person %>
-		<tbody class="<%= cycle 'odd', 'even' %>" id="obj-<%= o.id %>">
+		<% inactive = o.app_status && o.app_status.eligible != 'A' %>
+		<% if last_active && inactive %>
+			<tbody class="inactive-space" style="display: none;"><tr><td colspan="10">&nbsp;</td></tr></tbody>
+		<% end %>
+		<% last_active = !inactive %>
+		<tbody class="<%= cycle 'odd', 'even' %> <% if inactive %>app-inactive<% else %>app-active<% end %>" id="obj-<%= o.id %>">
 			<tr>
 				<td class="nobr"><%= i + 1 %></td>
 				<td>
 					<% if p %>
-						<%= link_to "#{p.last_name}, #{p.first_name}", :action => :applicant, :id => o.person_id %>
+						<%= link_to "#{p.last_name}, #{p.first_name}", {:action => :applicant, :id => o.person_id}, :class => 'app-name' %>
 						<% if o.perf_test_status == 'R' %>
 							<div style="color: #777; font-size: 80%;">RESTRICTED</div>
 						<% end %>

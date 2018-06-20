@@ -21,10 +21,17 @@
 <h2>Applicants</h2>
 <p>Click on an applicant's name to view more information. Click on &quot;Filter Applicants&quot; to restrict the list to particular villages, towns, school districts or fire departments. Candidate residency 
 is reviewed and updated when a residential certification is requested. Candidates must be residents for at least thirty (30) days before they are eligible to appear on a residential certification.</p>
-
+<style>
+	fieldset.collapsed { margin-bottom: 0; }
+	#active-toggle { display: inline-block; background: #ddd; border-radius: 5px; padding: 2px 7px 2px 5px; margin-top: -5px; }
+	#active-toggle.checked { background: #194E84; color: #fff; }
+	.list-extra { background: #eee; }
+	.app-inactive a.app-name, .inactive-key { color: #819EBB; font-style: italic; }
+	.inactive-space td { line-height: 1px; background: #eee; color: #fff; padding: 0; height: 1px; }
+</style>
 <% form_for(:filter) { |f| %>
 	<fieldset id="filter-applicants" class="coolfieldset">
-		<legend>Filter Applicants</legend>
+		<legend>Filter Applicants by Town/Village/Fire/School</legend>
 		<div>
 			<table width="100%">
 				<tr>
@@ -49,11 +56,18 @@ is reviewed and updated when a residential certification is requested. Candidate
 		</div>
 	</fieldset>
 <% } %>
-
+<label id="active-toggle"><input type="checkbox" name="active-toggle-chk" value="1"> Show Active Only</label>&nbsp;&nbsp;<span class="inactive-key">(inactive in italic)</span>
 <script type="text/javascript">
 
-	// Auto enable "coolfieldset"
 	jQuery(function($) {
+		
+		$('#active-toggle input').change(function(e) {
+			var v = $(this).prop('checked');
+			$('.app-inactive').toggle(!v);
+			$(this).parent().toggleClass('checked', v);
+			$('.inactive-space').toggle(v);
+		});
+	
 		$('#filter-applicants').coolfieldset({collapsed: <% if request.post? %>false<% else %>true<% end %>, animation: false});
 	});
 
