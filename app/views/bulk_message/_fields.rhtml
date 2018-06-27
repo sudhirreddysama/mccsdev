@@ -34,12 +34,12 @@
 		<th>Contacts:</th>
 		<td>
 			<%= hidden_field_tag 'obj[save_new_contact_ids]', 1  %>
-			<% if @sobj.respond_to?(:agency) %>
+			<% if false && @sobj.respond_to?(:agency) %>
 				<%= f.select :new_contact_ids, @sobj.agency.contacts.find(:all, :order => 'firstname, lastname').collect { |c| [c.letter_label, c.id] }, {}, {:multiple => true, :style => 'width: 300px; height: 100px;'} %>		
 			<% else %>
 				<%= select_tag 'obj[new_contact_ids]', option_groups_from_collection_for_select(
-					Agency.find(:all, :include => :contacts, :conditions => 'contacts.id is not null'), :contacts, :name, :id, :letter_label, @obj.new_contact_ids
-				), {:multiple => true, :style => 'width: 300px; height: 100px;'} %>
+					Agency.find(:all, :include => {:contacts => :department}, :conditions => 'contacts.id is not null', :order => 'agencies.name, departments.name, contacts.firstname, contacts.lastname'), :contacts, :name, :id, :letter_label_with_dept, @obj.new_contact_ids
+				), {:multiple => true, :style => 'width: 350px; height: 300px;'} %>
 			<% end %>
 		</td>
 	</tr>	

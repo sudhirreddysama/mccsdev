@@ -29,8 +29,19 @@ class Contact < ActiveRecord::Base
 		[[city.to_s.strip, state.to_s.strip].reject(&:blank?).join(', '), zip.to_s.strip].reject(&:blank?).join(' ')
 	end
 	
-	def letter_label
-		[name, primary ? '(Primary)' : nil, provisional_contact ? '(Prov.)' : nil].reject(&:blank?).join(' ')
+	def letter_label dept = false
+		[
+			[
+				department ? (department.abbreviation.blank? ? department.name : department.abbreviation) : nil,
+				name
+			].reject(&:blank?) * ': ',
+			primary ? '(Primary)' : nil, 
+			provisional_contact ? '(Prov.)' : nil
+		].reject(&:blank?) * ' '
+	end
+	
+	def letter_label_with_dept
+		letter_label true
 	end
 	
 	def lastname_clean
