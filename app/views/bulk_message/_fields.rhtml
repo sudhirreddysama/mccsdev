@@ -34,13 +34,27 @@
 		<th>Contacts:</th>
 		<td>
 			<%= hidden_field_tag 'obj[save_new_contact_ids]', 1  %>
-			<% if false && @sobj.respond_to?(:agency) %>
-				<%= f.select :new_contact_ids, @sobj.agency.contacts.find(:all, :order => 'firstname, lastname').collect { |c| [c.letter_label, c.id] }, {}, {:multiple => true, :style => 'width: 300px; height: 100px;'} %>		
-			<% else %>
-				<%= select_tag 'obj[new_contact_ids]', option_groups_from_collection_for_select(
-					Agency.find(:all, :include => {:contacts => :department}, :conditions => 'contacts.id is not null', :order => 'agencies.name, departments.name, contacts.firstname, contacts.lastname'), :contacts, :name, :id, :letter_label_with_dept, @obj.new_contact_ids
-				), {:multiple => true, :style => 'width: 350px; height: 300px;'} %>
+			<% if @sobj.respond_to?(:agency) && @sobj.agency %>
+				<div id="agency_select_type">
+					<label><%= radio_button_tag 'select_all_agencies', '', params[:select_all_agencies].blank? %> <%= @sobj.agency.name %> Contacts</label>&nbsp;&nbsp;
+					<label><%= radio_button_tag 'select_all_agencies', 'all', params[:select_all_agencies] == 'all' %> All Contacts</label>
+				</div>
+				<%= f.select :new_contact_ids, @sobj.agency.contacts.find(:all, :order => 'firstname, lastname').collect { |c| [c.letter_label, c.id] }, {}, {:multiple => true, :style => 'width: 350px; height: 100px;'} %>		
 			<% end %>
+			<%= select_tag 'obj[new_contact_ids]', option_groups_from_collection_for_select(
+				Agency.find(:all, :include => {:contacts => :department}, :conditions => 'contacts.id is not null', :order => 'agencies.name, departments.name, contacts.firstname, contacts.lastname'), :contacts, :name, :id, :letter_label_with_dept, @obj.new_contact_ids
+			), {:multiple => true, :style => 'width: 350px; height: 300px;', :id => 'obj_new_contact_ids_all'} %>			
+			<script>
+				(function($) {
+					var toggle_agency_contacts = function() {
+						var v = $('#agency_select_type input:checked').val() == 'all';
+						$('#obj_new_contact_ids').prop('disabled', v).toggle(!v);
+						$('#obj_new_contact_ids_all').prop('disabled', !v).toggle(v);
+					}
+					$('#agency_select_type input').change(toggle_agency_contacts);
+					toggle_agency_contacts();
+				})(jQuery);
+			</script>
 		</td>
 	</tr>	
 	<tr class="applicant-select">
