@@ -44,17 +44,19 @@
 			<%= select_tag 'obj[new_contact_ids]', option_groups_from_collection_for_select(
 				Agency.find(:all, :include => {:contacts => :department}, :conditions => 'contacts.id is not null', :order => 'agencies.name, departments.name, contacts.firstname, contacts.lastname'), :contacts, :name, :id, :letter_label_with_dept, @obj.new_contact_ids
 			), {:multiple => true, :style => 'width: 350px; height: 300px;', :id => 'obj_new_contact_ids_all'} %>			
-			<script>
-				(function($) {
-					var toggle_agency_contacts = function() {
-						var v = $('#agency_select_type input:checked').val() == 'all';
-						$('#obj_new_contact_ids').prop('disabled', v).toggle(!v);
-						$('#obj_new_contact_ids_all').prop('disabled', !v).toggle(v);
-					}
-					$('#agency_select_type input').change(toggle_agency_contacts);
-					toggle_agency_contacts();
-				})(jQuery);
-			</script>
+			<% if @sobj.respond_to?(:agency) && @sobj.agency %>
+				<script>
+					(function($) {
+						var toggle_agency_contacts = function() {
+							var v = $('#agency_select_type input:checked').val() == 'all';
+							$('#obj_new_contact_ids').prop('disabled', v).toggle(!v);
+							$('#obj_new_contact_ids_all').prop('disabled', !v).toggle(v);
+						}
+						$('#agency_select_type input').change(toggle_agency_contacts);
+						toggle_agency_contacts();
+					})(jQuery);
+				</script>
+			<% end %>
 		</td>
 	</tr>	
 	<tr class="applicant-select">
