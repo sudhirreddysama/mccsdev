@@ -25,7 +25,7 @@ grouped.keys.sort.each { |r|
 		exam_keys = exams.keys.sort
 		room = room_objs[r]
 	
-		if room && @report.face_sheet.to_i != 0
+		if room && @report.face_sheet.to_s != ''
 
 			session = ExamSiteSession.find_by_exam_site_id_and_given_on(room.id, @report[:from_date]) || {} 
 			proctors = session.proctor.to_s.split(',').map(&:strip)
@@ -145,53 +145,56 @@ grouped.keys.sort.each { |r|
 				directions you should always follow the information provided by New York State.</b></p>
 			</div>
 		<% end %>
+		
+		<% if @report.face_sheet.to_s != 'only' %>
 	
-		<% exam_keys.each { |e| objs = exams[e] %>
+			<% exam_keys.each { |e| objs = exams[e] %>
 		
-			<h1<% unless first %> style="page-break-before: always;"<% end %>>
-				Exams/Sites For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %><br />
-				Exam: <%= h e %><br />
-				Site: <%= h r %>
-			</h1>
-			<% first = false %>
-			<table>
-				<tr>
-					<th width="48%">Applicant</th>
-					<th width="1">Present</th>
-					<th width="1">FTA</th>
-					<th width="48%">Applicant</th>
-					<th width="1">Present</th>
-					<th width="1">FTA</th>
-				</tr>
-			</table>
-			<% tfirst = true %>
-			<% sgrps = objs.in_groups_of(48, false) { |sgrp| %>
-				<table<% if !tfirst %> style="page-break-before: always;"<% end %> width="100%">
-					<% tfirst = false %>
-					<% grps = sgrp.in_groups(2) %>
-					<% 0.upto(grps[0].size - 1) { |j| %>
-						<tr>
-							<% 0.upto(1) { |i| %>
-								<% a = grps[i][j] %>
-								<% if a %>
-									<td width="50%">
-										<%= h a.person.last_name %>, <%= h a.person.first_name %><br />
-										xxxx-xx-<%= h a.person.ssn_last4 %>
-									</td>
-								<% else %>
-									<td width="50%"></td>
-								<% end %>
-							<% } %>
-						</tr>
-					<% } %>
+				<h1<% unless first %> style="page-break-before: always;"<% end %>>
+					Exams/Sites For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %><br />
+					Exam: <%= h e %><br />
+					Site: <%= h r %>
+				</h1>
+				<% first = false %>
+				<table>
+					<tr>
+						<th width="48%">Applicant</th>
+						<th width="1">Present</th>
+						<th width="1">FTA</th>
+						<th width="48%">Applicant</th>
+						<th width="1">Present</th>
+						<th width="1">FTA</th>
+					</tr>
 				</table>
-			<% } %>
-			<p>
-				<%= h e %> / <%= h r %> TOTAL: <%= objs.size %><br />
-				<%= h e %> TOTAL: <%= exam_totals[e] %><br />
-				<%= h r %> TOTAL: <%= room_totals[r] %>
-			</p>
+				<% tfirst = true %>
+				<% sgrps = objs.in_groups_of(48, false) { |sgrp| %>
+					<table<% if !tfirst %> style="page-break-before: always;"<% end %> width="100%">
+						<% tfirst = false %>
+						<% grps = sgrp.in_groups(2) %>
+						<% 0.upto(grps[0].size - 1) { |j| %>
+							<tr>
+								<% 0.upto(1) { |i| %>
+									<% a = grps[i][j] %>
+									<% if a %>
+										<td width="50%">
+											<%= h a.person.last_name %>, <%= h a.person.first_name %><br />
+											xxxx-xx-<%= h a.person.ssn_last4 %>
+										</td>
+									<% else %>
+										<td width="50%"></td>
+									<% end %>
+								<% } %>
+							</tr>
+						<% } %>
+					</table>
+				<% } %>
+				<p>
+					<%= h e %> / <%= h r %> TOTAL: <%= objs.size %><br />
+					<%= h e %> TOTAL: <%= exam_totals[e] %><br />
+					<%= h r %> TOTAL: <%= room_totals[r] %>
+				</p>
 		
-		<% } %>
+			<% } %>
+		<% end %>
 	<% } %>
 <% } %>

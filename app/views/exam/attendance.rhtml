@@ -82,8 +82,12 @@
 	<tr>
 		<th></th>
 		<td>
-			<%= f.submit 'Generate Exams/Exam Sites Report (Single Date Only)', :name => 'exam_sites' %>&nbsp;&nbsp;&nbsp;
-			<label><%= f.check_box 'face_sheet' %> Include Face Sheets</label>
+			<%= f.submit 'Generate Exams/Exam Sites Report (Single Date Only)', :name => 'exam_sites' %>
+			<div style="padding-left: 100px;">
+				<label><%= f.radio_button 'face_sheet', '' %> No Face Sheets</label>&nbsp;&nbsp;&nbsp;
+				<label><%= f.radio_button 'face_sheet', 'include' %> Include Face Sheets</label>&nbsp;&nbsp;&nbsp;
+				<label><%= f.radio_button 'face_sheet', 'only' %> Only Face Sheets</label>
+			</div>
 		</td>
 	</tr>
 	<%= f.tr_submit 'Generate Exam Booklet Count Spreadsheet (NEW)', :name => 'exam_sites_grid' %>
