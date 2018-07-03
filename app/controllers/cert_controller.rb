@@ -322,6 +322,9 @@ class CertController < CrudController
 				:conditions => get_where(cond),
 				:include => [:app_status, :exam, {:person => [:town, :village, :school_district, :fire_district]}]
 			})
+			
+			objs_ids = @objs.map &:id
+			@extra_objs = @obj.cert_applicants.select { |ca| !objs_ids.include?(ca.applicant_id) }.map &:applicant
 		
 		end
 	end
