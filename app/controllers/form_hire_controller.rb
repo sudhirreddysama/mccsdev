@@ -83,6 +83,7 @@ class FormHireController < CrudController
 		if request.post?
 			@obj.status_user = @current_user
 			@obj.status_date = Time.now.to_date
+			old_status = @obj.status
 			@obj.update_attributes params[:obj]
 			flash[:notice] = 'Status has been updated.'
 			u = @obj.user #@obj.agency ? @obj.agency.get_users(@obj.department) : nil
@@ -90,6 +91,10 @@ class FormHireController < CrudController
 			if u2
 				Notifier.deliver_form_status [u2].reject(&:nil?), @obj
 			end
+			send_prov = @obj.civil_service_status == 'Provisional'
+			if send_prov && @obj.status == 'approved' && old_status != @obj.status
+				Notifier.deliver_form_hire_provisional @obj
+			end			
 			redirect_to
 		else
 			build_action

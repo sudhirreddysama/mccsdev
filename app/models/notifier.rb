@@ -31,10 +31,17 @@ class Notifier < ActionMailer::Base
 		body :m => m
 	end
 
-	def form_change_separation_provisional_approved f
+	def form_change_provisional f
 		recipients ['ahenning@monroecounty.gov']
 		from Thread.current[:current_user].email_with_name
-		subject '105 Form Provisional Separation/Promotion/Perm. Appt. Approved'
+		subject '105 Form Provisional Change'
+		body :o => f
+	end
+	
+	def form_hire_provisional f
+		recipients ['ahenning@monroecounty.gov']
+		from Thread.current[:current_user].email_with_name
+		subject '330 Form Provisional Hire'
 		body :o => f
 	end
 

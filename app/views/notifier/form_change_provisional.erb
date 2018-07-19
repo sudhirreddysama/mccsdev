@@ -1,0 +1,9 @@
+A 105 form (change) involving a provisional appointment has been approved:
+
+Name: <%= @o.last_name %>, <%= @o.first_name %>
+Reason: <%= @o.status_reason %>
+Changes: <%= @o.changes_string %>
+Agency: <%= @o.agency ? @o.agency.name : '' %>
+Department: <%= @o.department ? @o.department.name : '' %>
+
+http://www.monroecounty.gov/mccs/form_change/view/<%= @o.id %>

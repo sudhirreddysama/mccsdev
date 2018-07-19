@@ -1,0 +1,9 @@
+A 330 form (hire) involving a provisional appointment has been approved:
+
+Name: <%= @o.last_name %>, <%= @o.first_name %>
+Reason: <%= @o.status_reason %>
+Title: <%= @o.title %>
+Agency: <%= @o.agency ? @o.agency.name : '' %>
+Department: <%= @o.department ? @o.department.name : '' %>
+
+http://www.monroecounty.gov/mccs/form_hire/view/<%= @o.id %>
