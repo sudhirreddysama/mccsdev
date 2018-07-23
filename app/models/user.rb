@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
 	validates_uniqueness_of :username
 	validates_presence_of :password, :on => :create
 	validates_confirmation_of :password, :if => :password
-	validates_length_of :password, :minimum => 4, :if => :password
+	validates_length_of :password, :minimum => 6, :if => :password
 	validates_presence_of :name, :email
 	validates_presence_of :level
 	
