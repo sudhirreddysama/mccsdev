@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
 	
-	# Temporarily disable
-	#filter_parameter_logging :password
+	
+	filter_parameter_logging :password
 	
 	include ExceptionNotifiable
 	
