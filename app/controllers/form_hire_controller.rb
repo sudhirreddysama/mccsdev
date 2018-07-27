@@ -91,8 +91,7 @@ class FormHireController < CrudController
 			if u2
 				Notifier.deliver_form_status [u2].reject(&:nil?), @obj
 			end
-			send_prov = @obj.civil_service_status == 'Provisional'
-			if send_prov && @obj.status == 'approved' && old_status != @obj.status
+			if @obj.is_provisional? && @obj.status == 'approved' && old_status != @obj.status
 				Notifier.deliver_form_hire_provisional @obj
 			end			
 			redirect_to

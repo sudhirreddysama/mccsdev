@@ -49,6 +49,10 @@ class FormTitle  < ActiveRecord::Base
 		err 'The checkbox indicating this form is accurate and complete must be checked' if !accurate_and_complete
 	end
 	
+	def is_provisional?
+		false
+	end
+	
 	def err s
 		errors.add_to_base s
 	end	

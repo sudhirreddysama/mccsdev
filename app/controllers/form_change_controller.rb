@@ -96,14 +96,7 @@ class FormChangeController < CrudController
 			if u2
 				Notifier.deliver_form_status [u2].reject(&:nil?), @obj
 			end
-			send_prov = @obj.present_provisional
-			send_prov ||= @obj.change_demotion && (@obj.demotion_status == 'PROVISIONAL' || @obj.demotion_status == 'PROVISIONAL-2ND')
-			send_prov ||= @obj.change_promotion && (@obj.promotion_status == 'PROVISIONAL' || @obj.promotion_status == 'PROVISIONAL-2ND')
-			send_prov ||= @obj.change_second_provisional
-			send_prov ||= @obj.change_status && (@obj.status_type == 'V' || @obj.status_type == 'V2')
-			send_prov ||= @obj.change_title && (@obj.title_change_status == 'PROVISIONAL' || @obj.title_change_status == 'PROVISIONAL-2ND')
-			send_prov ||= @obj.change_separation && @obj.separation_provisional
-			if send_prov && @obj.status == 'approved' && old_status != @obj.status
+			if @obj.is_provisional? && @obj.status == 'approved' && old_status != @obj.status
 				Notifier.deliver_form_change_provisional @obj
 			end
 			redirect_to

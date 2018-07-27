@@ -95,7 +95,20 @@
 			</tr>
 		</table>
 	</div>
+	<% if @obj.is_provisional? && @obj.status != 'approved' %>
+		<div class="row" id="is_provisional" style="display: none;">
+			<table><tr><td style="font-weight: bold;">NOTE: This form involves a provisional appointment. An email notice will be sent to the Exam Unit upon approval.</td></tr></table>
+		</div>
+		<script>
+			(function($) {
+				$('#obj_status').change(function(e) {
+					$('#is_provisional')[$(this).val() == 'approved' ? 'show' : 'hide']();
+				});
+			})(jQuery);
+		</script>
+	<% end %>
 </div>
+
 <% if form %>
 	</form>
 <% end %>

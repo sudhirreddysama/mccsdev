@@ -35,6 +35,10 @@ class FormHire  < ActiveRecord::Base
 		[[address_city.strip, address_state.strip].reject(&:blank?).join(', '), address_zip.strip].reject(&:blank?).join(' ')
 	end	
 	
+	def is_provisional?
+		civil_service_status == 'Provisional'
+	end
+	
 	def set_title_text
 		if job
 			self.title = job.name

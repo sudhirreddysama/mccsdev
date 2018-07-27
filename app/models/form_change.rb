@@ -79,6 +79,18 @@ class FormChange  < ActiveRecord::Base
 		s << 'Title Change' if change_title
 		return s.join(', ')
 	end
+	
+	def is_provisional?
+		prov = 
+		prov ||= present_provisional
+		prov ||= change_demotion && (demotion_status == 'PROVISIONAL' || demotion_status == 'PROVISIONAL-2ND')
+		prov ||= change_promotion && (promotion_status == 'PROVISIONAL' || promotion_status == 'PROVISIONAL-2ND')
+		prov ||= change_second_provisional
+		prov ||= change_status && (status_type == 'V' || status_type == 'V2')
+		prov ||= change_title && (title_change_status == 'PROVISIONAL' || title_change_status == 'PROVISIONAL-2ND')
+		prov ||= change_separation && separation_provisional
+		prov
+	end
 
 	def set_job_text
 		if present_title_job
