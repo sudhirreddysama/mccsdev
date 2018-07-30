@@ -81,7 +81,7 @@ class Notifier < ActionMailer::Base
 	end
 	
 	def cert_specialist c
-		recipients ['JMcCann@monroecounty.gov', 'meganmetzler@monroecounty.gov']
+		recipients ['meganmetzler@monroecounty.gov']
 		subject "Certified List Specialist Notification - Cert #{c.status}"
 		from Thread.current[:current_user].email_with_name
 		body :c => c
@@ -204,7 +204,7 @@ class Notifier < ActionMailer::Base
 	end
 	
 	def pending_cert_exam_established c, e
-		u = ['JMcCann@monroecounty.gov', 'meganmetzler@monroecounty.gov']
+		u = ['meganmetzler@monroecounty.gov']
 		liaison = Agency.get_liaison c.agency, c.department
 		u << liaison.email if liaison
 		recipients u 
