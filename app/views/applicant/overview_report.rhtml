@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+<style>
+html, body { padding: 0; margin: 0; border: 0; }
+body, td, th { font: 11px/16px sans-serif; }
+.viewer { border: 1px solid #888; border-width: 0 1px 1px 0; margin: 5px; }
+.viewer .row { clear: both; border-top: 1px solid #888; }
+.viewer .header { font-weight: bold; padding: 2px 5px; clear: both; border: 1px solid #888; border-width: 1px 0 0 1px; background: white url(../images/tab-inactive-bg.gif) left -1px repeat-x; }
+.viewer table { border-collapse: collapse; }
+.viewer td { padding: 0 20px 2px 5px; border-left: 1px solid #888; vertical-align: top; }
+.viewer td label { display: block; color: #888; padding-right: 5px; }
+</style>
+</head>
+<body>
+<% @objs.each_with_index { |o, i| wa = o.web_applicant %>
+
+<div style="<% if i > 0 %>page-break-before: always;<% end %>">
+
+<div class="viewer">
+	<div class="row">
+		<table><tr>
+		<td><label>Name:</label><%= h o.person.label if o.person %></td>
+		<td><label>Status:</label><%= h o.app_status.name if o.app_status %></td>
+		<td><label>Submitted:</label><%= h o.submitted_at.d0? %></td>
+		<td><label>ID:</label><%= o.id %></td>
+		<tr></table>
+	</div>
+	<div class="row">
+		<table><tr>
+		<td><label>Mailing Address:</label><%= h o.person.full_mailing_address(', ') %></td>
+		<td><label>Mailing County:</label><%= h o.person.mailing_county %></td>
+		</tr></table>
+	</div>
+</div>
+
+<div class="viewer">
+	<div class="row">
+		<table><tr>
+		<td><label>Email:</label><%= o.person.email %></td>
+		<td><label>Home Phone:</label><%= h phone_format(o.person.home_phone) %></td>
+		<td><label>Work Phone:</label><%= h phone_format(o.person.work_phone) %></td>
+		<td><label>Cell Phone:</label><%= h phone_format(o.person.cell_phone) %></td>
+		</tr></table>
+	</div>
+</div>
+
+<div class="viewer">
+	<div class="row">
+		<table><tr>
+			<td><label>Convicted?</label><%= wa ? yn?(wa.law_violation) : '' %></td>
+			<td><label>Criminal charges pending?</label><%= wa ? yn?(wa.pending_criminal_charges) : '' %></td>
+			<td><label>Ever removed from employment?</label><%= wa ? yn?(wa.removed_employment) : '' %></td>
+		</tr></table>
+	</div>
+</div>
+
+</div>
+	
+<% } %>
+</body>
+</html>

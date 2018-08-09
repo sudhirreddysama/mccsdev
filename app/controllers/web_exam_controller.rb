@@ -304,7 +304,7 @@ class WebExamController < CrudController
 				message += [e.no, e.name].reject(&:blank?).join(' ') + "\n"
 				e.update_attribute :facebook_posted, true
 			}
-			System.find(:first).update_attribute :last_facebook_update, "New Exam/Job Announcements: \n#{message}Apply Now: cs.monroecounty.gov/hrapply"
+			System.find(:first).update_attribute :last_facebook_update, "New Exam/Job Announcements: \n#{message}Apply Now: https://cs.monroecounty.gov/hrapply"
 			flash[:notice] = 'Facebook post text updated.'
 		else
 			flash[:errors] = ['No new exams to post to Facebook!']

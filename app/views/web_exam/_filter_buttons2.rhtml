@@ -2,6 +2,7 @@
 	<% if(!(@current_user.agency_level? && !@current_user.allow_web_post_review)) %>	
 		<%= f.submit 'Approve All', :name => 'approve_all', :confirm => 'Approve applicants? This will only approve applicants that match you current filter settings.' %>
 	<% end %>
+	<%= partial 'applicant/filter_buttons2.rhtml' %>
 <% end %>
 
 

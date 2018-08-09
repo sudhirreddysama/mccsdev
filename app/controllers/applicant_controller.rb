@@ -54,7 +54,13 @@ class ApplicantController < CrudController
 		if @adv_search
 			@opt[:group] = 'applicants.id'
 		end
-   	super
+		if params[:overview_report]
+			@paginate = false
+			fetch_objs
+			render_pdf render_to_string(:template => 'applicant/overview_report', :layout => false), 'report.pdf'
+		else
+			super
+		end
 	end
 
 	def web_import

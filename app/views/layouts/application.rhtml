@@ -10,9 +10,6 @@ is_agency = %w{agency department contact}.include?(sc || c)
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head><meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta property="og:title" content="Monroe County Civil Service" />
-		<meta name="description" content="MonroeCounty.gov is the official site of Monroe County, New York providing online services and information for residents, businesses, municipalities and visitors." />
-		<meta property="og:image" content="https://www2.monroecounty.gov/seal200x200.jpg" />	
 		<title>Admin <%= RAILS_ENV %></title>
 		<% unless @nojs %>
 			<%= javascript_include_tag(
