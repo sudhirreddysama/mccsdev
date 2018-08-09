@@ -186,6 +186,10 @@ class WebExamController < CrudController
 				o.save
 			}
 			redirect_to
+		elsif params[:overview_report]
+			@paginate = false
+			fetch_objs
+			render_pdf render_to_string(:template => 'applicant/overview_report', :layout => false), 'report.pdf'
 		else
 			fetch_objs
 		end
@@ -292,6 +296,22 @@ class WebExamController < CrudController
 	end
 	
 	def facebook_oauth
+		exams = WebExam.find(:all, :order => 'name, no', :conditions => 'published = 1 and publish < now() and facebook_posted = 0')	
+		if exams.length > 0
+			message = ''
+			exams.each { |e|
+				p "Posting to Facebook: #{e.id} #{e.no} #{e.name}"
+				message += [e.no, e.name].reject(&:blank?).join(' ') + "\n"
+				e.update_attribute :facebook_posted, true
+			}
+			System.find(:first).update_attribute :last_facebook_update, "New Exam/Job Announcements: \n#{message}Apply Now: cs.monroecounty.gov/hrapply"
+			flash[:notice] = 'Facebook post text updated.'
+		else
+			flash[:errors] = ['No new exams to post to Facebook!']
+		end
+		redirect_to :action => :social
+		
+		return # facebook disabled their api
 		get_facebook_client
 		redirect_to @facebook_client.url_for_oauth_code(:permissions => 'email,publish_actions,manage_pages')
 	end

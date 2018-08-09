@@ -11,6 +11,11 @@
 <% } %>
 <div class="marg">NOTE: For Facebook, use the jessesternberg@monroecounty.gov login. For Twitter, use the civilservice@monroecounty.gov login. If you are logged into either service using a different account, go to facebook.com or twitter.com and logout before hitting the buttons below. If you are not logged in when you hit the buttons below, you will be prompted to login.</div>
 <div id="spost">
-<%= link_to 'POST TO FACEBOOK', {:action => :facebook_oauth}, :id => 'spost-fb' %>
+<%= link_to 'POST TO FACEBOOK<span class="req">*</span>', {:action => :facebook_oauth}, :id => 'spost-fb' %>
 <%= link_to 'POST TO TWITTER', {:action => :twitter_oauth}, :id => 'spost-tw' %>
+</div>
+<div>
+<div class="marg"><span class="req">*</span>NOTE: As of 8/1/2018 Facebook's API no longer allows automated posting. The text below must manually be copy/pasted into a Facebook post. <a href="https://www.facebook.com/MonroeCivilService/" target="_blank">Go to www.facebook.com/MonroeCivilService/</a></div>
+<div class="marg" style="border: 1px solid #888; padding: 5px; background: #eee;">
+<%= nl2br_h System.find(:first).last_facebook_update %>
 </div>
