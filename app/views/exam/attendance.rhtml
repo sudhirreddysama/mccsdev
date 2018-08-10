@@ -78,7 +78,12 @@
 			<label style="display: block;"><%= f.check_box :alternate_exam_date %> Only include applicants with an alternate exam date.</label>
 		</td>
 	</tr>
-	<%= f.tr_submit 'Generate Statistics Report', :name => 'statistics', :formtarget => '_blank' %>
+	<tr>
+		<th></th>
+		<td>
+			<%= submit_tag 'Generate Statistics Report #1', :name => 'statistics', :formtarget => '_blank' %>
+			<%= submit_tag 'Statistics #2', :name => 'statistics2', :formtarget => '_blank' %>
+		</td>
 	<tr>
 		<th></th>
 		<td>

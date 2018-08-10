@@ -20,6 +20,8 @@
 			.xline, .face-fill { border-bottom: 1px solid #000; text-align: center; }
 			.xline { width: 30px; display: inline-block; }
 			.yelo { background: #ff8; }
+			.tc { text-align: center; }
+			.tr { text-align: right; }
 		</style>
 	</head>
 	<body>
@@ -137,6 +139,8 @@
 		
 		<% elsif params[:exam_sites] %>
 			<%= partial 'attendance_print_exam_sites' %>
+		<% elsif params[:statistics2] %>
+			<%= partial 'attendance_print_statistics2' %>
 		<% elsif params[:statistics] %>
 		
 			<h1>Exam Totals and Statistics<br />For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %></h1>

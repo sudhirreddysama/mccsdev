@@ -392,6 +392,38 @@ class ExamController < CrudController
 					
 					@print_orient = 'Landscape'
 				
+				elsif params[:statistics2]
+				
+					where = get_where(cond)
+				
+					@objs1 = DB.query(
+						'select count(*) c, if(applicants.approved = "Y", "Approved", if(applicants.approved = "N", "Disapproved", "(none)")) label, sum(if(w.total > 0, w.waiver_requested, 0)) waiver
+						from applicants
+						left join ' + HRAPPLYDB + '.applicants w on w.id = applicants.web_applicant_id
+						left join exams on exams.id = applicants.exam_id
+						where ' + where + '
+						group by label order by label'
+					)
+					
+					@objs2 = DB.query(
+						'select count(*) c, ifnull(s.name, "(none)") label, sum(if(w.total > 0, w.waiver_requested, 0)) waiver
+						from applicants left join app_statuses s on s.id = applicants.app_status_id
+						left join ' + HRAPPLYDB + '.applicants w on w.id = applicants.web_applicant_id
+						left join exams on exams.id = applicants.exam_id
+						where ' + where + '
+						group by label order by label'
+					)
+					
+					@objs3 = DB.query(
+						'select count(*) c, ifnull(d.reason, "(none)") label, sum(if(w.total > 0, w.waiver_requested, 0)) waiver
+						from applicants left join disapprovals d on d.id = applicants.disapproval_id
+						left join ' + HRAPPLYDB + '.applicants w on w.id = applicants.web_applicant_id
+						left join exams on exams.id = applicants.exam_id
+						where applicants.approved = "N" and (' + where + ')
+						group by label order by label'
+					)
+					@objs = [@objs1, @objs2, @objs3]
+				
 				elsif params[:exam_sites]
 
 					cond << 'applicants.approved = "Y"'

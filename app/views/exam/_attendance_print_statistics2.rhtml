@@ -1,0 +1,30 @@
+<% titles = ['Approval', 'Status', 'Disapproval'] %>
+<h1>Statistics Report For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %></h1>
+<table>
+	<tr>
+		<th>Group</th>
+		<th class="tr">Count</th>
+		<th class="tr">Waiver</th>
+	</tr>
+	<% (0..2).each { |i| %>
+		<% tot_c = 0 %>
+		<% tot_w = 0 %>
+		<tr>
+			<th class="tc" colspan="3"><%= titles[i] %></th>
+		</tr>
+		<% @objs[i].each_hash { |o| %>
+			<% tot_c += o.c.to_i %>
+			<% tot_w += o.waiver.to_i %>
+			<tr>
+				<td><%= o.label %></td>
+				<td class="tr"><%= nwp o.c %></td>
+				<td class="tr"><%= nwp o.waiver %></td>
+			</tr>
+		<% } %>
+		<tr>
+			<td class="tr">Total:</td>
+			<td class="tr"><%= nwp tot_c %></td>
+			<td class="tr"><%= nwp tot_w %></td>
+		</tr>
+	<% } %>
+</table>
