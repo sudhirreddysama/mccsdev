@@ -1,3 +1,9 @@
+<% if @current_user.staff_level? %>
+	<div class="tabs buttons">
+		<%= tab 'New Application', {:controller => :applicant, :action => :new, 'obj[person_id]' => o.id}, {}, :class => 'tab-new' %>
+		<div class="clear"></div>
+	</div>
+<% end %>
 <div class="viewer">
 	<div class="header">General Info.</div>
 	<div class="row">
