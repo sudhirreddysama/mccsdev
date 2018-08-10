@@ -56,6 +56,7 @@ class ApplicantController < CrudController
 		end
 		if params[:overview_report]
 			@paginate = false
+			@opt[:limit] = 500
 			fetch_objs
 			render_pdf render_to_string(:template => 'applicant/overview_report', :layout => false), 'report.pdf'
 		else

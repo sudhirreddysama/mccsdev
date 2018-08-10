@@ -2,58 +2,134 @@
 <html>
 <head>
 <style>
-html, body { padding: 0; margin: 0; border: 0; }
-body, td, th { font: 11px/16px sans-serif; }
-.viewer { border: 1px solid #888; border-width: 0 1px 1px 0; margin: 5px; }
-.viewer .row { clear: both; border-top: 1px solid #888; }
-.viewer .header { font-weight: bold; padding: 2px 5px; clear: both; border: 1px solid #888; border-width: 1px 0 0 1px; background: white url(../images/tab-inactive-bg.gif) left -1px repeat-x; }
+html, body { padding: 0; margin: 0; border: 0; width: 7.5in; }
+body, td, th { font: 11px/16px "Verdana"; }
+h2 { font-size: 14px; font-weight: normal; line-height: 21px; margin: 10px 0 5px 0; }
+.viewer { border: 1px solid #aaa; border-width: 0 1px 1px 0; margin: 5px 0; }
+.viewer .row { clear: both; border-top: 1px solid #aaa; }
+.viewer .header { font-weight: bold; padding: 2px 5px; clear: both; border: 1px solid #aaa; border-width: 1px 0 0 1px; background: white url(../images/tab-inactive-bg.gif) left -1px repeat-x; }
 .viewer table { border-collapse: collapse; }
-.viewer td { padding: 0 20px 2px 5px; border-left: 1px solid #888; vertical-align: top; }
-.viewer td label { display: block; color: #888; padding-right: 5px; }
+.viewer td { padding: 0 20px 2px 5px; border-left: 1px solid #aaa; vertical-align: top; padding-top: 2px; }
+.viewer td label { /* font-size: 9px;*/ white-space: nowrap; display: block; color: #888; padding-right: 5px; }
+.viewer .row.inline label { display: inline; }
+.r { color: #800; }
+.g { color: #080; }
 </style>
 </head>
-<body>
+<body><% first_page = true %>
+<% if @objs.size >= 500 %>
+	<h2>WARNING: Only 1st 500 applications included in this report.</h2>
+	<% first_page = false %>
+<% end %>
 <% @objs.each_with_index { |o, i| wa = o.web_applicant %>
 
-<div style="<% if i > 0 %>page-break-before: always;<% end %>">
-
+<div style="<% if !first_page %>page-break-before: always;<% end %>">
+<% first_page = false %>
+<h2 style="margin-top: 0;"><%= o.person ? o.person.label : 'Unknown' %></h2>
 <div class="viewer">
-	<div class="row">
+	<div class="row inline">
 		<table><tr>
-		<td><label>Name:</label><%= h o.person.label if o.person %></td>
 		<td><label>Status:</label><%= h o.app_status.name if o.app_status %></td>
-		<td><label>Submitted:</label><%= h o.submitted_at.d0? %></td>
+		<td><label>Submitted:</label><%= h o.submitted_at.d0? %>&nbsp;</td>
 		<td><label>ID:</label><%= o.id %></td>
+		<td><label>Exam/Job:</label><%= o.exam ? o.exam.exam_no : (o.web_exam ? (o.web_exam.no.blank? ? o.web_exam.name : o.web_exam.no) : '') %></td>
 		<tr></table>
 	</div>
-	<div class="row">
+	<div class="row inline">
 		<table><tr>
 		<td><label>Mailing Address:</label><%= h o.person.full_mailing_address(', ') %></td>
-		<td><label>Mailing County:</label><%= h o.person.mailing_county %></td>
+		<td><label>Mailing County:</label><%= h o.person.mailing_county %>&nbsp;</td>
 		</tr></table>
 	</div>
 </div>
 
 <div class="viewer">
-	<div class="row">
+	<div class="row inline">
 		<table><tr>
 		<td><label>Email:</label><%= o.person.email %></td>
 		<td><label>Home Phone:</label><%= h phone_format(o.person.home_phone) %></td>
 		<td><label>Work Phone:</label><%= h phone_format(o.person.work_phone) %></td>
-		<td><label>Cell Phone:</label><%= h phone_format(o.person.cell_phone) %></td>
+		<td><label>Cell Phone:</label><%= h phone_format(o.person.cell_phone) %>&nbsp;</td>
 		</tr></table>
 	</div>
 </div>
 
 <div class="viewer">
-	<div class="row">
+	<div class="row inline">
 		<table><tr>
-			<td><label>Convicted?</label><%= wa ? yn?(wa.law_violation) : '' %></td>
-			<td><label>Criminal charges pending?</label><%= wa ? yn?(wa.pending_criminal_charges) : '' %></td>
-			<td><label>Ever removed from employment?</label><%= wa ? yn?(wa.removed_employment) : '' %></td>
+			<td><label>Convicted?</label><%= wa ? (wa.law_violation ? '<b class="r">YES</b>' : 'no') : '' %></td>
+			<td><label>Criminal charges pending?</label><%= wa ? (wa.pending_criminal_charges ? '<b class="r">YES</b>' : 'no') : '' %></td>
+			<td><label>Ever removed from employment?</label><%= wa ? (wa.removed_employment ? '<b class="r">YES</b>' : 'no') : '' %>&nbsp;</td>
 		</tr></table>
 	</div>
 </div>
+
+<% if(wa) %>
+	<% employments = wa.web_employments.find(:all, :order => 'ifnull(end_date, now()) asc') %>
+	<% employments.reverse.each_with_index { |e, i| %>
+		<h2>Employment #<%= i + 1 %></h2>
+		<div class="viewer">
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Employer:</label><%= h e.name %></td>
+						<td><label>Address:</label><%= h e.full_address(', ') %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+			<div class="row inline">
+				<table>
+					<tr>
+						<td><label>Title:</label>	<%= h e.title %></td>
+						<td><label>Salary:</label><%= h e.salary %></td>
+						<td><label>Start:</label><%= h e.start_date.d0? %></td>
+						<td><label>End:</label><%= h e.end_date.d0? %></td>
+						<td><label>Hours:</label><%= h e.hours %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>			
+		</div>
+		<div class="viewer">
+			<div class="row inline">
+				<table>
+					<tr>
+						<td><label>Currently Employed?</label><%= e.currently_employed ? '<b class="g">YES</b>' : 'no' %></td>
+						<td><label>Reason Left:</label><%= e.reason_left %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>		
+		</div>
+	<% } %>
+
+	<h2>Education</h2>
+	<div class="viewer">
+		<div class="row inline">
+			<table>
+				<tr>
+					<td><label>Education Level</label><%= WebApplicant::EDUCATION_LEVELS.rassoc(wa.education)[0] rescue nil %></td>
+					<td><label>Highest Grade Completed:</label><%= wa.education_grade %>&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+	<% wa.web_educations.each_with_index { |e, i| %>
+		<h2>College/School #<%= i + 1 %></h2>
+		<div class="viewer">
+			<div class="row">
+				<table>
+					<tr>
+						<td><label>Degree Received:</label><%= h e.degree %></td>
+						<td><label>Major:</label><%= h e.major %></td>
+						<td><label>School:</label><%= h e.school_name %></td>
+						<td><label>State:</label><%= h e.state %>&nbsp;</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	<% } %>
+
+<% end %>
 
 </div>
 	
