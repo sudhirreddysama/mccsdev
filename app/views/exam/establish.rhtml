@@ -11,7 +11,8 @@
 	<% @obj.valid_until = Time.now.to_date.advance :years => 1 %>
 <% end %>
 <% table_form_for(:obj) { |o| %>
-	<%= o.tr_calendar_date_select :established_date, :label => 'Established Date', :req => true %>
+	<% show_cert_warning = @obj.open_certs.count > 0 && !@obj.established_date_was %>
+	<%= o.tr_calendar_date_select :established_date, :label => 'Established Date', :req => true, :after => (show_cert_warning ? ' <span class="req">Establish Date Warning: Open Certified Lists Exist!</span>' : '') %>
 	<%= o.tr_calendar_date_select :valid_until, :label => 'Valid Until', :req => true %>
 	<tr>
 		<th>Pending Certs:</th>

@@ -28,8 +28,9 @@
 				<td><%= f.calendar_date_select :given_at, :style => 'width: 110px;' %></td>
 			</tr>
 			<% show_cert_warning = o.open_certs.count > 0 && !o.established_date_was %>
+			<% show_cert_warning2 = o.pending_certs.count > 0 && !o.established_date_was %>
 			<tr>
-				<th>List&nbsp;Established: <% if show_cert_warning %><span class="req">**</span><% end %></th>
+				<th>List&nbsp;Established: <% if show_cert_warning || show_cert_warning2 %><span class="req">**</span><% end %></th>
 				<th>Valid&nbsp;Until:</th>
 				<th>Scores&nbsp;Entered:</th>
 			</tr>
@@ -41,6 +42,11 @@
 			<% if show_cert_warning %>
 				<tr><td colspan="3">
 				<span class="req">**Establish Date Warning: Open Certified Lists Exist!</span>
+				</td></tr>
+			<% end %>
+			<% if show_cert_warning2 %>
+				<tr><td colspan="3">
+				<span class="req">**Establish Date Warning: Pending Certified Lists Exist! <%= link_to 'Go to Esablish tab to send notices', {:action => :scoring, :id => o.id, :id2 => 'establish'}, :target => '_blank' %></span>
 				</td></tr>
 			<% end %>
 		</table>
