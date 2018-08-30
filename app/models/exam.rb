@@ -127,6 +127,10 @@ class Exam < ActiveRecord::Base
 		calculator == 'PROHIBITED'
 	end
 	
+	def open_certs
+		job ? job.open_certs : []
+	end
+	
 	
 	
 	

@@ -326,7 +326,13 @@
 </div>
 <% } %>
 
-
+<% if @current_user.staff_level? %>
+	<% @objs = o.open_certs %>
+	<% if !@objs.empty? %>
+		<h2>Open Certified Lists For Title &quot;<%= o.job.name %>&quot;</h2>
+		<%= partial 'cert/list' %>
+	<% end %>
+<% end %>
 
 
 

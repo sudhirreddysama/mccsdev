@@ -26,8 +26,10 @@
 				<td><%= f.calendar_date_select :publish_at, :style => 'width: 110px;' %></td>
 				<td><%= f.calendar_date_select :deadline, :style => 'width: 110px;' %></td>
 				<td><%= f.calendar_date_select :given_at, :style => 'width: 110px;' %></td>
+			</tr>
+			<% show_cert_warning = o.open_certs.count > 0 && !o.established_date_was %>
 			<tr>
-				<th>List&nbsp;Established:</th>
+				<th>List&nbsp;Established: <% if show_cert_warning %><span class="req">**</span><% end %></th>
 				<th>Valid&nbsp;Until:</th>
 				<th>Scores&nbsp;Entered:</th>
 			</tr>
@@ -36,6 +38,11 @@
 				<td><%= f.calendar_date_select :valid_until, :style => 'width: 110px;' %></td>
 				<td><%= f.calendar_date_select :scores_date, :style => 'width: 110px;' %></td>
 			</tr>
+			<% if show_cert_warning %>
+				<tr><td colspan="3">
+				<span class="req">**Establish Date Warning: Open Certified Lists Exist!</span>
+				</td></tr>
+			<% end %>
 		</table>
 	</td>
 </tr>

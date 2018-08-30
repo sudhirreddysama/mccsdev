@@ -17,4 +17,8 @@ class Job < ActiveRecord::Base
 	
 	include DbChangeHooks
 	
+	def open_certs
+		certs.find(:all, :conditions => 'completed_date is null', :order => 'certs.id desc')
+	end
+	
 end
