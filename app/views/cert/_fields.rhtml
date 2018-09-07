@@ -28,7 +28,8 @@
 	<tr>
 		<th>Exam: <span class="req">*</span></th>
 		<td>
-			<%= partial 'pop_field', :id => 'obj_exam_label', :text => (@obj.exam ? @obj.exam.label : ''), :name => 'obj[exam_id]', :id => 'obj_exam_id', :url => popup_url({:controller => :exam}), :value => @obj.exam_id %>
+			<%= partial 'pop_field', :id => 'obj_exam_label', :text => (@obj.exam ? @obj.exam.label : ''), :name => 'obj[exam_id]', :id => 'obj_exam_id', :url => popup_url({:controller => :exam}), :value => @obj.exam_id, :attr => (@obj.exam ? @obj.exam.json_attributes : nil) %>
+			<div id="exam_attr"></div>
 			<div>Click the field above to open a popup where you can select an existing exam or create a new one.</div>
 		</td>
 	</tr>
@@ -42,7 +43,7 @@
 	<%= f.tr_calendar_date_select :pending_date, :label => 'Pending Date', :class => 'ucase', :help => 'Date list is forwarded from liaison to certification specialist.' %>
 	<%= f.tr_calendar_date_select :certification_date, :label => 'Certification Date', :class => 'ucase', :onchange => 'cdate_change();', :help => 'Date list is certified. Agencies will be able to enter candidate actions on/after this date.' %>	
 	<%= f.tr_calendar_date_select :notified_date, :label => 'Agency Notified Date', :class => 'ucase', :help => 'Date agency is notified that the list has been certified.' %>	
-	<%= f.tr_calendar_date_select :return_date, :label => 'Return Date', :class => 'ucase', :help => 'Date list expires and can no longer be used for hiring.' %>	
+	<%= f.tr_calendar_date_select :return_date, :label => 'Return Date', :onchange => 'rdate_change();', :class => 'ucase', :help => '<div id="obj_return_date_err" class="req"></div>Date list expires and can no longer be used for hiring.' %>	
 	<%= f.tr_calendar_date_select :completed_date, :label => 'Completed Date', :class => 'ucase', :help => 'Date agency completes and returns the list. Agency will no longer be able to enter candidate actions on/after this date.' %>	
 	<%= f.tr_calendar_date_select :prefinished_date, :label => 'Prefinished Date', :class => 'ucase', :help => 'Date returned list is approved by liaison and sent to certification specialist.' %>	
 	<%= f.tr_text_field :finished, :label => 'Finished', :class => 'ucase', :help => 'Enter initials and/or date to indicate completed list returned from agency has been reviewed and approved.' %>
@@ -133,11 +134,34 @@
 
 <script type="text/javascript">
 	
-	var cdate_change;
+	var cdate_change, rdate_change;
 	
 	var school_agency_ids = <%= @school_agency_ids.to_json %>;
 	
 	(function($) {
+		
+		var check_return_date = function() {
+			var attr = $('#obj_exam_id').data('attr');
+			var rd = Date.parse($('#obj_return_date').val());
+			var vu = attr && Date.parse(attr.valid_until);
+			$('#obj_return_date_err').html(rd && vu && rd > vu ? 'Warning! Return date is greater than exam expiration date!' : '');
+		}
+		
+		var obj_exam_id_change = function(e) {
+			var attr = $('#obj_exam_id').data('attr');
+			html = '';
+			if(attr) {
+				var d1 = Date.parse(attr.established_date);
+				var d2 = Date.parse(attr.valid_until);
+				html = 
+				'<span class="dim">Established Date:</span> ' + (d1 ? d1.toString('MM/dd/yyyy') : '(none)') + '&nbsp;&nbsp;&nbsp;' +
+				'<span class="dim">Expires On:</span> ' + (d2 ? d2.toString('MM/dd/yyyy') : '(none)');
+			}
+			$('#exam_attr').html(html);
+			check_return_date();
+		}
+		obj_exam_id_change();
+		$('#obj_exam_id').change(obj_exam_id_change);
 	
 		agency_select = $('#obj_agency_id');	
 		department_select = $('#obj_department_id');
@@ -169,14 +193,20 @@
 		}
 		agency_select.change(set_department);
 	
-		cdate = $('#obj_certification_date');
+		var cdate = $('#obj_certification_date');
+		var rdate = $('#obj_return_date');
 		
 		cdate_change = function(e) {
 			var d = Date.parse(cdate.val()).add({days: 60});
-			$('#obj_return_date').val(d.toString('MM/dd/yyyy'));
+			$('#obj_return_date').val(d.toString('MM/dd/yyyy')).effect('highlight');
+			check_return_date();
+		}		
+		rdate_change = function(e) {
+			check_return_date();
 		}
 
 		cdate.change(cdate_change);
+		rdate.change(rdate_change);
 		
 		$('#tr_job_type input').click(function(e) {
 			show = $('#tr_job_type input:checked').val() == 'T'

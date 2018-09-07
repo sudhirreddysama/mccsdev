@@ -27,7 +27,7 @@ class Exam < ActiveRecord::Base
 	
 	validates_uniqueness_of :exam_no
 	
-	def label; exam_no_was; end
+	def label; "#{exam_no_was} #{title_was}"; end
 	
 	def site; exam_site; end
 	
@@ -131,6 +131,10 @@ class Exam < ActiveRecord::Base
 		job ? job.open_certs : []
 	end
 	
+	# Passed from popup select windows to parent window.
+	def json_attributes
+		{:established_date => established_date, :valid_until => valid_until}
+	end
 	
 	
 	

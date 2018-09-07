@@ -12,5 +12,5 @@ end
 	<%= link_to image_tag('icons/pencil.png', :size => '16x16', :alt => 'edit', :title => 'Edit'), opt.merge(:action => :edit) %>
 <% end %>
 <% if params[:popup] %>
-	<%= link_to_function image_tag('icons/tick.png', :size => '16x16', :alt => 'select'), "window.parent.cb(#{o.id}, #{o.label.to_json});" %>
+	<%= link_to_function image_tag('icons/tick.png', :size => '16x16', :alt => 'select'), "window.parent.cb(#{o.id}, #{o.label.to_json}, #{o.json_attributes.to_json});" %>
 <% end %>

@@ -143,7 +143,7 @@ end
 	<% if params[:controller] == 'cert_bottom_note' || params[:controller] == 'cert_end_of_list' %>
 		<%= link_to_function '<span>Select This Record</span>', "window.parent.cb(#{@obj.value.to_json});", {:class => 'bigbtn'} %>
 	<% else %>
-		<%= link_to_function '<span>Select This Record</span>', "window.parent.cb(#{@obj.id}, #{@obj.label.to_json});", {:class => 'bigbtn'} %>
+		<%= link_to_function '<span>Select This Record</span>', "window.parent.cb(#{@obj.id}, #{@obj.label.to_json}, #{@obj.json_attributes.to_json});", {:class => 'bigbtn'} %>
 	<% end %>
 <% end %>
 <% end %>

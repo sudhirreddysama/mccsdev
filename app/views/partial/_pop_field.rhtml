@@ -1,6 +1,12 @@
 <%= text_field_tag "#{id}_text", text, :size => 60, :class => 'popup-field' %>
 <a href="#" id="<%= id %>_clear" style="<% if !value %>display: none;<% end %>">clear</a>
-<%= hidden_field_tag name, value, {:id => id} %>
+<%
+	hidden_attr = {:id => id}
+	if defined? attr
+		hidden_attr['data-attr'] = attr.to_json
+	end
+%>
+<%= hidden_field_tag name, value, hidden_attr %>
 
 <script type="text/javascript">
 	
@@ -11,14 +17,15 @@
 			if(pop) {
 				return;
 			}
-			window.cb = function(val, text) { 
+			window.cb = function(val, text, attr) { 
 				$(pop).dialog('close');
 				$('#' + id).val(val);
 				$('#' + id + '_text').val(text);
+				$('#' + id).data('attr', attr);
 				$('#' + id).change();
 				if(val) {
 					$('#' + id + '_clear').show();
-				}
+				}				
 			}
 			var w = 800;
 			var h = 500;
@@ -45,7 +52,8 @@
 			$('#' + id).val('');
 			$('#' + id + '_text').val('');
 			$('#' + id).change();
-			$(this).hide();
+			$('#' + id).data('attr', null);
+			$(this).hide();			
 		});
 	})(jQuery);
 	

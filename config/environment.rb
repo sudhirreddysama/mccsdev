@@ -80,6 +80,9 @@ class ActiveRecord::Base
 	attr :http_posted, true
 	attr :http_posted_by, true
 	
+	# Can be overriden to pass attributes back from popups to parent windows.
+	def json_attributes; {}; end;
+	
 end
 
 if RUBY_VERSION =~ /1.9/
