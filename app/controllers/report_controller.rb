@@ -628,6 +628,37 @@ class ReportController < ApplicationController
 		render_pdf render_to_string(:layout => false), 'veterans.pdf'
 	end	
 	
+	def commission_exam_stats
+	
+		@from_date = Date.parse(params[:from_date]) rescue nil
+		@to_date = Date.parse(params[:to_date]) rescue nil
+		
+		cond = []
+		cond << DB.escape('e.established_date >= "%s"', @from_date) if @from_date
+		cond << DB.escape('e.established_date <= "%s"', @to_date) if @to_date
+		@objs = DB.query('select
+				e.title, e.exam_no, e.established_date,
+				sum(a.approved = "Y") approved,
+				sum(a.approved = "N") disapproved,
+				sum(a.approved = "" or a.approved is null) no_action,
+				sum(a.approved = "Y" and s.code != "W" and s.code != "F" and s.code != "-" and a.final_score is not null) passed,
+				sum(s.code = "F") failed,
+				sum(s.code = "-") fta,
+				sum(s.code = "W") withdrew,
+				sum(s.eligible = "I") inactive,
+				sum(s.appointed) appointed,
+				sum(s.eligible = "A") active
+				from exams e join applicants a on a.exam_id = e.id join app_statuses s on s.id = a.app_status_id 
+				' + (cond.empty? ? '' : ('where ' + get_where(cond))) + '
+				group by e.id order by e.established_date'
+		)
+		if params[:html]
+			render :layout => false
+		else
+			render_pdf render_to_string(:layout => false), 'commission_exam_stats.pdf'
+		end
+	end
+	
 	def noncompetitive
 	
 		@from_date = Date.parse(params[:from_date])

@@ -326,6 +326,24 @@ end
 			</fieldset>
 		</form>
 		
+		<%= form_tag({:action => 'commission_exam_stats'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Commission Exam Statistics</legend>
+				<div class="fs">
+					<table class="form">
+						<tr>
+							<th>From Reference Date:</th>
+							<td><%= calendar_date_select_tag :from_date %></td>
+							<th>To Date:</th>
+							<th><%= calendar_date_select_tag :to_date %></th>					
+							<th><%= submit_tag 'Run Report (PDF)' %></th>
+							<th><%= submit_tag 'Run Report (HTML)', :name => 'html' %></th>
+						</tr>
+					</table>
+				</div>
+			</fieldset>
+		</form>
+		
 		<%= form_tag({:action => 'master'}, :target => '_blank') %>
 			<fieldset class="coolfieldset">
 				<legend>Exam Master List</legend>

@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th { font: 10px/15px Trebuchet MS, Verdana, Arial, sans-serif; }
+			body { padding: 5px; }
+			
+			table { border-collapse: collapse; }
+			td, th { vertical-align: top; text-align: left; padding: 0 2px 0 0; }
+			th { font-weight: bold; width: 50px; }
+			td { width: 50px; text-align: center; }
+			
+			.r { text-align: right; }
+			
+			.nobr { white-space: nowrap; }
+			tr { page-break-inside: avoid; }
+			p { margin: 10px 0; }
+			h3 { margin: 0; font-size: 12px; }
+			
+		</style>
+	</head>
+	<body>
+		<div style="float: right;"><%= Time.now.d0? %></div>
+		<h3>ELIGIBLE LISTS</h3>
+		<p>Date Range: <%= @from_date ? @from_date.d0? : 'All' %> to <%= @to_date ? @to_date.d0? : 'All' %>
+		<% @objs.each_hash { |o| %>
+			<div style="page-break-inside: avoid;">
+				<p style="margin-bottom: 0;"><b><%= o.title %> <%= o.exam_no %></b></p>
+				<table>
+					<tr>
+						<th>Passed:</th>
+						<td><%= nwp o.passed %></td>
+						<th>Rejected:</th>
+						<td><%= nwp o.disapproved %>
+					</tr>
+					<tr>
+						<th>Failed:</th>
+						<td><%= nwp o.failed %></td>
+						<th>FTA:</th>
+						<td><%= nwp o.fta %></td>
+					</tr>
+				</table>
+			</div>
+		<% } %>
+	</body>
+</html>
