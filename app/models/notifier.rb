@@ -212,7 +212,14 @@ class Notifier < ActionMailer::Base
 		from DEFAULT_FROM
 		body :c => c, :e => e
 	end
-	
+
+	def login_notice u
+		recipients ['jessesternberg@monroecounty.gov']
+		subject "#{u.username} HAS LOGGED IN!"
+		from DEFAULT_FROM
+		body :u => u
+	end
+
 	def custom_email r, s, f, b
 		recipients r
 		subject s

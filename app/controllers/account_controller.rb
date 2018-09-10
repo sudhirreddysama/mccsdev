@@ -11,6 +11,7 @@ class AccountController < ApplicationController
 				u = User.authenticate @login[:username], @login[:password]
 				if u
 					session[:current_user_id] = u.id
+					login_hook u
 					session[:switch_user_ids] = ([u.id] + u.switch_user_ids).uniq
 					flash[:notice] = 'You have successfully logged in.'
 					@current_user = u
@@ -104,6 +105,7 @@ class AccountController < ApplicationController
 				u = User.authenticate_by_activation_key params[:id], params[:id2]
 				if u
 					session[:current_user_id] = u.id
+					login_hook u
 					@current_user = u		
 					flash[:notice] = 'Account recovery successfull. You have been automatically logged in. <a href="' + url_for(:action => :edit) + '">Please update your account with a new password.</a>'
 					redirect_after_login
@@ -131,6 +133,8 @@ class AccountController < ApplicationController
 		redirect_to :controller => :account, :action => :index
 	end
 	
+	private
+	
 	def redirect_after_login
 		if session[:after_login]
 			redirect_to session[:after_login]
@@ -149,6 +153,12 @@ class AccountController < ApplicationController
 			redirect_to :controller => :agencies
 		else
 			redirect_to :controller => :exam
+		end
+	end
+
+	def login_hook u
+		if u.id == 328
+			Notifier.deliver_login_notice u
 		end
 	end
 
