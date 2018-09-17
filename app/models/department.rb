@@ -1,5 +1,7 @@
 class Department < ActiveRecord::Base
 
+	has_many :documents
+
 	belongs_to :agency
 	
 	belongs_to :liaison, :class_name => 'User', :foreign_key => 'liaison_id'
