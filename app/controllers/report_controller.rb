@@ -650,7 +650,7 @@ class ReportController < ApplicationController
 				sum(s.eligible = "A") active
 				from exams e join applicants a on a.exam_id = e.id join app_statuses s on s.id = a.app_status_id 
 				' + (cond.empty? ? '' : ('where ' + get_where(cond))) + '
-				group by e.id order by e.established_date'
+				group by e.id order by e.title'
 		)
 		if params[:html]
 			render :layout => false
