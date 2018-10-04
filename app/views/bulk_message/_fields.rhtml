@@ -120,7 +120,9 @@
 				<div class="clear"></div>
 			</div>
 			*F - Failed Perf. Test&nbsp;&nbsp;&nbsp;*R - Hasn't Taken Perf. Test&nbsp;&nbsp;*W - Waived at Least One Perf. Test<br />
-			<a href="#" onclick="uncheck_f(); return false">Uncheck *F</a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="uncheck_r(); return false">Uncheck *R</a><br />
+			<a href="#" onclick="uncheck_f(); return false">Uncheck *F</a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="uncheck_r(); return false">Uncheck *R</a>
+			&nbsp;&nbsp;&nbsp;<a href="#" onclick="uncheck_p(); return false">Uncheck NOT *F or *R</a>
+			<br />
 			<% if @sobj.class == Exam %>
 				<% @sobj.exam_perfs.each { |pt| %>
 					<a href="#" onclick="uncheck_w(<%= pt.perf_test_id %>); return false">Uncheck *W <%= pt.perf_test.name %></a><br />
@@ -132,20 +134,25 @@
 		
 		var uncheck_r;
 		var uncheck_f;
+		var uncheck_p;
 		var uncheck_w;
 		
 		(function($){
 			
 			uncheck_r = function() {
-				$('label.perf-test-status-R input').attr('checked', false);
+				$('#apps label.perf-test-status-R input').attr('checked', false);
 			}
 			
 			uncheck_f = function() {
-				$('label.perf-test-status-F input').attr('checked', false);
+				$('#apps label.perf-test-status-F input').attr('checked', false);
+			}
+			
+			uncheck_p = function() {
+				$('#apps label').not('.perf-test-status-R').not('.perf-test-status-F').find('input').attr('checked', false);
 			}
 			
 			uncheck_w = function(id) {
-				$('label.waived-' + id + ' input').attr('checked', false);
+				$('#apps label.waived-' + id + ' input').attr('checked', false);
 			}
 			
 			var app_status_ids = $('#obj_new_app_status_ids');
