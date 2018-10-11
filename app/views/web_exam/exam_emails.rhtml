@@ -30,7 +30,21 @@
 	Emails listed below will receive email notices when new examinations are announced. The email will contain a link to a printable
 	PDF listing all the new examinations. Enter each email on a new line or separate with commas.
 </div>
+<script type="text/javascript">
+function alphabetize_emails() {
+	var v = $F('exam_emails');
+	var emails = v.split(/[\r\n,]/);
+	var emails2 = [];
+	for(var i = 0; i < emails.length; i++) {
+		var e = emails[i].trim();
+		if(e) emails2.push(e);
+	}
+	$('exam_emails').value = emails2.sort(function(a, b) {
+		return a.toLowerCase().localeCompare(b.toLowerCase());
+	}).join("\n");
+}
+</script>
 <%= form_tag %>
 	<div class="marg"><%= text_area_tag 'exam_emails', @system.exam_emails, :size => '80x20' %></div>
-	<div class="marg"><%= submit_tag %></div>
+	<div class="marg"><%= submit_tag %> <a href="#" onclick="alphabetize_emails(); return false;">Alphabetize Emails</a></div>
 </form>
