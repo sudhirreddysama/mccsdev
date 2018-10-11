@@ -42,6 +42,7 @@ function alphabetize_emails() {
 	$('exam_emails').value = emails2.sort(function(a, b) {
 		return a.toLowerCase().localeCompare(b.toLowerCase());
 	}).join("\n");
+	$('exam_emails').highlight();
 }
 </script>
 <%= form_tag %>
