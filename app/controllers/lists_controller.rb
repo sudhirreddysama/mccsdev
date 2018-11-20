@@ -2,7 +2,7 @@ class ListsController < ApplicationController
 	
 	layout 'mc'
 	
-	skip_before_filter :force_ssl
+	#skip_before_filter :force_ssl
 	skip_before_filter :authenticate
 	
 	def mailtest
@@ -14,7 +14,7 @@ class ListsController < ApplicationController
 		throw_errortest
 	end
 	
-	before_filter :forbid_ssl
+	#before_filter :forbid_ssl
 	
 	def index
 		exams = PublicExam.find(:all,
