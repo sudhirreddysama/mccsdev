@@ -98,7 +98,14 @@ end
 					AGENCY, DEPT:
 					<div style="text-align: center;"><%= h @obj.agency.name %> <%= @obj.department.name if @obj.department && @obj.department.name.strip != @obj.agency.name.strip %></div>
 				</td>
-				<td width="33%"<% if @obj.exam.continuous %> style="line-height: 12px; padding-bottom: 0;"<% end %>>
+				<% style = '' %>
+				<% if @obj.exam.continuous %>
+					<% style = 'line-height: 12px; padding-bottom: 0;' %>
+					<% if @obj.exam.exam_no =~ /^OC3-/ %>
+						<% style += 'background-color: ' + (@obj.exam.cr_group == 2 ? '#ddffdd' : '#ffdddd') + ';' %>
+					<% end %>
+				<% end %>
+				<td width="33%" style="<%= style %>">
 					EXAM NUMBER, LIST EXPIRES:
 					<div style="text-align: center;">
 						<% if @obj.exam.continuous %>

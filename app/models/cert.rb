@@ -66,6 +66,25 @@ class Cert < ActiveRecord::Base
 	end
 	before_save :set_title
 	
+	def other_open_certs
+		return [] if !exam
+		et = exam.exam_type
+		return [] if !%w(PROM NCP OC).include?(et)
+		cond = ['certs.completed_date is null']
+		cond << DB.escape('certs.agency_id = %d', agency_id) if agency_id
+		cond << DB.escape('certs.department_id = %d', department_id) if department_id
+		cond << DB.escape('certs.job_id = %d', job_id) if job_id
+		cond << DB.escape('certs.division_id = %d', division_id) if division_id
+		cond << DB.escape('certs.id != %d', id) if id
+		cond << 'exams.exam_type in ("PROM", "NCP")' if et == 'PROM' || et == 'NCP'
+		cond << 'exams.exam_type = "OC"' if et == 'OC'
+		Cert.find(:all, :include => :exam, :conditions => cond.join(' and '), :order => 'certs.id desc')
+	end
+	
+	def other_open_certs_error_attr
+		other_open_certs.map { |c| {:id => c.id, :title => c.title, :requested_date => c.requested_date} }
+	end
+	
 	include DbChangeHooks
 	
 end

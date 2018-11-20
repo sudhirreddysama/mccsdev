@@ -17,7 +17,7 @@
 			<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => :cert, :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>
 		<% end %>
 		<% if @current_user.staff_level? %>
-			<%= tab 'Recertify', {:action => :recertify, :id => @obj.id}, {}, {:confirm => 'Create new Certified List with same applicants? All properties of the new certified list will remain the same, except the certification date, return date, completed date, and finished field, which will be cleared.', :method => :post, :class => 'tab-duplicate'} %>
+			<%= tab 'Recertify', {:action => :recertify, :id => @obj.id}, {}, {:confirm => 'Create new Certified List? All properties of the new certified list will remain the same, except the certification date, return date, completed date, and finished field, which will be cleared. Candidates with an action selected (besides NO ACTION or blank) will NOT be copied to the new certified list.', :method => :post, :class => 'tab-duplicate'} %>
 		<% end %>
 	<% end %>
 	<div class="clear"></div>
@@ -48,6 +48,17 @@
 <% end %>
 <% if @pref_list %>
 	<%= link_to('Preferred list exists for this job/agency/department! Click here to view', {:sc => nil, :sid => nil, :controller => 'preferred_list', :action => :view, :id => @pref_list.id}, :style => 'display: block; margin: 5px; padding: 5px; background-color: #800; text-align: center; color: #fff; text-decoration: none; font-weight: bold;')%>
+<% end %>
+<% if !@obj.completed_date %>
+	<% others = @obj.other_open_certs_error_attr %>
+	<% if !others.empty? %>
+		<div style="text-align: center; margin: 5px; padding: 5px; background: #fdd;" class="red2">
+			<div>Other open certified lists for agency/department/division &amp; title found! Click to view</div>
+			<% others.each { |ot| %>
+				<div><%= link_to "#{ot.title}, Requested: #{ot.requested_date ? ot.requested_date.d0 : '(unknown)'}", {:action => :view, :id => ot.id}, :style => 'color: #fff;' %></div>
+			<% } %>
+		</div>
+	<% end %>
 <% end %>
 <div class="viewer">
 	<div class="header">General Info.</div>

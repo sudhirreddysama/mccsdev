@@ -510,6 +510,10 @@ input.ucase, textarea.ucase { text-transform: uppercase; }
 
 .red,
 .red a { color: #a00; }
+.green,
+.green a { color: #0a0; }
+.red2, .red2 a, .red2 * { color: #f00 !important; }
+.green2, .green2 a, .green2 * { color: #0f0 !important; }
 
 fieldset { margin: 10px; border: 1px solid #000; }
 fieldset div.fs { padding: 10px; }

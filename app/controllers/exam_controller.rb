@@ -264,7 +264,7 @@ class ExamController < CrudController
 	end
 	
 	def attendance
-		@report = {:given_by => []}
+		@report = {:given_by => [], :fmt => 'pdf'}
 		if request.post?
 			@report = params[:report]
 			@report.given_by ||= []
@@ -629,7 +629,11 @@ class ExamController < CrudController
 						send_data data.string, :filename => 'export.xls', :type => 'application/vnd.ms-excel'
 					else
 						html = render_to_string :action => :attendance_print, :layout => false
-						render_pdf html, 'report.pdf'
+						if @report[:fmt] == 'doc'
+							send_data html, :type => 'application/vnd.ms-word', :filename => 'report.doc', :disposition => 'attachment'
+						else
+							render_pdf html, 'report.pdf'
+						end
 					end
 				end
 				

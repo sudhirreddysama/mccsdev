@@ -1,7 +1,9 @@
-<html>
-<% totalpaid=0;examsheld=0;tested=0;xapplied=0; approved=0; fee=0; collected=0;disapproved=0;passed=0;perf_passed=0;fta=0;withdrew=0;failed=0;perf_failed=0;perf_waived=0;inactive=0;appointed=0;%>
-
-<head>
+<!DOCTYPE html>
+<html 
+	xmlns:o="urn:schemas-microsoft-com:office:office" 
+	xmlns:w="urn:schemas-microsoft-com:office:word">
+	<head>
+		<% totalpaid=0;examsheld=0;tested=0;xapplied=0; approved=0; fee=0; collected=0;disapproved=0;passed=0;perf_passed=0;fta=0;withdrew=0;failed=0;perf_failed=0;perf_waived=0;inactive=0;appointed=0;%>
 		<style type="text/css">
 
 			html, body { padding: 0; margin: 0; border: 0; }
@@ -20,11 +22,26 @@
 			.xline, .face-fill { border-bottom: 1px solid #000; text-align: center; }
 			.xline { width: 30px; display: inline-block; }
 			.yelo { background: #ff8; }
-			.tc { text-align: center; }
-			.tr { text-align: right; }
+			.tc, td.tc { text-align: center; }
+			.tr, td.tr { text-align: right; }
+			.bb, td.bb { border-bottom: 1px solid #000; }
+			.uline { text-decoration: underline; }
+			body.fmt-doc { width: 8.5in; padding: 0; }
+			
+			@page Section1 { size: 8.5in 11.0in; margin: .5in; }
+			div.Section1 { page: Section1; }
 		</style>
+<!--[if gte mso 9]>
+<xml>
+<w:WordDocument>
+<w:View>Print</w:View>
+<w:Zoom>90</w:Zoom>
+<w:DoNotOptimizeForBrowser/>
+</w:WordDocument>
+</xml>
+<![endif]-->
 	</head>
-	<body>
+	<body class="fmt-<%= @report['fmt'] %>"><div class="Section1">
 		<% first = true %>
 		<% if params[:veterans] %>
 			<h1>Veterans Information For Exams Given From: <%= @report[:from_date].d0? %> To: <%= @report[:to_date].d0? %></h1>
@@ -443,5 +460,5 @@
 			TOTAL FTA: <%= no_fta %></p>
 		<% end %>
 	
-	</body>
+	</div></body>
 </html>

@@ -6,6 +6,13 @@ Exam: <%= @c.exam ? @c.exam.exam_no : 'None' %>
 Title: <%= @c.job ? @c.job.name : 'None' %>
 Agency: <%= @c.agency ? @c.agency.name : 'None' %>
 Department: <%= @c.department ? @c.department.name : 'None' %>
+<% others = @c.other_open_certs_error_attr; if !others.empty? -%>
+
+OTHER OPEN CERTIFIED LISTS FOUND FOR AGENCY/DEPT/DIV & TITLE:
+<% others.each { |o| -%>
+<%= o.title %>, Requested: <%= o.requested_date ? o.requested_date.d0 : '(unknown)' %>
+<% } -%>
+<% end -%>
 
 Agency Comments:
 <% unless @c.agency_comments.blank? -%>

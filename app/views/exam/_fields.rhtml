@@ -30,25 +30,34 @@
 			<% show_cert_warning = o.open_certs.count > 0 && !o.established_date_was %>
 			<% show_cert_warning2 = o.pending_certs.count > 0 && !o.established_date_was %>
 			<tr>
-				<th>List&nbsp;Established: <% if show_cert_warning || show_cert_warning2 %><span class="req">**</span><% end %></th>
+				<th>List&nbsp;Established: <% if show_cert_warning || show_cert_warning2 %><span class="req show_on_est_date" style="display: none;">**</span><% end %></th>
 				<th>Valid&nbsp;Until:</th>
 				<th>Scores&nbsp;Entered:</th>
 			</tr>
 			<tr>
-				<td><%= f.calendar_date_select :established_date, :style => 'width: 110px;' %></td>
+				<td><%= f.calendar_date_select :established_date, :style => 'width: 110px;', :onchange => 'check_est_date()' %></td>
 				<td><%= f.calendar_date_select :valid_until, :style => 'width: 110px;' %></td>
 				<td><%= f.calendar_date_select :scores_date, :style => 'width: 110px;' %></td>
 			</tr>
 			<% if show_cert_warning %>
-				<tr><td colspan="3">
+				<tr style="display: none;" class="show_on_est_date"><td colspan="4">
 				<span class="req">**Establish Date Warning: Open Certified Lists Exist!</span>
 				</td></tr>
 			<% end %>
 			<% if show_cert_warning2 %>
-				<tr><td colspan="3">
+				<tr style="display: none;" class="show_on_est_date"><td colspan="4">
 				<span class="req">**Establish Date Warning: Pending Certified Lists Exist! <%= link_to 'Go to Esablish tab to send notices', {:action => :scoring, :id => o.id, :id2 => 'establish'}, :target => '_blank' %></span>
 				</td></tr>
 			<% end %>
+			<script type="text/javascript">
+				var check_est_date;
+				(function($) {
+					check_est_date = function() {
+						$('.show_on_est_date').toggle(!!$('#obj_established_date').val());
+					}
+					check_est_date();
+				})(jQuery);
+			</script>
 		</table>
 	</td>
 </tr>

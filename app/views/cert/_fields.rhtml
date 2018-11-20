@@ -23,17 +23,70 @@
 	</tr>
 <% end %>
 <% if @current_user.agency_level? %>
-	<%= f.tr_select :exam_id, Exam.find(:all, :conditions => 'valid_until >= date(now())', :order => 'exams.title').collect { |e| ["#{e.title} - #{e.exam_no}", e.id] }, :include_blank => true, :label => 'Exam', :req => true %>
+	<tr>
+		<th>Exam: <span class="req">*</span></th>
+		<td>
+			<% exams = Exam.find(:all, :conditions => 'valid_until >= date(now()) and (continuous = 0 or current_exam_id = id)', :order => 'exams.title asc, exams.established_date desc') %>
+			<%= text_field_tag 'obj_exam_label', (@obj.exam ? @obj.exam.label : ''), :placeholder => 'Search For Exam...', :size => 80 %>
+			<div id="exam_attr"></div>
+			<%= f.hidden_field :exam_id, 'data-attr' => (@obj.exam ? {:id => @obj.exam.id, :established_date => @obj.exam.established_date, :valid_until => @obj.exam.valid_until, :cr_group => @obj.exam.cr_group, :label => @obj.exam.label} : nil).to_json %>
+			<script>
+				(function($) {
+					var options = <%= exams.map { |e| [e.label, e.id, e.established_date, e.valid_until, e.cr_group] }.to_json %>;
+					for(var i = 0; i < options.length; i++) {
+						var o = options[i];
+						options[i] = {value: o[0], label: o[0], id: o[1], established_date: o[2], valid_until: o[3], cr_group: o[4]};
+					}
+					var item_select = function(e, ui) {
+						var item = ui.item;
+						$('#obj_exam_id').val(item.id).data({attr: item});
+						obj_exam_id_change();
+						$(this).blur();
+					}
+					$('#obj_exam_label').autocomplete({
+						source: options,
+						minLength: 0,
+						select: item_select
+					}).focus(function(e) {
+						var $this = $(this);
+						if($this.autocomplete('widget').is(':visible')) {
+							return;
+						}
+						$this.select();
+						$this.data('autocomplete').search('');
+					}).blur(function(e) {
+						var $this = $(this);
+						var attr = $('#obj_exam_id').data('attr');
+						$this.val(attr ? attr.label : '');						
+					}).data('autocomplete')._renderItem = function(ul, item) {
+						var d1 = Date.parse(item.established_date);
+						var d2 = Date.parse(item.valid_until);
+						var label = item.label + '<br><span class="dim">Established Date:</span> ' + (d1 ? d1.toString('MM/dd/yyyy') : '(none)') + ' <span class="dim">Expires On:</span> ' + (d2 ? d2.toString('MM/dd/yyyy') : '(none)');
+						style = ''
+						if(item.label.match(/^OC3-/)) {
+							style = 'color: ' + (item.cr_group == 2 ? '#008800' : '#880000') + ';';
+						}
+						label = '<a style="' + style + '">' + label + '</a>';
+						return $('<li>').data('item.autocomplete', item).append(label).appendTo(ul);
+					};
+				})(jQuery);
+			</script>
+		</td>
+	</tr>
 <% else %>
 	<tr>
 		<th>Exam: <span class="req">*</span></th>
 		<td>
 			<%= partial 'pop_field', :id => 'obj_exam_label', :text => (@obj.exam ? @obj.exam.label : ''), :name => 'obj[exam_id]', :id => 'obj_exam_id', :url => popup_url({:controller => :exam}), :value => @obj.exam_id, :attr => (@obj.exam ? @obj.exam.json_attributes : nil) %>
 			<div id="exam_attr"></div>
-			<div>Click the field above to open a popup where you can select an existing exam or create a new one.</div>
+			<div>Click the field above to open a popup where you can select an existing exam.</div>
 		</td>
 	</tr>
 <% end %>
+<tr>
+	<th>Existing Certs:</th>
+	<td id="open_certs"></td>
+</tr>
 <% if false %>
 	<%= f.tr_select :job_id, Job.find(:all, :order => 'jobs.name').collect { |j| [j.name, j.id] }, :include_blank => true, :label => 'Job Title' %>	
 <% end %>
@@ -43,7 +96,7 @@
 	<%= f.tr_calendar_date_select :pending_date, :label => 'Pending Date', :class => 'ucase', :help => 'Date list is forwarded from liaison to certification specialist.' %>
 	<%= f.tr_calendar_date_select :certification_date, :label => 'Certification Date', :class => 'ucase', :onchange => 'cdate_change();', :help => 'Date list is certified. Agencies will be able to enter candidate actions on/after this date.' %>	
 	<%= f.tr_calendar_date_select :notified_date, :label => 'Agency Notified Date', :class => 'ucase', :help => 'Date agency is notified that the list has been certified.' %>	
-	<%= f.tr_calendar_date_select :return_date, :label => 'Return Date', :onchange => 'rdate_change();', :class => 'ucase', :help => '<div id="obj_return_date_err" class="req"></div>Date list expires and can no longer be used for hiring.' %>	
+	<%= f.tr_calendar_date_select :return_date, :label => 'Return Date', :onchange => 'rdate_change();', :class => 'ucase', :help => '<div id="obj_return_date_err" class="red2"></div>Date list expires and can no longer be used for hiring.' %>	
 	<%= f.tr_calendar_date_select :completed_date, :label => 'Completed Date', :class => 'ucase', :help => 'Date agency completes and returns the list. Agency will no longer be able to enter candidate actions on/after this date.' %>	
 	<%= f.tr_calendar_date_select :prefinished_date, :label => 'Prefinished Date', :class => 'ucase', :help => 'Date returned list is approved by liaison and sent to certification specialist.' %>	
 	<%= f.tr_text_field :finished, :label => 'Finished', :class => 'ucase', :help => 'Enter initials and/or date to indicate completed list returned from agency has been reviewed and approved.' %>
@@ -136,35 +189,91 @@
 	
 	var cdate_change, rdate_change;
 	
+	var obj_exam_id_change;
+	
 	var school_agency_ids = <%= @school_agency_ids.to_json %>;
 	
 	(function($) {
 		
+		var exam_id = $('#obj_exam_id');
+		var agency_select = $('#obj_agency_id');	
+		var department_select = $('#obj_department_id');
+		
 		var check_return_date = function() {
-			var attr = $('#obj_exam_id').data('attr');
+			var attr = exam_id.data('attr');
 			var rd = Date.parse($('#obj_return_date').val());
 			var vu = attr && Date.parse(attr.valid_until);
-			$('#obj_return_date_err').html(rd && vu && rd > vu ? 'Warning! Return date is greater than exam expiration date!' : '');
+			html = '';
+			$('#exam_attr').removeClass('red2');
+			if(rd && vu && rd > vu) {
+			$('#exam_attr').addClass('red2');
+				html = 'Warning! Return date is greater than exam expiration date!';
+			}
+			$('#obj_return_date_err').html(html);
+		}
+				
+		var open_certs = $('#open_certs');
+		var render_open_certs = function(certs) {
+			var html = '';
+			if(certs.length) {
+				html = '<div class="red2">Other open certified lists found! Click to view:</div>';
+				for(var i = 0; i < certs.length; i++) {
+					var rd = Date.parse(certs[i].requested_date);
+					html += '<div><a class="red2" href="<%= url_for :action => :view %>/'+ certs[i].id +'" target="_blank">' + certs[i].title + 
+						', Requested: ' + (rd ? rd.toString('MM/dd/yyyy') : '(unknown)') + '</a></div>';
+				}
+			}
+			else {
+				html = '<span class="dim">(no open certified lists found for agency/department/division &amp; title)</span>';
+			}
+			open_certs.html(html);
+		}
+		render_open_certs(<%= @obj.other_open_certs_error_attr.to_json %>);
+		
+		var check_open_certs = function() {
+			var v1 = agency_select.val();
+			var v2 = exam_id.val();
+			if(!v1 || !v2) {
+				open_certs.html('<span class="dim">(select an agency &amp; exam to view other open certs)</span>');
+				return;
+			}
+			open_certs.addClass('busy-bg');
+			$.ajax({
+				url: '<%= url_for :action => :check_open_certs, :id => o.id %>',
+				data: $('#obj_department_id, #obj_agency_id, #obj_exam_id, #obj_division_id').serialize(),
+				success: function(data, status, xhr) {
+					render_open_certs(data);
+				},
+				error: function(xhr, status, error) {
+				},
+				complete: function(xhr, status) {
+					open_certs.removeClass('busy-bg');
+				},
+			});
 		}
 		
-		var obj_exam_id_change = function(e) {
-			var attr = $('#obj_exam_id').data('attr');
+		obj_exam_id_change = function(e) {
+			var attr = exam_id.data('attr');
 			html = '';
 			if(attr) {
 				var d1 = Date.parse(attr.established_date);
 				var d2 = Date.parse(attr.valid_until);
+				var d1e = !d1
+				var d2e = !d2 || d2.setHours(0,0,0,0) < (new Date()).setHours(0,0,0,0);
 				html = 
-				'<span class="dim">Established Date:</span> ' + (d1 ? d1.toString('MM/dd/yyyy') : '(none)') + '&nbsp;&nbsp;&nbsp;' +
-				'<span class="dim">Expires On:</span> ' + (d2 ? d2.toString('MM/dd/yyyy') : '(none)');
+				'<span class="' + (d1e ? 'red2' : '') + '"><span class="dim">Established Date:</span> ' + (d1 ? d1.toString('MM/dd/yyyy') : '(none)') + '</span>&nbsp;&nbsp;&nbsp;' +
+				'<span class="' + (d2e ? 'red2' : '') + '"><span class="dim">Expires On:</span> ' + (d2 ? d2.toString('MM/dd/yyyy') : '(none)') + '</span>';
+			}
+			else {
+				html = '<span class="dim">(no exam selected)</div>'
 			}
 			$('#exam_attr').html(html);
 			check_return_date();
+			check_open_certs();
 		}
 		obj_exam_id_change();
-		$('#obj_exam_id').change(obj_exam_id_change);
+		exam_id.change(obj_exam_id_change);
 	
-		agency_select = $('#obj_agency_id');	
-		department_select = $('#obj_department_id');
 		department_row = department_select.closest('tr');
 		var toggle_department = function() {
 			var agency_id = parseInt(agency_select.val());
@@ -191,7 +300,16 @@
 		else {
 			toggle_department();
 		}
-		agency_select.change(set_department);
+		agency_select.change(function(e) {
+			set_department();
+			check_open_certs();
+		});
+		department_select.change(function(e) {
+			check_open_certs();
+		});
+		$('#obj_division_id_wrap').change(function(e) {
+			check_open_certs();
+		});
 	
 		var cdate = $('#obj_certification_date');
 		var rdate = $('#obj_return_date');

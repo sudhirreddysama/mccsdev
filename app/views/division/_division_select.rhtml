@@ -1,24 +1,32 @@
+<% 
+	opts = nil
+	if o.department_id
+		opts = Division.find(:all, :conditions => ['divisions.department_id = ?', o.department_id]).map { |d| [d.name, d.id] }
+	end
+%>
 <div id="<%= field_name %>_division_id_wrap" style="display: inline;">
-	<%= partial 'division/division_select_field', :department_id => o.department_id, :division_id => o.division_id, :field_name => field_name  %>
+	<%= partial 'division/division_select_field', :department_id => o.department_id, :division_id => o.division_id, :field_name => field_name, :opts => opts  %>
 </div>
-<script type="text/javascript">
-	(function($) {
-		var dept = $('#<%= field_name %>_department_id');
-		var div_wrap = $('#<%= field_name %>_division_id_wrap');
-		dept.change(function(e) {
-			div_wrap.addClass('busy-bg');
-			$.ajax({
-				url: '<%= url_for :controller => "division", :action => "division_select" %>',
-				data: {department_id: dept.val(), field_name: '<%= field_name %>'},
-				success: function(data, status, xhr) {
-					div_wrap.html(data);
-				},
-				error: function(xhr, status, error) {
-				},
-				complete: function(xhr, status) {
-					div_wrap.removeClass('busy-bg');
-				},
+<% if !@current_user.agency_level? || !@current_user.department %>
+	<script type="text/javascript">
+		(function($) {
+			var dept = $('#<%= field_name %>_department_id');
+			var div_wrap = $('#<%= field_name %>_division_id_wrap');
+			dept.change(function(e) {
+				div_wrap.addClass('busy-bg');
+				$.ajax({
+					url: '<%= url_for :controller => "division", :action => "division_select" %>',
+					data: {department_id: dept.val(), field_name: '<%= field_name %>'},
+					success: function(data, status, xhr) {
+						div_wrap.html(data);
+					},
+					error: function(xhr, status, error) {
+					},
+					complete: function(xhr, status) {
+						div_wrap.removeClass('busy-bg');
+					},
+				});
 			});
-		});
-	})(jQuery);
-</script>
+		})(jQuery);
+	</script>
+<% end %>

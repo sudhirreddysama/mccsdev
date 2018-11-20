@@ -80,6 +80,10 @@
 	</tr>
 	<tr>
 		<th></th>
+		<td>Format: <label><%= f.radio_button 'fmt', 'pdf' %> PDF</label>&nbsp;&nbsp;<label><%= f.radio_button 'fmt', 'doc' %> Word (may not work with all reports)</label></td>
+	</tr>
+	<tr>
+		<th></th>
 		<td>
 			<%= submit_tag 'Generate Statistics Report #1', :name => 'statistics', :formtarget => '_blank' %>
 			<%= submit_tag 'Statistics #2', :name => 'statistics2', :formtarget => '_blank' %>
@@ -104,7 +108,7 @@
 			<label style="display: block;"><%= f.check_box :only_active %> Only show &quot;ACTIVE&quot; applicants?</label>
 		</td>
 	</tr>
-	<%= f.tr_submit 'Generate Cross Filing Report (PDF)', :name => 'cross_filing', :formtarget => '_blank' %>
+	<%= f.tr_submit 'Generate Cross Filing Report (PDF/Word)', :name => 'cross_filing', :formtarget => '_blank' %>
 	<%= f.tr_submit 'Generate Cross Filing Report (EXCEL)', :name => 'cross_filing_excel', :formtarget => '_blank' %>	
 	<%= f.tr_submit 'Generate Special Accommodations Report', :name => 'special_accommodations', :formtarget => '_blank' %>
 	<tr>
@@ -118,7 +122,7 @@
         </td>
 	</tr>
 	<%= f.tr_submit 'Generate Attendance Report', :name => 'attendance', :formtarget => '_blank' %>
-	<%= f.tr_submit 'Generate Performance Test Report (PDF)', :name => 'performance', :formtarget => '_blank' %>
+	<%= f.tr_submit 'Generate Performance Test Report (PDF/Word)', :name => 'performance', :formtarget => '_blank' %>
 	<%= f.tr_submit 'Generate Performance Test Report (EXCEL)', :name => 'performance_excel', :formtarget => '_blank' %>	
 <% } %>
 

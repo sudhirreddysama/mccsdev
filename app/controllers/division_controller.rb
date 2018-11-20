@@ -25,13 +25,11 @@ class DivisionController < CrudController
 	end
 	
 	def division_select
-		if params.department_id.blank?
-			@opts = ['Select Department...', '']
-		else
+		@opts = nil
+		if !params.department_id.blank?
 			@opts = Division.find(:all, :conditions => ['divisions.department_id = ?', params.department_id]).map { |d| [d.name, d.id] }
-			@opts = ['No Divisions For Department', ''] if @opts.empty?
 		end
-		render :inline => "<%= partial 'division/division_select_field', :department_id => params.department_id, :division_id => nil, :field_name => params.field_name %>"
+		render :inline => "<%= partial 'division/division_select_field', :department_id => params.department_id, :division_id => nil, :field_name => params.field_name, :opts => @opts %>"
 	end
 
 end

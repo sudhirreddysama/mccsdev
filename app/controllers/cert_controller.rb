@@ -151,8 +151,18 @@ class CertController < CrudController
 			@obj.division = @current_user.division if @current_user.division
 			@obj.requested_date = Time.now.to_date
 			@obj.requestor = @current_user.name
-		end		
+		end
+		if !request.post? && @obj.agency
+			@obj.department = Department.find_by_name @obj.agency.name
+		end
 		@obj.job_id = @obj.exam ? @obj.exam.job_id : nil
+	end
+	
+	def check_open_certs
+		# Build a fake object to check open certs against it
+		build_obj
+		@obj.id = params.id
+		render :json => @obj.other_open_certs_error_attr.to_json
 	end
 
 	def cert_upload
@@ -416,7 +426,10 @@ class CertController < CrudController
 			@obj.recert_from_id = old.id
 			if @obj.save
 				old.cert_applicants.each { |ca|
-					@obj.cert_applicants << ca.clone
+					cc = ca.cert_code
+					if !cc or cc.code == 'X' or cc.code == 'NA'
+						@obj.cert_applicants << ca.clone
+					end
 				}
 				flash[:notice] = 'New certification has been created with the same applicants.'
 			else
