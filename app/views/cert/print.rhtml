@@ -102,7 +102,7 @@ end
 				<% if @obj.exam.continuous %>
 					<% style = 'line-height: 12px; padding-bottom: 0;' %>
 					<% if @obj.exam.exam_no =~ /^OC3-/ %>
-						<% style += 'background-color: ' + (@obj.exam.cr_group == 2 ? '#ddffdd' : '#ffdddd') + ';' %>
+						<% style += 'background-color: ' + (@obj.exam.cr_group == 2 ? '#ffdddd' : '#ddffdd') + ';' %>
 					<% end %>
 				<% end %>
 				<td width="33%" style="<%= style %>">

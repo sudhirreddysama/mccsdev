@@ -64,7 +64,7 @@
 						var label = item.label + '<br><span class="dim">Established Date:</span> ' + (d1 ? d1.toString('MM/dd/yyyy') : '(none)') + ' <span class="dim">Expires On:</span> ' + (d2 ? d2.toString('MM/dd/yyyy') : '(none)');
 						style = ''
 						if(item.label.match(/^OC3-/)) {
-							style = 'color: ' + (item.cr_group == 2 ? '#008800' : '#880000') + ';';
+							style = 'color: ' + (item.cr_group == 2 ? '#880000' : '#008800') + ';';
 						}
 						label = '<a style="' + style + '">' + label + '</a>';
 						return $('<li>').data('item.autocomplete', item).append(label).appendTo(ul);
