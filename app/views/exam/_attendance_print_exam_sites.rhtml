@@ -162,7 +162,7 @@ grouped.keys.sort.each { |r|
 				<p>Purple Bio Data Sheet, completion of PART B - Check candidate directions.</p>
 				<p>Veteran credit forms due in 1 month: <%= (show_date + 1.month).strftime '%B %d, %Y' %></p>
 				<% if !special_acc.empty? %>
-					<p><span class="yelo"><b>Special Accomodations:</b></span><br>
+					<p><span class="yelo"><b>Special Accommodations:</b></span><br>
 					<%= special_acc.map { |pid, person| h "#{person.last_name}, #{person.first_name} - #{person.special_acc_face_sheet}" }.join('<br>') %>
 				<% end %>
 				<p><b><u>Note:</u> If a discrepancy exists between this sheet and the information provided by NYS on the exam booklet or candidate 
