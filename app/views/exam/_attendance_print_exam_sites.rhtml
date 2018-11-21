@@ -10,6 +10,8 @@ exam_objs = {}
 	exam_objs[exam] = o
 	o.applicants.each { |a|
 		room = a.exam_site ? a.exam_site.name : 'UNKNOWN SITE'
+		logger.info '????'
+		logger.info room
 		room_objs[room] = a.exam_site
 		d = (a.alternate_exam_date || exam_objs[exam].given_at.to_date).to_s
 		grouped[room][d][exam] << a
@@ -22,10 +24,20 @@ grouped.keys.sort.each { |r|
 	grouped[r].keys.sort.each { |d|
 
 		exams = grouped[r][d];
+		
+		logger.info 'HERE-----------';
+		logger.info exams
+		
 		exam_keys = exams.keys.sort
 		room = room_objs[r]
+		
+		logger.info r
+		logger.info room_objs.inspect
+		logger.info room
 	
 		if room && @report.face_sheet.to_s != ''
+		
+			logger.info 'ok wtf'
 
 			session = ExamSiteSession.find_by_exam_site_id_and_given_on(room.id, @report[:from_date]) || {} 
 			proctors = session.proctor.to_s.split(',').map(&:strip)
@@ -56,22 +68,34 @@ grouped.keys.sort.each { |r|
 			%>		
 			<h1 class="big" <% unless first %> style="page-break-before: always;"<% end %>><span class="yelo"><%= room_name[0].to_s.strip %></span><br>
 			<% proc_room = room.exam_site_group ? room.exam_site_group.head_proctor_room.to_s.sub(/^ROOM\s*/, '') : '' %>
-			PLEASE PICK UP AND RETURN MATERIALS TO ROOM <span class="xline<% if !proc_room.blank? %> yelo<% end %>" style="width: 120px;">&nbsp;<%= proc_room %>&nbsp;</span></h1>
+			PLEASE PICK UP AND RETURN MATERIALS TO ROOM 
+				<% if proc_room.blank? %>
+					<span class="uline"><%= '&nbsp;' * 12 %></span>
+				<% else %>
+					<span class="uline"><span class="yelo">&nbsp;&nbsp;<%= proc_room %>&nbsp;&nbsp;</span></span>
+				<% end %>
+			</h1>
 			<div class="face-sheet">
 				<% first = false %>
 				<table width="100%">
 					<tr>
 						<th width="1%" style="vertical-align: bottom;">PROCTOR</td>
-						<td width="80%" style="vertical-align: bottom;"><div class="face-fill"><%= first_proctor %>&nbsp;</div></td>
-						<th width="1%" style="vertical-align: bottom;">ROOM&nbsp;NUMBER</th>
+						<td width="80%" style="vertical-align: bottom; text-align: center;" class="bb"><%= first_proctor %>&nbsp;</td>
+						<th width="1%" style="vertical-align: bottom;">&nbsp;ROOM&nbsp;NUMBER</th>
 						<% actual_room = room_name[1].to_s.strip.sub(/^ROOM\s*/, '') %>
-						<td width="20%" style="vertical-align: bottom;"><div class="face-fill<% if !actual_room.blank? %> yelo<% end %>">&nbsp;<%= actual_room %>&nbsp;</div></td>
+						<td width="20%" style="vertical-align: bottom; text-align: center;" class="bb">
+							<% if actual_room.blank? %>
+								<%= '&nbsp;' * 12 %>
+							<% else %>
+								<span class="yelo">&nbsp;<%= actual_room %>&nbsp;</span>
+							<% end %>
+						</td>
 					</tr>
 					<% if !proctors.empty? %>
 						<% proctors.each { |proctor| %>
 							<tr>
 								<th width="1%" style="vertical-align: bottom;" class="nobr">ASST. PROCTOR</td>
-								<td width="80%" style="vertical-align: bottom;"><div class="face-fill"><%= proctor %>&nbsp;</div></td>
+								<td width="80%" style="vertical-align: bottom; text-align: center;" class="bb"><%= proctor %>&nbsp;</td>
 							</tr>
 						<% } %>
 					<% end %>
@@ -82,14 +106,14 @@ grouped.keys.sort.each { |r|
 							exam_date = exam_objs[exam_keys.first].given_at.to_date
 							alt = show_date != exam_date
 						%>
-						<td><div class="face-fill"><%= show_date.strftime '%B %d, %Y' %><% if alt %> <b class="">(ALT DATE)</b><% end %>&nbsp;</div></td>
-						<th>EXAM&nbsp;START:</th>
-						<td><div class="face-fill"><%= exam_keys.map { |k| exam_objs[k].given_at }.min.t0? %>&nbsp;</div></td>
+						<td class="bb" style="text-align: center;"><%= show_date.strftime '%B %d, %Y' %><% if alt %> <b class="">(ALT DATE)</b><% end %>&nbsp;</td>
+						<th>&nbsp;EXAM&nbsp;START</th>
+						<td class="bb" style="text-align: center;"><%= exam_keys.map { |k| exam_objs[k].given_at }.min.t0? %>&nbsp;</td>
 					</tr>
 				</table>
 				<p><span class="<% if !calc_allowed %>yelo<% end %>">Arithmetic CALCULATORS and slide rules allowed: 
-					YES <span class="xline">&nbsp;<% if calc_same && calc_allowed %>X<% end %>&nbsp;</span>
-					NO <span class="xline">&nbsp;<% if calc_same && !calc_allowed %>X<% end %>&nbsp;</span>
+					YES <span class="uline">&nbsp;<% if calc_same && calc_allowed %>X<% else %>&nbsp;<% end %>&nbsp;</span>
+					NO <span class="uline">&nbsp;<% if calc_same && !calc_allowed %>X<% else %>&nbsp;<% end %>&nbsp;</span>
 				</span></p>
 				<p><b><%= cross_counter.size %> Candidates</b></p>
 				<table width="100%">
