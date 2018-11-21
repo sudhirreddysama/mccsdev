@@ -10,8 +10,6 @@ exam_objs = {}
 	exam_objs[exam] = o
 	o.applicants.each { |a|
 		room = a.exam_site ? a.exam_site.name : 'UNKNOWN SITE'
-		logger.info '????'
-		logger.info room
 		room_objs[room] = a.exam_site
 		d = (a.alternate_exam_date || exam_objs[exam].given_at.to_date).to_s
 		grouped[room][d][exam] << a
@@ -25,19 +23,10 @@ grouped.keys.sort.each { |r|
 
 		exams = grouped[r][d];
 		
-		logger.info 'HERE-----------';
-		logger.info exams
-		
 		exam_keys = exams.keys.sort
 		room = room_objs[r]
-		
-		logger.info r
-		logger.info room_objs.inspect
-		logger.info room
 	
 		if room && @report.face_sheet.to_s != ''
-		
-			logger.info 'ok wtf'
 
 			session = ExamSiteSession.find_by_exam_site_id_and_given_on(room.id, @report[:from_date]) || {} 
 			proctors = session.proctor.to_s.split(',').map(&:strip)
