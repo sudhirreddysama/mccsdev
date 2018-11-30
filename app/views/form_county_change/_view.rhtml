@@ -1,0 +1,5 @@
+<%= partial 'form_change/status', :o => @obj %>
+<% fields_for(:obj, :builder => TableFormBuilder) { |f| %>
+	<% f.noform = true %>
+	<%= partial 'fields_page', :f => f %>
+<% } %>

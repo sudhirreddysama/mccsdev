@@ -1,0 +1,242 @@
+<% 
+
+#@job_opts = Job.find(:all, :order => 'jobs.name').collect { |j| [j.name, j.id] }
+@class_opts = Const::JOB_CLASSES.map { |m| m[0] }
+@status_opts = Const::JOB_STATUSES.map { |s| s[0] }
+
+%>
+<style>
+	#form { padding: .2in; width: 8.5in; border: 1px solid #888; box-sizing: border-box; margin: 5px; }
+	table.form #form { margin: 0; }
+	#form * { box-sizing: border-box; }
+	#form > h2 { font-size: 1em; margin: 0; padding: 0; font-weight: bold; border: none; margin: 5px 0; font-size: 13px; line-height: 18px; }
+	#form > div { margin: 2px 0; }
+	#form input[type="text"] { border: none; margin: 0; padding: 0; background: #ffc; box-shadow: inset 0 -1px 0 #000; width: 100px; }
+	#form textarea { background: #ffc; border: 1px solid #000; margin: 0; padding: 2px; }
+	#form select { padding: 0 10px 0 0; margin: 0; border: none; background: #ffc url(/mccs/images/menu-expanded.png) right center no-repeat; box-shadow: inset 0 -1px 0 #000; border-radius: 0; -webkit-appearance: none; }
+	#form table { border-collapse: collapse; }
+	#form th, #form td { border: 1px solid #000; padding: 0; margin: 0; }
+	#form th { padding: 0 2px; }
+	#form td input[type="text"] { box-shadow: none; width: 100%; padding: 0 2px; }
+	#form input[type="checkbox"], 
+	#form input[type="radio"] { opacity: 0; position: absolute; left: -999px; }
+	#form input[type="checkbox"] + label,
+	#form input[type="radio"] + label { position: relative; padding-left: 16px; }
+	#form input[type="checkbox"] + label::before,
+	#form input[type="radio"] + label::before { text-align: center; font-size: 12px; line-height: 1em; top: -1px; left: 0; position: absolute; content: ''; display: block; height: 11px; width: 11px; border: 1px solid #000; background: #ffc; }
+	#form input[type="radio"] + label::before { border-radius: 6px; }
+	#form input[type="checkbox"]:checked + label::after { position: absolute; top: 0px; left: 1px; content: ""; display: block; height: 4px; width: 7px; border-left: 4px solid; border-bottom: 4px solid; transform: rotate(-45deg); z-index: 2; }
+	#form input[type="radio"]:checked + label::after { position: absolute; top: 1px; left: 2px; content: ""; height: 9px; width: 9px; border-radius: 50%; background: #000; display: block; z-index: 2; }
+	#form input[type="checkbox"]:focus + label:before,
+	#form input[type="radio"]:focus + label:before,
+	#form input[type="text"]:focus, #form select:focus, #form textarea:focus { outline: auto #888; outline-offset: 1px; z-index: 2; }
+	#form input[type="text"], #form select, #form textarea { position: relative; }
+	#form div.fieldWithErrors input, 
+	#form div.fieldWithErrors textarea, 
+	#form div.fieldWithErrors select { background: #fee; border-color: #f00; }
+	#form div.fieldWithErrors input[type="text"] { box-shadow: inset 0 -1px 0 #f00; } 
+</style>
+<div id="form">
+	<h2 class="ct"><u>RECOMMENDATION FOR PERSONNEL CHANGE</u></h2>
+	<div style="display: flex;">
+		<label>Employee Name:&nbsp;</label>
+		<div style="flex: 3;"><%= f.text_field :name, :style => 'width: 100%;' %></div>
+		<label>&nbsp;SAP Personnel #:&nbsp;</label>
+		<div style="flex: 1;"><%= f.text_field :personnel_no, :style => 'width: 100%;' %></div>
+		<label>&nbsp;Vac. Appr. #:&nbsp;</label>
+		<div style="flex: 1;"><%= f.text_field :vacancy_no, :style => 'width: 100%;' %></div>
+	</div>
+	<div style="display: flex;">
+		<label>County Organization #:&nbsp;</label>
+		<div style="flex: 1;"><%= f.text_field :county_org_no, :style => 'width: 100%;' %></div>
+		<label>&nbsp;SAP Organization #:&nbsp;</label>
+		<div style="flex: 1;"><%= f.text_field :org_no, :style => 'width: 100%;' %></div>
+		<label>&nbsp;Cost Center #:&nbsp;</label>
+		<div style="flex: 1;"><%= f.text_field :cost_center, :style => 'width: 100%;' %></div>
+	</div>
+	<div style="display: flex;">
+		<label>Current Title:&nbsp;</label>
+		<div style="flex: 3;"><%= f.text_field :position, :style => 'width: 100%;' %></div>
+		<label>&nbsp;Current Position #:&nbsp;</label>
+		<div style="flex: 1;"><%= f.text_field :position_no, :style => 'width: 100%;' %></div>
+	</div>
+	<div>
+		<label>EFFECTIVE DATE OF CHANGE:</label>
+		<%= f.text_field :effective_date, :style => 'width: 150px;' %>
+	</div>
+	<h2 class="ct"><u>CHECK APPROPRIATE CHANGES</u></h2>
+	<h2><u>PERSONNEL ACTIONS</u></h2>
+	<div>
+		<%= f.check_box :action_promotion %>
+		<label for="obj_action_promotion">Promotion</label>&nbsp;
+		<%= f.check_box :action_out_of_title %><label for="obj_action_out_of_title">Out-of-Title</label>
+		<label>Replacing:</label>
+		<%= f.text_field :action_out_of_title_replacing, :style => 'width: 200px;' %>&nbsp;
+		<%= f.check_box :action_title_change %><label for="obj_action_title_change">Title Change</label>&nbsp;
+		<%= f.check_box :action_reinstatement %><label for="obj_action_reinstatement">Reinstatement</label>&nbsp;
+		<%= f.check_box :action_demotion %><label for="obj_action_demotion">Demotion</label>&nbsp;
+		<%= f.check_box :action_miscellaneous %><label for="obj_action_miscellaneous">Miscellaneous</label>
+	</div>
+	<div style="padding-left: 20px;">
+		<label>New Title:</label>
+		<%= f.text_field :action_title, :style => 'width: 350px;' %>
+		<label>Position #:</label>
+		<%= f.text_field :action_position_no, :style => 'width: 80px;' %>
+		<label>FLSA:</label>
+		<%= f.radio_button :action_flsa, 'Exempt' %><label for="obj_action_flsa_exempt">Exempt</label>&nbsp;
+		<%= f.radio_button :action_flsa, 'Non-Exempt' %><label for="obj_action_flsa_nonexempt">Non-Exempt</label>
+	</div>
+	<div style="padding-left: 20px;">
+		<label>Group:</label>
+		<%= f.text_field :action_group, :style => 'width: 80px;' %>
+		<label>Step:</label>
+		<%= f.text_field :action_step, :style => 'width: 80px;' %>
+		<label>Hourly Rate:</label>
+		<%= f.text_field :action_hourly_rate, :style => 'width: 80px;' %>
+		<label>Job Code:</label>
+		<%= f.text_field :action_job_code, :style => 'width: 80px;' %>
+		<label>List #:</label>
+		<%= f.text_field :action_list_no, :style => 'width: 80px;' %>
+	</div>
+	<div>
+		<%= f.check_box :action_status_change %><label for="obj_action_status_change">Status Change:</label>&nbsp;
+		<label>New Class:</label>
+		<%= f.select :action_class, @class_opts, :include_blank => true %>
+		<label>New Status:</label>
+		<%= f.select :action_status, @status_opts, :include_blank => true %>
+	</div>
+	<div>
+		<%= f.check_box :action_perm_appt %><label for="obj_action_perm_appt">Permanent Civil Service Appointment:</label>&nbsp;
+		<label>List #:</label>
+		<%= f.text_field :action_perm_appt_list_no, :style => 'width: 80px;' %>
+	</div>
+	<div>
+		<%= f.check_box :action_2nd_provisional %><label for="obj_action_2nd_provisional">Second Provisional Appointment:</label>&nbsp;
+		<label>Date:</label>
+		<%= f.text_field :action_2nd_provisional_date, :style => 'width: 80px;' %>
+	</div>
+	<div>
+		<%= f.check_box :action_change_hours %><label for="obj_action_change_hours">Change Normal Hours:</label>&nbsp;
+		<%= f.text_field :action_hours %>
+		<label><b>(PT, Seasonal, Temporary = 0)</b></label>
+	</div>
+	<div>
+		<%= f.check_box :action_special_increment %><label for="obj_action_special_increment">Special Increment <b>(attach letter of justification)</b></label>&nbsp;
+		<label>Step:</label>
+		<%= f.text_field :action_special_inc_step, :style => 'width: 80px;' %>
+		<label>Hourly Rate:</label>
+		<%= f.text_field :action_special_inc_rate, :style => 'width: 80px;' %>
+	</div>
+	<div>
+		<%= f.check_box :action_separation %><label for="obj_action_separation">Separation:</label>&nbsp;
+		<label>Date:</label>
+		<%= f.text_field :action_separation_date %>
+		<label>Code:</label>
+		<%= f.select :action_separation_code, FormCountyChange::SEPARATION_CODES, :include_blank => true %>
+		<label>Provisional?</label>
+		<%= f.radio_button :action_separation_provisional, 'Yes' %><label for="obj_action_separation_provisional_yes">Yes</label>&nbsp;
+		<%= f.radio_button :action_separation_provisional, 'No' %><label for="obj_action_separation_provisional_no">No</label>
+	</div>
+	<div style="padding-left: 20px;">If <u>Retirement</u>, and the retiree is assigned to a Grant or Internal Order, provide new Org/cost center for retiree charges:</div>
+	<div>
+		<div style="display: inline-block; width: 150px;">&nbsp;</div> <div style="display: inline-block; width: 50px;">&nbsp;</div>
+		<label>Co. Org #:</label> <%= f.text_field :action_separation_county_org_no, :style => 'width: 120px;' %>
+		<label>Sap Org #:</label><%= f.text_field :action_separation_sap_org_no, :style => 'width: 120px;' %>
+		<label>Cost Center #:</label><%= f.text_field :action_separation_cost_center, :style => 'width: 120px;' %>
+	</div>
+	<h2><u>ORG. MANAGEMENT</u></h2>
+	<div>
+		<div style="display: inline-block; width: 150px;"><%= f.check_box :org_move_person_position %><label for="obj_org_move_person_position">Move Person &amp; Position:</label></div>
+		<label style="display: inline-block; width: 50px;">New </label><label>Co. Org #:</label> <%= f.text_field :org_pe_po_co_org_no, :style => 'width: 120px;' %>
+		<label>Sap Org #:</label><%= f.text_field :org_pe_po_sap_org_no, :style => 'width: 120px;' %>
+		<label>Cost Center #:</label><%= f.text_field :org_pe_po_cost_center, :style => 'width: 120px;' %>		
+	</div>
+	<div>
+		<div style="display: inline-block; width: 150px;"><%= f.check_box :org_move_position %><label for="obj_org_move_position">Move Position:</label></div>
+		<label style="display: inline-block; width: 50px;">From: </label><label>Co. Org #:</label> <%= f.text_field :org_po_co_org_no_from, :style => 'width: 120px;' %>
+		<label>Sap Org #:</label><%= f.text_field :org_po_sap_org_no_from, :style => 'width: 120px;' %>
+		<label>Cost Center #:</label><%= f.text_field :org_po_cost_center_from, :style => 'width: 120px;' %>		
+	</div>
+	<div>
+		<div style="display: inline-block; width: 150px;">&nbsp;</div> <label style="display: inline-block; width: 50px;">To: </label><label>Co. Org #:</label> <%= f.text_field :org_po_co_org_no, :style => 'width: 120px;' %>
+		<label>Sap Org #:</label><%= f.text_field :org_po_sap_org_no, :style => 'width: 120px;' %>
+		<label>Cost Center #:</label><%= f.text_field :org_po_cost_center, :style => 'width: 120px;' %>			
+	</div>
+	<div>
+		<div style="display: inline-block; width: 150px;"><%= f.check_box :org_organization_change %><label for="obj_org_organization_change">Organization Change:</label></div>
+		<label style="display: inline-block; width: 50px;">New </label><label>Co. Org #:</label> <%= f.text_field :org_org_co_org_no, :style => 'width: 120px;' %>
+		<label>Sap Org #:</label><%= f.text_field :org_org_sap_org_no, :style => 'width: 120px;' %>
+		<label>Cost Center #:</label><%= f.text_field :org_org_cost_center, :style => 'width: 120px;' %>	
+	</div>
+	<div>
+		<div style="display: inline-block; width: 150px;">&nbsp;</div> <label>New Position #:</label><%= f.text_field :org_org_position_no, :style => 'width: 150px;' %>
+	</div>
+	<div>
+		<%= f.check_box :org_new_position %><label for="obj_org_new_position">New Position #:</label>
+		<%= f.text_field :org_pos_position_no, :style => 'width: 130px;' %>
+	</div>
+	<div>
+		<%= f.check_box :org_remove_in_lieu_of %><label for="obj_org_remove_in_lieu_of">Remove &quot;in lieu of&quot;</label>
+	</div>
+	<div>
+		<%= f.check_box :org_new_work_sched_code %><label for="obj_org_new_work_sched_code">New Work Schedule Code:</label>
+		<%= f.text_field :org_work_sched_code, :style => 'width: 130px;' %>
+	</div>
+	<div>
+		<%= f.check_box :org_new_time_admin_code %><label for="obj_org_new_time_admin_code">New Time Administrator Code:</label>
+		<%= f.text_field :org_time_admin_code, :style => 'width: 130px;' %>
+	</div>
+	<div>
+		<%= f.check_box :org_position_funding %><label for="obj_org_position_funding">Position Funding: <b>Percentages must equal 100%</b></label>
+	</div>
+	<div style="padding-left: 20px;">
+		<table style="width: 100%;">
+			<tr>
+				<th width="20%">Cost Center #</th>
+				<th width="25%">Order #</th>
+				<th width="5%">%</th>
+				<th width="25%">Fund</th>
+				<th width="25%">Grant</th>
+			</tr>
+			<% [1,2].each { |i| %>
+				<tr>
+					<td><%= f.text_field "org_fund_cost_center#{i}" %></td>
+					<td><%= f.text_field "org_fund_order_no#{i}" %></td>
+					<td><%= f.text_field "org_fund_percent#{i}" %></td>
+					<td><%= f.text_field "org_fund_fund#{i}" %></td>
+					<td><%= f.text_field "org_fund_grant#{i}" %></td>
+				</tr>
+			<% } %>
+		</table>
+	</div>
+	<h2><u>LEAVE MANAGEMENT</u> (Leave Request Form, Cert. of Healthcare Provider, and/or military paperwork MUST be attached)</h2>
+	<div>
+		<%= f.check_box :leave_no_pay %><label for="obj_leave_no_pay">No Pay Leave</label>&nbsp;
+		<%= f.check_box :leave_paid %><label for="obj_leave_paid">Paid Leave</label>&nbsp;
+		<label>Reason:</label>
+		<%= f.text_field :leave_reason, :style => 'width: 500px;' %>
+	</div>
+	<div style="padding-left: 20px;">
+		<%= f.check_box :leave_fmla %><label for="obj_leave_fmla">FMLA <b>(attach Designation Form WH-382)</b></label>&nbsp;
+		<%= f.check_box :leave_half_pay_sick %><label for="obj_leave_half_pay_sick">Half Pay Sick Leave</label>&nbsp;
+		<%= f.check_box :leave_military %><label for="obj_leave_military">Military Leave</label>&nbsp;
+		<%= f.check_box :leave_section_72 %><label for="obj_leave_section_72">Section 72</label>
+	</div>
+	<div style="padding-left: 20px;">
+		<%= f.check_box :leave_workers_comp %><label for="obj_leave_workers_comp">Workers Comp.</label>&nbsp;
+		<%= f.check_box :leave_section_207c%><label for="obj_leave_section_207c">Section 207(c)</label>
+	</div>
+	<div style="padding-left: 20px;">
+		<label>Leave Start Date:</label>
+		<%= f.text_field :leave_start_date %>&nbsp;
+		<label>Anticipated Return Date:</label>
+		<%= f.text_field :leave_anticipated_return_date %>
+	</div>
+	<div>
+		<%= f.check_box :leave_return %><label for="obj_leave_return">Return From Leave:</label>&nbsp;
+		<label>Date:</label>
+		<%= f.text_field :leave_return_date %>
+	</div>
+	<h2><u>NOTES TO HR</u> (Include any explanatory information regarding the personnel change included on this form)</h2>
+	<div><%= f.text_area :notes, :style => 'width: 100%; height: 80px;' %></div>
+</div>

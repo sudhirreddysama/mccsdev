@@ -1,0 +1,114 @@
+<% if params[:action] != 'print' %>
+	<div class="tabs buttons">
+		<%= tab 'Printable Version', {:action => :print, :id => @obj.id}, {}, :target => '_blank' %>
+		<% if @obj.employee %>
+			<%= tab 'Employee History Details', {:controller => :employee, :action => :print, :id => @obj.employee_id}, {}, :target => '_blank' %>
+		<% end %>
+		<% if false || @current_user.username == 'isadmin' %>
+			<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => params[:controller], :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>		
+		<% end %>		
+		<div class="clear"></div>
+	</div>
+
+	<% if true || @current_user.agency_level? %>
+		<% if @obj.status == 'started' || @obj.status == 'disapproved' %>
+			<% if @obj.class == FormTitle && @obj.memo_of_explanation.blank? %>
+				<%= link_to 'Before submitting this 222 form please fill out the Justification Memo by clicking here or the &quot;Justification Memo&quot; tab above.', 
+					{:action => :memo, :id => @obj.id},
+					:style => 'display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: underline;' 
+				%>
+			<% else %>
+				<% if @current_user.level == 'agency-head' || @current_user.admin_level? %>
+					<%= link_to('This form has not yet been submitted to HR. Click here to submit.', 
+						{:action => :submit, :id => @obj.id},
+						:confirm => 'Are you sure you want to submit this form? No changes can be made after submitting. Please make sure all required information and documents have been provided.',
+						:style => 'display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: underline;') 
+					%>
+				<% else %>
+					<div style="display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: none;">
+						This form has not yet been submitted to HR. An agency-head level user must submit it from this page.
+					</div>
+				<% end %>
+			<% end %>
+		<% end %>
+	<% end %>
+
+<% end %>
+
+<% form = (@current_user.staff_level? || @current_user.level == 'liaison') && !(params[:action] == 'print') %>
+<% if form %>
+	<%= form_tag %>
+<% end %>
+<div class="viewer">
+	<div class="header">Status</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<% ft = @obj.class == FormTitle %>
+					<label>Status:</label>
+					<% if form %>
+						<% statuses = ['started', 'submitted', 'approved', 'disapproved'] %>
+						<% if ft %>
+							<% statuses = ['started', 'submitted', 'review', 'info-needed', 'withdrawn', 'approved', 'disapproved'] %>
+						<% end %>
+						<%= select :obj, :status, statuses %>
+					<% else %>
+						<%= form_status o.status %>
+					<% end %>
+				</td>
+				<td>
+					<label>Reason:</label>
+					<% if form %>
+						<%= text_field :obj, :status_reason, :size => (ft ? '30' : '60') %>
+						<% if !ft %>
+							<%= submit_tag 'Update' %>
+						<% end %>
+					<% else %>
+						<%= h o.status_reason %>
+					<% end %>
+				</td>
+				<% if form && ft %>
+					<td>
+						<label>Send Email To: (defaults to who started form)</label>
+						<%= text_field :obj, :status_notify, :size => '30' %>
+						<%= submit_tag 'Update' %>
+					</td>
+					<script type="text/javascript">
+						(function($) {
+							var f = $('#obj_status_notify');
+							f.autocomplete({
+								source: '<%= url_for(:controller => :form_title, :action => :email_autocomplete) %>',
+								minLength: 2
+							});
+						})(jQuery);
+					</script>
+				<% end %>
+				<td>
+					<label>Updated By:</label>
+					<%= h o.status_user.name if o.status_user %>
+				</td>
+				<td>
+					<label>Updated At:</label>
+					<%= h o.status_date.d0? %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<% if @obj.is_provisional? && @obj.status != 'approved' %>
+		<div class="row" id="is_provisional" style="display: none;">
+			<table><tr><td style="font-weight: bold; color: #e00;">NOTE: This form involves a provisional appointment. An email notice will be sent to the Exam Unit upon approval.</td></tr></table>
+		</div>
+		<script>
+			(function($) {
+				$('#obj_status').change(function(e) {
+					$('#is_provisional')[$(this).val() == 'approved' ? 'show' : 'hide']();
+				});
+			})(jQuery);
+		</script>
+	<% end %>
+</div>
+
+<% if form %>
+	</form>
+<% end %>

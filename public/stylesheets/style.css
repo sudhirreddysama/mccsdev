@@ -191,6 +191,7 @@ a img { border: none; }
 
 .tabs a.tab-import_applicants span { background-image: url(../images/icons/user_go.png); }
 .tabs a.tab-form span { background-image: url(../images/icons/report_user.png); }
+.tabs a.tab-form-mc span { background-image: url(../images/book-m.png); }
 
 .tab-div { float: left; width: 10px; border-right: 1px solid #888; line-height: 26px; }
 

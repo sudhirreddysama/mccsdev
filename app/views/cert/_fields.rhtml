@@ -22,7 +22,7 @@
 		<td><%= partial 'division/division_select', :f => f, :o => o, :field_name => 'obj' %></td>
 	</tr>
 <% end %>
-<% if @current_user.agency_level? %>
+<% if true || @current_user.agency_level? %>
 	<tr>
 		<th>Exam: <span class="req">*</span></th>
 		<td>
@@ -65,6 +65,9 @@
 						style = ''
 						if(item.label.match(/^OC3-/)) {
 							style = 'color: ' + (item.cr_group == 2 ? '#880000' : '#008800') + ';';
+						}
+						else if(item.label.match(/^OC3B-/)) {
+							style = 'color: ' + (item.cr_group == 3 ? '#880000' : '#008800') + ';';
 						}
 						label = '<a style="' + style + '">' + label + '</a>';
 						return $('<li>').data('item.autocomplete', item).append(label).appendTo(ul);

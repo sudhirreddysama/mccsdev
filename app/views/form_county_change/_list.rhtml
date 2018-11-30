@@ -1,0 +1,45 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<td width="1%">Actions</td>
+			<th width="1%">ID</th>
+			<th width="1%">Status</th>
+			<th width="1%">Created</th>
+			<th width="1%">Effective</th>
+			<% if @current_user.agency_level? %>
+				<th width="33%">Name</th>
+				<th width="33%">Changes</th>
+				<th width="33%">Present Title</th>
+			<% else %>
+				<th width="20%">Name</th>
+				<th width="20%">Agency</th>
+				<th width="20%">Department</th>
+				<th width="20%">Changes</th>
+				<th width="20%">Present Title</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td class="nobr">
+					<%= partial 'actions', :o => o %>
+					<% if !o.documents.to_a.empty? %>
+						<%= link_to(image_tag('icons/attach.png', :size => '16x16', :alt => 'docs', :title => 'Documents'), {:sc => :form_change, :sid => o.id, :controller => :document}) %>
+					<% end %>
+				</td>
+				<td><%= o.id %></td>
+				<td><%= form_status o.status %></td>
+				<td class="nobr"><%= o.created_at.d0? %></td>
+				<td class="nobr"><%= o.effective_date.d0? %></td>
+				<td><%= link_to "#{o.last_name}, #{o.first_name}", :action => :view, :id => o.id %></td>
+				<% if !@current_user.agency_level? %>
+					<td><%= h o.agency.name if o.agency %></td>
+					<td><%= h o.department.name if o.department %><% if o.division %> (<%= o.division.name %>)<% end %></td>
+				<% end %>
+				<td><%= o.changes_string %></td>
+				<td><%= o.present_title %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

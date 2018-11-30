@@ -104,6 +104,9 @@ end
 					<% if @obj.exam.exam_no =~ /^OC3-/ %>
 						<% style += 'background-color: ' + (@obj.exam.cr_group == 2 ? '#ffdddd' : '#ddffdd') + ';' %>
 					<% end %>
+					<% if @obj.exam.exam_no =~ /^OC3B-/ %>
+						<% style += 'background-color: ' + (@obj.exam.cr_group == 3 ? '#ffdddd' : '#ddffdd') + ';' %>
+					<% end %>
 				<% end %>
 				<td width="33%" style="<%= style %>">
 					EXAM NUMBER, LIST EXPIRES:

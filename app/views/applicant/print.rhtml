@@ -131,7 +131,7 @@
 						<td>
 							<table cellspacing="0" cellpadding="0" border="0" width="100%">
 								<tr>
-									<td width="50%">
+									<td width="50%" valign="top">
 										<% if seasonal %>
 											<p>Are you at least 18 years old? <b><%= @obj.over_18 ? 'YES' : 'NO' %></b></p>
 											<p>When can you begin to work? <b><%= @obj.begin_work %></b></p>
@@ -140,18 +140,19 @@
 										<% else %>
 											<p>Are you a citizen of the United States? <b><%= @obj.us_citizen ? 'YES' : 'NO' %></b></p>
 											<p>Do you have a valid New York State Driver's license? <b><%= @obj.state_drivers_license ? 'YES' : 'NO' %></b></p>
-											<p>Will you accept part-time work? <b><%= @obj.accept_part_time_work ? 'YES' : 'NO' %></b></p>
+											<p>Will you accept temporary work? <b><%= @obj.accept_temp_work ? 'YES' : 'NO' %></b></p>
 										<% end %>
 									</td>
-									<td width="50%">
+									<td width="50%" valign="top">
 										<% if seasonal %>
 											<p>Do you have a valid NYS drivers license? <b><%= @obj.state_drivers_license ? 'YES' : 'NO' %></b></p>
-											<p>If so what class? <b><%= @obj.drivers_license_class %></b></p>
+											<p>Driver's license class: <b><%= @obj.drivers_license_class %></b></p>
 											<p>Can you obtain daily transportation to any work site in Monroe County? <b><%= @obj.has_transportation ? 'YES' : 'NO' %></b></p>
 										<% else %>
 											<p>If no, do you have a legal right to work in the US? <b><%= @obj.us_citizen ? 'NA' : @obj.us_right_to_work ? 'YES' : 'NO' %></b></p>
-											<p>If yes, what class? <b><%= @obj.us_right_to_work_class %></b></p>
-											<p>Will you accept temporary work? <b><%= @obj.accept_temp_work ? 'YES' : 'NO' %></b></p>
+											<p>Driver's license class: <b><%= @obj.drivers_license_class %></b></p>
+											<% if false %><p>If yes, what class? <b><%= @obj.us_right_to_work_class %></b></p><% end %>
+											<p>Will you accept part-time work? <b><%= @obj.accept_part_time_work ? 'YES' : 'NO' %></b></p>
 										<% end %>
 									</td>
 								</tr>

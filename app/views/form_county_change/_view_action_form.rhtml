@@ -1,0 +1,13 @@
+<% if !(params[:action] == 'print') && (@current_user.staff_level? || @current_user.liaison_level?) %>
+	<div class="tabs buttons">
+		<% if @obj.class == FormHire && (@obj.hire_type == 'New Hire' || @obj.hire_type == 'Additional Position') %>
+			<%= tab 'Create New Employee Record', {:controller => :employee, :action => :new, :from => @obj.id}, {}, :target => '_blank' %>
+		<% else %>
+			<a href="#" onclick="jQuery('#action-form').toggle(); return false" class="tab-action_new"><span>New History</span></a>
+		<% end %>
+		<div class="clear"></div>
+	</div>
+	<div id="action-form" style="display: none;">
+		<%= partial 'form_change/empl_action_form' %>
+	</div>
+<% end %>

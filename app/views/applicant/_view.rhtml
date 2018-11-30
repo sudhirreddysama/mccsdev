@@ -562,8 +562,8 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 				<table>
 					<tr>
 						<td><label>Valid NYS Driver's license?</label><%= yn? wa.state_drivers_license %>&nbsp;</td>
+						<td><label>License class:</label><%= h wa.drivers_license_class %></td>
 						<% if is_seasonal %>
-							<td><label>License class:</label><%= h wa.drivers_license_class %></td>
 							<td><label>Daily transp. to work site?</label><%= yn wa.has_transportation %></td>
 						<% end %>
 						<% if !is_seasonal %>

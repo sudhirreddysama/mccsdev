@@ -1,0 +1,16 @@
+<% ft = @model == FormTitle %>
+<tr>
+	<th>Statuses:</th>
+	<td>
+		<label><%= check_box_tag 'filter[statuses][]', 'started', @filter.statuses.include?('started') %> started</label>
+		<label><%= check_box_tag 'filter[statuses][]', 'submitted', @filter.statuses.include?('submitted') %> submitted</label>
+		<% if ft %>
+			<label><%= check_box_tag 'filter[statuses][]', 'review', @filter.statuses.include?('review') %> review</label>
+			<label><%= check_box_tag 'filter[statuses][]', 'info-needed', @filter.statuses.include?('info-needed') %> info-needed</label>
+			<label><%= check_box_tag 'filter[statuses][]', 'withdrawn', @filter.statuses.include?('withdrawn') %> withdrawn</label>
+		<% end %>
+		<label><%= check_box_tag 'filter[statuses][]', 'approved', @filter.statuses.include?('approved') %> approved</label>
+		<label><%= check_box_tag 'filter[statuses][]', 'disapproved', @filter.statuses.include?('disapproved') %> disapproved</label>
+	</td>
+</tr>
+<%= partial 'cert/agen_dept_div_filter', :f => f %>
