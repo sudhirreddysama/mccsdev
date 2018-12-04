@@ -22,7 +22,7 @@
 		<td><%= partial 'division/division_select', :f => f, :o => o, :field_name => 'obj' %></td>
 	</tr>
 <% end %>
-<% if true || @current_user.agency_level? %>
+<% if @current_user.agency_level? %>
 	<tr>
 		<th>Exam: <span class="req">*</span></th>
 		<td>
