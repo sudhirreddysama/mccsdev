@@ -508,6 +508,7 @@ input.ucase, textarea.ucase { text-transform: uppercase; }
 .pref-status.pref-certified { background-color: #080; }
 .pref-status.pref-complete { background-color: #088; }
 .pref-status.pref-exhausted { background-color: #800; }
+.pref-status.pref-expired { background-color: #000; }
 
 .red,
 .red a { color: #a00; }
@@ -521,7 +522,7 @@ fieldset div.fs { padding: 10px; }
 legend { font-weight: bold; }
 fieldset table.form { margin: 0; }
 
-.pref-mil { display: block; padding: 0 3px; color: #fff; float: left; }
+.pref-mil { display: block; padding: 0 5px; color: #fff; float: left; border-radius: 5px; float: left; }
 .pref-mil.pref-mil-preferred { background-color: #088; }
 .pref-mil.pref-mil-military { background-color: #080; }
 

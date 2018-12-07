@@ -5,7 +5,8 @@ class Const
 		'requested',
 		'certified',
 		'complete',
-		'exhausted'
+		'exhausted',
+		'expired'
 	]
 
 	AGENCY_TYPES = [
