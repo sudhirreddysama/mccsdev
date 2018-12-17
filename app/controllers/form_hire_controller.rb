@@ -132,7 +132,7 @@ class FormHireController < CrudController
 				:action_date => @obj.effective_date,
 				:reference_date => Time.now.to_date,
 				:absent => true,
-				:leave_date => @empl.leave_date,
+				#:leave_date => @empl.leave_date, # No leave date from "new hire" form.
 				:empl_action_type_id => 31
 			}
 		end
