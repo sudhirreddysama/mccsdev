@@ -1,4 +1,126 @@
 <%= f.tr_text_field :name, :label => 'Name', :req => true %>
+<tr>
+	<th>Existing Web Posts:</th>
+	<td>
+		<div id="existing-help">Any existing published web posts with a similar name will show up here. <a href="https://cs.monroecounty.gov/hrapply" target="_blank">View all published web posts</a></div>
+		<div id="existing" style="display: none;">
+			<%
+				ex = "#{HRAPPLYDB}.exams"
+				existing = WebExam.find(:all, 
+					:conditions => "(#{ex}.publish < now() or #{ex}.publish is null) and (#{ex}.deadline > now() or #{ex}.deadline is null) and (#{ex}.published = 1 or #{ex}.published is null)" + (@obj.id ? ' and id != %d' % @obj.id : ''),
+					:order => "#{ex}.name asc",
+					:include => :web_exam_type
+				) %>
+				<% existing.each { |e| %>
+					<% search = [e.no, e.name].reject(&:blank?).map { |s| s.to_s.downcase.gsub(/[^\w ]/, '') } %>
+					<div data-search="<%= search %>"><%= link_to [e.web_exam_type && e.web_exam_type.name, e.no, e.name].reject(&:blank?) * ' - ', {:action => :view, :id => e.id}, :target => '_blank' %> &middot; <%= link_to 'Web', "/hrapply/apply/view/#{e.id}", :target => '_blank' %></div>
+				<% } %>
+		</div>
+	</td>
+</tr>
+<script>
+	(function($) {
+		var input = $('#obj_name');
+		input.attr('autocomplete', 'new-password');
+		var existing_help = $('#existing-help');
+		var existing = $('#existing');
+		var val = '';
+		var search = function(e) {
+			var new_val = input.val();
+			if(val != new_val) {
+				val = new_val;
+				var parts = val.split(' ');
+				var words = [];
+				for(var i = 0; i < parts.length; i++) {
+					var word = parts[i].trim().replace(/\W/, '');
+					if(word && word.length > 3) {
+						words.push(word.toLowerCase());
+					}
+				}				
+				if(words.length) {
+					existing.show();
+					existing.find('div').each(function(i, el) {
+						el = $(el);
+						var txt = el.data('search');
+						match = 0;
+						for(var i = 0; i < words.length && match < 3; i++) {
+							if(txt.indexOf(words[i]) != -1) {
+								match++;
+							}
+						}
+						el.toggle(match > 2 || match == words.length);
+					});
+				}
+				else {
+					existing.hide();
+				}
+			}
+		};
+		search();
+		input.live('keyup', search);
+	})(jQuery);
+</script>
+<% if false %>
+<script>
+	(function($) {
+		var input = $('#obj_name');
+		input.attr('autocomplete', 'new-password');
+		var existing_help = $('#existing-help');
+		var existing = $('#existing');
+		var val = input.val();
+		var delay = null;
+		var xhr = null;
+		
+		var find_existing = function() {
+			existing_help.addClass('busy-bg');
+			var xhr = $.ajax({
+				url: '<%= url_for(:controller => :web_exam, :action => :autocomplete) %>',
+				data: {term: val},
+				success: function(data, status, xhr) {
+					html = '';
+					for(var i = 0; i < data.length; i++) {
+						var o = data[i];
+						html += '<div><a href="' + ROOT_PATH + 'web_exam/view/' + o.id + '" target="_blank">' + (o.no ? o.no + ' - ' : '') + o.name + '</a> &middot; <a href="/hrapply/apply/view/' + o.id + '" target="_blank">Public Link</a></div>'
+					}
+					existing.html(html);
+				},
+				complete: function(xhr, status) {
+					existing_help.removeClass('busy-bg');
+					xhr = null;
+				},
+				error: function(xhr, status, error) {
+				}
+			});
+		}
+		if(val.length > 3) {
+			find_existing();
+		}
+		
+		input.live('keyup', function(e) {
+			var new_val = input.val();
+			if(val != new_val) {
+				val = new_val;
+				existing_help.removeClass('busy-bg');
+				if(xhr) {
+					xhr.abort();
+				}
+				if(delay) {
+					clearTimeout(delay);
+				}
+				if(val.length > 3) {
+					var delay = setTimeout(function() {				
+						delay = null;		
+						find_existing();
+					}, 200);
+				}
+				else {
+					existing.html('');
+				}
+			}
+		});
+	})(jQuery);
+</script>
+<% end %>
 <%= f.tr_text_field :no, :label => 'Exam No.' %>
 <%= f.tr_select :exam_type_id, WebExamType.find(:all, :order => 'name asc').collect { |t| [t.name, t.id] }, :label => 'Type', :include_blank => true, :req => true %>
 <tr>
