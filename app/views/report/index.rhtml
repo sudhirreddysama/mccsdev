@@ -435,6 +435,22 @@ end
 			</fieldset>
 		</form>
 		
+		<%= form_tag({:action => 'appointments'}, :target => '_blank') %>
+			<fieldset class="coolfieldset">
+				<legend>Employee Appointment Class &amp; Status</legend>
+				<div class="fs">
+					<table class="form">
+						<th>Appointment Date:</th>
+						<td><%= calendar_date_select_tag :from_date %></td>
+						<th>To Date:</th>
+						<td><%= calendar_date_select_tag :to_date %></td>
+						<td><%= submit_tag 'Run Report' %></td>
+					</table>
+					(Only includes latest appointment per employee)
+				</div>
+			</fieldset>
+		</form>
+		
 	<% end %>
 
 </div>
