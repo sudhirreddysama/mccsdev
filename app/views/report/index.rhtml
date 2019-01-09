@@ -440,13 +440,13 @@ end
 				<legend>Employee Appointment Class &amp; Status</legend>
 				<div class="fs">
 					<table class="form">
-						<th>Appointment Date:</th>
+						<th>Appointment Date From:</th>
 						<td><%= calendar_date_select_tag :from_date %></td>
 						<th>To Date:</th>
 						<td><%= calendar_date_select_tag :to_date %></td>
 						<td><%= submit_tag 'Run Report' %></td>
 					</table>
-					(Only includes latest appointment per employee)
+					(Only includes latest NEW HIRE, REHIRE, or TITLE CHG action per employee)
 				</div>
 			</fieldset>
 		</form>
