@@ -902,4 +902,36 @@ class ReportController < ApplicationController
 		render :layout => false
 	end
 	
+	def appointments
+		@from_date = Date.parse(params[:from_date]) rescue nil
+		@to_date = Date.parse(params[:to_date]) rescue nil	
+		cond = []
+		cond << DB.escape('a.action_date >= "%s"', @from_date.to_s(:db)) if @from_date
+		cond << DB.escape('a.action_date <= "%s"', @to_date.to_s(:db)) if @to_date
+		result = DB.query(
+			'select e.first_name, e.last_name, j.name job_name, a.action_date, a.classification, a.status from employees e
+			join empl_actions a on a.employee_id = e.id
+			join empl_action_types t on t.id = a.empl_action_type_id and t.hire = 1
+			join jobs j on j.id = a.job_id
+			join (
+				select max(a.action_date) action_date, a.employee_id employee_id
+				from empl_actions a 
+				join empl_action_types t on t.id = a.empl_action_type_id and t.hire = 1
+				' + (cond.empty? ? '' : 'where ' + get_where(cond)) + '
+				group by a.employee_id
+			) m on m.action_date = a.action_date and m.employee_id = e.id
+			group by e.id
+			order by a.classification, a.status, e.last_name, e.first_name'
+		)
+		if result.num_rows > 20000
+			render :text => 'Too many records.'
+			return
+		end
+		@objs = Hash.new { |h, k| h[k] = Hash.new { |h2, k2| h2[k2] = [] } }
+		result.each_hash { |o|
+			@objs[o.classification][o.status] << o
+		}
+		render_pdf render_to_string(:layout => false), 'appointments.pdf'
+	end
+	
 end

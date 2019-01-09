@@ -1,0 +1,81 @@
+<html>
+	<head>
+		<style type="text/css">
+
+			html, body { padding: 0; margin: 0; border: 0; }
+			body, td, th { font: 11px/16px Trebuchet MS, Verdana, Arial, sans-serif; }
+			
+			table { border-collapse: collapse; }
+			td, th { vertical-align: top; text-align: left; padding: 2px; }
+			th { font-weight: bold; }
+			
+			.r { text-align: right; }
+			tr { page-break-inside: avoid; }
+			.nobr { white-space: nowrap; }
+			
+		</style>
+	</head>
+	<body>
+		<div style="float: right;"><%= Time.now.d0? %></div>
+		<h3>
+			Employee Appointment Class &amp; Status<br />
+			<% if @from_date %>From <%= @from_date.d0? %> <% end %><% if @to_date %>To <%= @to_date.d0? %><% end %>
+		</h3>
+		<% s_tot = Hash.new { |h, k| h[k] = 0 } %>
+		<% c_tot = Hash.new { |h, k| h[k] = 0 } %>
+		<% details = capture { %>
+			<table style="width: 100%;">
+				<tr style="border-top: 1px solid #000; border-bottom: 1px solid #000;">
+					<th>Name</th>
+					<th>Title</th>
+					<th>Date</th>
+					<th>Class</th>
+					<th>Status</th>
+				</tr>
+				<% @objs.each { |c, c_objs| %>
+					<% c_name = Const::JOB_CLASSES_SHORT_HASH[c] %>
+					<% c_objs.each { |s, s_objs| %>
+						<% s_name = Const::JOB_STATUSES_SHORT_HASH[s] %>
+						<% s_tot[s] += s_objs.size %>
+						<% c_tot[c] += s_objs.size %>
+						<% s_objs.each { |o| %>
+							<tr style="border-bottom: 1px solid #ccc;">
+								<td><%= h o.last_name %>, <%= h o.first_name %></td>
+								<td><%= h o.job_name %></td>
+								<td><%= Date.parse(o.action_date).d0? rescue nil %></td>
+								<td class="r nobr"><%= c_name %></td>
+								<td class="r nobr"><%= s_name %></td>
+							</tr>
+						<% } %>
+						<tr style="border-bottom: 1px solid #000;"><th class="r" colspan="5">TOTAL CLASS <%= c_name %> - STATUS <%= s_name %>: <%= nwp s_objs.size %></th></tr>
+					<% } %>				
+					<tr style="border-bottom: 1px solid #000;"><th class="r" colspan="5">TOTAL CLASS <%= c_name %>: <%= nwp c_objs.size %></th></tr>
+				<% } %>
+			</table>
+		<% } %>
+		<div style="float: left; margin-right: 20px;">
+			<h3>Classification Totals:</h3>
+			<table>
+				<% Const::JOB_CLASSES.each { |name, c| %>
+					<tr>
+						<td class="nobr"><%= name %></td>
+						<td class="r"><%= nwp c_tot[c] %></td>
+					</tr>
+				<% } %>
+			</table>
+		</div>
+		<div style="float: left;">
+			<h3>Status Totals:</h3>
+			<table>
+				<% Const::JOB_STATUSES.each { |name, s| %>
+					<tr>
+						<td class="nobr"><%= name %></td>
+						<td class="r"><%= nwp s_tot[s] %></td>
+					</tr>
+				<% } %>
+			</table>
+		</div>
+		<h3 style="clear: both;">Details</h3>
+		<%= details %>
+	</body>
+</html>
