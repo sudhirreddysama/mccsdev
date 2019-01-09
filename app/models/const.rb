@@ -1,5 +1,9 @@
 class Const
 
+	def self.rassoc_to_hash arr
+		Hash[*arr.map(&:reverse).flatten]
+	end
+
 	PREF_LIST_STATUSES = [
 		'established',
 		'requested',
@@ -29,6 +33,7 @@ class Const
 		['EXEMPT', 'E'],
 		['PENDING CLASSIFICATION', 'D']
 	]
+	JOB_CLASSES_HASH = rassoc_to_hash JOB_CLASSES
 	
 	JOB_CLASSES_SHORT = [
 		['UNCLASS', 'U'],
@@ -39,6 +44,7 @@ class Const
 		['EXEMPT', 'E'],
 		['PENDING', 'D']
 	]
+	JOB_CLASSES_SHORT_HASH = rassoc_to_hash JOB_CLASSES_SHORT
 	
 	GIVEN_BY = [
 		['State Decentralized', 1],
@@ -56,6 +62,7 @@ class Const
 		['SUBSTITUTE', 'SU'],
 		['PENDING-NYS', 'PN']
 	]
+	JOB_STATUSES_HASH = rassoc_to_hash JOB_STATUSES
 	
 	JOB_STATUSES_SHORT = [
 		['PERM', 'P'],
@@ -67,6 +74,7 @@ class Const
 		['SUB', 'SU'],
 		['PEND-NYS', 'PN']
 	]
+	JOB_STATUSES_SHORT_HASH = rassoc_to_hash JOB_STATUSES_SHORT
 	
 	JOB_TIMES = [
 		['FULL TIME', 'F'],
@@ -103,7 +111,7 @@ class Const
 		['Can access entire system, but is view only.', 'view-only'],
 		['Can make updates under the employee tab, otherwise view only.', 'liaison'],
 		['Agency user, can only access agency specific data.', 'agency'],
-		['Agency user, can only view basic employee information', 'agency-employees'],
+		#['Agency user, can only view basic employee information', 'agency-employees'],
 		['Agency user who can also sign and return certified lists.', 'agency-head']
 	]
 	
