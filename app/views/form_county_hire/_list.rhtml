@@ -7,13 +7,13 @@
 			<th width="1%">Created</th>
 			<th width="1%">Effective</th>
 			<% if @current_user.agency_level? %>
-				<th width="33%">Name</th>
-				<th width="33%">Present Title</th>
+				<th width="45%">Name</th>
+				<th width="50%">Position</th>
 			<% else %>
-				<th width="20%">Name</th>
-				<th width="20%">Agency</th>
-				<th width="20%">Department</th>
-				<th width="20%">Present Title</th>
+				<th width="23%">Name</th>
+				<th width="24%">Agency</th>
+				<th width="24%">Department</th>
+				<th width="31%">Position</th>
 			<% end %>
 		</tr>
 	</thead>
@@ -23,7 +23,7 @@
 				<td class="nobr">
 					<%= partial 'actions', :o => o %>
 					<% if !o.documents.to_a.empty? %>
-						<%= link_to(image_tag('icons/attach.png', :size => '16x16', :alt => 'docs', :title => 'Documents'), {:sc => :form_change, :sid => o.id, :controller => :document}) %>
+						<%= link_to(image_tag('icons/attach.png', :size => '16x16', :alt => 'docs', :title => 'Documents'), {:sc => :form_county_hire, :sid => o.id, :controller => :document}) %>
 					<% end %>
 				</td>
 				<td><%= o.id %></td>
@@ -35,7 +35,7 @@
 					<td><%= h o.agency.name if o.agency %></td>
 					<td><%= h o.department.name if o.department %><% if o.division %> (<%= o.division.name %>)<% end %></td>
 				<% end %>
-				<td><%= o.position %></td>
+				<td><%= h o.position %></td>
 			</tr>
 		<% } %>
 	</tbody>

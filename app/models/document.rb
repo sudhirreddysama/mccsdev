@@ -21,6 +21,8 @@ class Document < ActiveRecord::Base
 	belongs_to :agency
 	belongs_to :department
 	belongs_to :preferred_list
+	belongs_to :form_county_hire
+	belongs_to :form_county_change
 	
 	attr :uploaded_file, true
 	

@@ -33,4 +33,18 @@ class VacancyData < ActiveRecord::Base
 		logger.info "VacancyData.cron finished #{Time.now}"
 	end
 	
+	def autocomplete_json_data field = 'search'
+		{
+			:organization => organization,
+			:org_no => org_no,
+			:cost_center => cost_center,
+			:position => position,
+			:position_no => position_no,
+			:last_incumbent => last_incumbent,
+			:salary_group => salary_group,
+			:status => status,
+			:label => field == 'search' ? "#{position} - #{last_incumbent.blank? ? '(NO INCUMBENT)' : last_incumbent}" : send(field)
+		}	
+	end
+	
 end

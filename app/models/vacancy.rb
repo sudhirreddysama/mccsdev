@@ -106,6 +106,19 @@ class Vacancy < ActiveRecord::Base
 		no = DB.query('select lpad(ifnull(max(substr(exec_approval_no, 4) + 0), 0) + 1, 3, "0") no from vacancies where substr(exec_approval_no, 1, 2) = "%s" and id != %d', yr, id).fetch_hash.no
 		return "#{yr}-#{no}"
 	end
+	
+	def autocomplete_json_data
+		{
+			:exec_approval_no => exec_approval_no,
+			:org_no => org_no,
+			:cost_center => cost_center,
+			:position_no => position_no,
+			:position => position,
+			:salary_group => salary_group,
+			:last_incumbent => last_incumbent,
+			:desired_start => desired_start
+		}	
+	end
 
 	include DbChangeHooks
 	

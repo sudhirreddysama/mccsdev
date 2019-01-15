@@ -9,3 +9,10 @@
 	</td>
 </tr>
 <%= f.tr_select :omb_liaison_id, @user_opts, :order => 'users.name asc', :include_blank => true, :label => 'OMB Liaison User', :help => 'OMB Liaison is used in the Request to Fill Vacancy workflow.' %>
+<tr>
+	<th>SAP Codes:</th>
+	<td>
+		<%= f.text_field :vacancy_data_codes %>
+		<div>Starting 2 digits of cost centers that belong to this county department. Multiple values can be separated by commas. This is used to limit what personnel data comes up as suggestions on RTF Vacancy and 105 Employment Change forms.</div> 
+	</td>
+</tr>

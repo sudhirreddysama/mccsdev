@@ -60,37 +60,85 @@ is_agency = %w{agency department contact}.include?(sc || c)
 		<%= partial 'top_texts' %>
 		<% unless @notabs or params[:popup] %>
 			<div id="tabs" class="tabs">
-				<% if @current_user.only_vacancy %>
-					<%= tab 'Req. Fill Vac.', {:controller => :vacancy, :sc => nil}, {}, {:class => 'tab-form' + (sc == 'vacancy' ? ' active' : ''), :title => 'Requests to Fill Vacancies'} %>
-				<% elsif @current_user.agency_level? %>
+			
+				<% if @current_user.agency_level? %>
 					<%= tab 'Home', {:controller => :agencies, :sc => nil, :sid => nil, :id => nil}, {}, {:class => 'tab-agencies', :title => 'Agency Portal Home'} %>
-					<%= tab 'Employees', {:controller => :employee, :sc => nil}, {}, {:class => 'tab-employee' + (sc == 'employee' || c == 'pay_cert' || sc == 'pay_cert' || c == 'form_change' || sc == 'form_change' || c == 'form_hire' || sc == 'form_hire' || c == 'form_title' || sc == 'form_title' || c == 'vacancy' || sc == 'vacancy' ? ' active' : ''), :title => 'Employees + History'} %>					
-					<% if @current_user.level != 'agency-employees' %>
-						<% if @current_user.agency && @current_user.agency.show_web_posts %>
-							<%= tab 'Web Posts', {:controller => :web_exam, :sc => nil}, {}, {:class => 'tab-web_exam' + (sc == 'web_exam' ? ' active' : ''), :title => 'Exams/Vacancies Posted to Website'} %>
-						<% end %>
-						<% if @current_user.show_pref_lists %>
-							<%= tab 'Pref. Lists', {:controller => :preferred_list, :sc => nil}, {}, {:class => 'tab-preferred' + (sc == 'preferred_list' || c == 'preferred_list' ? ' active' : ''), :title => 'Preferred Lists'} %>
-						<% end %>
-						<% if @current_user.show_cert_lists %>
-							<%= tab 'Cert. Lists', {:controller => :cert, :sc => nil}, {}, {:class => 'tab-cert' + (sc == 'cert' ? ' active' : ''), :title => 'Certified Eligible Lists'} %>												
+					<% if @current_user.perm_ag_employees %>
+						<%= tab 'Employees', {:controller => :employee, :sc => nil}, {}, {:class => 'tab-employee' + (sc == 'employee' ? ' active' : ''), :title => 'Employees + History'} %>
+					<% end %>
+					<% if @current_user.perm_ag_pay_certs %>
+						<%= tab 'Pay Cert.', {:controller => :pay_cert}, {:action => :index, :id => nil, :sc => nil, :sid => nil}, :class => 'tab-pay_cert' + (params[:sc] == 'pay_cert' ? ' active' : '') %>
+					<% end %>
+					<% if @current_user.perm_ag_vacancies %>
+						<%= tab 'RTF Vac.', {:controller => :vacancy, :sc => nil}, {}, {:class => 'tab-form' + (sc == 'vacancy' ? ' active' : ''), :title => 'Requests to Fill Vacancies'} %>
+					<% end %>
+					<% if @current_user.perm_ag_form_changes %>
+						<% if @current_user.is_agency_county? %>
+							<%= tab '105', {:controller => :form_county_change, :sc => nil}, {}, {:class => 'tab-form-mc' + (params[:sc] == 'form_county_change' ? ' active' : ''), :title => 'Personnel Change Form'} %>
+						<% else %>
+							<%= tab '105', {:controller => :form_change, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_change' ? ' active' : ''), :title => 'Personnel Change Form'} %>
 						<% end %>
 					<% end %>
-					<% if @current_user.allow_applicants %>
-						<%= tab 'Applicants', {:controller => :person, :sc => nil}, {}, {:class => 'tab-person' + (sc == 'person' ? ' active' : ''), :title => 'Applicants'} %>				
+					<% if @current_user.perm_ag_form_hires %>
+						<% if @current_user.is_agency_county? %>
+							<%= tab '330', {:controller => :form_county_hire, :sc => nil}, {}, {:class => 'tab-form-mc' + (params[:sc] == 'form_county_hire' ? ' active' : ''), :title => 'New Hire Form'} %>
+						<% else %>
+							<%= tab '330', {:controller => :form_hire, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_hire' ? ' active' : ''), :title => 'New Hire Form'} %>
+						<% end %>
 					<% end %>
-					<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (sc == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>				
+					<% if @current_user.perm_ag_form_titles %>
+						<%= tab '222', {:controller => :form_title, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_title' ? ' active' : ''), :title => 'Electronic New Title Form'} %>
+					<% end %>
+					<% if @current_user.perm_ag_web_posts %>
+						<%= tab 'Web Posts', {:controller => :web_exam, :sc => nil}, {}, {:class => 'tab-web_exam' + (sc == 'web_exam' ? ' active' : ''), :title => 'Exams/Vacancies Posted to Website'} %>
+					<% end %>
+					<% if @current_user.show_pref_lists %>
+						<%= tab 'Pref. Lists', {:controller => :preferred_list, :sc => nil}, {}, {:class => 'tab-preferred' + (sc == 'preferred_list' || c == 'preferred_list' ? ' active' : ''), :title => 'Preferred Lists'} %>
+					<% end %>
+					<% if @current_user.show_cert_lists %>
+						<%= tab 'Cert. Lists', {:controller => :cert, :sc => nil}, {}, {:class => 'tab-cert' + (sc == 'cert' ? ' active' : ''), :title => 'Certified Eligible Lists'} %>	
+					<% end %>
+					<% if @current_user.perm_ag_reports %>
+						<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (sc == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>			
+					<% end %>
+					<% if @current_user.perm_ag_applicants %>
+						<%= tab 'Applicants', {:controller => :person, :sc => nil}, {}, {:class => 'tab-person' + (sc == 'person' ? ' active' : ''), :title => 'Applicants'} %>			
+					<% end %>
+			
 				<% else %>
-					<%= tab 'Employees', {:controller => :employee, :sc => nil}, {}, {:class => 'tab-employee' + (sc == 'employee' || c == 'pay_cert' || sc == 'pay_cert' || c == 'form_change' || sc == 'form_change' || c == 'form_hire' || sc == 'form_hire' || c == 'form_title' || sc == 'form_title' || c == 'vacancy' || sc == 'vacancy' ? ' active' : ''), :title => 'Employees + History'} %>
-					<%= tab 'Exams/Lists', {:controller => :exam, :sc => nil}, {}, {:class => 'tab-exam' + (sc == 'exam' || c == 'provisional' || sc == 'provisional' || c == 'preferred_list' ? ' active' : ''), :title => 'Exams + Eligible Lists'} %>				
-					<%= tab 'Certifications', {:controller => :cert, :sc => nil}, {}, {:class => 'tab-cert' + (sc == 'cert' ? ' active' : ''), :title => 'Certified Eligible Lists'} %>								
-					<%= tab 'Web Posts', {:controller => :web_exam, :sc => nil}, {}, {:class => 'tab-web_exam' + (sc == 'web_exam' ? ' active' : ''), :title => 'Exams/Vacancies Posted to Website'} %>
-					<%= tab 'Applications', {:controller => :applicant, :sc => nil}, {}, {:class => 'tab-applicant' + (sc == 'applicant' ? ' active' : ''), :title => 'All Submitted Applications'} %>							
-					<%= tab 'Applicants', {:controller => :person, :sc => nil}, {}, {:class => 'tab-person' + (sc == 'person' ? ' active' : ''), :title => 'Applicants'} %>				
-					<%= tab 'Delivery', {:controller => :delivery, :sc => nil}, {}, {:class => 'tab-delivery' + (sc == 'delivery' ? ' active' : ''), :title => 'Deliver Letters to Applicants'} %>				
-					<%= tab 'Agencies', {:controller => :agency, :sc => nil}, {}, {:class => 'tab-agency' + (is_agency ? ' active' : ''), :title => 'Agency/Departments & Contacts'} %>
-					<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (sc == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>
-					<%= tab 'Misc.', {:controller => :job, :sc => nil}, {}, {:class => 'tab-misc' + (is_misc ? ' active' : ''), :title => 'Manage Other Tables (Users, Agencies, etc.)'} %>
+					<%# This tab display logic can be cleaned up. The agency specific stuff was separated into above condition block. %>
+					<% if @current_user.only_vacancy %>
+						<%= tab 'Req. Fill Vac.', {:controller => :vacancy, :sc => nil}, {}, {:class => 'tab-form' + (sc == 'vacancy' ? ' active' : ''), :title => 'Requests to Fill Vacancies'} %>
+					<% elsif @current_user.agency_level? %>
+						<%= tab 'Home', {:controller => :agencies, :sc => nil, :sid => nil, :id => nil}, {}, {:class => 'tab-agencies', :title => 'Agency Portal Home'} %>
+						<%= tab 'Employees', {:controller => :employee, :sc => nil}, {}, {:class => 'tab-employee' + (sc == 'employee' || c == 'pay_cert' || sc == 'pay_cert' || c == 'form_change' || sc == 'form_change' || c == 'form_hire' || sc == 'form_hire' || c == 'form_title' || sc == 'form_title' || c == 'vacancy' || sc == 'vacancy' ? ' active' : ''), :title => 'Employees + History'} %>					
+						<% if @current_user.level != 'agency-employees' %>
+							<% if @current_user.agency && @current_user.agency.show_web_posts %>
+								<%= tab 'Web Posts', {:controller => :web_exam, :sc => nil}, {}, {:class => 'tab-web_exam' + (sc == 'web_exam' ? ' active' : ''), :title => 'Exams/Vacancies Posted to Website'} %>
+							<% end %>
+							<% if @current_user.show_pref_lists %>
+								<%= tab 'Pref. Lists', {:controller => :preferred_list, :sc => nil}, {}, {:class => 'tab-preferred' + (sc == 'preferred_list' || c == 'preferred_list' ? ' active' : ''), :title => 'Preferred Lists'} %>
+							<% end %>
+							<% if @current_user.show_cert_lists %>
+								<%= tab 'Cert. Lists', {:controller => :cert, :sc => nil}, {}, {:class => 'tab-cert' + (sc == 'cert' ? ' active' : ''), :title => 'Certified Eligible Lists'} %>												
+							<% end %>
+						<% end %>
+						<% if @current_user.allow_applicants %>
+							<%= tab 'Applicants', {:controller => :person, :sc => nil}, {}, {:class => 'tab-person' + (sc == 'person' ? ' active' : ''), :title => 'Applicants'} %>				
+						<% end %>
+						<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (sc == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>				
+					<% else %>
+						<%= tab 'Employees', {:controller => :employee, :sc => nil}, {}, {:class => 'tab-employee' + (sc == 'employee' || c == 'pay_cert' || sc == 'pay_cert' || c == 'form_change' || sc == 'form_change' || c == 'form_hire' || sc == 'form_hire' || c == 'form_title' || sc == 'form_title' || c == 'vacancy' || sc == 'vacancy' || c == 'form_county_hire' || sc == 'form_county_hire' || c == 'form_county_change' || sc == 'form_county_change' ? ' active' : ''), :title => 'Employees + History'} %>
+						<%= tab 'Exams/Lists', {:controller => :exam, :sc => nil}, {}, {:class => 'tab-exam' + (sc == 'exam' || c == 'provisional' || sc == 'provisional' || c == 'preferred_list' ? ' active' : ''), :title => 'Exams + Eligible Lists'} %>				
+						<%= tab 'Certifications', {:controller => :cert, :sc => nil}, {}, {:class => 'tab-cert' + (sc == 'cert' ? ' active' : ''), :title => 'Certified Eligible Lists'} %>								
+						<%= tab 'Web Posts', {:controller => :web_exam, :sc => nil}, {}, {:class => 'tab-web_exam' + (sc == 'web_exam' ? ' active' : ''), :title => 'Exams/Vacancies Posted to Website'} %>
+						<%= tab 'Applications', {:controller => :applicant, :sc => nil}, {}, {:class => 'tab-applicant' + (sc == 'applicant' ? ' active' : ''), :title => 'All Submitted Applications'} %>							
+						<%= tab 'Applicants', {:controller => :person, :sc => nil}, {}, {:class => 'tab-person' + (sc == 'person' ? ' active' : ''), :title => 'Applicants'} %>				
+						<%= tab 'Delivery', {:controller => :delivery, :sc => nil}, {}, {:class => 'tab-delivery' + (sc == 'delivery' ? ' active' : ''), :title => 'Deliver Letters to Applicants'} %>				
+						<%= tab 'Agencies', {:controller => :agency, :sc => nil}, {}, {:class => 'tab-agency' + (is_agency ? ' active' : ''), :title => 'Agency/Departments & Contacts'} %>
+						<%= tab 'Reports', {:controller => :report, :sc => nil}, {}, {:class => 'tab-report' + (sc == 'report' ? ' active' : ''), :title => 'Run Various Reports'} %>
+						<%= tab 'Misc.', {:controller => :job, :sc => nil}, {}, {:class => 'tab-misc' + (is_misc ? ' active' : ''), :title => 'Manage Other Tables (Users, Agencies, etc.)'} %>
+					<% end %>
 				<% end %>
 				<div class="right tabs-menu">
 					<%= tab @current_user.username, {:controller => :account, :action => :edit, :sc => nil}, {}, :class => 'tabs-menu-label tab-username' %>

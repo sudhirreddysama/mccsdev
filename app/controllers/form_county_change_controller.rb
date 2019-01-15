@@ -9,7 +9,7 @@ class FormCountyChangeController < CrudController
 			['ID', 'form_county_changes.id'],
 			['Created Date', 'form_county_changes.created_at'],
 			['Effective Date', 'form_county_changes.effective_date'],
-			['First Name', 'form_county_changes.name'],
+			['Name', 'form_county_changes.name'],
 			['Agency Name', 'agencies.name'],
 			['Department Name', 'departments.name'],
 		]
@@ -54,7 +54,7 @@ class FormCountyChangeController < CrudController
 		@opt = {
 			:conditions => get_where(cond),
 			:order => get_order_auto,
-			:include => [:agency, :department, :employee]
+			:include => [:agency, :department]
 		}
 		super
 	end
@@ -66,6 +66,11 @@ class FormCountyChangeController < CrudController
 	
 	def build_obj
 		super
+		if params[:from_vacancy_id]
+			v = Vacancy.find(params[:from_vacancy_id])
+			@obj.vacancy_no = v.exec_approval_no
+			@obj.name = v.hr_candidate_hired
+		end
 		if @current_user.agency_level?
 			@obj.agency = @current_user.agency if @current_user.agency
 			@obj.department = @current_user.department if @current_user.department
@@ -85,14 +90,14 @@ class FormCountyChangeController < CrudController
 			old_status = @obj.status
 			@obj.update_attributes params[:obj]
 			flash[:notice] = 'Status has been updated.'
-			#u = @obj.user #@obj.agency ? @obj.agency.get_users(@obj.department) : nil
-			#u2 = @obj.submitter
-			#if u2
-			#	Notifier.deliver_form_status [u2].reject(&:nil?), @obj
-			#end
-			#if @obj.is_provisional? && @obj.status == 'approved' && old_status != @obj.status
-			#	Notifier.deliver_form_change_provisional @obj
-			#end
+			u = @obj.user #@obj.agency ? @obj.agency.get_users(@obj.department) : nil
+			u2 = @obj.submitter
+			if u2
+				Notifier.deliver_form_status [u2].reject(&:nil?), @obj
+			end
+			if @obj.is_provisional? && @obj.status == 'approved' && old_status != @obj.status
+				Notifier.deliver_form_change_provisional @obj
+			end
 			redirect_to
 		else
 			super
@@ -101,13 +106,18 @@ class FormCountyChangeController < CrudController
 	
 	def submit
 		load_obj
-		#u = Agency.get_liaison(@obj.agency, @obj.department)
-		#if u
-		#	Notifier.deliver_form_submitted [u], @obj
-		#end
+		u = Agency.get_liaison(@obj.agency, @obj.department)
+		if u
+			Notifier.deliver_form_submitted [u], @obj
+		end
 		@obj.update_attributes({:status => 'submitted', :submitter_id => @current_user.id, :submitted_at => Time.now})
 		redirect_to :action => :view, :id => @obj.id
 		flash[:notice] = 'Form has been submitted to HR'
+	end
+	
+	def print
+		@opt = {:margin => '.2in'}
+		super
 	end
 
 end

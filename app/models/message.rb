@@ -31,6 +31,7 @@ class Message < ActiveRecord::Base
 			f = TempfileExt.open 'wkhtmltopdf.html', 'tmp'			
 			f.write body_full.gsub("<strong", "\n<strong") # fix for weird bug where bold text was smooshed against previous word.
 			f.close
+			mb = '.5in'
 			foot = 'letter-footer.html'
 			if letterhead == 'dhs'
 				foot = 'letter-footer-no-address.html'
@@ -40,8 +41,11 @@ class Message < ActiveRecord::Base
 				foot = 'letter-footer-dot.html'				
 			elsif letterhead == 'parks'
 				foot = 'letter-footer-parks.html'				
+			elsif letterhead == 'mcso'
+				foot = 'letter-footer-mcso.html'				
+				mb = '1.5in'
 			end
-			`wkhtmltopdf --disable-smart-shrinking --footer-html /home/rails/mccs#{RAILS_ENV == 'development' ? 'dev' : ''}/#{foot} -s Letter -O Portrait --margin-left 1in --margin-right 1in --margin-top .5in --margin-bottom .5in #{f.path} #{path}`			
+			`wkhtmltopdf --disable-smart-shrinking --footer-html /home/rails/mccs#{RAILS_ENV == 'development' ? 'dev' : ''}/#{foot} -s Letter -O Portrait --margin-left 1in --margin-right 1in --margin-top .5in --margin-bottom #{mb} #{f.path} #{path}`			
 			update_attribute :rendered_pdf, true
 		end
 	end

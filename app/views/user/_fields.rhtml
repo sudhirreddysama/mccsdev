@@ -1,6 +1,9 @@
+<tr style="background: #e8e8e8;"><th></th><th>User Login</th></tr>
 <%= f.tr_text_field :username, :label => 'Username', :req => true, :autocomplete => 'off' %>
 <%= f.tr_password_field :password, :label => 'Password', :help => 'Leave blank to keep current password. Required for new users.', :req => @obj.new_record?, :autocomplete => 'off' %>
 <%= f.tr_password_field :password_confirmation, :label => 'Confirm Password', :help => 'Please retype the password.', :req => @obj.new_record?, :autocomplete => 'off' %>
+
+<tr style="background: #e8e8e8;"><th></th><th>User Information</th></tr>
 <%= f.tr_text_field :name, :label => 'Name', :req => true %>
 <%= f.tr_text_field :initials, :label => 'Initials', :size => '5' %>
 <%= f.tr_text_field :title, :label => 'title' %>
@@ -8,6 +11,7 @@
 <%= f.tr_text_field :email2, :label => '2nd Email', :req => false %>
 <%= f.tr_text_field :phone, :label => 'Phone' %>
 <%= f.tr_text_field :fax, :label => 'Fax' %>
+<tr style="background: #e8e8e8;"><th></th><th>User Access Level</th></tr>
 <tr>
 	<th>User Level: <span class="req">*</span></th>
 	<td>
@@ -16,22 +20,81 @@
 		<% } %>
 	</td>
 </tr>
-<%= f.tr_check :allow_edit_notice_emails, :label => 'Edit Exam Notice Emails?', :text => 'Check here to grant access to the "Exam Notice Emails" tab.' %>
-<%= f.tr_check :allow_web_post_review, :label => 'Allow Web Post Review?', :text => 'Check here to allow agency users to review web post applications just like the Liaison role.' %>
-<% if false %>
-	<%= f.tr_check :view_web_post_for_agency, :label => 'View all Web Posts for Agency?', :text => 'Check here to allow this agency user to view all web posts for their own agency.' %>
-<% end %>
-<%= f.tr_check :only_vacancy, :label => 'Only Req. to Fill Vac.?', :text => 'Check here if this user should ONLY see request to fill vacancies (no access to other agency level parts of system).' %>
-<%= f.tr_check :allow_vacancy_omb, :label => 'Req. to Fill Vac. OMB?', :text => 'Check here to allow this user to give OMB approval/disapproval for requests to fill vacancies.' %>
-<%= f.tr_check :allow_vacancy_admin, :label => 'Req. to Fill Vac. Admin?', :text => 'Check here to allow this user to give final (Exec.) approval/disapproval for requests to fill vacancies.' %>
-<%= f.tr_check :vacancy_emails, :label => 'All Vacancy Notices?', :text => 'If checked user will receive ALL vacancy notices for their department (submitted, approved, disapproved) in addition to the submitter/approver.' %>
-<%= f.tr_check :allow_applicants, :label => 'View Applicants?', :text => 'If checked user will be able to view the applicants tab and send the onboarding email. Normally agency users cannot see the applicants tab, and only admins can sent the onboarding email.' %>
-<%= f.tr_check :show_pref_lists, :label => 'Show Preferred Lists Tab?', :text => 'Show/hide preferred list tab for agency level users.' %>
-<%= f.tr_check :show_cert_lists, :label => 'Show Certified Lists Tab?', :text => 'Show/hide certified list tab for agency level users.' %>
+<tr style="background: #e8e8e8;"><th></th><th>Agency/Department/Division</th></tr>
 <%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name asc').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Agency', :help => 'Select an agency for agency and agency-head level users.' %>
 <%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name asc').collect { |a| [a.name, a.id] }, :include_blank => true, :label => 'Department', :help => 'Select an department for agency and agency-head level users.' %>
 <tr>
 	<th>Division:</th>
 	<td><%= partial 'division/division_select', :f => f, :o => o, :field_name => 'obj' %></td>
 </tr>
+<tr style="background: #e8e8e8;"><th></th><th>Agency Level Permissions&nbsp;&nbsp;&nbsp;<a href="#" id="defaults1" class="dim">Set County Defaults</a>&nbsp;&nbsp;&nbsp;<a href="#" id="defaults2" class="dim">Set Non-County Defaults</a></th></tr>
+<tr>
+	<th></th>
+	<td id="perm_ag">
+		<label><%= f.check_box :perm_ag_employees, :class => 'def2' %> Access Employees Tab</label><br>
+		<label><%= f.check_box :perm_ag_pay_certs, :class => 'def2' %> Access Payroll Certifications Tab</label><br>
+		<label><%= f.check_box :perm_ag_form_changes, :class => 'def1 def2' %> Access 105 Employment Change Form Tab</label><br>
+		<label><%= f.check_box :perm_ag_form_hires, :class => 'def1 def2' %> Access 330 New Hire Form Tab</label><br>
+		<label><%= f.check_box :perm_ag_form_titles, :class => 'def1 def2' %> Access 220 New Title Form Tab</label><br>
+		<label><%= f.check_box :perm_ag_web_posts, :class => '' %> Access Web Posts Tab</label><br>
+		<label style="padding-left: 20px;"><%= f.check_box :allow_web_post_review, :class => '' %> Allow Web Post Applicant Review (user can approve/disapprove applications)</label><br>
+		<label><%= f.check_box :show_pref_lists, :class => 'def1 def2' %> Access Preferred Lists Tab</label><br>
+		<label><%= f.check_box :show_cert_lists, :class => 'def1 def2' %> Access Certified Lists Tab</label><br>
+		<label><%= f.check_box :perm_ag_reports, :class => 'def2' %> Access Reports Tab</label><br>
+		<label><%= f.check_box :perm_ag_applicants, :class => '' %> Access Applications Tab (view ALL applicants)</label><br>
+		<label><%= f.check_box :perm_ag_vacancies, :class => 'def1' %> Access Request to Fill Vacancy Tab</label>
+	</td>
+</tr>
+<script>
+	(function($) {
+		$('#defaults1').click(function(e) {
+			e.preventDefault();
+			$('#perm_ag input').prop('checked', false).filter('.def1').prop('checked', true).parent().effect('highlight');
+		});
+		$('#defaults2').click(function(e) {
+			e.preventDefault();
+			$('#perm_ag input').prop('checked', false).filter('.def2').prop('checked', true).parent().effect('highlight');
+		});
+	})(jQuery);
+</script>
+
+
+
+
+<tr style="background: #e8e8e8;"><th></th><th>Other Permissions</th></tr>
+<tr>
+	<th></th>
+	<td>
+		<label><%= f.check_box :allow_edit_notice_emails %> Access Exam Notice Emails Tab</label><br>
+		<label><%= f.check_box :allow_vacancy_omb %> Can Enter RTF Vacancy OMB Approval/Disapproval</label><br>
+		<label><%= f.check_box :allow_vacancy_admin %> Can Enter RTF Vacancy Final Exec. Approval/Disapproval</label><br>
+		<label><%= f.check_box :vacancy_emails %> Receive All Vacancy Notices (receive all emails for department usually only sent to submitter/approver)</label><br>
+		<label><%= f.check_box :perm_formatta_email %> Can Send Formatta Email</label>
+	</td>
+</tr>
+
+
+
+
+
+
+<tr style="background: #e8e8e8;"><th></th><th>Other</th></tr>
 <%= f.tr_text_field :switch_username, :label => 'Switch Username', :help => 'Enter the username of a user that will always be able to "switch" to this user without logging in again.' %>
+
+
+
+<% if false %>
+<%= f.tr_check :allow_vacancy_omb, :label => 'Req. to Fill Vac. OMB?', :text => 'Check here to allow this user to give OMB approval/disapproval for requests to fill vacancies.' %>
+<%= f.tr_check :allow_vacancy_admin, :label => 'Req. to Fill Vac. Admin?', :text => 'Check here to allow this user to give final (Exec.) approval/disapproval for requests to fill vacancies.' %>
+<%= f.tr_check :vacancy_emails, :label => 'All Vacancy Notices?', :text => 'If checked user will receive ALL vacancy notices for their department (submitted, approved, disapproved) in addition to the submitter/approver.' %>
+<%= f.tr_check :only_vacancy, :label => 'Only Req. to Fill Vac.?', :text => 'Check here if this user should ONLY see request to fill vacancies (no access to other agency level parts of system).' %>
+<%= f.tr_check :allow_edit_notice_emails, :label => 'Edit Exam Notice Emails?', :text => 'Check here to grant access to the "Exam Notice Emails" tab.' %>
+<%= f.tr_check :allow_web_post_review, :label => 'Allow Web Post Review?', :text => 'Check here to allow agency users to review web post applications just like the Liaison role.' %>
+	<%= f.tr_check :allow_applicants, :label => 'View Applicants?', :text => 'If checked user will be able to view the applicants tab and send the onboarding email. Normally agency users cannot see the applicants tab, and only admins can sent the onboarding email.' %>
+	<%= f.tr_check :show_pref_lists, :label => 'Show Preferred Lists Tab?', :text => 'Show/hide preferred list tab for agency level users.' %>
+	<%= f.tr_check :show_cert_lists, :label => 'Show Certified Lists Tab?', :text => 'Show/hide certified list tab for agency level users.' %>
+<% end %>
+
+<% if false %>
+	<%= f.tr_check :view_web_post_for_agency, :label => 'View all Web Posts for Agency?', :text => 'Check here to allow this agency user to view all web posts for their own agency.' %>
+<% end %>

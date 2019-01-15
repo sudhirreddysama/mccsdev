@@ -1,5 +1,13 @@
 class TableFormBuilder < ActionView::Helpers::FormBuilder    
-
+	
+	def merge_global_options(options)
+		if global_options
+			global_options.each { |k, v|
+				options[k] = v if !options.key?(k)
+			}
+		end
+	end
+	
 	
 	def submit(value = "Submit", options = {})
 		return '' if @noform
@@ -7,51 +15,52 @@ class TableFormBuilder < ActionView::Helpers::FormBuilder
 	end
 
 	def text_field(method, options = {})
-		options[:readonly] = true if @noform
+		merge_global_options(options)
  		super(method, options)
 	end
 	
 	def password_field(method, options = {})
-		options[:readonly] = true if @noform
+		merge_global_options(options)
 		super(method, options)
 	end
 	
 	def hidden_field(method, options = {})
+		merge_global_options(options)
 		super(method, options)
 	end
 	
 	def file_field(method, options = {})
-		options[:readonly] = true if @noform
+		merge_global_options(options)
 		super(method, options)
 	end
 	
 	def text_area(method, options = {})
-		options[:readonly] = true if @noform
+		merge_global_options(options)
 		super(method, options)
 	end
 	
 	def check_box(method, options = {}, checked_value = "1", unchecked_value = "0")
-		options[:disabled] = true if @noform
+		merge_global_options(options)
 		super(method, options, checked_value, unchecked_value)
 	end
 	
 	def radio_button(method, tag_value, options = {})
-		options[:disabled] = true if @noform
+		merge_global_options(options)
 		super(method, tag_value, options)
 	end
 	
 	def select(method, choices, options = {}, html_options = {})
-		html_options[:disabled] = true if @noform
+		merge_global_options(html_options)
 		super(method, choices, options, html_options)
 	end
 	
 	def grouped_collection_select(method, collection, group_method, group_label_method, option_key_method, option_value_method, options = {}, html_options = {})
-		html_options[:disabled] = true if @noform
+		merge_global_options(html_options)
 		super(method, collection, group_method, group_label_method, option_key_method, option_value_method, options, html_options)
 	end
 	
 	def calendar_date_select(method, options = {})
-		options[:readonly] = true if @noform
+		merge_global_options(options)
 		#if @noform
 		#	text_field method, options
 		#else
@@ -59,17 +68,17 @@ class TableFormBuilder < ActionView::Helpers::FormBuilder
 		#end
 	end
 	
-	attr :noform, true
+	attr :global_options, true
 	
 	def tr_text_field(method, options = {})
 		options[:size] ||= 60
-		options[:readonly] = true if @noform
+		merge_global_options(options)
 		tr method, text_field(method, trim_opts(options)), options
 	end
 	
 	def tr_password_field(method, options = {})
 		options[:size] ||= 60
-		options[:readonly] = true if @noform
+		merge_global_options(options)
 		tr method, password_field(method, trim_opts(options)), options
 	end
 	
@@ -78,23 +87,23 @@ class TableFormBuilder < ActionView::Helpers::FormBuilder
 	end
 	
 	def tr_file_field(method, options = {})
-		options[:readonly] = true if @noform
+		merge_global_options(options)
 		tr method, file_field(method, trim_opts(options)), options
 	end
 	
 	def tr_text_area(method, options = {})
 		options[:size] ||= '60x4'
-		options[:readonly] = true if @noform
+		merge_global_options(options)
 		tr method, text_area(method, trim_opts(options)), options
 	end
 	
 	def tr_check_box(method, options = {}, checked_value = "1", unchecked_value = "0")
-		options[:disabled] = true if @noform
+		merge_global_options(options)
 		tr method, check_box(method, trim_opts(options), checked_value, unchecked_value), options
 	end
 	
 	def tr_radio_button(method, tag_value, options = {})
-		options[:disabled] = true if @noform
+		merge_global_options(options)
 		tr method, radio_button(method, tag_value, trim_opts(options)), options
 	end
 	
@@ -104,22 +113,22 @@ class TableFormBuilder < ActionView::Helpers::FormBuilder
 	end
 	
 	def tr_select(method, select_opts, options, opt2 = {})
-		options[:disabled] = true if @noform
+		merge_global_options(options)
 		tr method, select(method, select_opts, trim_opts(options), opt2), options
 	end
 	
 	def tr_grouped_collection_select(method, collection, group_method, group_label_method, option_key_method, option_value_method, options = {}, html_options = {})
-		options[:disabled] = true if @noform
+		merge_global_options(html_options)
 		tr method, grouped_collection_select(method, collection, group_method, group_label_method, option_key_method, option_value_method, trim_opts(options), html_options), options
 	end
 	
 	def tr_calendar_date_select(method, options = {})
-		options[:readonly] = true if @noform
+		merge_global_options(options)
 		tr method, calendar_date_select(method, trim_opts(options)), options
 	end
 	
 	def tr_check(method, options = {})
-		options[:disabled] = true if @noform
+		merge_global_options(options)
 		'<tr>' +
 			'<th class="nobr">' +
 				options[:label].to_s +

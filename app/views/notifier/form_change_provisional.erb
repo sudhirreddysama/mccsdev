@@ -1,3 +1,4 @@
+<% if @o.form_type == '105' -%>
 A 105 form (change) involving a provisional appointment has been approved:
 
 Name: <%= @o.last_name %>, <%= @o.first_name %>
@@ -7,3 +8,13 @@ Agency: <%= @o.agency ? @o.agency.name : '' %>
 Department: <%= @o.department ? @o.department.name : '' %>
 
 http://www.monroecounty.gov/mccs/form_change/view/<%= @o.id %>
+<% elsif @o.form_type == '105C' -%>
+A County 105 form (change) involving a provisional appointment has been approved:
+
+Name: <%= @o.name %>
+Reason: <%= @o.status_reason %>
+Agency: <%= @o.agency ? @o.agency.name : '' %>
+Department: <%= @o.department ? @o.department.name : '' %>
+
+http://www.monroecounty.gov/mccs/form_county_change/view/<%= @o.id %>
+<% end -%>

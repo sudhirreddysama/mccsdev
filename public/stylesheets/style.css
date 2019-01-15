@@ -1,4 +1,5 @@
 html, body { padding: 0; margin: 0; border: 0; }
+body { padding-bottom: 10px; }
 body, td, th, input, select, textarea { font: 11px/16px Trebuchet MS, Verdana, Arial, sans-serif; }
 h1, h2, h3, h4, h5, h6 { font-weight: normal; padding: 0; margin: 1em 0; }
 h1 { font-size: 160%; }
@@ -269,9 +270,9 @@ td.subform table { border-collapse: collapse; }
 
 input[type=text], input[type=password], textarea, select { background-color: #ffe; margin: 0; }
 
-.fieldWithErrors { color: #c00; display: inline; }
-.fieldWithErrors input { color: #c00; }
-.fieldWithErrors input[type=text], .fieldWithErrors textarea { border-color: #c00; }
+.fieldWithErrors { color: #c00; }
+.fieldWithErrors { color: #c00; }
+.fieldWithErrors { border-color: #c00; }
 .err * { color: #c00 !important; border-color: #c00 !important; }
 
 iframe { margin: 0; border: 0; padding: 0;/* width: 100%; height: 100%; */}

@@ -118,4 +118,21 @@ class User < ActiveRecord::Base
 	
 	include DbChangeHooks
 	
+	# One time queries.
+	def self.setup_new_permissions
+		DB.query('update users set perm_formatta_email = allow_applicants')
+		DB.query('update users u left join agencies a on a.id = u.agency_id set
+			u.perm_ag_employees = a.agency_type != "COUNTY" and u.only_vacancy = 0,
+			u.perm_ag_pay_certs = a.agency_type != "COUNTY" and u.only_vacancy = 0,
+			u.perm_ag_form_changes = u.only_vacancy = 0,
+			u.perm_ag_form_hires = u.only_vacancy = 0,
+			u.perm_ag_form_titles = u.only_vacancy = 0,
+			u.perm_ag_web_posts = u.only_vacancy = 0,
+			u.perm_ag_reports = u.only_vacancy = 0,
+			u.perm_ag_applicants = u.allow_applicants,
+			u.perm_ag_vacancies = 1
+			where u.level like "agency%"'
+		)
+	end
+	
 end

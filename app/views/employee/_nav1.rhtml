@@ -1,3 +1,5 @@
+<% if false %>
+
 <% if @current_user.level != 'agency-employees' %>
 	<%= tab 'Pay Cert.', {:controller => :pay_cert}, {:action => :index, :id => nil, :sc => nil, :sid => nil}, :class => 'tab-pay_cert' + (params[:sc] == 'pay_cert' ? ' active' : '') %>
 	<%= tab '105 Forms', {:controller => :form_change, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_change' ? ' active' : ''), :title => 'Electronic Personnel Change Form'} %>				
@@ -11,20 +13,22 @@
 	<% end %>
 <% end %>
 
-<% if false  %>
+<% else %>
 
-<% if @current_user.level != 'agency-employees' %>
-	<%= tab 'Pay Cert.', {:controller => :pay_cert}, {:action => :index, :id => nil, :sc => nil, :sid => nil}, :class => 'tab-pay_cert' + (params[:sc] == 'pay_cert' ? ' active' : '') %>
-	<%= tab '105', {:controller => :form_change, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_change' ? ' active' : ''), :title => 'Non-County Personnel Change Form'} %>				
-	<%= tab '105(C)', {:controller => :form_county_change, :sc => nil}, {}, {:class => 'tab-form-mc' + (params[:sc] == 'form_county_change' ? ' active' : ''), :title => 'County Electronic Personnel Change Form'} %>				
-	<%= tab '330', {:controller => :form_hire, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_hire' ? ' active' : ''), :title => 'Non-County New Hire Form'} %>				
-	<%= tab '330(C)', {:controller => :form_county_hire, :sc => nil}, {}, {:class => 'tab-form-mc' + (params[:sc] == 'form_county_hire' ? ' active' : ''), :title => 'County New Hire Form'} %>				
-	<%= tab '222', {:controller => :form_title, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_title' ? ' active' : ''), :title => 'Electronic New Title Form'} %>				
-	<% if !@current_user.agency_level? || @current_user.is_agency_county? %>
-		<%= tab 'Req. Fill Vac.', {:controller => :vacancy, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'vacancy' ? ' active' : ''), :title => 'Requests to Fill Vacancies'} %>
-	<% end %>
-	<% if !@current_user.agency_level? %>
-		<%= tab 'Empl/Appl Mismatch', {:controller => :employee, :sc => nil, :sid => nil, :action => :mismatch}, {:id => 'name'}, {:class => 'tab-mismatch', :title => 'Display name and address mismatches between the employee and applicant databases'} %>				
+<% if !@current_user.agency_level? %>
+	<% if @current_user.level != 'agency-employees' %>
+		<%= tab 'Pay Cert.', {:controller => :pay_cert}, {:action => :index, :id => nil, :sc => nil, :sid => nil}, :class => 'tab-pay_cert' + (params[:sc] == 'pay_cert' ? ' active' : '') %>
+		<%= tab '105', {:controller => :form_change, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_change' ? ' active' : ''), :title => 'Non-County Personnel Change Form'} %>				
+		<%= tab '105(C)', {:controller => :form_county_change, :sc => nil}, {}, {:class => 'tab-form-mc' + (params[:sc] == 'form_county_change' ? ' active' : ''), :title => 'County Electronic Personnel Change Form'} %>				
+		<%= tab '330', {:controller => :form_hire, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_hire' ? ' active' : ''), :title => 'Non-County New Hire Form'} %>				
+		<%= tab '330(C)', {:controller => :form_county_hire, :sc => nil}, {}, {:class => 'tab-form-mc' + (params[:sc] == 'form_county_hire' ? ' active' : ''), :title => 'County New Hire Form'} %>				
+		<%= tab '222', {:controller => :form_title, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_title' ? ' active' : ''), :title => 'Electronic New Title Form'} %>				
+		<% if !@current_user.agency_level? || @current_user.is_agency_county? %>
+			<%= tab 'Req. Fill Vac.', {:controller => :vacancy, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'vacancy' ? ' active' : ''), :title => 'Requests to Fill Vacancies'} %>
+		<% end %>
+		<% if !@current_user.agency_level? %>
+			<%= tab 'Empl/Appl Mismatch', {:controller => :employee, :sc => nil, :sid => nil, :action => :mismatch}, {:id => 'name'}, {:class => 'tab-mismatch', :title => 'Display name and address mismatches between the employee and applicant databases'} %>				
+		<% end %>
 	<% end %>
 <% end %>
 

@@ -1,0 +1,19 @@
+<div class="viewer">
+	<div class="header">Documents</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Click to Download/View:</label>
+					<% if o.documents.empty? %>
+						No Documents
+					<% else %>
+						<% o.documents.each { |d| %>
+							<div><%= link_to d.filename, url_for(:only_path => false, :sc => params[:controller], :sid => o.id, :controller => :document, :action => :download, :id => d.id) %></div>
+						<% } %>
+					<% end %>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

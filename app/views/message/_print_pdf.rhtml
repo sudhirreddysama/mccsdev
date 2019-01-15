@@ -23,6 +23,8 @@
 		<img id="head" src="<%= RAILS_ROOT.strip %>/public/user/letter-head-vet.png" width="100%" />
 	<% elsif lh == 'parks' %>
 		<img id="head" src="<%= RAILS_ROOT.strip %>/public/user/letter-head-parks.png" width="100%" />
+	<% elsif lh == 'mcso' %>
+		<img id="head" src="<%= RAILS_ROOT.strip %>/public/user/letter-head-mcso.png" width="100%" />		
 	<% end %>
 <div id="address">
 	<% if @obj.class == Letter %>

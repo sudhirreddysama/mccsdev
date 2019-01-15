@@ -1,0 +1,152 @@
+<% content_for(:head) { %>
+	<%= stylesheet_link_tag 'county-form.css' %>
+<% } %>
+<% 
+
+#@job_opts = Job.find(:all, :order => 'jobs.name').collect { |j| [j.name, j.id] }
+@class_opts = Const::JOB_CLASSES.map { |m| m[0] }
+@status_opts = Const::JOB_STATUSES.map { |s| s[0] }
+
+%>
+<div id="form">
+	<h2 class="ct"><u>NEW HIRE REQUEST</u></h2>
+	<div class="flex">
+		<label>Vac. Appr. #:&nbsp;</label>
+		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :vacancy_no, :style => 'width: 100%;', :placeholder => 'Search RTFs...' %></div>
+		<label>&nbsp;Employee Name:&nbsp;</label>
+		<div style="-webkit-box-flex: 3; flex: 3;"><%= f.text_field :name, :style => 'width: 100%;', :placeholder => 'Search Certified List Candidates...' %></div>
+	</div>
+	<div class="flex">
+		<label>County Organization #:&nbsp;</label>
+		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :county_org_no, :style => 'width: 100%;' %></div>
+		<label>&nbsp;SAP Organization #:&nbsp;</label>
+		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :org_no, :style => 'width: 100%;' %></div>
+		<label>&nbsp;Cost Center #:&nbsp;</label>
+		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :cost_center, :style => 'width: 100%;' %></div>
+	</div>
+	<div class="flex">
+		<label style="width: 120px;">Home Address Line 1:&nbsp;</label>
+		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :address, :style => 'width: 100%;' %></div>
+	</div>
+	<div class="flex">
+		<label style="width: 120px;">Home Address Line 2:&nbsp;</label>
+		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :address2, :style => 'width: 100%;' %></div>
+	</div>
+	<div class="flex">
+		<label style="width: 120px;">Home Address City:&nbsp;</label>
+		<div style="-webkit-box-flex: 3; flex: 3;"><%= f.text_field :address_city, :style => 'width: 100%;' %></div>
+		<label>&nbsp;State:&nbsp;</label>
+		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.select :address_state, USState::NAMES, {}, :style => 'width: 100%;' %></div>
+		<label>&nbsp;Zip:&nbsp;</label>
+		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :address_zip, :style => 'width: 100%;' %></div>
+	</div>
+	<div>
+		Enter Mailing Address below <b>if different from Home Address</b>
+	</div>
+	<div class="flex">
+		<label style="width: 120px;">Mailing Address Line 1:&nbsp;</label>
+		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :mail_address, :style => 'width: 100%;' %></div>
+	</div>
+	<div class="flex">
+		<label style="width: 120px;">Mailing Address Line 2:&nbsp;</label>
+		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :mail_address2, :style => 'width: 100%;' %></div>
+	</div>
+	<div class="flex">
+		<label style="width: 120px;">Mailing Address City:&nbsp;</label>
+		<div style="-webkit-box-flex: 3; flex: 3;"><%= f.text_field :mail_city, :style => 'width: 100%;' %></div>
+		<label>&nbsp;State:&nbsp;</label>
+		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.select :mail_state, USState::NAMES, {}, :style => 'width: 100%;' %></div>
+		<label>&nbsp;Zip:&nbsp;</label>
+		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :mail_zip, :style => 'width: 100%;' %></div>
+	</div>	
+	<div>
+		<label>Email:&nbsp;</label>
+		<%= f.text_field :email, :style => 'width: 250px;' %>
+		<label>&nbsp;Phone:&nbsp;</label>
+		<%= f.text_field :phone, :style => 'width: 150px;' %>
+	</div>
+	<div>
+		<label>Position:&nbsp;</label>
+		<%= f.text_field :position, :style => 'width: 350px;' %>
+		<label>&nbsp;Position #:&nbsp;</label>
+		<%= f.text_field :position_no, :style => 'width: 150px;' %>
+	</div>
+	<div>
+		<label>Salary Group:&nbsp;</label>
+		<%= f.text_field :salary_group, :style => 'width: 100px;' %>
+		<label>&nbsp;Salary Step:&nbsp;</label>
+		<%= f.text_field :salary_step, :style => 'width: 100px;' %>
+		<label>&nbsp;Hourly Rate:&nbsp;</label>
+		<%= f.text_field :hourly_rate, :style => 'width: 100px;' %>
+	</div>
+	<div class="ct"><b>(IF OTHER THAN ENTRY LEVEL, ATTACH LETTER OF JUSTIFICATION)</b></div>
+	<div>
+		<label>Normal Bi-Weekly Hours:&nbsp;</label>
+		<%= f.text_field :normal_biweekly_hours, :style => 'width: 80px;' %>
+		<label>&nbsp;<b>(PT, Seasonal, or Temporary = 0)</b></label>
+	</div>	
+	<div>
+		<label><b>Physical Required?:</b>&nbsp;</label>
+		<%= f.radio_button :physical_required, true %><label for="obj_physical_required_true"> Yes</label>&nbsp;&nbsp;
+		<%= f.radio_button :physical_required, false %><label for="obj_physical_required_false"> No</label>&nbsp;&nbsp;
+	</div>		
+	<div>
+		<label><b>Days/Times <u>NOT AVAILABLE</u> for Drug Testing:&nbsp;</b></label>
+		<%= f.text_field :not_available_drug_testing, :style => 'width: 400px;' %>
+	</div>
+	<div>
+		<label><b>TENTATIVE HIRE DATE&nbsp;</b></label>
+		<%= f.text_field :effective_date, :style => 'width: 200px;', :class => 'date', :value => (@obj.effective_date.strftime('%m/%d/%Y') rescue nil) %>
+	</div>
+	<div class="ct">* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *</div>
+	<div style="width: 50%; float: left;">
+		<label style="display: inline-block; width: 110px;">Class:</label>
+		<%= f.select :classification, @class_opts, {:include_blank => true}, :style => 'width: 200px;' %><br>
+		<label style="display: inline-block; width: 110px;">Status:</label>
+		<%= f.select :civil_service_status, @status_opts, {:include_blank => true}, :style => 'width: 200px;' %><br>
+		<label style="display: inline-block; width: 110px;">Job Code:</label>
+		<%= f.text_field :job_code, :style => 'width: 200px;' %><br>
+		<label style="display: inline-block; width: 110px;">List Number:</label>
+		<%= f.text_field :list_no, :style => 'width: 200px;' %><br>
+		<label style="display: inline-block; width: 110px;">Work Schedule Code:</label>
+		<%= f.text_field :work_schedule_code, :style => 'width: 200px;' %><br>
+		<label style="display: inline-block; width: 110px;">FSLA:</label>
+		<%= f.radio_button :flsa_exempt, true %><label for="obj_flsa_exempt_true"> Exempt</label>&nbsp;&nbsp;
+		<%= f.radio_button :flsa_exempt, false %><label for="obj_flsa_exempt_false"> Non-Exempt</label>
+	</div>
+	<div style="width: 50%; float: right;">
+		<label style="display: inline-block; width: 110px;">Physical Date:</label>
+		<%= f.text_field :physical_date, :style => 'width: 200px;', :class => 'date', :value => (@obj.physical_date.strftime('%m/%d/%Y') rescue nil) %><br>
+		<label style="display: inline-block; width: 110px;">Benefits Date:</label>
+		<%= f.text_field :benefits_date, :style => 'width: 200px;', :class => 'date', :value => (@obj.benefits_date.strftime('%m/%d/%Y') rescue nil) %></label><br>
+		<label style="display: inline-block; width: 110px;">Drug Test Date:</label>
+		<%= f.text_field :drug_test_date, :style => 'width: 200px;', :class => 'date', :value => (@obj.drug_test_date.strftime('%m/%d/%Y') rescue nil) %><br>
+		<label style="display: inline-block; width: 110px;">Birth Date:</label>
+		<%= f.text_field :birth_date, :style => 'width: 200px;', :class => 'date', :value => (@obj.birth_date.strftime('%m/%d/%Y') rescue nil) %><br>
+		<label style="display: inline-block; width: 110px;">Social Sec. No.:</label>
+		<%= f.text_field :ssn, :style => 'width: 200px;' %><br>
+		<label style="display: inline-block; width: 110px;">Time Admin. Code:</label>
+		<%= f.text_field :time_admin_code, :style => 'width: 200px;' %>
+	</div>
+	<div style="clear: both;">
+		<label>Grant/Project? Fill out table below: <b>(Percentages must equal 100%)</b></label>
+	</div>
+	<table style="width: 100%;">
+		<tr>
+			<th width="20%">Cost Center #</th>
+			<th width="25%">Order #</th>
+			<th width="5%">%</th>
+			<th width="25%">Fund</th>
+			<th width="25%">Grant</th>
+		</tr>
+		<% [1,2,3].each { |i| %>
+			<tr>
+				<td><%= f.text_field "gp_cost_center#{i}" %></td>
+				<td><%= f.text_field "gp_order_no#{i}" %></td>
+				<td><%= f.text_field "gp_percent#{i}" %></td>
+				<td><%= f.text_field "gp_fund#{i}" %></td>
+				<td><%= f.text_field "gp_grant#{i}" %></td>
+			</tr>
+		<% } %>
+	</table>
+</div>

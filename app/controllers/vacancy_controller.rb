@@ -300,14 +300,17 @@ class VacancyController < CrudController
 			cond += get_search_conditions(params[:position_no], {'position_no' => :left}) if field != 'position' && field != 'last_incumbent'
 			cond += get_search_conditions(params[:last_incumbent], {'last_incumbent' => :like}) if field != 'position' && field != 'position_no'
 		end
-		if @current_user.agency_level?
-			data_codes = @current_user.department && @current_user.department.vacancy_data_codes
-			if data_codes.blank?
-				data_codes = @current_user.agency && @current_user.agency.vacancy_data_codes
-			end
-			if !data_codes.blank?
-				cond << 'substring(cost_center, 1, 2) in (' + data_codes.split(',').map(&:to_i).join(',') + ')'
-			end
+		cond << 'status != 0' if params[:no_vacant]
+		department_id = @current_user.agency_level? && @current_user.department_id || params[:department_id]
+		agency_id = @current_user.agency_level? && @current_user.agency_id || params[:agency_id]
+		department = Department.find_by_id(department_id) if !department_id.blank?
+		agency = Agency.find_by_id(agency_id) if !agency_id.blank?
+		data_codes = department && department.vacancy_data_codes
+		if data_codes.blank?
+			data_codes = agency && agency.vacancy_data_codes
+		end
+		if !data_codes.blank?
+			cond << 'substring(cost_center, 1, 2) in (' + data_codes.split(',').map(&:to_i).join(',') + ')'
 		end
 		opt = {
 			:limit => 20,
@@ -318,44 +321,32 @@ class VacancyController < CrudController
 			opt[:group] = 'organization, org_no, cost_center'
 		end
 		data = VacancyData.find(:all, opt)
-		render :json => data.collect { |o| {
-				:organization => o.organization,
-				:org_no => o.org_no,
-				:cost_center => o.cost_center,
-				:position => o.position,
-				:position_no => o.position_no,
-				:last_incumbent => o.last_incumbent,
-				:salary_group => o.salary_group,
-				:status => o.status,
-				:label => field == 'search' ? "#{o.position} - #{o.last_incumbent.blank? ? '(NO INCUMBENT)' : o.last_incumbent}" : o.send(field)
-			}
+		render :json => data.collect { |o|
+			o.autocomplete_json_data(field)
 		}
-		
-# 		cond = get_search_conditions params[:term], {
-# 			'vacancy_orgs.name' => :like,
-# 			'vacancy_orgs.cost_center' => :left,
-# 			'vacancy_orgs.org_no' => :left
-# 		}
-# 		cond << 'vacancy_orgs.cost_center != ""'
-# 		if params[:id] == 'org_no'
-# 			order = 'vacancy_orgs.org_no'
-# 		elsif params[:id] == 'cost_center'
-# 			order = 'vacancy_orgs.cost_center'
-# 		else
-# 			order = 'vacancy_orgs.name'
-# 		end		
-# 		orgs = VacancyOrg.find(:all, :order => order, :conditions => get_where(cond), :limit => 15)
-# 		orgs = orgs.collect { |o| 
-# 			if params[:id] == 'org_no'
-# 				label = "#{o.org_no} - #{o.name} (#{o.cost_center})"
-# 			elsif params[:id] == 'cost_center'
-# 				label = "#{o.cost_center} - #{o.name} (#{o.org_no})"
-# 			else
-# 				label = "#{o.name} (#{o.org_no} / #{o.cost_center})"
-# 			end
-# 			{:org_no => o.org_no, :name => o.name, :cost_center => o.cost_center, :label => label}
-# 		}
-# 		render :json => orgs.to_json
+	end
+	
+	# Different than above. This is used on OTHER forms to reference a Vacancy object.
+	def autocomplete
+		cond = get_search_conditions(params[:term], {
+			'vacancies.exec_approval_no' => :like,
+			'vacancies.org_no' => :like,
+			'vacancies.cost_center' => :like,
+			'vacancies.position_no' => :like,
+			'vacancies.position' => :like
+		})
+		cond << 'vacancies.exec_decision = "Approved"'
+		user_limited = @current_user.agency_level? && !@current_user.allow_vacancy_omb && !@current_user.allow_vacancy_admin
+		agency_id = user_limited && @current_user.agency_id || params[:agency_id]
+		department_id = user_limited && @current_user.department_id || params[:department_id]
+		division_id = user_limited && @current_user.division_id || params[:division_id]
+		cond << 'vacancies.agency_id = %d' % agency_id.to_i if !agency_id.blank?
+		cond << 'vacancies.department_id = %d' % department_id.to_i if !department_id.blank?
+		cond << 'vacancies.division_id = %d' % division_id.to_i if !division_id.blank?
+		objs = @model.find(:all, :conditions => get_where(cond), :limit => 10, :order => 'vacancies.id desc').map { |o|
+			o.autocomplete_json_data
+		}
+		render :json => objs.to_json
 	end
 	
 	def get_approval_no

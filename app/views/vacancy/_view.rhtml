@@ -5,6 +5,12 @@
 <% else %>
 	<div class="tabs buttons">
 		<%= tab 'Printable Version', {:action => :print, :id => o.id}, {}, :target => '_blank' %>
+		<% if false %>
+			<% if @obj.exec_decision == 'Approved' || @obj.exec_decision == 'Filled' %>
+				<%= tab 'Start 330 (New Hire) Form', {:controller => :form_county_hire, :action => :new, :from_vacancy_id => o.id}, {}, :class => 'tab-form-mc' %>
+				<%= tab 'Start 105 (Emp. Change) Form', {:controller => :form_county_change, :action => :new, :from_vacancy_id => o.id}, {}, :class => 'tab-form-mc' %>
+			<% end %>
+		<% end %>
 		<div class="clear"></div>
 	</div>
 	<% if @obj.exec_decision == 'Started' %>
@@ -450,24 +456,6 @@
 	</div>
 </div>
 
-<div class="viewer">
-	<div class="header">Documents</div>
-	<div class="row">
-		<table>
-			<tr>
-				<td>
-					<label>Click to Download/View:</label>
-					<% if o.documents.empty? %>
-						No Documents
-					<% else %>
-						<% o.documents.each { |d| %>
-							<div><%= link_to d.filename, url_for(:only_path => false, :sc => :vacancy, :sid => o.id, :controller => :document, :action => :download, :id => d.id) %></div>
-						<% } %>
-					<% end %>
-				</td>
-			</tr>
-		</table>
-	</div>
-</div>
+<%= partial 'view_documents', :o => o %>
 
 

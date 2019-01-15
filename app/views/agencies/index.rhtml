@@ -1,3 +1,4 @@
+<% if false %>
 <div class="marg">
 
 	<h3>Monroe County Civil Service Agency Portal</h3>
@@ -37,3 +38,55 @@
 </div>
 
 
+<% end %>
+<style>
+	#home { width: 500px; margin: 50px auto; }
+	#home h3, #home a { font-size: 140%; margin: 20px 0; text-align: center; font-weight: bold; }
+	#home h3 { font-size: 180%; }
+	#home a { display: block; margin: 10px 0; border-radius: 10px; background: linear-gradient(182deg, #666, #222 50%, #000 51%); color: #fff; padding: 10px 0; text-decoration: none; transition: transform .1s; }
+	#home a:hover { background: #222; transform: scale(1.05); }
+</style>
+<div id="home">
+	<h3>Monroe County Civil Service Agency Portal</h3>
+	<% if @current_user.perm_ag_employees %>
+		<%= link_to 'Employee Database', {:controller => :employee, :sc => nil} %>
+	<% end %>
+	<% if @current_user.perm_ag_pay_certs %>
+		<%= link_to 'Payroll Certifications', {:controller => :pay_cert} %>
+	<% end %>
+	<% if @current_user.perm_ag_vacancies %>
+		<%= link_to 'Requests to Fill Vacancies', {:controller => :vacancy, :sc => nil} %>
+	<% end %>
+	<% if @current_user.perm_ag_form_changes %>
+		<% if @current_user.is_agency_county? %>
+			<%= link_to '105 Employment Change Forms', {:controller => :form_county_change, :sc => nil} %>
+		<% else %>
+			<%= link_to '105 Employment Change Forms', {:controller => :form_change, :sc => nil} %>
+		<% end %>
+	<% end %>
+	<% if @current_user.perm_ag_form_hires %>
+		<% if @current_user.is_agency_county? %>
+			<%= link_to '330 New Hire Forms', {:controller => :form_county_hire, :sc => nil} %>
+		<% else %>
+			<%= link_to '330 New Hire Forms', {:controller => :form_hire, :sc => nil} %>
+		<% end %>
+	<% end %>
+	<% if @current_user.perm_ag_form_titles %>
+		<%= link_to '222 New Title Request Forms', {:controller => :form_title, :sc => nil} %>
+	<% end %>
+	<% if @current_user.perm_ag_web_posts %>
+		<%= link_to 'Web Posts', {:controller => :web_exam, :sc => nil} %>
+	<% end %>
+	<% if @current_user.show_pref_lists %>
+		<%= link_to 'Preferred Lists', {:controller => :preferred_list, :sc => nil} %>
+	<% end %>
+	<% if @current_user.show_cert_lists %>
+		<%= link_to 'Certified Lists', {:controller => :cert, :sc => nil} %>
+	<% end %>
+	<% if @current_user.perm_ag_reports %>
+		<%= link_to 'Reports', {:controller => :report, :sc => nil} %>
+	<% end %>
+	<% if @current_user.perm_ag_applicants %>
+		<%= link_to 'Applicants', {:controller => :person, :sc => nil} %>
+	<% end %>
+</div>

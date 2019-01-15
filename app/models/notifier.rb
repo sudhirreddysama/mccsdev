@@ -34,14 +34,14 @@ class Notifier < ActionMailer::Base
 	def form_change_provisional f
 		recipients ['ahenning@monroecounty.gov']
 		from Thread.current[:current_user].email_with_name
-		subject '105 Form Provisional Change'
+		subject f.form_type + ' Form Provisional Change'
 		body :o => f
 	end
 	
 	def form_hire_provisional f
 		recipients ['ahenning@monroecounty.gov']
 		from Thread.current[:current_user].email_with_name
-		subject '330 Form Provisional Hire'
+		subject f.form_type + ' Form Provisional Hire'
 		body :o => f
 	end
 

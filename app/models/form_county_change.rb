@@ -7,6 +7,9 @@ class FormCountyChange  < ActiveRecord::Base
 #	belongs_to :cert
 	belongs_to :status_user, :class_name => 'User', :foreign_key => 'status_user_id'
 	
+	belongs_to :vacancy, :class_name => 'Vacancy', :foreign_key => 'vacancy_no', :primary_key => 'exec_approval_no'
+	belongs_to :vacancy_data, :class_name => 'VacancyData', :foreign_key => 'position_no', :primary_key => 'position_no'
+	
 #	belongs_to :present_title_job, :class_name => 'Job', :foreign_key => 'present_title_id'
 #	belongs_to :demotion_title_job, :class_name => 'Job', :foreign_key => 'demotion_title_id'
 #	belongs_to :promotion_new_title_job, :class_name => 'Job', :foreign_key => 'promotion_new_title_id'
@@ -17,7 +20,104 @@ class FormCountyChange  < ActiveRecord::Base
 	
 	belongs_to :submitter, :class_name => 'User', :foreign_key => 'submitter_id'
 	
-	validates_presence_of :agency, :department, :name, :effective_date, :if => :http_posted
+	validates_presence_of(:agency, :department, 
+		:name, :county_org_no, :org_no, :cost_center, :position, :position_no, :effective_date, :personnel_no,
+		:if => :http_posted
+	)
+	validates_presence_of(
+		:present_provisional,
+		:if => Proc.new { |o| o.http_posted && o.present_provisional.nil? }
+	)
+	validates_presence_of(
+		:action_out_of_title_replacing, 
+		:if => Proc.new { |o| o.http_posted && o.action_out_of_title }
+	)
+	validates_presence_of(
+		:action_title, :action_position_no, :action_group, :action_step, :action_hourly_rate, :action_job_code, :action_list_no,
+		:if => Proc.new { |o| o.http_posted && (o.action_promotion || o.action_out_of_title || o.action_title_change || o.action_reinstatement || o.action_demotion || o.action_miscellaneous) }
+	)
+	validates_presence_of(
+		:action_flsa_exempt,
+		:if => Proc.new { |o| 
+			o.http_posted && (o.action_promotion || o.action_out_of_title || o.action_title_change || o.action_reinstatement || o.action_demotion || o.action_miscellaneous) && 
+			o.action_flsa_exempt.nil?
+		}
+	)
+	validates_presence_of(
+		:action_class, :action_status,
+		:if => Proc.new { |o| o.http_posted && o.action_status_change }
+	)
+	validates_presence_of(
+		:action_perm_appt_list_no,
+		:if => Proc.new { |o| o.http_posted && o.action_perm_appt }
+	)
+	validates_presence_of(
+		:action_2nd_provisional_date,
+		:if => Proc.new { |o| o.http_posted && o.action_2nd_provisional }
+	)
+	validates_presence_of(
+		:action_hours,
+		:if => Proc.new { |o| o.http_posted && o.action_change_hours }
+	)
+	validates_presence_of(
+		:action_special_inc_step, :action_special_inc_rate,
+		:if => Proc.new { |o| o.http_posted && o.action_special_increment }
+	)
+	validates_presence_of(
+		:action_separation_date, :action_separation_code,
+		:if => Proc.new { |o| o.http_posted && o.action_separation }
+	)
+	validates_presence_of(
+		:action_separation_provisional,
+		:if => Proc.new { |o| o.http_posted && o.action_separation && o.action_separation_provisional.nil? }
+	)
+	validates_presence_of(
+		:action_separation_county_org_no, :action_separation_sap_org_no, :action_separation_cost_center,
+		:if => Proc.new { |o| o.http_posted && o.action_separation && o.action_separation_code == '03 Retired' }
+	)
+	validates_presence_of(
+		:org_pe_po_co_org_no, :org_pe_po_sap_org_no, :org_pe_po_cost_center,
+		:if => Proc.new { |o| o.http_posted && o.org_move_person_position }
+	)
+	validates_presence_of(
+		:org_po_co_org_no, :org_po_co_org_no_from, :org_po_sap_org_no, :org_po_sap_org_no_from, :org_po_cost_center, :org_po_cost_center_from,
+		:if => Proc.new { |o| o.http_posted && o.org_move_position }
+	)
+	validates_presence_of(
+		:org_org_co_org_no, :org_org_sap_org_no, :org_org_cost_center, :org_org_position_no,
+		:if => Proc.new { |o| o.http_posted && o.org_organization_change }
+	)
+	validates_presence_of(
+		:org_pos_position_no,
+		:if => Proc.new { |o| o.http_posted && o.org_new_position }
+	)
+	validates_presence_of(
+		:org_work_sched_code,
+		:if => Proc.new { |o| o.http_posted && o.org_new_work_sched_code }
+	)
+	validates_presence_of(
+		:org_time_admin_code,
+		:if => Proc.new { |o| o.http_posted && o.org_new_time_admin_code }
+	)
+	validates_presence_of(
+		:org_fund_cost_center1, :org_fund_order_no1, :org_fund_percent1, :org_fund_fund1, :org_fund_grant1,
+		:if => Proc.new { |o| o.http_posted && o.org_position_funding }
+	)
+	validates_presence_of(
+		:leave_reason,
+		:if => Proc.new { |o| o.http_posted && (o.leave_no_pay || o.leave_paid) }
+	)
+	validates_presence_of(
+		:leave_start_date, :leave_anticipated_return_date,
+		:if => Proc.new { |o| 
+			o.http_posted && 
+			(o.leave_no_pay || o.leave_paid || o.leave_fmla || o.leave_half_pay_sick || o.leave_military || o.leave_section_72 || o.leave_workers_comp || o.leave_section_207c) 
+		}
+	)
+	validates_presence_of(
+		:leave_return_date,
+		:if => Proc.new { |o| o.http_posted && o.leave_return }
+	)
 	
 	def employee; nil; end
 	
@@ -92,31 +192,12 @@ class FormCountyChange  < ActiveRecord::Base
 # 		end
 	end
 	
-	def changes_string
-		s = []
-# 		s << 'Demotion' if change_demotion
-# 		s << 'Leave of Absence' if change_loa
-# 		s << 'Name Change' if change_name
-# 		s << 'Permananent Civil Service Appointment' if change_perm_appt
-# 		s << 'Promotion' if change_promotion
-# 		s << 'Salary Change' if change_salary
-# 		s << 'Second Provisional Appointment' if change_second_provisional
-# 		s << 'Separation' if change_separation
-# 		s << 'Status/Class' if change_status
-# 		s << 'Suspension' if change_suspension
-# 		s << 'Title Change' if change_title
-		return s.join(', ')
-	end
-	
 	def is_provisional?
-		prov = 
-# 		prov ||= present_provisional
-# 		prov ||= change_demotion && (demotion_status == 'PROVISIONAL' || demotion_status == 'PROVISIONAL-2ND')
-# 		prov ||= change_promotion && (promotion_status == 'PROVISIONAL' || promotion_status == 'PROVISIONAL-2ND')
-# 		prov ||= change_second_provisional
-# 		prov ||= change_status && (status_type == 'V' || status_type == 'V2')
-# 		prov ||= change_title && (title_change_status == 'PROVISIONAL' || title_change_status == 'PROVISIONAL-2ND')
-# 		prov ||= change_separation && separation_provisional
+		prov = false
+ 		prov ||= present_provisional
+ 		prov ||= action_status_change && (action_status == 'PROVISIONAL' || action_status == 'PROVISIONAL-2ND')
+ 		prov ||= action_2nd_provisional
+ 		prov ||= action_separation && action_separation_provisional
 		prov
 	end
 
