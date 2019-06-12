@@ -63,7 +63,7 @@ class User < ActiveRecord::Base
   end
   
   # User levels that can login. Note "disabled" is missing.
-  USER_LEVELS = %w{agency agency-head agency-employees view-only staff admin}
+  USER_LEVELS = %w{agency agency-head agency-employees view-only staff admin liaison}
   
   def self.authenticate n, p
   	return nil if n.blank? || p.blank?
