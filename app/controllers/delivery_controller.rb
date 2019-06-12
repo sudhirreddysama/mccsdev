@@ -25,7 +25,10 @@ class DeliveryController < CrudController
 		@both_count = 0
 		@messages.each { |m|
 			u = m.person
-			if u && u.contact_via == 'both'
+			if m.force_postal
+				m.delivered_via = 'postal'
+				@postal_count += 1
+			elsif u && u.contact_via == 'both'
 				m.delivered_via = 'both'
 				@both_count += 1
 			elsif u && u.contact_via == 'email'

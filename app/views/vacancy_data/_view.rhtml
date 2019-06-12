@@ -1,0 +1,87 @@
+<%
+	rtf = @current_user.staff_level? || @current_user.perm_ag_vacancies 
+	hire = @current_user.staff_level? || @current_user.perm_ag_form_hires 
+	chg = @current_user.staff_level? || @current_user.perm_ag_form_changes
+%>
+<% if rtf || hire || chg %>
+<div class="tabs buttons">
+		<% if rtf %>
+			<%= tab 'New Request to Fill Vacancy', {:controller => :vacancy, :action => :new, 'from_vacancy_data_id' => o.id}, {}, :class => 'tab-new' %>
+		<% end %>
+		<% if hire %>
+			<%= tab 'New 330 Form (New Hire)', {:controller => :form_county_hire, :action => :new, 'from_position_no' => o.position_no}, {}, :class => 'tab-new' %>
+		<% end %>
+		<% if chg %>
+			<%= tab 'New 105 Form (Change Request)', {:controller => :form_county_change, :action => :new, 'from_vacancy_data_id' => o.id}, {}, :class => 'tab-new' %>
+		<% end %>
+		<div class="clear"></div>
+	</div>
+<% end %>
+<div class="viewer">
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Name:</label>
+					<%= o.name_fml %>
+				</td>
+				<td>
+					<label>Position:</label>
+					<%= o.position %>
+				</td>
+				<td>
+					<label>Organization:</label>
+					<%= o.organization %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Org #:</label>
+					<%= o.org_no %>
+				</td>
+				<td>
+					<label>County Org #:</label>
+					<%= o.county_org_no %>
+				</td>
+				<td>
+					<label>Cost Center:</label>
+					<%= o.cost_center %>
+				</td>
+				<td>
+					<label>Position #:</label>
+					<%= o.position_no %>
+				</td>
+				<td>
+					<label>Job #:</label>
+					<%= o.job_no %>
+				</td>
+				<td>
+					<label>Personnel #:</label>
+					<%= o.personnel_no %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Status:</label>
+					<% if o.status.to_i == 0 %><span class="req">VACANT</span><% else %>OCCUPIED<% end %>
+				</td>
+				<td>
+					<label>Salary Group:</label>
+					<%= o.salary_group %>
+				</td>
+				<td>
+					<label>FLSA Exempt:</label>
+					<%= o.flsa_exempt %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>

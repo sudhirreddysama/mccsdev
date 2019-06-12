@@ -4,23 +4,25 @@
 			<td width="1%">Actions</td>
 			<th width="1%">ID</th>
 			<th width="1%">Abbr.</th>
-			<th width="33%">Name</th>
-			<th width="32%">HR Liaison</th>
-			<th width="32%">OMB Liaison</th>
+			<th width="99%">Name</th>
+			<th width="1%" class="nobr">HR Liaison</th>
+			<th width="1%" class="nobr">OMB Liaison</th>
+			<th width="1%" class="nobr">Payroll User</th>
 		</tr>
 	</thead>
 	<tbody id="objs">
 		<% @objs.each { |o| %>
 			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
 				<td class="nobr"><%= partial 'actions', :o => o %></td>
-				<td><%= o.id %></td>
+				<td class="nobr"><%= o.id %></td>
 				<td class="nobr"><%= h o.abbreviation %></td>
 				<td><%= link_to o.name, :action => :view, :id => o.id %></td>
-				<td>
+				<td class="nobr">
 					<%= h o.liaison.name if o.liaison %>
 					<% if false && o.liaison2 %><div><%= o.liaison2.name %></div><% end %>
 				</td>	
-				<td><%= h o.omb_liaison.name if o.omb_liaison %></td>				
+				<td class="nobr"><%= h o.omb_liaison.name if o.omb_liaison %></td>				
+				<td class="nobr"><%= h o.payroll_user.name if o.payroll_user %></td>
 			</tr>
 		<% } %>
 	</tbody>

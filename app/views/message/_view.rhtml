@@ -53,6 +53,10 @@
 					<%= o.delivered_via %>
 				</td>
 				<td>
+					<label>Force Postal:</label>
+					<%= yn o.force_postal %>
+				</td>
+				<td>
 					<label>Bulk Message:</label>
 					<% if o.bulk_message && o.bulk_message.bulk_object %>
 						<%= link_to o.bulk_message.bulk_object.label, :sc => o.bulk_message.bulk_object.class.to_s.downcase, :sid => o.bulk_message.bulk_object.id, :controller => :bulk_message, :action => :view, :id => o.bulk_message.id %>

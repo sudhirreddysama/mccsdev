@@ -26,7 +26,7 @@ class DepartmentController < CrudController
 			:conditions => get_where(cond),
 			:order => get_order_auto,
 	#		:joins => 'left join users u2 on u2.id = departments.omb_liaison_id',
-			:include => [:liaison, :liaison2, :omb_liaison]
+			:include => [:liaison, :liaison2, :omb_liaison, :payroll_user]
 		}
 		
 		@export_fields = %w{id abbreviation name}

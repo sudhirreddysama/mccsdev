@@ -162,6 +162,17 @@
 				&nbsp;</td>
 			</tr>
 		</table>
+	</div><div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Study Guide:</label>
+					<% if !o.study_guide.blank? %>
+						<%= link_to(o.study_guide, o.study_guide, :target => '_blank') %>
+					<% end %>
+				&nbsp;</td>
+			</tr>
+		</table>
 	</div>
 </div>
 

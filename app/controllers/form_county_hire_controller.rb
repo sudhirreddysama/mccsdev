@@ -1,5 +1,13 @@
 class FormCountyHireController < CrudController
 
+	skip_before_filter :block_agency_users
+	def check_access
+		return true if @current_user.above_agency_level?
+		return true if @current_user.is_agency_county? && @current_user.perm_ag_form_hires
+		render_nothing and return false
+	end
+	before_filter :check_access
+
 	def index
 		@filter = get_filter({
 			:sort1 => 'form_county_changes.created_at',
@@ -9,7 +17,9 @@ class FormCountyHireController < CrudController
 			['ID', 'form_county_hires.id'],
 			['Created Date', 'form_county_hires.created_at'],
 			['Effective Date', 'form_county_hires.effective_date'],
-			['Name', 'form_county_hires.name'],
+			['First Name', 'form_county_hires.first_name'],
+			['Middle Name', 'form_county_hires.middle_name'],
+			['Last Name', 'form_county_hires.last_name'],
 			['Agency Name', 'agencies.name'],
 			['Department Name', 'departments.name'],
 		]
@@ -17,7 +27,9 @@ class FormCountyHireController < CrudController
 			'form_county_hires.id' => :left,
 			'agencies.name' => :like,
 			'departments.name' => :like,
-			'form_county_hires.name' => :like,
+			'form_county_hires.first_name' => :like,
+			'form_county_hires.last_name' => :like,
+			'form_county_hires.middle_name' => :like,
 		}
 		
 		if @current_user.agency_level?
@@ -46,10 +58,9 @@ class FormCountyHireController < CrudController
 		cond += get_date_cond
 		
 		@filter.statuses ||= []		
-		if !@filter.statuses.empty?
-			s = @filter.statuses.collect { |s| "\"#{DB.escape(s)}\"" }.join(',')
-			cond << 'form_county_hires.status in (%s)' % s
-		end
+		cond << 'form_county_hires.status in (%s)' % @filter.statuses.collect { |s| "\"#{DB.escape(s)}\"" }.join(',') if !@filter.statuses.empty?
+		@filter.hr_statuses ||= []		
+		cond << 'form_county_hires.status in (%s)' % @filter.hr_statuses.collect { |s| "\"#{DB.escape(s)}\"" }.join(',') if !@filter.hr_statuses.empty?
 		
 		@opt = {
 			:conditions => get_where(cond),
@@ -63,45 +74,46 @@ class FormCountyHireController < CrudController
 		@obj.check_validation = true
 		super
   end
+  
+	def new
+		@obj.check_validation = true
+		super
+  end
 	
 	def build_obj
 		super
 		if params[:from_vacancy_id]
-			v = Vacancy.find(params[:from_vacancy_id])
-			@obj.vacancy_no = v.exec_approval_no
-			@obj.org_no = v.org_no
-			@obj.cost_center = v.cost_center
-			@obj.position = v.position
-			@obj.position_no = v.position_no
-			@obj.salary_group = v.salary_group
+			@obj.vacancy = Vacancy.find params[:from_vacancy_id]
+			@obj.agency_id = @obj.vacancy.agency_id
+			@obj.department_id = @obj.vacancy.department_id
+		end
+		if params[:from_position_no]
+			@obj.position_data = VacancyData.find_by_position_no params[:from_position_no]
+			@obj.agency = @obj.position_data.agency
+			@obj.department = @obj.position_data.department
+		end
+		if params[:from_cert_id]
+			@obj.cert = Cert.find params[:from_cert_id]
+			@obj.agency_id = @obj.cert.agency_id
+			@obj.department_id = @obj.cert.department_id
+		end
+		if params[:from_applicant_id]
+			@obj.applicant = Applicant.find params[:from_applicant_id]
 		end
 		if @current_user.agency_level?
 			@obj.agency = @current_user.agency if @current_user.agency
 			@obj.department = @current_user.department if @current_user.department
 			@obj.division = @current_user.division if @current_user.division
 		end
-		if !request.post? && @obj.agency
-			@obj.department = Department.find_by_name @obj.agency.name
-		end
 		@obj.user = @current_user
 		@obj.status = 'started'
+		@obj.hr_status = 'dept'
 	end
 	
 	def view
 		if request.post?
-			@obj.status_user = @current_user
-			@obj.status_date = Time.now.to_date
-			old_status = @obj.status
-			@obj.update_attributes params[:obj]
+			FormCountyChange.update_county_form_status_and_notify @obj, @current_user, params[:obj]			
 			flash[:notice] = 'Status has been updated.'
-			u = @obj.user #@obj.agency ? @obj.agency.get_users(@obj.department) : nil
-			u2 = @obj.submitter
-			if u2
-				Notifier.deliver_form_status [u2].reject(&:nil?), @obj
-			end
-			if @obj.is_provisional? && @obj.status == 'approved' && old_status != @obj.status
-				Notifier.deliver_form_change_provisional @obj
-			end
 			redirect_to
 		else
 			super
@@ -110,11 +122,7 @@ class FormCountyHireController < CrudController
 	
 	def submit
 		load_obj
-		u = Agency.get_liaison(@obj.agency, @obj.department)
-		if u
-			Notifier.deliver_form_submitted [u], @obj
-		end
-		@obj.update_attributes({:status => 'submitted', :submitter_id => @current_user.id, :submitted_at => Time.now})
+		FormCountyChange.update_county_form_status_and_notify @obj, @current_user, {:status => 'submitted', :hr_status => 'liaison', :submitter_id => @current_user.id, :submitted_at => Time.now}
 		redirect_to :action => :view, :id => @obj.id
 		flash[:notice] = 'Form has been submitted to HR'
 	end
@@ -152,6 +160,7 @@ class FormCountyHireController < CrudController
 					:cert_title => c.title,
 					:first_name => p.first_name,
 					:last_name => p.last_name,
+					:middle_name => p.middle_name,
 					:exam_no => e.exam_no,
 					:cert_code => cc ? cc.label : '',
 					:certification_date => c.certification_date,
@@ -169,11 +178,44 @@ class FormCountyHireController < CrudController
 					:residence_city => p.residence_city,
 					:residence_state => p.residence_state,
 					:residence_zip => p.residence_zip,
-					:date_of_birth => p.date_of_birth
+					:date_of_birth => p.date_of_birth,
+					:gender => p.gender
 				}
 			}
 		}
 		render :json => data.to_json
+	end
+	
+	def work_schedule_autocomplete
+		cond = get_search_conditions params[:term], {
+			'work_schedules.rule' => :like,
+			'work_schedules.text' => :like
+		}
+		objs = WorkSchedule.find(:all, {
+			:conditions => get_where(cond),
+			:order => 'work_schedules.rule asc',
+			:limit => 20
+		})
+		render :json => objs.map { |o| {:rule => o.rule, :text => o.text} }.to_json
+	end
+	
+	def time_admin_code_autocomplete
+		cond = get_search_conditions params[:term], {
+			'time_admin_codes.group' => :like,
+			'time_admin_codes.code' => :like,
+			'time_admin_codes.name' => :like
+		}
+		objs = TimeAdminCode.find(:all, {
+			:conditions => get_where(cond),
+			:order => 'time_admin_codes.group, time_admin_codes.code',
+			:limit => 100
+		})
+		render :json => objs.map { |o| {:code => o.code, :group => o.group, :name => o.name} }.to_json
+	end
+	
+	def print
+		@opt = {:margin => '.2in'}
+		super
 	end
 
 end

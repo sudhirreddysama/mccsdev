@@ -1,4 +1,12 @@
 class VacancyController < CrudController
+
+	skip_before_filter :block_agency_users
+	def check_access
+		return true if @current_user.above_agency_level?
+		return true if @current_user.is_agency_county? && @current_user.perm_ag_vacancies?
+		render_nothing and return false
+	end
+	before_filter :check_access, :except => :autocomplete
 	
 	def expire_vacancy_requests
 		Vacancy.expire_vacancy_requests
@@ -231,6 +239,11 @@ class VacancyController < CrudController
 	
 	def build_obj
 		super
+		if params[:from_vacancy_data_id]
+			@from_vacancy_data = VacancyData.find params[:from_vacancy_data_id]
+			@obj.agency = @from_vacancy_data.agency
+			@obj.department = @from_vacancy_data.department
+		end
 		if @current_user.agency_level?
 			@obj.agency = @current_user.agency if @current_user.agency
 			@obj.department = @current_user.department if @current_user.department
@@ -301,17 +314,7 @@ class VacancyController < CrudController
 			cond += get_search_conditions(params[:last_incumbent], {'last_incumbent' => :like}) if field != 'position' && field != 'position_no'
 		end
 		cond << 'status != 0' if params[:no_vacant]
-		department_id = @current_user.agency_level? && @current_user.department_id || params[:department_id]
-		agency_id = @current_user.agency_level? && @current_user.agency_id || params[:agency_id]
-		department = Department.find_by_id(department_id) if !department_id.blank?
-		agency = Agency.find_by_id(agency_id) if !agency_id.blank?
-		data_codes = department && department.vacancy_data_codes
-		if data_codes.blank?
-			data_codes = agency && agency.vacancy_data_codes
-		end
-		if !data_codes.blank?
-			cond << 'substring(cost_center, 1, 2) in (' + data_codes.split(',').map(&:to_i).join(',') + ')'
-		end
+		cond << data_cost_center_cond
 		opt = {
 			:limit => 20,
 			:conditions => get_where(cond),
@@ -333,7 +336,8 @@ class VacancyController < CrudController
 			'vacancies.org_no' => :like,
 			'vacancies.cost_center' => :like,
 			'vacancies.position_no' => :like,
-			'vacancies.position' => :like
+			'vacancies.position' => :like,
+			'vacancies.last_incumbent' => :like
 		})
 		cond << 'vacancies.exec_decision = "Approved"'
 		user_limited = @current_user.agency_level? && !@current_user.allow_vacancy_omb && !@current_user.allow_vacancy_admin
@@ -343,7 +347,7 @@ class VacancyController < CrudController
 		cond << 'vacancies.agency_id = %d' % agency_id.to_i if !agency_id.blank?
 		cond << 'vacancies.department_id = %d' % department_id.to_i if !department_id.blank?
 		cond << 'vacancies.division_id = %d' % division_id.to_i if !division_id.blank?
-		objs = @model.find(:all, :conditions => get_where(cond), :limit => 10, :order => 'vacancies.id desc').map { |o|
+		objs = @model.find(:all, :include => :vacancy_data, :conditions => get_where(cond), :limit => 10, :order => 'vacancies.id desc').map { |o|
 			o.autocomplete_json_data
 		}
 		render :json => objs.to_json
@@ -351,6 +355,23 @@ class VacancyController < CrudController
 	
 	def get_approval_no
 		render :text => Vacancy.next_exec_approval_no(params[:yr], params[:id])
+	end
+	
+	private
+	
+	def data_cost_center_cond
+		department_id = @current_user.agency_level? && @current_user.department_id || params[:department_id]
+		agency_id = @current_user.agency_level? && @current_user.agency_id || params[:agency_id]
+		department = Department.find_by_id(department_id) if !department_id.blank?
+		agency = Agency.find_by_id(agency_id) if !agency_id.blank?
+		data_codes = department && department.vacancy_data_codes
+		if data_codes.blank?
+			data_codes = agency && agency.vacancy_data_codes
+		end
+		if !data_codes.blank?
+			return 'substring(cost_center, 1, 2) in (' + data_codes.split(',').map(&:to_i).join(',') + ')'
+		end	
+		return nil
 	end
 	
 end

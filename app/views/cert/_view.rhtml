@@ -60,6 +60,7 @@
 		</div>
 	<% end %>
 <% end %>
+<% status = o.status %>
 <div class="viewer">
 	<div class="header">General Info.</div>
 	<div class="row">
@@ -71,7 +72,7 @@
 				</td>
 				<td>
 					<label>Status:</label>
-					<%= cert_status o.status %>
+					<%= cert_status status %>
 				</td>
 				<td>
 					<label>Title:</label>
@@ -457,19 +458,26 @@
 								</tr>
 								<tr>
 									<td class="nobr">Effective Date:</td>
-									<% if allow_action_edit %>
-										<td>
-											<% if @current_user.staff_level? %>
-												<div class="right">
-													<%= link_to 'others', {:controller => 'cert', :action => :other_certs, :id => @obj.id, :id2 => ca.id}, :class => 'popup', 'data-popup-title' => 'Other Certified Lists' %>
-													<%= link_to 'log', {:controller => 'cert_applicant', :action => :change_log, :id => ca.id}, :class => 'popup', 'data-popup-title' => 'Change Log' %>
-												</div>
+									<td>										
+										<div class="right">
+											<% if status == 'completed' || status == 'finished' || status == 'expired' %>
+												<% if @obj.agency && @obj.agency.agency_type == 'COUNTY' && (@current_user.staff_level? || @current_user.perm_ag_form_changes) %>
+													<%= link_to 'New 330', {:controller => :form_county_hire, :action => :new, :from_applicant_id => ca.applicant_id, :from_cert_id => @obj.id}, :target => '_blank'  %>
+												<% end %>
+											<% end %>										
+											<% if allow_action_edit %>
+												<% if @current_user.staff_level? %>
+													&nbsp;&nbsp;<%= link_to 'Others', {:controller => 'cert', :action => :other_certs, :id => @obj.id, :id2 => ca.id}, :class => 'popup', 'data-popup-title' => 'Other Certified Lists' %>
+													&nbsp;&nbsp;<%= link_to 'Log', {:controller => 'cert_applicant', :action => :change_log, :id => ca.id}, :class => 'popup', 'data-popup-title' => 'Change Log' %>
+												<% end %>
 											<% end %>
+										</div>
+										<% if allow_action_edit %>
 											<%= calendar_date_select_tag "action_dates[#{ca.id}]", ca.action_date, :style => 'width: 100px;', :class => 'ca-date ucase', :id => "date-#{ca.id}", :onchange => 'date_change(this)' %>
-										</td> 
-									<% else %>
-										<td><%= ca.action_date.d0? %></td>
-									<% end %>
+										<% else %>
+											<%= ca.action_date.d0? %>
+										<% end %>
+									</td>
 								</tr>
 								<% if !ca.documents.empty? %>
 									<tr>

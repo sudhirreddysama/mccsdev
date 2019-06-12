@@ -85,6 +85,19 @@ class Cert < ActiveRecord::Base
 		other_open_certs.map { |c| {:id => c.id, :title => c.title, :requested_date => c.requested_date} }
 	end
 	
+	def autocomplete_json_data
+		e = exam
+		{
+			:id => id,
+			:title => title,
+			:exam_no => e ? e.exam_no : '',
+			:job_type => job_type,
+			:job_time => job_time,
+			:certification_date => certification_date,
+			:requested_date => requested_date
+		}
+	end
+	
 	include DbChangeHooks
 	
 end

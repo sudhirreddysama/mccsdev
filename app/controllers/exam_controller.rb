@@ -1070,6 +1070,7 @@ class ExamController < CrudController
 		render :text => 'done'
 	end
 	skip_before_filter :authenticate, :only => :send_expiring_cr_email
+	skip_before_filter :block_agency_users, :only => :send_expiring_cr_email
 	
 	
 	

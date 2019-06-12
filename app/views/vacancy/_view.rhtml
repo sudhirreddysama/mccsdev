@@ -5,9 +5,11 @@
 <% else %>
 	<div class="tabs buttons">
 		<%= tab 'Printable Version', {:action => :print, :id => o.id}, {}, :target => '_blank' %>
-		<% if false %>
-			<% if @obj.exec_decision == 'Approved' || @obj.exec_decision == 'Filled' %>
+		<% if @obj.exec_decision == 'Approved' || @obj.exec_decision == 'Filled' %>
+			<% if @current_user.staff_level? || @current_user.perm_ag_form_hires %>	
 				<%= tab 'Start 330 (New Hire) Form', {:controller => :form_county_hire, :action => :new, :from_vacancy_id => o.id}, {}, :class => 'tab-form-mc' %>
+			<% end %>
+			<% if @current_user.staff_level? || @current_user.perm_ag_form_changes %>
 				<%= tab 'Start 105 (Emp. Change) Form', {:controller => :form_county_change, :action => :new, :from_vacancy_id => o.id}, {}, :class => 'tab-form-mc' %>
 			<% end %>
 		<% end %>

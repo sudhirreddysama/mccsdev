@@ -1,5 +1,6 @@
 <%= f.tr_text_field :name, :label => 'Name', :req => true, :class => 'ucase' %>
 <%= f.tr_text_field :abbreviation, :label => 'Abbreviation', :class => 'ucase' %>
+<%= f.tr_check :county, :label => 'County Dept.', :text => 'Check here to make avaialble on dropdowns that only include county departments.'  %>
 <% @user_opts = User.find(:all, :conditions => '(users.level not like "agency%" or users.allow_vacancy_omb) and users.level != "disabled"', :order => 'users.name asc').collect { |u| [u.name, u.id] } %>
 <tr>
 	<th>Liaison User:</th>
@@ -9,6 +10,7 @@
 	</td>
 </tr>
 <%= f.tr_select :omb_liaison_id, @user_opts, :order => 'users.name asc', :include_blank => true, :label => 'OMB Liaison User', :help => 'OMB Liaison is used in the Request to Fill Vacancy workflow.' %>
+<%= f.tr_select :payroll_user_id, @user_opts, :order => 'users.name asc', :include_blank => true, :label => 'Payroll User', :help => 'Payroll user is notified when 330/105 forms are routed to payroll.' %>
 <tr>
 	<th>SAP Codes:</th>
 	<td>

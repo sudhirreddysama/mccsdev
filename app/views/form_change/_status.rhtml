@@ -5,6 +5,7 @@
 			<%= tab 'Employee History Details', {:controller => :employee, :action => :print, :id => @obj.employee_id}, {}, :target => '_blank' %>
 		<% end %>
 		<% if false || @current_user.username == 'isadmin' %>
+			<% 'this was implemented as a generic solution to approvals/disapprovals but HR eventually decided against it so it disabled for all but user isadmin' %>
 			<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => params[:controller], :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>		
 		<% end %>		
 		<div class="clear"></div>
@@ -39,6 +40,7 @@
 <% if form %>
 	<%= form_tag %>
 <% end %>
+<% cty = @obj.class == FormCountyHire || @obj.class == FormCountyChange %>
 <div class="viewer">
 	<div class="header">Status</div>
 	<div class="row">
@@ -57,8 +59,18 @@
 						<%= form_status o.status %>
 					<% end %>
 				</td>
+				<% if cty %>
+					<td>
+						<label>HR Status</label>
+						<% if form %>
+							<%= select :obj, :hr_status, Const::HR_STATUSES %>
+						<% else %>
+							<%= form_hr_status o.hr_status %>
+						<% end %>
+					</td>
+				<% end %>
 				<td>
-					<label>Reason:</label>
+					<label>Reason/Note:</label>
 					<% if form %>
 						<%= text_field :obj, :status_reason, :size => (ft ? '30' : '60') %>
 						<% if !ft %>
@@ -95,7 +107,96 @@
 			</tr>
 		</table>
 	</div>
-	<% if @obj.is_provisional? && @obj.status != 'approved' %>
+	<% if cty && form %>
+		<%
+			liaison = Agency.get_liaison(@obj.agency, @obj.department)
+			liaison_name = liaison ? liaison.name : 'NONE'
+			payroll = @obj.department && @obj.department.payroll_user
+			payroll_name = payroll ? payroll.name : 'NONE'
+		%>
+		<div class="row" id="cty_info" style="display: none;">
+			<table><tr><td style="font-weight: bold;"></td></tr></table>
+			<script>
+				(function($) {
+					var obj_status = $('#obj_status');
+					var obj_hr_status = $('#obj_hr_status');
+					var old_status = '<%= @obj.status %>';
+					var old_hr_status = '<%= @obj.hr_status %>';
+					var status_changed = false;
+					var hr_status_changed = false;
+					var new_status = old_status;
+					var new_hr_status = old_hr_status;
+					var cty_info = $('#cty_info');
+					var msg_cell = cty_info.find('td');
+					var liaison_name = <%= liaison_name.to_json %>;
+					var payroll_name = <%= payroll_name.to_json %>;
+					var is_prov = <%= @obj.is_provisional?.to_json %>;
+					
+					var update_msg = function() {
+						var msg = '';
+						if(status_changed) {
+							msg = 'Status change email will be sent to dept user(s) (<%= [@obj.user, @obj.submitter].reject(&:nil?).map(&:name).uniq * ", " %>).';
+							if(new_status == 'approved') {
+								msg += ' Do not approve until ALL internal HR routing is complete.';
+							}
+						}
+						var msg2 = '';
+						if(hr_status_changed) {
+							if(new_hr_status == 'liaison' || new_hr_status == 'liaison-final') msg2 = 'HR status change email will be sent to Dept Liaison (' + liaison_name + ').';
+							else if(new_hr_status == 'exam-mgr') msg2 = 'HR status change email will be sent to Exam Manager (Aileen Henning).';
+							else if(new_hr_status == 'hr-mgr') msg2 = 'HR status change email will be sent to HR Manager (Patty English).';
+							else if(new_hr_status == 'hr-director') msg2 = 'HR status change email will be sent to HR Director (Brayton Connard).';
+							else if(new_hr_status == 'payroll') msg2 = 'HR status change email will be sent to dept Payroll User (' + payroll_name + ').';
+							else if(new_hr_status == 'benefits') msg2 = 'HR status change email will be sent to Benefits User (Debra Wood).';
+						}
+						msg_cell.html('');
+						cty_info.hide();
+						if(is_prov && old_hr_status == 'liaison' && new_status == 'submitted') {
+							msg_cell.append('<div style="color: #e00;">This form involves a provisional employee and should be routed to exam manager.</div>');
+							cty_info.show();
+						}						
+						if(msg || msg2) {
+							cty_info.show();
+							if(msg) msg_cell.append('<div>' + msg + '</div>');
+							if(msg2) msg_cell.append('<div>' + msg2 + '</div>');
+						}
+					}
+					update_msg();
+					
+					var status_val = function(v) {
+						if(v) obj_status.val(v);
+						new_status = obj_status.val();
+						status_changed = new_status != old_status;
+					}
+					
+					var hr_status_val = function(v) {
+						if(v) obj_hr_status.val(v);
+						new_hr_status = obj_hr_status.val();
+						hr_status_changed = new_hr_status != old_hr_status;
+					}
+					
+					obj_status.change(function(e) {
+						status_val();
+						if(new_status == 'disapproved') hr_status_val(old_hr_status);
+						else if(new_status == 'started') hr_status_val('dept');
+						else if(new_status == 'approved') hr_status_val('done');
+						else if(new_status == 'submitted' && (new_hr_status == 'done' || new_hr_status == 'dept')) hr_status_val((old_hr_status == 'done' || old_hr_status == 'dept') ? 'liaison' : old_hr_status);
+						update_msg();
+					});
+					
+					obj_hr_status.change(function(e) {
+						hr_status_val();
+						if(new_hr_status == 'done') status_val('approved');
+						else if(new_hr_status == 'dept') status_val('started');
+						else if(hr_status_changed) status_val('submitted');
+						update_msg();
+					});
+					
+				})(jQuery);
+			</script>
+		</div>
+	<% end %>
+	<% if !cty && @obj.is_provisional? && @obj.status != 'approved' %>
 		<div class="row" id="is_provisional" style="display: none;">
 			<table><tr><td style="font-weight: bold; color: #e00;">NOTE: This form involves a provisional appointment. An email notice will be sent to the Exam Unit upon approval.</td></tr></table>
 		</div>

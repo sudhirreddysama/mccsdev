@@ -1,5 +1,13 @@
 class PersonController < CrudController
 
+	skip_before_filter :block_agency_users
+	def check_access
+		return true if @current_user.above_agency_level?
+		return true if @current_user.agency_level? && @current_user.perm_ag_applicants
+		render_nothing and return false
+	end
+	before_filter :check_access
+
 	def index
 		@filter = get_filter({
 			:sort1 => 'people.last_name',
@@ -262,6 +270,23 @@ class PersonController < CrudController
 		@obj.update_attributes :formatta_email_sent => Time.now, :formatta_email_sent_by => @current_user.username
 		redirect_to :action => :view, :id => @obj.id
 		flash[:notice] = 'Formatta login email has been sent.'
+	end
+	
+	def clear_formatta_dates
+		load_obj
+		@obj.update_attributes({
+			:formatta_direct_deposit => nil,
+			:formatta_w4 => nil,
+			:formatta_2104 => nil,
+			:formatta_i9 => nil,
+			:formatta_esafety => nil,
+			:formatta_eeo => nil,
+			:formatta_oath => nil,
+			:formatta_veteran_exempt => nil,
+			:formatta_monroe_policies => nil
+		})
+		redirect_to :action => :view, :id => @obj.id
+		flash[:notice] = 'Formatta form completed dates have been cleared.'
 	end
 
 end

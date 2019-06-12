@@ -3,6 +3,46 @@ class Notifier < ActionMailer::Base
 	DEFAULT_FROM = 'Monroe CS <civilservice@monroecounty.gov>'
 	HR_FROM = 'Monroe HR <noreply@monroecounty.gov>'
 	
+	# This is called from county form controllers. Need to see if there are any recipients before sending email.
+	def self.county_form_recipient f
+		case f.hr_status
+			when 'liaison', 'liaison-final'
+				u = Agency.get_liaison(f.agency, f.department)
+				u ? u.email_with_name : nil
+			when 'exam-mgr'
+				'Aileen Henning <AHenning@monroecounty.gov>'
+			when 'hr-mgr'
+				'Patty English <PEnglish@monroecounty.gov>'
+			when 'hr-director'
+				'Brayton Connard <BConnard@monroecounty.gov>'
+			when 'payroll'
+				u = f.department && f.department.payroll_user
+				u ? u.email_with_name : nil
+			when 'benefits'
+				'Debra Wood <DebraWood@monroecounty.gov>'
+		end
+	end
+
+	def county_form_status f, to_email, from_email
+		recipients to_email
+		from from_email
+		typ = 'County Form'
+		typ = '105(C) Personnel Change Form' if f.is_a?(FormCountyChange)
+		typ = '330(C) New Hire Form' if f.is_a?(FormCountyHire)
+		subject "[#{f.status}] #{typ} (#{f.id} - #{f.name})"
+		body :o => f
+	end
+	
+	def county_form_hr_status f, to_email, from_email
+		recipients to_email
+		from from_email
+		typ = 'County Form'
+		typ = '105(C) Personnel Change Form' if f.is_a?(FormCountyChange)
+		typ = '330(C) New Hire Form' if f.is_a?(FormCountyHire)
+		subject "[#{f.hr_status}] #{typ} (#{f.id} - #{f.name})"
+		body :o => f
+	end
+	
 	def lost_password u, url
 		recipients u.email_with_name
 		from DEFAULT_FROM
@@ -51,6 +91,17 @@ class Notifier < ActionMailer::Base
 		subject f.form_type + " Form Status Updated (#{f.status})"
 		body :o => f
 	end
+	
+	def form_county_personnel f
+		if f.status == 'hr-personnel'
+			recipients ['PEnglish@monroecounty.gov']
+		elsif f.status == 'hr-director'
+			recipients ['BConnard@monroecounty.gov']
+		end
+		from f.status_user.email_with_name
+		subject f.form_type + " Form Status Updated (#{f.status})"
+		body :o => f
+	end	
 	
 	def form_submitted u, f
 		recipients u.collect { |i| i.email_with_name }

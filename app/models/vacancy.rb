@@ -9,6 +9,8 @@ class Vacancy < ActiveRecord::Base
 	belongs_to :submitted_by, :class_name => 'User', :foreign_key => 'submitter_id'
 	has_many :documents
 	
+	belongs_to :vacancy_data, :primary_key => 'position_no', :foreign_key => 'position_no'	
+	
 	OMB_CODES = [
 		['Approved - Funding Available', 'A1'],
 		['Approved - Grant Position', 'A2'],
@@ -108,7 +110,10 @@ class Vacancy < ActiveRecord::Base
 	end
 	
 	def autocomplete_json_data
+		v = vacancy_data || {}
 		{
+			:id => id,
+			:vacancy_data_id => v.id,
 			:exec_approval_no => exec_approval_no,
 			:org_no => org_no,
 			:cost_center => cost_center,
@@ -116,7 +121,11 @@ class Vacancy < ActiveRecord::Base
 			:position => position,
 			:salary_group => salary_group,
 			:last_incumbent => last_incumbent,
-			:desired_start => desired_start
+			:desired_start => desired_start,
+			:county_org_no => (vacancy_data ? vacancy_data.county_org_no : ''),
+			:job_no => (v ? v.job_no : ''),
+			:flsa_exempt => (v ? v.flsa_exempt : ''),
+			:vacancy_data => v ? v.autocomplete_json_data : nil
 		}	
 	end
 

@@ -18,6 +18,10 @@
 				<td>
 					<label>SAP Codes:</label>
 					<%= h o.vacancy_data_codes %>
+				</td>
+				<td>
+					<label>County?</label>
+					<%= yn o.county %>
 				&nbsp;</td>
 			</tr>
 		</table>
@@ -29,11 +33,15 @@
 					<label>HR Liaison(s):</label>
 					<%= h o.liaison.name if o.liaison %>
 					<% if false && o.liaison2 %><div><%= o.liaison2.name %></div><% end %>
-				&nbsp;</td>
+				</td>
 				<td>
 					<label>OMB Liaison:</label>
 					<%= h o.omb_liaison.name if o.omb_liaison %>
-				&nbsp;</td>
+				</td>
+				<td>
+					<label>Payroll User:</label>
+					<%= h o.payroll_user.name if o.payroll_user %>
+				&nbsp;</td>				
 			</tr>
 		</table>
 	</div>

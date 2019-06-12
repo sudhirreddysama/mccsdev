@@ -4,6 +4,7 @@ class SurveyController < ApplicationController
 	
 	skip_before_filter :force_ssl
 	skip_before_filter :authenticate
+	skip_before_filter :block_agency_users
 
 	def take
 		@app = WebApplicant.find(params[:id], :conditions => ['survey_key = ? and submitted_at is not null', params[:id2]])

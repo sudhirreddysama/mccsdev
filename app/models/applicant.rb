@@ -198,6 +198,54 @@ class Applicant < ActiveRecord::Base
 		logger.flush
 	end
 	
+	def autocomplete_json_data
+		p = person
+		e = exam
+		w = web_exam
+		wt = web_exam && web_exam.web_exam_type
+		{
+			:id => id,
+			:submitted_at => submitted_at,
+			:person => p ? {
+				:id => p.id,
+				:first_name => p.first_name,
+				:last_name => p.last_name,
+				:middle_name => p.middle_name,
+				:email => p.email,
+				:home_phone => p.home_phone,
+				:work_phone => p.work_phone,
+				:cell_phone => p.cell_phone,
+				:mailing_address => p.mailing_address,
+				:mailing_address2 => p.mailing_address2,
+				:mailing_city => p.mailing_city,
+				:mailing_state => p.mailing_state,
+				:mailing_zip => p.mailing_zip,
+				:residence_different => p.residence_different,
+				:residence_address => p.residence_address,
+				:residence_city => p.residence_city,
+				:residence_state => p.residence_state,
+				:residence_zip => p.residence_zip,
+				:date_of_birth => p.date_of_birth,
+				:gender => p.gender,
+				:ssn => p.ssn
+			} : nil,
+			:exam => e ? {
+				:id => e.id,
+				:exam_no => e.exam_no,
+				:title => e.title
+			} : nil,
+			:web_exam => w ? {
+				:id => w.id,
+				:no => w.no,
+				:name => w.name,
+				:web_exam_type => wt ? {
+					:id => wt.id,
+					:short_name => wt.short_name
+				} : nil,
+			} : nil
+		}
+	end
+	
 	include DbChangeHooks
 	
 end

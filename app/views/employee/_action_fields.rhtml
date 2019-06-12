@@ -33,7 +33,7 @@ empl_action_types.each { |t|
 
 %>
 <%= f.tr_select :empl_action_type_id, empl_action_types.collect { |t| [t.label, t.id] }, :include_blank => true, :label => 'Action', :req => true %>
-<%= f.tr_calendar_date_select :leave_date, :label => 'Leave Date' %>
+<%= f.tr_calendar_date_select :leave_date, :label => 'Separation Date' %>
 <%= f.tr_calendar_date_select :received_date, :label => 'Received Date' %>
 <%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name asc').collect { |a| [a.name, a.id] }, {:include_blank => true, :label => 'Agency', :req => true}, :class => 'pop-info' %>
 <%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name asc').collect { |d| [d.name, d.id] }, :include_blank => true, :label => 'Department', :req => true %>

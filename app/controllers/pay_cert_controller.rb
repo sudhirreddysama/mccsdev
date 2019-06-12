@@ -1,5 +1,13 @@
 class PayCertController < CrudController
 
+	skip_before_filter :block_agency_users
+	def check_access
+		return true if @current_user.above_agency_level?
+		return true if @current_user.agency_level? && @current_user.perm_ag_pay_certs
+		render_nothing and return false
+	end
+	before_filter :check_access
+
 	def index
 		@filter = get_filter({
 			:sort1 => 'pay_certs.as_of_date',

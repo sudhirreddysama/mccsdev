@@ -1,6 +1,7 @@
 class AccountController < ApplicationController
 	
 	skip_before_filter :authenticate, :except => :edit
+	skip_before_filter :block_agency_users
 	layout 'login', :except => [:edit, :switch]
 		
 	def index
@@ -11,9 +12,12 @@ class AccountController < ApplicationController
 				u = User.authenticate @login[:username], @login[:password]
 				if u
 					session[:current_user_id] = u.id
+					if u.reset_password || u.password_set_at.nil? || Time.now > u.password_set_at.advance(:months => 6)
+						session[:reset_password] = true
+					end
 					login_hook u
 					session[:switch_user_ids] = ([u.id] + u.switch_user_ids).uniq
-					flash[:notice] = 'You have successfully logged in.'
+					flash[:notice] = session[:reset_password] ? 'Your password has expired. Please enter a new password below.' : 'You have successfully logged in.'
 					@current_user = u
 					redirect_after_login
 					return
@@ -97,6 +101,19 @@ class AccountController < ApplicationController
 		end
 	end
 	
+	def password
+		@obj = @current_user
+		if request.post?
+			@obj.attributes = params[:obj]
+			@obj.resetting_password = true
+			if @obj.save
+				flash[:notice] = 'Your password has been updated.'
+				session.delete :reset_password
+				redirect_after_login
+			end
+		end
+	end
+	
 	def recover
 		if params[:id2]
 			if params[:id2].blank?
@@ -105,9 +122,10 @@ class AccountController < ApplicationController
 				u = User.authenticate_by_activation_key params[:id], params[:id2]
 				if u
 					session[:current_user_id] = u.id
+					session[:reset_password] = true
 					login_hook u
 					@current_user = u		
-					flash[:notice] = 'Account recovery successfull. You have been automatically logged in. <a href="' + url_for(:action => :edit) + '">Please update your account with a new password.</a>'
+					flash[:notice] = 'Account recovery successfull. You have been automatically logged in. Please update your account with a new password.'
 					redirect_after_login
 					return
 				else
@@ -121,14 +139,14 @@ class AccountController < ApplicationController
 		@obj = @current_user
 		if request.post? and @obj.update_attributes params[:obj]
 			flash[:notice] = 'Your account has been updated.'
-			redirect_after_login
+			default_redirect
 		else 
 			render :layout => 'application'
 		end
 	end
 	
 	def logout
-		session[:current_user_id] = nil
+		reset_session
 		flash[:notice] = 'You have successfully logged out.'
 		redirect_to :controller => :account, :action => :index
 	end
@@ -145,10 +163,12 @@ class AccountController < ApplicationController
 	end
 	
 	def default_redirect
-		if @current_user.liaison_level? || @current_user.view_only?
+		if session[:reset_password]
+			redirect_to :action => :password
+		elsif @current_user.liaison_level? || @current_user.view_only?
 			redirect_to :controller => :employee
-		elsif @current_user.only_vacancy
-			redirect_to :controller => :vacancy
+		#elsif @current_user.only_vacancy
+		#	redirect_to :controller => :vacancy
 		elsif @current_user.agency_level?
 			redirect_to :controller => :agencies
 		else
@@ -157,9 +177,9 @@ class AccountController < ApplicationController
 	end
 
 	def login_hook u
-		if u.id == 328
-			Notifier.deliver_login_notice u
-		end
+#		if u.id == 328
+#			Notifier.deliver_login_notice u
+#		end
 	end
 
 end

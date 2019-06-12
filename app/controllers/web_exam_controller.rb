@@ -1,5 +1,13 @@
 class WebExamController < CrudController
 
+	skip_before_filter :block_agency_users
+	def check_access
+		return true if @current_user.above_agency_level?
+		return true if @current_user.agency_level? && @current_user.perm_ag_web_posts
+		render_nothing and return false
+	end
+	before_filter :check_access
+
 	def index
 		@filter = get_filter({
 			:sort1 => "#{HRAPPLYDB}.exams.publish",
@@ -284,6 +292,7 @@ class WebExamController < CrudController
 		end
 	end
 	skip_before_filter :authenticate, :only => :send_exam_emails
+	skip_before_filter :check_access, :only => :send_exam_emails
 
 	def social
 	end

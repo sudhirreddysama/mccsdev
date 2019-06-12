@@ -98,7 +98,8 @@ class BulkMessage < ActiveRecord::Base
 			#:hr_letterhead => hr_letterhead,
 			:letterhead => letterhead,
 			:deliver_after => deliver_after,
-			:user_id => user_id
+			:user_id => user_id,
+			:force_postal => force_postal
 		}
 		if select_via == 'contact'
 			cond << 'contacts.id in (%s)' % contact_ids.join(',') unless contact_ids.empty?

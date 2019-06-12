@@ -14,7 +14,7 @@
 			<% unless @departments %>
 				<td><%= h o.department_name %></td>
 			<% end %>
-			<td><%= h o.classification %></td>
+			<td><%= h(Const::JOB_CLASSES_SHORT.rassoc(o.classification)[0]) rescue nil %></td>
 			<td><%= h o.status %></td>
 			<td><%= h o.job_time %></td>
 			<% if params[:show_ssn] %>

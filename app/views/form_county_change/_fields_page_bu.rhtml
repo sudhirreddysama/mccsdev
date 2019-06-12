@@ -1,0 +1,250 @@
+<% content_for(:head) { %>
+	<%= stylesheet_link_tag 'county-form.css?v2' %>
+<% } %>
+<% 
+
+#@job_opts = Job.find(:all, :order => 'jobs.name').collect { |j| [j.name, j.id] }
+@class_opts = Const::JOB_CLASSES.map { |m| m[0] }
+@status_opts = Const::JOB_STATUSES.map { |s| s[0] }
+@union_opts = Const::UNIONS.map { |u| "#{u[1]} #{u[0]}" }
+
+%>
+<div id="form">
+<h2 class="ct"><u>FORM 105: RECOMMENDATION FOR PERSONNEL CHANGE</u></h2>
+	<div class="flex">
+		<label style="width: 120px;">Employee Last Name:&nbsp;</label>
+		<%= f.text_field :last_name, :style => 'width: 140px;', :class => 'autofill' %>
+		<label style="width: 110px;">&nbsp;First Name:&nbsp;</label>
+		<%= f.text_field :first_name, :style => 'width: 140px;', :class => 'autofill' %>
+		<label style="width: 100px;">&nbsp;Middle Name:&nbsp;</label>
+		<%= f.text_field :middle_name, :style => 'width: 140px;', :class => 'autofill' %>
+	</div>
+	<div class="flex">
+		<label style="width: 120px;">&nbsp;SAP Personnel #:&nbsp;</label>
+		<%= f.text_field :personnel_no, :style => 'width: 140px;', :class => 'autofill' %>
+		<label style="width: 110px;">&nbsp;Vac. Appr. #:&nbsp;</label>
+		<%= f.text_field :vacancy_no, :style => 'width: 140px;', :class => 'autofill' %>
+	</div>
+	<div class="flex">
+		<label style="width: 120px;">County Organization #:&nbsp;</label>
+		<%= f.text_field :county_org_no, :style => 'width: 140px;', :class => 'autofill', :placeholder => 'Search...' %>
+		<label style="width: 110px;">&nbsp;SAP Organization #:&nbsp;</label>
+		<%= f.text_field :org_no, :style => 'width: 140px;', :class => 'autofill', :placeholder => 'Search...' %>
+		<label style="width: 100px;">&nbsp;Cost Center #:&nbsp;</label>
+		<%= f.text_field :cost_center, :style => 'width: 140px;', :class => 'autofill', :placeholder => 'Search...' %>
+	</div>
+	<div class="flex">
+		<label style="width: 120px;">Current Title:&nbsp;</label>
+		<%= f.text_field :position, :style => 'width: 390px;', :class => 'autofill', :placeholder => 'Search...' %>
+		<label style="width: 100px;">&nbsp;Current Position #:&nbsp;</label>
+		<%= f.text_field :position_no, :style => 'width: 140px;', :class => 'autofill', :placeholder => 'Search...' %>
+	</div>
+	<div>
+		<label>EFFECTIVE DATE OF CHANGE:</label>
+		<%= f.text_field :effective_date, :style => 'width: 120px;', :class => 'date', :value => (@obj.effective_date.strftime('%m/%d/%Y') rescue '') %>
+		<label>Current Provisional:</label>
+		<%= f.radio_button :present_provisional, true %><label for="obj_present_provisional_true"> Yes</label>&nbsp;
+		<%= f.radio_button :present_provisional, false %><label for="obj_present_provisional_false"> No</label>&nbsp;
+	</div>
+	<h2 class="ct"><u>CHECK APPROPRIATE CHANGES</u></h2>
+	<h2><u>PERSONNEL ACTIONS</u></h2>
+	<div>
+		<%= f.check_box :action_promotion, :class => 'fields1' %>
+		<label for="obj_action_promotion">Promotion</label>&nbsp;
+		<%= f.check_box :action_out_of_title, :class => 'fields1' %><label for="obj_action_out_of_title">Out-of-Title</label>
+		<label>Replacing:</label>
+		<%= f.text_field :action_out_of_title_replacing, :style => 'width: 180px;' %>&nbsp;
+		<%= f.check_box :action_title_change, :class => 'fields1' %><label for="obj_action_title_change">Title Change</label>&nbsp;
+		<%= f.check_box :action_reinstatement, :class => 'fields1' %><label for="obj_action_reinstatement">Reinstatement</label>&nbsp;
+		<%= f.check_box :action_demotion, :class => 'fields1' %><label for="obj_action_demotion">Demotion</label>&nbsp;
+		<%= f.check_box :action_miscellaneous, :class => 'fields1' %><label for="obj_action_miscellaneous">Miscellaneous</label>
+	</div>
+	<div style="padding-left: 20px;">
+		<label>New Title:</label>
+		<%= f.text_field :action_title, :style => 'width: 350px;', :class => 'autofill-alt', :placeholder => 'Search...' %>
+		<label>Position #:</label>
+		<%= f.text_field :action_position_no, :style => 'width: 80px;', :class => 'autofill-alt', :placeholder => 'Search...' %>
+		<label>FLSA:</label>
+		<%= f.radio_button :action_flsa_exempt, true, :class => 'autofill-alt' %><label for="obj_action_flsa_exempt_true">Exempt</label>&nbsp;
+		<%= f.radio_button :action_flsa_exempt, false, :class => 'autofill-alt' %><label for="obj_action_flsa_exempt_false">Non-Exempt</label>
+	</div>
+	<div style="padding-left: 20px;">
+		<label>Group:</label>
+		<%= f.text_field :action_group, :style => 'width: 80px;', :class => 'autofill-alt' %>
+		<label>Step:</label>
+		<%= f.text_field :action_step, :style => 'width: 80px;' %>
+		<label>Hourly Rate:</label>
+		<%= f.text_field :action_hourly_rate, :style => 'width: 80px;' %>
+		<label>Job Code:</label>
+		<%= f.text_field :action_job_code, :style => 'width: 80px;', :class => 'autofill-alt' %>
+		<label>List #:</label>
+		<%= f.text_field :action_list_no, :style => 'width: 80px;' %>
+	</div>
+	<div>
+		<%= f.check_box :action_status_change %><label for="obj_action_status_change">Status Change:</label>&nbsp;
+		<label>New Class:</label>
+		<%= f.select :action_class, @class_opts, :include_blank => true %>
+		<label>New Status:</label>
+		<%= f.select :action_status, @status_opts, :include_blank => true %>
+	</div>
+	<div>
+		<%= f.check_box :action_union_change %><label for="obj_action_union_change">Union Change:</label>&nbsp;
+		<label>New Employee Sub-group:</label>
+		<%= f.select :action_union, @union_opts, :include_blank => true %>
+	</div>
+	<div>
+		<%= f.check_box :action_perm_appt %><label for="obj_action_perm_appt">Permanent Civil Service Appointment:</label>&nbsp;
+		<label>List #:</label>
+		<%= f.text_field :action_perm_appt_list_no, :style => 'width: 80px;' %>
+	</div>
+	<div>
+		<%= f.check_box :action_2nd_provisional %><label for="obj_action_2nd_provisional">Second Provisional Appointment:</label>&nbsp;
+		<label>Date:</label>
+		<%= f.text_field :action_2nd_provisional_date, :style => 'width: 80px;', :class => 'date', :value => (@obj.action_2nd_provisional_date.strftime('%m/%d/%Y') rescue '') %>
+	</div>
+	<div>
+		<%= f.check_box :action_change_hours %><label for="obj_action_change_hours">Change Normal Hours:</label>&nbsp;
+		<%= f.text_field :action_hours %>
+		<label><b>(PT, Seasonal, Temporary = 0)</b></label>
+	</div>
+	<div>
+		<%= f.check_box :action_special_increment %><label for="obj_action_special_increment">Special Increment <b>(attach letter of justification)</b></label>&nbsp;
+		<label>Step:</label>
+		<%= f.text_field :action_special_inc_step, :style => 'width: 80px;' %>
+		<label>Hourly Rate:</label>
+		<%= f.text_field :action_special_inc_rate, :style => 'width: 80px;' %>
+	</div>
+	<div>
+		<%= f.check_box :action_separation %><label for="obj_action_separation">Separation:</label>&nbsp;
+		<label>Date:</label>
+		<%= f.text_field :action_separation_date, :class => 'date', :value => (@obj.action_separation_date.strftime('%m/%d/%Y') rescue '') %>
+		<label>Code:</label>
+		<%= f.select :action_separation_code, FormCountyChange::SEPARATION_CODES, :include_blank => true %>
+		<label>Provisional?</label>
+		<%= f.radio_button :action_separation_provisional, true %><label for="obj_action_separation_provisional_true">Yes</label>&nbsp;
+		<%= f.radio_button :action_separation_provisional, false %><label for="obj_action_separation_provisional_false">No</label>
+	</div>
+	<div style="padding-left: 20px;">If <u>Retirement</u>, and the retiree is assigned to a Grant or Internal Order, provide new Org/cost center for retiree charges:</div>
+	<div>
+		<div style="display: inline-block; width: 150px;">&nbsp;</div> <div style="display: inline-block; width: 50px;">&nbsp;</div>
+		<label>Co. Org #:</label> <%= f.text_field :action_separation_county_org_no, :style => 'width: 110px;', :placeholder => 'Search...' %>
+		<label>Sap Org #:</label> <%= f.text_field :action_separation_sap_org_no, :style => 'width: 110px;', :placeholder => 'Search...' %>
+		<label>Cost Center #:</label> <%= f.text_field :action_separation_cost_center, :style => 'width: 110px;', :placeholder => 'Search...' %>
+	</div>
+	<h2><u>ORG. MANAGEMENT</u></h2>
+	<div>
+		<div style="display: inline-block; width: 150px;"><%= f.check_box :org_move_person_position, :class => 'fields2' %><label for="obj_org_move_person_position">Move Person &amp; Position:</label></div>
+		<label style="display: inline-block; width: 50px;">New </label>
+		<label>Co. Org #:</label> <%= f.text_field :org_pe_po_co_org_no, :style => 'width: 110px;', :class => 'autofill-alt fake-select', :placeholder => 'Search...' %>
+		<label>Sap Org #:</label> <%= f.text_field :org_pe_po_sap_org_no, :style => 'width: 110px;', :class => 'autofill-alt fake-select', :placeholder => 'Search...' %>
+		<label>Cost Center #:</label> <%= f.text_field :org_pe_po_cost_center, :style => 'width: 110px;', :class => 'autofill-alt fake-select', :placeholder => 'Search...' %>		
+	</div>
+	<div>
+		<div style="display: inline-block; width: 150px;"><%= f.check_box :org_move_position, :class => 'fields3' %><label for="obj_org_move_position">Move Position:</label></div>
+		<label style="display: inline-block; width: 50px;">From: </label>
+		<label>Co. Org #:</label> <%= f.text_field :org_po_co_org_no_from, :style => 'width: 110px;', :class => 'autofill fake-select', :placeholder => 'Search...' %>
+		<label>Sap Org #:</label> <%= f.text_field :org_po_sap_org_no_from, :style => 'width: 110px;', :class => 'autofill fake-select', :placeholder => 'Search...' %>
+		<label>Cost Center #:</label> <%= f.text_field :org_po_cost_center_from, :style => 'width: 110px;', :class => 'autofill fake-select', :placeholder => 'Search...' %>		
+	</div>
+	<div>
+		<div style="display: inline-block; width: 150px;">&nbsp;</div> <label style="display: inline-block; width: 50px;">To: </label>
+		<label>Co. Org #:</label> <%= f.text_field :org_po_co_org_no, :style => 'width: 110px;', :class => 'autofill-alt fake-select', :placeholder => 'Search...' %>
+		<label>Sap Org #:</label> <%= f.text_field :org_po_sap_org_no, :style => 'width: 110px;', :class => 'autofill-alt fake-select', :placeholder => 'Search...' %>
+		<label>Cost Center #:</label> <%= f.text_field :org_po_cost_center, :style => 'width: 110px;', :class => 'autofill-alt fake-select', :placeholder => 'Search...' %>			
+	</div>
+	<div>
+		<div style="display: inline-block; width: 150px;"><%= f.check_box :org_organization_change, :class => 'fields4' %><label for="obj_org_organization_change">Organization Change:</label></div>
+		<label style="display: inline-block; width: 50px;">New </label>
+		<label>Co. Org #:</label> <%= f.text_field :org_org_co_org_no, :style => 'width: 110px;', :class => 'autofill-alt fake-select', :placeholder => 'Search...' %>
+		<label>Sap Org #:</label> <%= f.text_field :org_org_sap_org_no, :style => 'width: 110px;', :class => 'autofill-alt fake-select', :placeholder => 'Search...' %>
+		<label>Cost Center #:</label> <%= f.text_field :org_org_cost_center, :style => 'width: 110px;', :class => 'autofill-alt fake-select', :placeholder => 'Search...' %>	
+	</div>
+	<div>
+		<div style="display: inline-block; width: 150px;">&nbsp;</div> 
+			<label>New Position #:</label>
+			<%= f.text_field :org_org_position_no, :style => 'width: 150px;', :class => 'autofill-alt', :placeholder => 'Search...' %>
+			<label>New Title:</label>
+			<%= f.text_field :org_org_position, :style => 'width: 300px;', :class => 'autofill-alt', :placeholder => 'Search...' %>
+	</div>
+	<div>
+		<%= f.check_box :org_new_position, :class => 'fields5' %><label for="obj_org_new_position">New Position #:</label>
+		<%= f.text_field :org_pos_position_no, :style => 'width: 130px;', :class => 'autofill-alt', :placeholder => 'Search...' %>
+		<label>New Title:</label>
+		<%= f.text_field :org_pos_position, :style => 'width: 300px;', :class => 'autofill-alt', :placeholder => 'Search...' %>
+	</div>
+	<div>
+		<%= f.check_box :org_add_in_lieu_of %><label for="obj_org_add_in_lieu_of">Add Job Code:&nbsp;</label>
+		<%= f.text_field :org_add_in_lieu_of_code, :style => 'width: 100px;' %>	
+		 &quot;in lieu of&quot; Position&nbsp;&nbsp;
+		<%= f.check_box :org_remove_in_lieu_of %><label for="obj_org_remove_in_lieu_of">Remove &quot;in lieu of&quot;</label>
+	</div>
+	<div>
+		<%= f.check_box :org_new_work_sched_code %><label for="obj_org_new_work_sched_code">New Work Schedule Code:</label>
+		<%= f.text_field :org_work_sched_code, :style => 'width: 130px;', :placeholder => 'Search...', :class => 'fake-select' %>
+	</div>
+	<div>
+		<%= f.check_box :org_new_time_admin_code %><label for="obj_org_new_time_admin_code">New Time Administrator Code:</label>
+		<%= f.text_field :org_time_admin_code, :style => 'width: 130px;', :placeholder => 'Search...' %>
+	</div>
+	<div>
+		<%= f.check_box :org_position_funding %><label for="obj_org_position_funding">Position Funding: <b>Percentages must equal 100%</b></label>
+		<% if params[:action] == 'edit' || params[:action] == 'new' %>
+			<a class="right" id="reload-cost" href="#" style="display: none;">Reload Cost Data</a>
+		<% end %>
+	</div>
+	<div style="padding-left: 20px;">
+		<table style="width: 100%;">
+			<tbody>
+				<tr id="cost-table-header">
+					<th width="20%">Cost Center #</th>
+					<th width="25%">Order #</th>
+					<th width="10%">%</th>
+					<th width="20%">Fund</th>
+					<th width="25%">Grant</th>
+				</tr>
+			</tbody>
+			<% last = [@obj.funding_rows_filled + 1, 3].max %>
+			<tbody id="cost-tbody">
+				<% (1..6).each { |i| %>
+					<tr <% if i > last %>style="display: none;"<% end %>>
+						<td><%= f.text_field "org_fund_cost_center#{i}", :class => 'autofill-alt fake-select', :placeholder => 'Search...' %></td>
+						<td><%= f.text_field "org_fund_order_no#{i}", :class => 'autofill-alt' %></td>
+						<td><%= f.text_field "org_fund_percent#{i}", :class => 'autofill-alt' %></td>
+						<td><%= f.text_field "org_fund_fund#{i}", :class => 'autofill-alt' %></td>
+						<td><%= f.text_field "org_fund_grant#{i}", :class => 'autofill-alt' %></td>
+					</tr>
+				<% } %>
+			</tbody>
+		</table>
+	</div>
+	<h2><u>LEAVE MANAGEMENT</u> (Leave Request Form, Cert. of Healthcare Provider, and/or military paperwork MUST be attached)</h2>
+	<div>
+		<%= f.check_box :leave_no_pay %><label for="obj_leave_no_pay">No Pay Leave</label>&nbsp;
+		<%= f.check_box :leave_paid %><label for="obj_leave_paid">Paid Leave</label>&nbsp;
+		<label>Reason:</label>
+		<%= f.text_field :leave_reason, :style => 'width: 500px;' %>
+	</div>
+	<div style="padding-left: 20px;">
+		<%= f.check_box :leave_fmla %><label for="obj_leave_fmla">FMLA <b>(attach Designation Form WH-382)</b></label>&nbsp;
+		<%= f.check_box :leave_half_pay_sick %><label for="obj_leave_half_pay_sick">Half Pay Sick Leave</label>&nbsp;
+		<%= f.check_box :leave_military %><label for="obj_leave_military">Military Leave</label>&nbsp;
+		<%= f.check_box :leave_section_72 %><label for="obj_leave_section_72">Section 72</label>
+	</div>
+	<div style="padding-left: 20px;">
+		<%= f.check_box :leave_workers_comp %><label for="obj_leave_workers_comp">Workers Comp.</label>&nbsp;
+		<%= f.check_box :leave_section_207c%><label for="obj_leave_section_207c">Section 207(c)</label>
+	</div>
+	<div style="padding-left: 20px;">
+		<label>Leave Start Date:</label>
+		<%= f.text_field :leave_start_date, :class => 'date', :value => (@obj.leave_start_date.strftime('%m/%d/%Y') rescue nil) %>&nbsp;
+		<label>Anticipated Return Date:</label>
+		<%= f.text_field :leave_anticipated_return_date, :class => 'date', :value => (@obj.leave_anticipated_return_date.strftime('%m/%d/%Y') rescue nil) %>
+	</div>
+	<div>
+		<%= f.check_box :leave_return %><label for="obj_leave_return">Return From Leave:</label>&nbsp;
+		<label>Date:</label>
+		<%= f.text_field :leave_return_date, :class => 'date', :value => (@obj.leave_return_date.strftime('%m/%d/%Y') rescue nil) %>
+	</div>
+	<h2><u>NOTES TO HR</u> (Include any explanatory information regarding the personnel change included on this form)</h2>
+	<div><%= f.text_area :notes, :style => 'width: 100%; height: 80px;' %></div>
+</div>

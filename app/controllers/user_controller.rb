@@ -36,5 +36,37 @@ class UserController < CrudController
 		session[:current_user_id] = params[:id]
 		render :text => 'flip'
 	end
+	
+	def bulk_email
+		if !@current_user.admin_level?
+			render :nothing => true
+			return
+		end
+		@errors = []
+		if request.post?
+			@mail = params.mail
+			@errors << 'Subject is required' if @mail.subject.blank?
+			@errors << 'Body is required' if @mail.body.blank?
+			@errors << 'From is required' if @mail.from.blank?
+			emails = @mail.to.to_s.split(/[\r\n,]/).map(&:strip).reject(&:blank?)
+			@errors << 'Recipients is required' if emails.empty?
+			if @errors.empty?
+				emails.each { |e|
+					Notifier.deliver_custom_email e, @mail.subject, @mail.from, @mail.body
+				}
+				flash[:notice] = 'Email Sent!'
+				redirect_to
+			end
+		else
+			emails = [] 
+			users = User.find(:all, :conditions => 'level != "disabled"', :include => :agency, :group => 'email', :order => 'agencies.agency_type = "COUNTY" desc')
+			@mail = {
+				:from => @current_user.email_with_name,
+				:subject => '',
+				:body => '',
+				:to => users.map(&:email_with_name).join("\r")
+			}
+		end
+	end
 
 end

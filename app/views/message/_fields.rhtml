@@ -16,6 +16,7 @@
 	</td>
 </tr>
 <%= f.tr_calendar_date_select :deliver_after, :label => 'Deliver After', :default_time => Time.parse('1:00am'), :after => '<div>Enter a date to delay delivery. Letter will not be available to deliver until after this date.</div>' %>
+<%= f.tr_check :force_postal, :label => 'Force Postal', :text => 'Deliver via postal mail even if applicant prefers email.' %>
 <%= f.tr_text_area :body, :label => 'Body', :style => 'width: 400px; height: 500px;', :req => true %>
 
 <script type="text/javascript">

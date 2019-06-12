@@ -7,7 +7,10 @@ class FormCountyHire  < ActiveRecord::Base
 #	belongs_to :cert
 	belongs_to :status_user, :class_name => 'User', :foreign_key => 'status_user_id'
 	
-	belongs_to :vacancy, :class_name => 'Vacancy', :foreign_key => 'vacancy_no', :primary_key => 'exec_approval_no'
+	belongs_to :vacancy
+	belongs_to :applicant
+	belongs_to :cert
+	belongs_to :position_data, :class_name => 'VacancyData', :foreign_key => 'position_no', :primary_key => 'position_no'
 	
 #	belongs_to :present_title_job, :class_name => 'Job', :foreign_key => 'present_title_id'
 #	belongs_to :demotion_title_job, :class_name => 'Job', :foreign_key => 'demotion_title_id'
@@ -21,20 +24,27 @@ class FormCountyHire  < ActiveRecord::Base
 	
 	validates_presence_of(
 		:agency, :department,
-		:name, :county_org_no, :org_no, :cost_center, :position, :position_no, :effective_date,
+		:first_name, :last_name, :county_org_no, :org_no, :cost_center, :position, :position_no, :effective_date,
 		:vacancy_no, :address,
 		:address_city, :address_state, :address_zip,
-		:email, :phone, :salary_group, :salary_step, :hourly_rate, :normal_biweekly_hours,
-		:classification, :civil_service_status, :job_code, :list_no, :work_schedule_code, :benefits_date, :drug_test_date, :birth_date, :ssn, :time_admin_code,
-		:if => :http_posted
+		:email, :phone, :phone2, :salary_group, :salary_step, :normal_biweekly_hours,
+		:classification, :civil_service_status, :job_code, :list_no, :work_schedule_code, :ssn, :gender, #:time_admin_code,
+		:hourly_rate, :biweekly_rate,
+		:if => :check_validation
 	)
-	validates_presence_of :flsa_exempt, :if => Proc.new { |o| o.http_posted && o.flsa_exempt.nil? }
-	validates_presence_of :physical_required, :if => Proc.new { |o| o.http_posted && o.physical_required.nil? }
-	validates_presence_of :physical_date, :if => Proc.new { |o| o.http_posted && o.physical_required }
+	#validates_presence_of :flsa_exempt, :if => Proc.new { |o| o.http_posted && o.flsa_exempt.nil? }
+	validates_presence_of :physical_required, :if => Proc.new { |o| o.check_validation && o.physical_required.nil? }
+	#validates_presence_of :physical_date, :if => Proc.new { |o| o.http_posted && o.physical_required }
+
+	
 	
 	def employee; nil; end
 	
-	def label; "330 #{name_was}"; end
+	def label; "330 #{first_name_was} #{last_name_was}"; end
+	
+	def name; "#{first_name} #{last_name}"; end
+	
+	def name_fml; [first_name, middle_name, last_name].reject(&:blank?) * ' '; end
 	
 	def form_type; '330C'; end
 	
@@ -43,68 +53,15 @@ class FormCountyHire  < ActiveRecord::Base
 		if !check_validation
 			return
 		end
-# 		if change_demotion
-# 			errors.add_to_base 'Please enter all required fields for Demotion' if !demotion_title_job || demotion_salary.blank? || demotion_salary_per.blank? || demotion_class.blank? || demotion_status.blank? || demotion_job_time.blank?
-# 		end
-# 		if change_loa
-# 			errors.add_to_base 'Please enter all required fields for Leave of Absence' if loa_reason.blank? || loa_with_pay.nil? || loa_date_from.blank? || loa_date_to.blank?
-# 		end
-# 		if change_name
-# 			errors.add_to_base 'Please enter all required fields for Name Change' if name_change_from.blank? || name_change_to.blank?
-# 		end
-# 		if change_perm_appt
-# 			errors.add_to_base 'Please enter all required fields for Perm. CS Appt.' if perm_appt_list_no.blank? || perm_appt_score.blank?
-# 		end
-# 		if change_promotion
-# 			errors.add_to_base 'Please enter all required fields for Promotion' if !promotion_new_title_job || promotion_salary.blank? || promotion_salary_per.blank? || promotion_class.blank? || promotion_status.blank? || promotion_job_time.blank?
-# 		end
-# 		if change_salary
-# 			errors.add_to_base 'Please enter all required fields for Salary Change' if salary_change_from.blank? || salary_change_to.blank? || salary_change_from_per.blank? || salary_change_to_per.blank?
-# 		end
-# 		if change_second_provisional
-# 			errors.add_to_base 'Please enter all required fields for 2nd Prov. Appt.' if second_provisional_date.blank?
-# 		end
-# 		if change_separation
-# 			errors.add_to_base 'Please enter all required fields for Separation' if separation_date.blank? || separation_reason.blank?
-# 		end
-# 		if change_status
-# 			errors.add_to_base 'Please enter all required fields for Status/Class Change' if status_type.blank? || status_class.blank?
-# 		end
-# 		if change_suspension
-# 			errors.add_to_base 'Please enter all required fields for Suspension' if suspension_reason.blank? || suspension_with_pay.nil?
-# 		end
-# 		if change_title
-# 			errors.add_to_base 'Please enter all required fields for Title Change' if !title_change_new_title_job || title_change_class.blank? || title_change_status.blank? || title_change_job_time.blank?
-# 		end
 	end
 	
 	def is_provisional?
-		civil_service_status == 'PROVISIONAL' || civil_service_status == 'PROVISIONAL-2ND'
+		['V', 'V2'].include?(civil_service_status)
 	end
-
-# 	def set_job_text
-# 		if present_title_job
-# 			self.present_title = present_title_job.name
-# 		else		
-# 			self.present_title = ''
-# 		end
-# 		if demotion_title_job
-# 			self.demotion_title = demotion_title_job.name
-# 		else
-# 			self.demotion_title = ''
-# 		end
-# 		if promotion_new_title_job
-# 			self.promotion_new_title = promotion_new_title_job.name
-# 		else
-# 			self.promotion_new_title = ''
-# 		end
-# 		if title_change_new_title_job
-# 			self.title_change_new_title = title_change_new_title_job.name
-# 		else
-# 			self.title_change_new_title = ''
-# 		end
-# 	end
-# 	before_save :set_job_text
+	
+	def funding_rows_filled
+		(1..6).to_a.reverse.find { |i| %w(cost_center order_no percent fund grant).find { |f| !send("gp_#{f}#{i}").blank? } } || 0
+	end
 	
 	include DbChangeHooks
 	

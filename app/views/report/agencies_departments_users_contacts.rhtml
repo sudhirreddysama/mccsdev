@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+<title>Agencies/Departments Users/Contacts</title>
+<%= javascript_include_tag(
+	'/jquery-3.3.1.min.js', 
+	'/jquery.stickytableheaders.min.js'
+) %>
+<style>
+ html, body { box-sizing: border-box; margin: 0; padding: 0; font: 12px/1.5 Arial, sans-serif; }
+ body { padding: 4px; }
+ table { margin: 0; border-spacing: 0; border-collapse: collapse; width: 100%; }
+ th, td { text-align: left; font-weight: normal; border: 1px solid #888; padding: 2px 4px; }
+ th { font-weight: bold; background: #fff; }
+ .nomatch { background: #fdd; color: #800; }
+ .blank { background: #ddd; }
+ #filter { margin-bottom: 4px; }
+ input { border: 1px solid #888; margin: 0; padding: 2px 4px; font: inherit; background-color: #ffe; }
+</style>
+</head>
+<body>	
+	<div id="filter"><input type="text" name="filter" style="width: 200px;" placeholder="Type to Filter" autocomplete="new-password"></div>
+	<table>
+		<thead>
+			<tr>
+				<th colspan="4">User</th>
+				<th colspan="4">Contact</th>
+			</tr>
+			<tr>
+				<th>Agency</th>
+				<th>Department</th>
+				<th>ID</th>
+				<th>User</th>
+				<th>Agency</th>
+				<th>Department</th>
+				<th>ID</th>
+				<th>Contact</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @objs.each_hash { |h| %>
+				<% aclass = 'nomatch' if h.a_nomatch == '1' %>
+				<% dclass = 'nomatch' if h.d_nomatch == '1' %>
+				<% uclass = 'blank' if h.u_aname.blank? && h.u_dname.blank? && h.u_name.blank? %>
+				<% cclass = 'blank' if h.c_aname.blank? && h.c_dname.blank? && h.c_name.blank? %>
+				<tr>
+					<td class="<%= aclass %> <%= uclass %>"><%= h.u_aname %></td>
+					<td class="<%= dclass %> <%= uclass %>"><%= h.u_dname %></td>
+					<td class="<%= uclass %>"><%= h.u_id %></td>
+					<td class="<%= uclass %>"><%= h.u_name %></td>
+					<td class="<%= aclass %> <%= cclass %>"><%= h.c_aname %></td>
+					<td class="<%= dclass %> <%= cclass %>"><%= h.c_dname %></td>
+					<td class="<%= cclass %>"><%= h.c_id %></td>
+					<td class="<%= cclass %>"><%= h.c_name %></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+	<script>
+		$('table').stickyTableHeaders();
+		var rows = $('tbody tr');
+		$('#filter input').on('input', function(e) {
+			var v = this.value;
+			console.log(v);
+			for(var i = 0; i < rows.length; i++) {
+				var r = $(rows[i]);
+				r.toggle(!v || r.text().indexOf(v) != -1);
+			}
+		});
+	</script>
+</body>
+</html>

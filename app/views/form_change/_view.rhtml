@@ -319,7 +319,7 @@
 					<td>
 						<label>Status/Class:</label>
 						<%= o.status_type %>
-						<% if o.status_type == 'Temporary' && !o.status_temporary_type.blank? %>
+						<% if o.status_type == 'T' && !o.status_temporary_type.blank? %>
 							- <%= o.status_temporary_type %>
 						<% end %>
 					&nbsp;</td>

@@ -1,5 +1,13 @@
 class ApplicantController < CrudController
 
+	skip_before_filter :block_agency_users
+	def check_access
+		return true if @current_user.above_agency_level?
+		return true if @current_user.agency_level? && @current_user.perm_ag_applicants
+		render_nothing and return false
+	end
+	before_filter :check_access, :except => :autocomplete
+
 	def index
 		
 		@filter = get_filter({
@@ -63,6 +71,37 @@ class ApplicantController < CrudController
 			super
 		end
 	end
+	
+	def autocomplete
+		cond = get_search_conditions(params.search || params.term, {
+			'people.first_name' => :like,
+			'people.last_name' => :like,
+			'people.ssn' => :like,
+			'exams.exam_no' => :like,
+			'exams.title' => :like,
+			'we.name' => :like
+		})
+		cond << 'approved = "Y"'
+		cond << 'submitted_at > "%s"' % Date.today.years_ago(2)
+		inc = [:person, :exam, :app_status]
+		if !params.cert_id.blank?
+			inc << :cert_applicants
+			cond << 'cert_applicants.cert_id = %d' % params.cert_id.to_i
+		end
+		extra_joins = []
+		extra_joins << 'left join ' + HRAPPLYDB + '.exams we on we.id = applicants.web_exam_id'
+		opt = {
+			:conditions => get_where(cond),
+			:order => 'applicants.id desc',
+			:include => inc,
+			:joins => extra_joins * ' ',
+			:limit => 20
+		}
+		data = Applicant.find(:all, opt)
+		render :json => data.collect { |o| 
+			o.autocomplete_json_data
+		}
+	end		
 
 	def web_import
 		if request.post?

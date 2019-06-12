@@ -4,6 +4,10 @@ class ApplicationController < ActionController::Base
 	filter_parameter_logging :password
 	
 	include ExceptionNotifiable
+
+	def render_nothing
+		render :nothing => true
+	end
 	
 	def force_ssl
 		unless request.ssl?
@@ -32,21 +36,35 @@ class ApplicationController < ActionController::Base
 	before_filter :load_user
 	
 	def authenticate
-		unless @current_user
-			redirect_to :controller => :account, :action => :index
-			session[:after_login] = url_for({})
+		if !@current_user
+			redirect_to :sc => nil, :sid => nil, :controller => :account, :action => :index
+			session[:after_login] = request.url
 			flash[:notice] = 'Please log in or register a new account to continue.'
 			return false
+		elsif session[:reset_password]
+			session[:after_login] = request.url
+			redirect_to :sc => nil, :sid => nil, :controller => :account, :action => :password
+			flash[:notice] = 'Please reset your password.'
 		end
 		true
 	end
 	before_filter :authenticate
 	
+	def block_agency_users
+		if !@current_user.above_agency_level?
+			render_nothing
+			return false
+		end
+		return true
+	end
+	before_filter :block_agency_users
+	
 	def options; end
 	before_filter :options
 	
 	def load_top_text
-		@top_texts = TopText.find(:all, :conditions => ['? like top_texts.path and top_texts.hidden = 0', request.path])
+		p = request.path + '/'
+		@top_texts = TopText.find(:all, :conditions => ['? like top_texts.path and top_texts.hidden = 0', p])
 	end
 	before_filter :load_top_text
 	
@@ -147,10 +165,6 @@ class ApplicationController < ActionController::Base
 		cond << "#{dt} <= %f" % d2 if dt && d2
 		return cond
 	end	
-
-	def render_nothing
-		render :nothing => true
-	end
 	
 	def render_htmldoc filename, opts = {}
 		f = TempfileExt.open 'htmldoc.html', 'tmp'

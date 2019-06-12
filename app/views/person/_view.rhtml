@@ -193,7 +193,9 @@
 			</tr>
 		</table>
 	</div>	
-	
+</div>
+<div class="viewer">
+	<div class="header">Formatta/Onboarding</div>
 	<div class="row">
 		<table>
 			<tr>
@@ -222,8 +224,58 @@
 						<label>Login Email Sent</label>
 						<%= o.formatta_email_sent.dt0? %> <%= o.formatta_email_sent_by %>
 						<%= link_to 'Send Email', {:action => :send_formatta_login, :id => o.id}, :confirm => 'Are you sure you want to send the Formatta login email?' %>
+						&middot;
+						<%= link_to 'Clear Form Dates', {:action => :clear_formatta_dates, :id => o.id}, :confirm => 'Are you sure you want to clear Formatta form completed dates?' %>
 					</td>
 				<% end %>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Direct Deposit</label>
+					<%= h o.formatta_direct_deposit %>
+				</td>
+				<td>
+					<label>W4</label>
+					<%= h o.formatta_w4 %>
+				</td>
+				<td>
+					<label>2104</label>
+					<%= h o.formatta_2104 %>
+				</td>
+				<td>
+					<label>I9</label>
+					<%= h o.formatta_i9 %>
+				</td>
+				<td>
+					<label>eSafety</label>
+					<%= h o.formatta_esafety %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>EEO</label>
+					<%= h o.formatta_eeo %>
+				</td>
+				<td>
+					<label>Oath</label>
+					<%= h o.formatta_oath %>
+				</td>
+				<td>
+					<label>Vet. Exempt</label>
+					<%= h o.formatta_veteran_exempt %>
+				</td>
+				<td>
+					<label>Policies</label>
+					<%= h o.formatta_monroe_policies %>
+				&nbsp;</td>
 			</tr>
 		</table>
 	</div>

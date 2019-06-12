@@ -1,8 +1,14 @@
 <tr style="background: #e8e8e8;"><th></th><th>User Login</th></tr>
 <%= f.tr_text_field :username, :label => 'Username', :req => true, :autocomplete => 'off' %>
-<%= f.tr_password_field :password, :label => 'Password', :help => 'Leave blank to keep current password. Required for new users.', :req => @obj.new_record?, :autocomplete => 'off' %>
-<%= f.tr_password_field :password_confirmation, :label => 'Confirm Password', :help => 'Please retype the password.', :req => @obj.new_record?, :autocomplete => 'off' %>
-
+<tr>
+	<th>Password: <% if @obj.new_record? %><span class="req">*</span><% end %></th>
+	<td>
+		<%= f.password_field :password, :autocomplete => 'new-password', :size => 60 %>
+		<% unless @obj.new_record? %><div>Leave blank to keep current password.</div><% end %><div>Min: 8 characters, must contain 1 of each: uppercase, lowercase, number, special character (#%$@*...)</div>
+	</td>
+</tr>
+<%= f.tr_password_field :password_confirmation, :label => 'Confirm Password', :help => 'Please retype the password.', :req => @obj.new_record?, :autocomplete => 'new-password' %>
+<%= f.tr_check :reset_password, :label => 'Reset Password:', :text => 'Check here to force user to enter a new password next time they login.' %>
 <tr style="background: #e8e8e8;"><th></th><th>User Information</th></tr>
 <%= f.tr_text_field :name, :label => 'Name', :req => true %>
 <%= f.tr_text_field :initials, :label => 'Initials', :size => '5' %>
@@ -31,7 +37,7 @@
 <tr>
 	<th></th>
 	<td id="perm_ag">
-		<label><%= f.check_box :perm_ag_employees, :class => 'def2' %> Access Employees Tab</label><br>
+		<label><%= f.check_box :perm_ag_employees, :class => 'def1 def2' %> Access Employees Tab</label><br>
 		<label><%= f.check_box :perm_ag_pay_certs, :class => 'def2' %> Access Payroll Certifications Tab</label><br>
 		<label><%= f.check_box :perm_ag_form_changes, :class => 'def1 def2' %> Access 105 Employment Change Form Tab</label><br>
 		<label><%= f.check_box :perm_ag_form_hires, :class => 'def1 def2' %> Access 330 New Hire Form Tab</label><br>
@@ -79,6 +85,14 @@
 
 
 <tr style="background: #e8e8e8;"><th></th><th>Other</th></tr>
+<tr>
+	<th>Failed Logins:</th>
+	<td>
+		<%= @obj.failed_logins.to_i %> Failed Logins,
+		<%= @obj.failed_recoveries.to_i %> Failed Account Recoveries
+		&nbsp;&nbsp;&nbsp;<label><%= f.check_box :reset_failed_logins %> Reset Failed Logins</label>
+	</td>
+</tr>
 <%= f.tr_text_field :switch_username, :label => 'Switch Username', :help => 'Enter the username of a user that will always be able to "switch" to this user without logging in again.' %>
 
 

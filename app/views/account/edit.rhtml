@@ -4,8 +4,14 @@
 	<%= f.tr_text_field :username, :label => 'Username', :req => true %>
 	<%= f.tr_text_field :name, :label => 'Name', :req => true %>
 	<%= f.tr_text_field :initials, :label => 'Initials', :req => true %>
-	<%= f.tr_password_field :password, :label => 'Password', :req => true, :help => @obj.new_record? ? nil : 'Leave blank to keep the current password.' %>
-	<%= f.tr_password_field :password_confirmation, :label => 'Retype Password', :req => true %>
+	<tr>
+		<th>Password:</th>
+		<td>
+			<%= f.password_field :password, :autocomplete => 'new-password', :size => 60 %>
+			<div>Leave blank to keep current password.</div><div>Min: 8 characters, must contain 1 of each: uppercase, lowercase, number, special character (#%$@*...)</div>
+		</td>
+	</tr>
+	<%= f.tr_password_field :password_confirmation, :label => 'Retype Password', :req => true, :autocomplete => 'new-password' %>
 	<%= f.tr_text_field :email, :label => 'Email', :req => true %>
 	<% if @current_user.staff_level? %>
 		<%= f.tr_text_field :email2, :label => '2nd Email', :req => false %>

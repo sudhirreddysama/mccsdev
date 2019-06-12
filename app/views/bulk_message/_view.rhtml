@@ -14,6 +14,12 @@
 					<label>Subject (Public):</label>
 					<%= h o.public_name %>
 				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
 				<td>
 					<label>Created:</label>
 					<%= o.created_at.dt0? %>
@@ -25,6 +31,10 @@
 				<td>
 					<label>From/Reply To:</label>
 					<%= h o.email_from %>
+				</td>
+				<td>
+					<label>Force Postal:</label>
+					<%= yn o.force_postal %>
 				</td>
 				<td>
 					<label>Deliver After:</label>

@@ -1,5 +1,13 @@
 class EmployeeController < CrudController
-
+	
+	skip_before_filter :block_agency_users
+	def check_access
+		return true if @current_user.above_agency_level?
+		return true if !@current_user.is_agency_county? && @current_user.perm_ag_employees
+		render_nothing and return false
+	end
+	before_filter :check_access, :except => :autocomplete
+	
 	def index
 		@filter = get_filter({
 			:sort1 => 'employees.last_name',

@@ -24,12 +24,25 @@
 					<label>Submitted At:</label>
 					<%= h o.submitted_at.d0? %>
 				&nbsp;</td>
+				<td>
+					<label>Agency</label>
+					<%= o.agency.name if o.agency %>
+				</td>
+				<td>
+					<label>Department</label>
+					<%= o.department.name if o.department %>
+				</td>
+				<td>
+					<label>Division</label>
+					<%= o.division.name if o.division %>
+				</td>
 			</tr>
 		</table>
 	</div>
 </div>
 <% fields_for(:obj, :builder => TableFormBuilder) { |f| %>
 	<% f.global_options = {:disabled => true, :readonly => true} %>
+	<% @view = true %>
 	<%= partial 'fields_page', :f => f %>
 <% } %>
 <%= partial 'view_documents', :o => @obj %>

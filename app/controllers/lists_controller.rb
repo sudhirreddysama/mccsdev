@@ -4,6 +4,7 @@ class ListsController < ApplicationController
 	
 	#skip_before_filter :force_ssl
 	skip_before_filter :authenticate
+	skip_before_filter :block_agency_users
 	
 	def mailtest
 		Notifier.deliver_mailtest

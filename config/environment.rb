@@ -75,6 +75,7 @@ require 'net/pop'
 require 'net/ftp'
 require 'shellwords'
 require 'securerandom'
+require 'savon'
 
 #require 'twitter'
 #require 'oauth' 

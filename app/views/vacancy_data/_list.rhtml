@@ -1,0 +1,29 @@
+<table class="dg">
+	<thead>
+		<tr>
+			<th></th>
+			<th width="1%" class="nobr">Name<br>Personnel # &middot; Cost Center</th>
+			<th width="1%" class="nobr">Position<br>Position # &middot; Job #</th>
+			<th width="97%">Organization<br>Org # &middot; County Org #</th>
+		</tr>
+	</thead>
+	<tbody id="objs">
+		<% @objs.each { |o| %>
+			<tr class="<%= cycle 'odd', 'even' %>" id="obj_<%= o.id %>">
+				<td><%= link_to image_tag('icons/zoom.png', :size => '16x16', :alt => 'view', :title => 'View'), :action => :view, :id => o.id %></td>
+				<td class="nobr">
+					<div><%= link_to o.last_incumbent.blank? ? 'BLANK' : o.last_incumbent, :action => :view, :id => o.id %></div>
+					<div><% if o.status.to_i == 0 %><span class="req">VACANT </span><% end %><%= o.personnel_no %> &middot; <%= o.cost_center %></div>
+				</td>
+				<td class="nobr">
+					<div><%= o.position %></div>
+					<div><%= o.position_no %> &middot; <%= o.job_no %></div>
+				</td>
+				<td>
+					<div><%= o.organization %></div>
+					<div><%= o.org_no %> &middot; <%= o.county_org_no %></div>
+				</td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

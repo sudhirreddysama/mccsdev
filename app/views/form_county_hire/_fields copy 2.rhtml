@@ -1,0 +1,468 @@
+<% @update_js = true %>
+<% content_for(:head) { %>
+	<%= javascript_include_tag '/jquery.datetimepicker/jquery.datetimepicker.js' %>
+	<%= stylesheet_link_tag '/jquery.datetimepicker/jquery.datetimepicker.css' %>
+<% } %>
+<% if !@current_user.agency_level? || !@current_user.agency %>
+	<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name', :conditions => 'agency_type = "COUNTY"').collect { |a| [a.name, a.id] }, :label => 'Agency', :req => true, :include_blank => true %>
+<% end %>
+<% if !@current_user.agency_level? || !@current_user.department %>
+	<%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name', :conditions => 'departments.county = 1').collect { |a| [a.name, a.id] }, :label => 'Department', :req => true, :include_blank => true %>
+<% end %>
+<% if !@current_user.agency_level? || !@current_user.division %>
+	<tr>
+		<th>Division:</th>
+		<td><%= partial 'division/division_select', :f => f, :o => o, :field_name => 'obj' %></td>
+	</tr>
+<% end %>
+<tr><th>Auto Fill From:</th><td>Use the search/dropdowns below to auto-fill <span class="autofill">&nbsp;blue fields&nbsp;</span> from other records in the system.</td></tr>
+<tr>
+	<th>Req. Fill Vac.:</th>
+	<td>
+		<% v = @obj.vacancy %>
+		<%= f.select :vacancy_id, v ? [["Approval #: #{v.exec_approval_no.blank? ? 'NA' : v.exec_approval_no}, Title: #{v.position}", v.id]] : [], {}, :style => 'width: 600px;' %>
+	</td>
+</tr>
+<tr>
+	<th>Cert:</th>
+	<td>
+		<% c = @obj.cert %>
+		<%= f.select :cert_id, c ? [[c.title, c.id]] : '', {}, :style => 'width: 600px;' %>
+	</td>
+</tr>
+<tr>
+	<th>Applicant:</th>
+	<td>
+		<% a = @obj.applicant %>
+		<% e = a && a.exam %>
+		<% r = a && a.person %>
+		<%= f.select :applicant_id, a ? [["Exam #: #{e && !e.exam_no.blank? ? e.exam_no : 'NA'}, Name: #{r ? r.name_fml : ''}", a.id]] : '', {}, :style => 'width: 600px;' %>
+	</td>
+</tr>
+<tr>
+	<th>Position:</th>
+	<td>
+		<% v = @obj.vacancy_data %>
+		<%= f.select :vacancy_data_id, v ? [["Position #: #{v.position_no}, Title: #{v.position}", v.id]] : [], {}, :style => 'width: 600px;' %>
+	</td>
+</tr>
+<tr><th>Form:</th><td colspan="2">
+<%= partial 'fields_page', :f => f %>
+</td></tr>
+<script>
+
+var vacancy_obj = <%= (@obj.vacancy ? @obj.vacancy.autocomplete_json_data : nil).to_json %>;
+var cert_obj = <%= (@obj.cert ? @obj.cert.autocomplete_json_data : nil).to_json %>;
+var applicant_obj = <%= (@obj.applicant ? @obj.applicant.autocomplete_json_data : nil).to_json %>;
+var vacancy_data_obj = <%= (@obj.vacancy_data ? @obj.vacancy_data.autocomplete_json_data : nil).to_json %>;
+
+$('input.date').datepicker({changeMonth: true, changeYear: true}).attr('autocomplete', 'new-password');
+$('input.datetime').datetimepicker({changeMonth: true, changeYear: true, timeFormat: 'hh:mm tt'}).attr('autocomplete', 'new-password');
+	
+var obj_agency_id = $('#obj_agency_id');
+var obj_department_id = $('#obj_department_id');
+var obj_division_id = $('#obj_division_id');
+
+var obj_vacancy_id = $('#obj_vacancy_id');
+var obj_cert_id = $('#obj_cert_id');
+var obj_applicant_id = $('#obj_applicant_id');
+var obj_vacancy_data_id = $('#obj_vacancy_data_id');
+
+var obj_vacancy_no = $('#obj_vacancy_no');
+var obj_org_no = $('#obj_org_no');
+var obj_county_org_no = $('#obj_county_org_no');
+var obj_cost_center = $('#obj_cost_center');
+var obj_salary_group = $('#obj_salary_group');
+var obj_position = $('#obj_position');
+var obj_position_no = $('#obj_position_no');
+var obj_flsa_exempt_true = $('#obj_flsa_exempt_true');
+var obj_flsa_exempt_false = $('#obj_flsa_exempt_false');
+var obj_effective_date = $('#obj_effective_date');
+
+var obj_first_name = $('#obj_first_name');
+var obj_middle_name = $('#obj_middle_name');
+var obj_last_name = $('#obj_last_name');
+var obj_address = $('#obj_address');
+var obj_address2 = $('#obj_address2');
+var obj_address_city = $('#obj_address_city');
+var obj_address_state = $('#obj_address_state');
+var obj_address_zip = $('#obj_address_zip');
+var obj_mail_address = $('#obj_mail_address');
+var obj_mail_address2 = $('#obj_mail_address2');
+var obj_mail_city = $('#obj_mail_city');
+var obj_mail_state = $('#obj_mail_state');
+var obj_mail_zip = $('#obj_mail_zip');		
+var obj_list_no = $('#obj_list_no');
+var obj_job_code = $('#obj_job_code');
+var obj_email = $('#obj_email');
+var obj_phone = $('#obj_phone');
+var obj_ssn = $('#obj_ssn');
+var obj_birth_date = $('#obj_birth_date');
+var obj_civil_service_status = $('#obj_civil_service_status');
+var obj_gender_m = $('#obj_gender_m');
+var obj_gender_f = $('#obj_gender_f');
+var obj_work_schedule_code = $('#obj_work_schedule_code');
+var obj_move_to_org_no = $('#obj_move_to_org_no');
+var obj_rehire_sap_no = $('#obj_rehire_sap_no');
+
+function obj_vacancy_data_label(i) {
+	return 'Position #: ' + i.position_no + ', Title: ' + i.position;
+}
+
+function set_vacancy_fields(i) {
+	obj_vacancy_no.val(i.exec_approval_no).effect('highlight');
+	var v = i.vacancy_data;
+	if(v) {
+		var opt = new Option(obj_vacancy_data_label(v), v.id, true, true);
+    obj_vacancy_data_id.append(opt).trigger('change').trigger({type: 'select2:select', params: {data: v}}).find('+ span.select2 .select2-selection').effect('highlight');
+	}
+	else {
+		obj_vacancy_data_id.val(null).trigger('change');
+		set_vacancy_data_fields(i);
+	}
+}
+
+function set_vacancy_data_fields(i) {
+	obj_org_no.val(i.org_no).effect('highlight');
+	obj_county_org_no.val(i.county_org_no).effect('highlight');
+	obj_cost_center.val(i.cost_center).effect('highlight');
+	obj_salary_group.val(i.salary_group).effect('highlight');
+	obj_position.val(i.position).effect('highlight');
+	obj_position_no.val(i.position_no).effect('highlight').trigger('change');		
+	obj_job_code.val(i.job_no).effect('highlight');
+	if(i.flsa_exempt == 'E') {
+		obj_flsa_exempt_true.prop('checked', true);
+	}
+	else if(i.flsa_exempt == 'N') {
+		obj_flsa_exempt_false.prop('checked', true);
+	}
+	else {
+		obj_flsa_exempt_true.prop('checked', false);
+		obj_flsa_exempt_false.prop('checked', false);
+	}
+	var ed = i.desired_start;
+	ed = ed ? (new Date(ed)).toLocaleDateString('en-us') : '';
+	console.log(ed);
+	obj_effective_date.val(ed).effect('highlight');	
+}
+
+function set_applicant_fields(i) {
+	var p = i.person || {};
+	var e = i.exam || {};
+	obj_first_name.val(p.first_name).effect('highlight');
+	obj_middle_name.val(p.middle_name).effect('highlight');
+	obj_last_name.val(p.last_name).effect('highlight');
+	if(i.residence_different) {
+		obj_mail_address.val(p.mailing_address).effect('highlight');
+		obj_mail_address2.val(p.mailing_address2).effect('highlight');
+		obj_mail_city.val(p.mailing_city).effect('highlight');
+		obj_mail_state.val(p.mailing_state).effect('highlight');
+		obj_mail_zip.val(p.mailing_zip).effect('highlight');
+		obj_address.val(p.residence_address).effect('highlight');
+		obj_address2.val('').effect('highlight');
+		obj_address_city.val(p.residence_city).effect('highlight');
+		obj_address_state.val(p.residence_state).effect('highlight');
+		obj_address_zip.val(p.residence_zip).effect('highlight');
+	}
+	else {
+		obj_mail_address.val('').effect('highlight');
+		obj_mail_address2.val('').effect('highlight');
+		obj_mail_city.val('').effect('highlight');
+		obj_mail_state.val('').effect('highlight');
+		obj_mail_zip.val('').effect('highlight');	
+		obj_address.val(p.mailing_address).effect('highlight');
+		obj_address2.val(p.mailing_address2).effect('highlight');
+		obj_address_city.val(p.mailing_city).effect('highlight');
+		obj_address_state.val(p.mailing_state).effect('highlight');
+		obj_address_zip.val(p.mailing_zip).effect('highlight');
+	}
+	obj_list_no.val(e.exam_no).effect('highlight');
+	obj_email.val(p.email).effect('highlight');
+	obj_phone.val(p.home_phone || p.cell_phone || p.work_phone).effect('highlight');
+	obj_ssn.val(p.ssn).effect('highlight').trigger('change');
+	obj_birth_date.val(p.date_of_birth ? (new Date(p.date_of_birth)).toLocaleDateString('en-us') : '').effect('highlight');
+	obj_gender_m.prop('checked', p.gender == 'M');
+	obj_gender_f.prop('checked', p.gender == 'F');
+}
+
+function set_cert_fields(i) {
+	obj_list_no.val(i.exam_no);
+	var t = i.job_type
+	css = t == 'C' ? 'CONTINGENT-PERMANENT' : t == 'P' ? 'PERMANENT' : t == 'T' ? 'TEMPORARY' : '';
+	obj_civil_service_status.val(css).effect('highlight');
+}
+
+init_select2({
+	select: obj_vacancy_id,
+	url: '<%= url_for(:controller => :vacancy, :action => :autocomplete) %>',
+	placeholder: 'Search RTF Approval #, Title, Last Incumbent, Etc.',
+	params: function(params) {
+		params.agency_id = obj_agency_id.val();
+		params.department_id = obj_department_id.val();
+		params.division_id = obj_division_id.val();
+	},
+	item: function(item) {
+		item.text = 'Approval #: ' + (item.exec_approval_no || 'NA') + ', Title: ' + item.position;
+	},
+	templateResult: function(i) {
+		if(!i.id) return i.text;
+		return $('<div>')
+			.append($('<div>').text((i.exec_approval_no || 'NA') + ' - ' + i.position))
+			.append($('<div class="ac-extra">')
+				.append('<i>Pos#:</i>&nbsp;')
+				.append($('<span>').text(i.position_no + ' '))
+				.append('<i>Grp:</i>&nbsp;')
+				.append($('<span>').text(i.salary_group + ' '))
+				.append('<i>Org#:</i>&nbsp;')
+				.append($('<span>').text(i.org_no + ' '))
+				.append('<i>CC:</i>&nbsp;')
+				.append($('<span>').text(i.cost_center + ' '))
+			);
+	}
+}).on('select2:select', function(e) {
+	var i = e.params.data;
+	vacancy_obj = i;
+	set_vacancy_fields(i);
+});
+
+init_select2({
+	select: obj_cert_id,
+	url: '<%= url_for(:controller => :cert, :action => :autocomplete) %>',
+	placeholder: 'Search Exam #, Title, Etc.',
+	params: function(params) {
+		params.agency_id = obj_agency_id.val();
+		params.department_id = obj_department_id.val();
+		params.division_id = obj_division_id.val();
+	},
+	item: function(item) {
+		item.text = item.title;
+	},
+	templateResult: function(i) {
+		if(!i.id) return i.text;
+		return $('<div>')
+			.append($('<div>').text(i.title))
+			.append($('<div class="ac-extra">')
+				.append('<i>ID:</i>&nbsp;')
+				.append($('<span>').text(i.id + ' '))
+				.append('<i>Requested:</i>&nbsp;')
+				.append($('<span>').text(i.requested_date ? ymd2mdy(i.requested_date) + ' ' : 'NA '))
+				.append('<i>Certified:</i>&nbsp;')
+				.append($('<span>').text(i.certification_date ? ymd2mdy(i.certification_date) + ' ' : 'NA '))
+			);
+	}
+}).on('select2:select', function(e) {
+	var i = e.params.data;
+	cert_obj = i;
+	set_cert_fields(i);
+});
+
+init_select2({
+	select: obj_applicant_id,
+	url: '<%= url_for(:controller => :applicant, :action => :autocomplete) %>',
+	placeholder: 'Search Name, Exam #, Etc.',
+	params: function(params) {
+		params.agency_id = obj_agency_id.val();
+		params.department_id = obj_department_id.val();
+		params.division_id = obj_division_id.val();
+		params.cert_id = obj_cert_id.val();
+	},
+	item: function(item) {
+		var e = item.exam;
+		var p = item.person;
+		item.name_fml = p ? p.first_name + ' ' + (p.middle_name || '') + ' ' + p.last_name : '';
+		item.text = 'Exam #: ' + (e && e.exam_no || 'NA') + ', Name: ' + item.name_fml;
+	},
+	templateResult: function(i) {
+		if(!i.id) return i.text;
+		var e = i.exam;
+		var w = i.web_exam;
+		var wt = i.web_exam && i.web_exam.web_exam_type;
+		var p = i.person;
+		var d = i.submitted_at ? (new Date(i.submitted_at)).toLocaleDateString('en-us') : 'NA';
+		return $('<div>')
+			.append($('<div>').text(i.name_fml))
+			.append($('<div class="ac-extra">')
+				.append('<i>Exam/List:</i>&nbsp;')
+				.append($('<span>').text(e ? e.exam_no + ': ' + e.title : 'None'))
+				.append('<br>')
+				.append('<i>Submitted:</i>&nbsp;')
+				.append($('<span>').text(d + ' '))
+				.append('<i>Web Post:</i>&nbsp;')
+				.append($('<span>').text((wt ? wt.short_name + ': ' : '') + (w ? w.name : 'NA')))
+			)
+	}
+}).on('select2:select', function(e) {
+	var i = e.params.data;
+	applicant_obj = i;
+	set_applicant_fields(i);
+});
+
+init_select2({
+	select: obj_vacancy_data_id,
+	url: '<%= url_for(:controller => :vacancy_data, :action => :autocomplete) %>',
+	placeholder: 'Search Title, Position #, Etc.',
+	params: function(params) {
+		params.agency_id = obj_agency_id.val();
+		params.department_id = obj_department_id.val();
+		params.division_id = obj_division_id.val();
+	},
+	item: function(item) {
+		item.text = obj_vacancy_data_label(item);
+	},
+	templateResult: function(i) {
+		if(!i.id) return i.text;
+		return $('<div>')
+			.append($('<div>').text(i.position_no + ' - ' + i.position))
+			.append($('<div class="ac-extra">')
+				.append(i.status ? '' : '<b style="color: #800;">VACANT</b> ')
+				.append('<i>Grp:</i>&nbsp;').append($('<span>').text(i.salary_group + ' '))
+				.append('<i>Org:</i>&nbsp;').append($('<span>').text(i.organization + ' '))
+				.append('<i>Org#:</i>&nbsp;').append($('<span>').text(i.org_no + ' '))
+				.append('<i>CC:</i>&nbsp;').append($('<span>').text(i.cost_center + ' '))
+			)
+	}
+}).on('select2:select', function(e) {
+	var i = e.params.data;
+	vacancy_data_obj = i;
+	set_vacancy_data_fields(i);
+});
+
+var cost_table_header = $('#cost-table-header');
+var cost_table_lines = [];
+var cost_tbody = $('#cost-tbody');
+var cost_rows = cost_tbody.find('tr');
+cost_rows.each(function(i, r) {
+	var j = i + 1;
+	cost_table_lines.push({
+		cost_center: $('#obj_gp_cost_center' + j),
+		order_no: $('#obj_gp_order_no' + j),
+		percent: $('#obj_gp_percent' + j),
+		fund: $('#obj_gp_fund' + j),
+		grant: $('#obj_gp_grant' + j)
+	});
+});
+
+var cost_visible_rows = function() {
+	var last = 2;
+	for(var i = 5; i >= 2; i--) {
+		var l = cost_table_lines[i];
+		if(l.cost_center.val() || l.order_no.val() || l.percent.val() || l.fund.val() || l.grant.val()) {
+			last = i + 1;
+			break;
+		}
+	}
+	cost_rows.each(function(i, r) {
+		$(r).toggle(i <= last);
+	});
+}
+cost_tbody.on('change', function(e) { cost_visible_rows(); });
+
+var load_vacancy_cost_data = function() {
+	var pos_no = obj_position_no.val();
+	cost_table_header.addClass('busy-bg');
+	$.ajax({
+		url: '<%= url_for :controller => :vacancy_data, :action => :vacancy_cost_data %>',
+		data: {
+			position_no: pos_no,
+			agency_id: obj_agency_id.val(),
+			department_id: obj_department_id.val(),
+			division_id: obj_division_id.val()					
+		},
+		complete: function(xhr, status) {
+			cost_table_header.removeClass('busy-bg');
+		},
+		success: function(data, status, xhr) {
+			for(var i = 0; i < 6; i++) {
+				var d = {};
+				if(data && data[i]) {
+					d = data[i];
+				}
+				l = cost_table_lines[i];
+				l.cost_center.val(d.cost_center).effect('highlight');
+				l.order_no.val(d.order_no).effect('highlight');
+				l.percent.val(d.percentage).effect('highlight');
+				l.fund.val(d.fund).effect('highlight');
+				l.grant.val(d.grant).effect('highlight');
+			}
+			cost_visible_rows();
+		},
+		error: function(xhr, status, error) {
+		}
+	});
+}
+obj_position_no.change(function(e) {
+	load_vacancy_cost_data();
+});
+$('#reload-cost').click(function(e) { 
+	e.preventDefault();
+	load_vacancy_cost_data();
+});
+
+var load_rehire_no = function(display_errors) {
+	var ssn = obj_ssn.val().replace(/[^\d]/g, '');
+	if(!ssn) {
+		obj_rehire_sap_no.val('').effect('highlight');
+		return;
+	}
+	obj_rehire_sap_no.addClass('busy-bg');
+	$.ajax({
+		url: '<%= url_for :controller => :vacancy_data, :action => :rehire_sap_no_from_ssn %>',
+		data: {
+			ssn: ssn,
+			agency_id: obj_agency_id.val(),
+			department_id: obj_department_id.val(),
+			division_id: obj_division_id.val()					
+		},
+		complete: function(xhr, status) {
+			obj_rehire_sap_no.removeClass('busy-bg');
+		},
+		success: function(data, status, xhr) {
+			if(data.success) {
+				obj_rehire_sap_no.val(data.emp_no).effect('highlight');;
+			}
+			else if(display_errors) {
+				alert(data.errors.join("\n"));
+			}
+		},
+		error: function(xhr, status, error) {
+			if(display_errors) {
+				alert('Could not load employee #');
+			}
+		}
+	});
+}
+obj_ssn.change(function(e) {
+	load_rehire_no(false);
+});
+$('#load-rehire').click(function(e) {
+	e.preventDefault();
+	load_rehire_no(true);
+});
+
+init_autocomplete({
+	input: obj_work_schedule_code,
+	url: '<%= url_for(:controller => :form_county_hire, :action => :work_schedule_autocomplete) %>',
+	minLength: 0,
+	item: function(i) {
+		i.label = i.rule + ' - ' + i.text;
+		i.value = i.rule;
+	}
+});
+
+init_autocomplete({
+	input: obj_move_to_org_no,
+	url: '<%= url_for(:controller => :vacancy_data, :action => :org_autocomplete) %>',
+	minLength: 0,
+	item: function(i) {
+		i.label = i.org_no + ' - ' + i.organization;
+		i.value = i.org_no;
+	}
+});
+
+<% if params[:from_vacancy_id] %>set_vacancy_fields(vacancy_obj);<% end %>
+<% if params[:from_cert_id] %>set_cert_fields(cert_obj);<% end %>
+<% if params[:from_applicant_id] %>set_applicant_fields(applicant_obj);<% end %>
+<% if params[:from_vacancy_data_id] %>set_vacancy_data_fields(vacancy_data_obj);<% end %>
+
+
+</script>

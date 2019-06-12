@@ -7,6 +7,10 @@ body, td, th, input, select, textarea { font: 12px/1.5 Trebuchet MS, Verdana, Ar
 tr { page-break-inside: avoid; }
 .ct { text-align: center; }
 <%= File.read 'public/stylesheets/county-form.css' %>
+/* squeeze on 1 page! */
+#form > div { margin: 0 0; } 
+#form td, #form th { line-height: 14px; }
+#form td input[type="text"] { height: 14px; line-height: 14px; }
 </style>
 </head>
 <body class="print">

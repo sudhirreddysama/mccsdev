@@ -37,6 +37,8 @@ class Person < ActiveRecord::Base
 	
 	def full_name; "#{first_name} #{last_name}"; end
 	
+	def name_fml; [first_name, middle_name, last_name].reject(&:blank?) * ' '; end
+	
 	def email_with_name; "#{full_name} <#{email}>"; end
 	
 	def ssn_last4; ssn.to_s[7..10]; end

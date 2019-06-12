@@ -1,5 +1,13 @@
 class FormCountyChangeController < CrudController
 
+	skip_before_filter :block_agency_users
+	def check_access
+		return true if @current_user.above_agency_level?
+		return true if @current_user.is_agency_county? && @current_user.perm_ag_form_changes
+		render_nothing and return false
+	end
+	before_filter :check_access
+
 	def index
 		@filter = get_filter({
 			:sort1 => 'form_county_changes.created_at',
@@ -9,7 +17,9 @@ class FormCountyChangeController < CrudController
 			['ID', 'form_county_changes.id'],
 			['Created Date', 'form_county_changes.created_at'],
 			['Effective Date', 'form_county_changes.effective_date'],
-			['Name', 'form_county_changes.name'],
+			['First Name', 'form_county_changes.first_name'],
+			['Middle Name', 'form_county_changes.middle_name'],
+			['Last Name', 'form_county_changes.last_name'],
 			['Agency Name', 'agencies.name'],
 			['Department Name', 'departments.name'],
 		]
@@ -17,7 +27,9 @@ class FormCountyChangeController < CrudController
 			'form_county_changes.id' => :left,
 			'agencies.name' => :like,
 			'departments.name' => :like,
-			'form_county_changes.name' => :like,
+			'form_county_changes.first_name' => :like,
+			'form_county_changes.last_name' => :like,
+			'form_county_changes.middle_name' => :like,
 		}
 		
 		if @current_user.agency_level?
@@ -46,10 +58,9 @@ class FormCountyChangeController < CrudController
 		cond += get_date_cond
 		
 		@filter.statuses ||= []		
-		if !@filter.statuses.empty?
-			s = @filter.statuses.collect { |s| "\"#{DB.escape(s)}\"" }.join(',')
-			cond << 'form_county_changes.status in (%s)' % s
-		end
+		cond << 'form_county_hires.status in (%s)' % @filter.statuses.collect { |s| "\"#{DB.escape(s)}\"" }.join(',') if !@filter.statuses.empty?
+		@filter.hr_statuses ||= []		
+		cond << 'form_county_hires.status in (%s)' % @filter.hr_statuses.collect { |s| "\"#{DB.escape(s)}\"" }.join(',') if !@filter.hr_statuses.empty?
 		
 		@opt = {
 			:conditions => get_where(cond),
@@ -63,41 +74,38 @@ class FormCountyChangeController < CrudController
 		@obj.check_validation = true
 		super
   end
+  
+	def new
+		@obj.check_validation = true
+		super
+  end
 	
 	def build_obj
 		super
 		if params[:from_vacancy_id]
-			v = Vacancy.find(params[:from_vacancy_id])
-			@obj.vacancy_no = v.exec_approval_no
-			@obj.name = v.hr_candidate_hired
+			@obj.vacancy = Vacancy.find params[:from_vacancy_id]
+			@obj.agency_id = @obj.vacancy.agency_id
+			@obj.department_id = @obj.vacancy.department_id
+		end
+		if params[:from_vacancy_data_id]
+			@obj.vacancy_data = VacancyData.find params[:from_vacancy_data_id]
+			@obj.agency = @obj.vacancy_data.agency
+			@obj.department = @obj.vacancy_data.department
 		end
 		if @current_user.agency_level?
 			@obj.agency = @current_user.agency if @current_user.agency
 			@obj.department = @current_user.department if @current_user.department
 			@obj.division = @current_user.division if @current_user.division
 		end
-		if !request.post? && @obj.agency
-			@obj.department = Department.find_by_name @obj.agency.name
-		end
 		@obj.user = @current_user
 		@obj.status = 'started'
+		@obj.hr_status = 'dept'
 	end
 	
 	def view
 		if request.post?
-			@obj.status_user = @current_user
-			@obj.status_date = Time.now.to_date
-			old_status = @obj.status
-			@obj.update_attributes params[:obj]
+			FormCountyChange.update_county_form_status_and_notify @obj, @current_user, params[:obj]			
 			flash[:notice] = 'Status has been updated.'
-			u = @obj.user #@obj.agency ? @obj.agency.get_users(@obj.department) : nil
-			u2 = @obj.submitter
-			if u2
-				Notifier.deliver_form_status [u2].reject(&:nil?), @obj
-			end
-			if @obj.is_provisional? && @obj.status == 'approved' && old_status != @obj.status
-				Notifier.deliver_form_change_provisional @obj
-			end
 			redirect_to
 		else
 			super
@@ -106,11 +114,7 @@ class FormCountyChangeController < CrudController
 	
 	def submit
 		load_obj
-		u = Agency.get_liaison(@obj.agency, @obj.department)
-		if u
-			Notifier.deliver_form_submitted [u], @obj
-		end
-		@obj.update_attributes({:status => 'submitted', :submitter_id => @current_user.id, :submitted_at => Time.now})
+		FormCountyChange.update_county_form_status_and_notify @obj, @current_user, {:status => 'submitted', :hr_status => 'liaison', :submitter_id => @current_user.id, :submitted_at => Time.now}
 		redirect_to :action => :view, :id => @obj.id
 		flash[:notice] = 'Form has been submitted to HR'
 	end
@@ -119,5 +123,9 @@ class FormCountyChangeController < CrudController
 		@opt = {:margin => '.2in'}
 		super
 	end
-
+	
+	def update_obj_statuses_and_notify attr
+	
+	end
+	
 end

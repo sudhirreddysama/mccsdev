@@ -1,5 +1,8 @@
 class DocumentController < CrudController
-		
+	
+	# TO DO: Implement access check based on context.
+	skip_before_filter :block_agency_users
+	
 	def index
 		@paginate = false	
 		if params[:sc] == 'applicant'

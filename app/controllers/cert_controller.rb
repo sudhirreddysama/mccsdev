@@ -1,5 +1,13 @@
 class CertController < CrudController
-
+	
+	skip_before_filter :block_agency_users
+	def check_access
+		return true if @current_user.above_agency_level?
+		return true if @current_user.agency_level? && @current_user.show_cert_lists
+		render_nothing and return false
+	end
+	before_filter :check_access, :except => :autocomplete
+	
 	def options
 		super
 		if @current_user.agency_level?
@@ -98,6 +106,31 @@ class CertController < CrudController
 		}
 		super
 	end
+	
+	def autocomplete
+		cond = get_search_conditions(params.search || params.term, {
+			'certs.id' => :left,
+			'certs.title' => :like,
+			'exams.exam_no' => :like,
+			'exams.title' => :like
+		})
+		agency_id = @current_user.agency_level? && @current_user.agency_id || params[:agency_id]
+		department_id = @current_user.agency_level? && @current_user.department_id || params[:department_id]
+		division_id = @current_user.agency_level? && @current_user.division_id || params[:division_id]
+		cond << 'certs.agency_id = %d' % agency_id.to_i if !agency_id.blank?
+		cond << 'certs.department_id = %d' % department_id.to_i if !department_id.blank?
+		cond << 'certs.division_id = %d' % division_id.to_i if !division_id.blank?
+		opt = {
+			:limit => 20,
+			:conditions => get_where(cond),
+			:order => 'certs.id desc',
+			:include => :exam
+		}
+		data = Cert.find(:all, opt)
+		render :json => data.collect { |o| 
+			o.autocomplete_json_data
+		}
+	end		
 	
 	def print
 		@opt = {:flags => '--footer-right "[page] of [topage]" --header-right "ID# ' + @obj.id.to_s + '"'}

@@ -49,12 +49,16 @@
 <div id="home">
 	<h3>Monroe County Civil Service Agency Portal</h3>
 	<% if @current_user.perm_ag_employees %>
-		<%= link_to 'Employee Database', {:controller => :employee, :sc => nil} %>
+		<% if @current_user.is_agency_county? %>
+			<%= link_to 'Employee Database', {:controller => :vacancy_data, :sc => nil} %>
+		<% else %>
+			<%= link_to 'Employee Database', {:controller => :employee, :sc => nil} %>
+		<% end %>
 	<% end %>
 	<% if @current_user.perm_ag_pay_certs %>
 		<%= link_to 'Payroll Certifications', {:controller => :pay_cert} %>
 	<% end %>
-	<% if @current_user.perm_ag_vacancies %>
+	<% if @current_user.perm_ag_vacancies && @current_user.is_agency_county? %>
 		<%= link_to 'Requests to Fill Vacancies', {:controller => :vacancy, :sc => nil} %>
 	<% end %>
 	<% if @current_user.perm_ag_form_changes %>

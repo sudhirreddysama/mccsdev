@@ -1,5 +1,13 @@
 class ReportController < ApplicationController
 
+	skip_before_filter :block_agency_users
+	def check_access
+		return true if @current_user.above_agency_level?
+		return true if @current_user.agency_level? && @current_user.perm_ag_reports
+		render_nothing and return false
+	end
+	before_filter :check_access
+
 	def index
 		@employee_orders = employee_sort_options
 		employee_bd
@@ -932,6 +940,28 @@ class ReportController < ApplicationController
 			@objs[o.classification][o.status] << o
 		}
 		render_pdf render_to_string(:layout => false), 'appointments.pdf'
+	end
+	
+	def agencies_departments_users_contacts
+		@objs = DB.query('
+			select u_aname != c_aname a_nomatch, u_dname != c_dname d_nomatch, a.* from
+			(select u.*, c.* from
+			(select a.id u_aid, a.name u_aname, d.id u_did, d.name u_dname, u.id u_id, u.name u_name, u.level u_level
+				from users u left join agencies a on a.id = u.agency_id left join departments d on d.id = u.department_id where u.level like "agency%%" order by a.name, d.name, u.name) u
+			left join
+			(select a.id c_aid, a.name c_aname, d.id c_did, d.name c_dname, c.id c_id, c.firstname c_firstname, c.lastname c_lastname, concat(c.firstname, " ", c.lastname) c_name
+				from contacts c left join agencies a on a.id = c.agency_id left join departments d on d.id = c.department_id order by a.name, d.name, c_name) c on u.u_name = replace(c.c_name, "*", "")
+			union all
+			select u.*, c.* from
+			(select a.id c_aid, a.name c_aname, d.id c_did, d.name c_dname, c.id c_id, c.firstname c_firstname, c.lastname c_lastname, concat(c.firstname, " ", c.lastname) c_name
+				from contacts c left join agencies a on a.id = c.agency_id left join departments d on d.id = c.department_id order by a.name, d.name, c_name) c
+			left join
+			(select a.id u_aid, a.name u_aname, d.id u_did, d.name u_dname, u.id u_id, u.name u_name, u.level u_level
+				from users u left join agencies a on a.id = u.agency_id left join departments d on d.id = u.department_id where u.level like "agency%%" order by a.name, d.name, u.name) u on u.u_name = replace(c.c_name, "*", "")
+			where u.u_name is null) a
+			order by ifnull(u_aname, c_aname), ifnull(u_dname, c_dname), c_aname, c_dname, ifnull(u_name, c_name)
+		')
+		render :layout => false
 	end
 	
 end

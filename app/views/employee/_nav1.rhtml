@@ -17,6 +17,7 @@
 
 <% if !@current_user.agency_level? %>
 	<% if @current_user.level != 'agency-employees' %>
+		<%= tab 'County Empl.', {:controller => :vacancy_data}, {:action => :index, :id => nil, :sc => nil, :sid => nil}, :class => 'tab-employee' + (params[:sc] == 'vacancy_data' ? ' active' : '') %>
 		<%= tab 'Pay Cert.', {:controller => :pay_cert}, {:action => :index, :id => nil, :sc => nil, :sid => nil}, :class => 'tab-pay_cert' + (params[:sc] == 'pay_cert' ? ' active' : '') %>
 		<%= tab '105', {:controller => :form_change, :sc => nil}, {}, {:class => 'tab-form' + (params[:sc] == 'form_change' ? ' active' : ''), :title => 'Non-County Personnel Change Form'} %>				
 		<%= tab '105(C)', {:controller => :form_county_change, :sc => nil}, {}, {:class => 'tab-form-mc' + (params[:sc] == 'form_county_change' ? ' active' : ''), :title => 'County Electronic Personnel Change Form'} %>				

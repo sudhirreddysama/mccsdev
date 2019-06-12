@@ -1,8 +1,8 @@
 <% if !@current_user.agency_level? || !@current_user.agency %>
-	<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name').collect { |a| [a.name, a.id] }, :label => 'Agency', :include_blank => true %>
+	<%= f.tr_select :agency_id, Agency.find(:all, :order => 'agencies.name', :conditions => 'agency_type = "COUNTY"').collect { |a| [a.name, a.id] }, :label => 'Agency', :include_blank => true %>
 <% end %>
 <% if !@current_user.agency_level? || !@current_user.department %>
-	<%= f.tr_select :department_id, Department.find(:all, :order => 'departments.name').collect { |a| [a.name, a.id] }, :label => 'Department', :include_blank => true %>
+	<%= f.tr_select :department_id, Department.select_options(@obj.department_id, 1), :label => 'Department', :include_blank => true %>
 <% end %>
 <% if !@current_user.agency_level? || !@current_user.division %>
 	<tr>
@@ -129,9 +129,9 @@
 		<%= f.text_area :justification, :style => 'width: 500px; height: 80px;' %>
 	</td>
 </tr>
-
 <script type="text/javascript">
 	(function($) {
+	
 		var search_input = $('#search');
 		var organization_input = $('#obj_organization');
 		var org_no_input = $('#obj_org_no');
@@ -141,6 +141,33 @@
 		var last_incumbent_input = $('#obj_last_incumbent');
 		var salary_group_input = $('#obj_salary_group');
 		var clear_link = $('#clear');
+		
+		var set_vacancy_data_fields = function(i, field) {
+			if(field == 'position' || field == 'position_no' || field == 'last_incumbent' || field == 'search') {
+				position_input.val(i.position);
+				new Effect.Highlight(position_input[0]);
+				position_no_input.val(i.position_no);
+				new Effect.Highlight(position_no_input[0]);
+				last_incumbent_input.val(i.last_incumbent);
+				new Effect.Highlight(last_incumbent_input[0]);
+				salary_group_input.val(i.salary_group);
+				new Effect.Highlight(salary_group_input[0]);
+				if(field == 'search') {
+					new Effect.Highlight(search_input[0]);
+				}
+			}
+			organization_input.val(i.organization);
+			new Effect.Highlight(organization_input[0]);
+			org_no_input.val(i.org_no);
+			new Effect.Highlight(org_no_input[0]);
+			cost_center_input.val(i.cost_center);
+			new Effect.Highlight(cost_center_input[0]);
+			search_input.val('');	
+		}
+		<% if @from_vacancy_data %>
+			set_vacancy_data_fields(<%= @from_vacancy_data.autocomplete_json_data.to_json %>, 'search');
+		<% end %>
+		
 		var setup_ac = function(input, field) {
 			input.autocomplete({
 				source: function(request, response) {
@@ -164,26 +191,7 @@
 				minLength: 2,
 				select: function(e, ui) {
 					var i = ui.item;
-					if(field == 'position' || field == 'position_no' || field == 'last_incumbent' || field == 'search') {
-						position_input.val(i.position);
-						new Effect.Highlight(position_input[0]);
-						position_no_input.val(i.position_no);
-						new Effect.Highlight(position_no_input[0]);
-						last_incumbent_input.val(i.last_incumbent);
-						new Effect.Highlight(last_incumbent_input[0]);
-						salary_group_input.val(i.salary_group);
-						new Effect.Highlight(salary_group_input[0]);
-						if(field == 'search') {
-							new Effect.Highlight(search_input[0]);
-						}
-					}
-					organization_input.val(i.organization);
-					new Effect.Highlight(organization_input[0]);
-					org_no_input.val(i.org_no);
-					new Effect.Highlight(org_no_input[0]);
-					cost_center_input.val(i.cost_center);
-					new Effect.Highlight(cost_center_input[0]);
-					search_input.val('');
+					set_vacancy_data_fields(i, field);
 					return false;
 				},
 				focus: function(e, ui) {

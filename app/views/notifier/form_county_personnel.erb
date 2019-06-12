@@ -1,0 +1,17 @@
+<% if @o.form_type == '330C' -%>
+The status for a County 330 form has been updated:
+
+Status: <%= @o.status %>
+Name: <%= @o.name %>
+Reason: <%= @o.status_reason %>
+
+http://www.monroecounty.gov/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/form_county_hire/view/<%= @o.id %>
+<% elsif @o.form_type == '105C' -%>
+The status for a County 105 form has been updated:
+
+Status: <%= @o.status %>
+Name: <%= @o.name %>
+Reason: <%= @o.status_reason %>
+
+http://www.monroecounty.gov/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/form_county_change/view/<%= @o.id %>
+<% end %>

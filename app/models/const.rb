@@ -28,7 +28,7 @@ class Const
 		['UNCLASSIFIED', 'U'],
 		['COMPETITIVE', 'C'],
 		['NON-COMPETITIVE', 'N'],
-		['SPECIAL NON-COMPETITIVE (55A)', '5'],
+		['55A NON-COMPETITIVE', '5'],
 		['LABOR', 'L'],
 		['EXEMPT', 'E'],
 		['PENDING CLASSIFICATION', 'D']
@@ -39,7 +39,7 @@ class Const
 		['UNCLASS', 'U'],
 		['COMP', 'C'],
 		['NON-COMP', 'N'],
-		['SPECIAL', '5'],
+		['55A', '5'],
 		['LABOR', 'L'],
 		['EXEMPT', 'E'],
 		['PENDING', 'D']
@@ -52,29 +52,34 @@ class Const
 		['Locally Prepared and Rated', 3]
 	]
 	
-	JOB_STATUSES = [
-		['PERMANENT', 'P'],
-		['PROVISIONAL', 'V'],
-		['PROVISIONAL-2ND', 'V2'],
-		['CONTINGENT-PERMANENT', 'C'],
-		['TEMPORARY', 'T'],
-		['SEASONAL', 'S'],
-		['SUBSTITUTE', 'SU'],
-		['PENDING-NYS', 'PN']
-	]
-	JOB_STATUSES_HASH = rassoc_to_hash JOB_STATUSES
+	js = JobStatus.find(:all, :order => 'sort').to_a
 	
-	JOB_STATUSES_SHORT = [
-		['PERM', 'P'],
-		['PROV', 'V'],
-		['PROV2', 'V2'],
-		['CONT-PERM', 'C'],
-		['TEMP', 'T'],
-		['SEASONAL', 'S'],
-		['SUB', 'SU'],
-		['PEND-NYS', 'PN']
-	]
+	JOB_STATUSES = js.map { |s| [s.name, s.code] }
+	JOB_STATUSES_HASH = rassoc_to_hash JOB_STATUSES
+	JOB_STATUSES_SHORT = js.map { |s| [s.short, s.code] }
 	JOB_STATUSES_SHORT_HASH = rassoc_to_hash JOB_STATUSES_SHORT
+	
+# 	JOB_STATUSES = [
+# 		['PERMANENT', 'P'],
+# 		['PROVISIONAL', 'V'],
+# 		['PROVISIONAL-2ND', 'V2'],
+# 		['CONTINGENT-PERMANENT', 'C'],
+# 		['TEMPORARY', 'T'],
+# 		['SEASONAL', 'S'],
+# 		['SUBSTITUTE', 'SU'],
+# 		['PENDING-NYS', 'PN']
+# 	]
+	
+# 	JOB_STATUSES_SHORT = [
+# 		['PERM', 'P'],
+# 		['PROV', 'V'],
+# 		['PROV2', 'V2'],
+# 		['CONT-PERM', 'C'],
+# 		['TEMP', 'T'],
+# 		['SEASONAL', 'S'],
+# 		['SUB', 'SU'],
+# 		['PEND-NYS', 'PN']
+# 	]
 	
 	JOB_TIMES = [
 		['FULL TIME', 'F'],
@@ -145,5 +150,24 @@ class Const
 		['DISABLED VET', 'DISABLED VET'],
 		['ACTIVE DUTY', 'ACTIVE DUTY']
 	]
+	
+	UNIONS = [
+		['CSEA', '01'],
+		['FSW', '02'],
+		['IUOE', '03'],
+		['IAFF', '04'],
+		['Department Head', '05'],
+		['Management and Confi', '06'],
+		['Management & Professional', '07'],
+		['Sheriff\'s Command', '08'],
+		['LEA', '09'],
+		['PBA', '10'],
+		['DSA', '11'],
+		['Elected Official, Co', '12'],
+		['Sheriff\'s Exec Staff', '13'],
+		['union', '14-Non'],
+	]
+	
+	HR_STATUSES = ['dept', 'liaison', 'exam-mgr', 'hr-mgr', 'hr-director', 'liaison-final', 'payroll', 'benefits', 'done']
 	
 end

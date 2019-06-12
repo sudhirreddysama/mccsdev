@@ -4,6 +4,7 @@
 			<td width="1%">Actions</td>
 			<th width="1%">ID</th>
 			<th width="1%">Status</th>
+			<th width="1%">HR&nbsp;Status</th>
 			<th width="1%">Created</th>
 			<th width="1%">Effective</th>
 			<% if @current_user.agency_level? %>
@@ -28,6 +29,7 @@
 				</td>
 				<td><%= o.id %></td>
 				<td><%= form_status o.status %></td>
+				<td><%= form_hr_status o.hr_status %></td>
 				<td class="nobr"><%= o.created_at.d0? %></td>
 				<td class="nobr"><%= o.effective_date.d0? %></td>
 				<td><%= link_to o.name, :action => :view, :id => o.id %></td>

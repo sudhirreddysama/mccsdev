@@ -294,6 +294,9 @@ input.ac { background-image: url(../images/throbber.gif); background-repeat: no-
 input.working { background-position: 100% -18px; }
 
 .popup-field { background-image: url(../images/icons/application_get.png); background-position: right center; background-repeat: no-repeat; cursor: pointer; }
+.inp-icon { position: relative; display: inline-block; }
+.inp-icon::after { content: ''; position: absolute; right: 2px; top: 3px; width: 16px; height: 16px; }
+.inp-icon-search::after { background-image: url(../images/icons/zoom.png); }
 
 
 
@@ -499,6 +502,16 @@ input.ucase, textarea.ucase { text-transform: uppercase; }
 .form-status.form-filled { background-color: #808; }
 .form-status.form-expired { background-color: #000; }
 
+.form-status.form-hr-dept { background-color: #000; }
+.form-status.form-hr-liaison { background-color: #800; }
+.form-status.form-hr-exam-mgr { background-color: #840; }
+.form-status.form-hr-hr-mgr { background-color: #880; }
+.form-status.form-hr-hr-director { background-color: #480; }
+.form-status.form-hr-liaison-final { background-color: #080; }
+.form-status.form-hr-payroll { background-color: #084; }
+.form-status.form-hr-benefits { background-color: #088; }
+.form-status.form-hr-done { background-color: #888; }
+
 .dual-status .form-status { display: block; float: none; border-radius: 0; border-top: 1px solid rgba(255,255,255,.5); }
 .dual-status :first-child { border-radius: 5px 5px 0 0; border-top: none; }
 .dual-status :last-child { border-radius: 0 0 5px 5px; }
@@ -572,8 +585,35 @@ a.tick-red:active { background-color: #600 !important; }
 .submit-message { display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: none; border-radius: 5px; }
 a.submit-message:hover { background-color: #500; }
 
-span.ac-extra { font-size: 9px; }
-span.ac-extra i { color: #aaa; font-style: normal; }
+span.ac-extra, div.ac-extra { font-size: 9px; }
+span.ac-extra i, div.ac-extra i { color: #aaa; font-style: normal; }
 
 .pill { display: inline-block; padding: 0 3px; background: #ddd; color: #000; border-radius: 5px; white-space: nowrap; }
 sup.ref { line-height: 0; font-size: 8px; font-weight: normal; }
+
+
+
+
+
+#app select.error + .select2 .select2-selection { border-color: #800; background-color: #fff8f8; }
+.form .select2-container { margin-top: -2px; vertical-align: top; }
+#app .select2-selection--single,
+#app .select2-selection--multiple { min-height: 0; border: 1px solid #888; border-radius: 0; background: #ffe; }
+#app .select2-selection__arrow,
+#app .select2-selection--single { height: 22px; line-height: 22px; }
+#app .select2-selection--single .select2-selection__rendered { padding-left: 4px; height: 22px; line-height: 22px; }
+#app .select2-selection__rendered { vertical-align: top; padding: 0; }
+#app .select2-selection__choice { border-radius: 3px; margin: 0; padding: 0; margin: 1px; margin-bottom: 0; margin-right: 0; padding: 0 4px; border: none; background: #004887 !important; color: #fff; }
+#app .select2-selection__choice__remove { color: #ddd; }
+#app .select2-selection__choice__remove:hover { color: #fff; }
+#app .select2-search__field { margin: 0; margin: 1px; padding: 0 0 0 4px; }
+#app .select2-search--dropdown .select2-search__field { margin: 0; padding: 0; }
+#app .select2-results__option { padding: 0 4px; }
+#app .select2-results__option--highlighted { background: #004887; }
+#app .select2-selection--single .select2-selection__clear { position: absolute; right: 20px; }
+#app .select2-selection--multiple .select2-selection__clear { margin-top: 2px; }
+
+
+#app .select2-container--open .select2-selection--single,
+#app .select2-container--open .select2-selection--multiple { border-color: #048 #048 #fff #048; background: #fff; /* box-shadow: 3px 3px #888; */ }
+#app .select2-dropdown { border-radius: 0; border-color: #fff #048 #048 #048; margin-top: -1px; /* box-shadow: 3px 3px #888; */ }

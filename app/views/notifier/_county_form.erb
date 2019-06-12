@@ -1,0 +1,16 @@
+ID: <%= o.id %>
+Status: <%= o.status %>
+HR Status: <%= o.hr_status %>
+Status Reason/Note: <%= o.status_reason %>
+Name: <%= o.name %>
+Effective Date: <%= o.effective_date.d0? %>
+Provisional?: <%= o.is_provisional? ? 'YES' : 'no' %>
+<% if chg -%>
+Current Title: <%= o.position %>
+Changes: <%= o.all_changes.join(', ') %>
+<% else -%>
+<% end -%>
+
+View the form here:
+http://www.monroecounty.gov/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/form_county_<% if chg %>change<% else %>hire<% end %>/view/<%= o.id %>
+
