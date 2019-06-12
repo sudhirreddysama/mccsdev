@@ -127,7 +127,7 @@ class User < ActiveRecord::Base
   end
   
   def above_agency_level?
-  	level == 'view-only' || level == 'staff' || level == 'admin'
+  	level == 'view-only' || level == 'staff' || level == 'admin' || level == 'liaison'
   end
   
   def view_only?
