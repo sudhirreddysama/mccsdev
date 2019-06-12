@@ -58,9 +58,9 @@ class FormCountyChangeController < CrudController
 		cond += get_date_cond
 		
 		@filter.statuses ||= []		
-		cond << 'form_county_hires.status in (%s)' % @filter.statuses.collect { |s| "\"#{DB.escape(s)}\"" }.join(',') if !@filter.statuses.empty?
+		cond << 'form_county_changes.status in (%s)' % @filter.statuses.collect { |s| "\"#{DB.escape(s)}\"" }.join(',') if !@filter.statuses.empty?
 		@filter.hr_statuses ||= []		
-		cond << 'form_county_hires.status in (%s)' % @filter.hr_statuses.collect { |s| "\"#{DB.escape(s)}\"" }.join(',') if !@filter.hr_statuses.empty?
+		cond << 'form_county_changes.status in (%s)' % @filter.hr_statuses.collect { |s| "\"#{DB.escape(s)}\"" }.join(',') if !@filter.hr_statuses.empty?
 		
 		@opt = {
 			:conditions => get_where(cond),
