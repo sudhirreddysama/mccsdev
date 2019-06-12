@@ -1,4 +1,7 @@
 class UploadController < ApplicationController
+	
+	# TO DO: Implement access check based on context.
+	skip_before_filter :block_agency_users
 
 	def new
 		@doc = Document.create :uploaded_file => params[:file], :filename => params[:name], :user => @current_user, :temporary => true
