@@ -1,5 +1,7 @@
 class JobController < CrudController
 
+	skip_before_filter :block_agency_users
+
 	def index
 		@agency_options = Agency.find(:all, {
 			:order => 'agencies.name', 
