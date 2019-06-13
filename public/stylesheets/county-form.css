@@ -1,5 +1,5 @@
 #form { width: 8.5in; padding: .2in; border: 1px solid #888; box-sizing: border-box; margin: 5px auto; box-shadow: 0 0 20px #ddf; }
-body.print #form { width: 8.1in; padding: 0; border: none; margin: 0; box-shadow: none; }
+body.print #form { width: 7.9in; padding: 0; border: none; margin: 0; box-shadow: none; }
 table.form #form { margin: 0; }
 .flex { display: -webkit-box; display: flex; }
 #form * { box-sizing: border-box; }

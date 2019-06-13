@@ -15,6 +15,7 @@ tr { page-break-inside: avoid; }
 </head>
 <body class="print">
 <% fields_for(:obj, :builder => TableFormBuilder) { |f| %>
+	<% @view = true %>
 	<%= partial 'fields_page', :f => f %>
 <% } %>
 </body>

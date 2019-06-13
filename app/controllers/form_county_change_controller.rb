@@ -120,7 +120,7 @@ class FormCountyChangeController < CrudController
 	end
 	
 	def print
-		@opt = {:margin => '.2in'}
+		@opt = {:margin => '.3in'}
 		super
 	end
 	
