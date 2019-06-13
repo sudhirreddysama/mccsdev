@@ -1,13 +1,15 @@
-<html>
+<!doctype html>
+<html lang="en">
 	<head>
+		<title>Monroe County HR</title>
 		<meta property="og:title" content="Monroe County Civil Service" />
 		<meta name="description" content="MonroeCounty.gov is the official site of Monroe County, New York providing online services and information for residents, businesses, municipalities and visitors." />
 		<meta property="og:image" content="https://www2.monroecounty.gov/seal200x200.jpg" />	
 		<script type="text/javascript" src="https://www2.monroecounty.gov/modules/jquery_update/replace/jquery/1.8/jquery.min.js?v=1.8.3"></script>
-		<link type="text/css" rel="stylesheet" media="all" href="https://www2.monroecounty.gov/modules/system/system.base.css" />
+		<link type="text/css" rel="stylesheet" media="all" href="https://www2.monroecounty.gov/modules/system/system.base.css?v2" />
 		<link type="text/css" rel="stylesheet" media="all" href="https://www2.monroecounty.gov/modules/system/system.theme.css" />
 		<link type="text/css" rel="stylesheet" media="all" href="https://www2.monroecounty.gov/modules/system/system.messages.css" />
-		<link type="text/css" rel="stylesheet" media="all" href="https://www2.monroecounty.gov/themes/mc/style.css?v2" />
+		<link type="text/css" rel="stylesheet" media="all" href="https://www2.monroecounty.gov/themes/mc/style.css?v3" />
 		<link type="text/css" rel="stylesheet" media="all" href="https://www2.monroecounty.gov/themes/mc/header.css" />
 		<link type="text/css" rel="stylesheet" media="all" title="small" href="https://www2.monroecounty.gov/themes/mc/small.css" />
 		<link type="text/css" rel="alternate stylesheet" media="all" title="medium" href="https://www2.monroecounty.gov/themes/mc/medium.css" />
@@ -20,6 +22,7 @@
 		<%= yield :head %>
 	</head>
 	<body class="page path-hr">
+		<div id="skip-link"><a href="#main-body" class="element-invisible element-focusable">Skip to main content</a></div>
 		<% if RAILS_ENV == 'development' %><div id="dev-bar">DEVELOPMENT SITE</div><% end %>
 		<div id="wrap">
 		<div id="top-nav">
@@ -35,7 +38,7 @@
 		<div id="top">
 			<div id="search">
 				<form id="search-mc" action="https://www.monroecounty.gov/search" method="post">
-					<input type="text" name="edit[keys]" placeholder="Search" />
+					<input type="text" name="edit[keys]" placeholder="Search" aria-label="Search" />
 					<input type="submit" value="Go!"/>
 				</form>
 			</div>
@@ -61,7 +64,7 @@
 		<div id="columns">
 		
 			<div id="center-col">
-				<div id="center-inner">
+				<div id="center-inner"><div id="main-body">
 					<% if flash[:notice] %><div class="messages status"><%= flash[:notice] %></div><% end %>
 					<%= yield %>
 					
@@ -85,7 +88,7 @@
 
 					
 				</div>
-			</div>
+			</div></div>
 			
 			<div id="left-col">
 				
@@ -99,7 +102,7 @@
 				</ul>
 			</div>
 				
-			<img width="150" height="33" border="0" src="https://www2.monroecounty.gov/themes/mc/col-flag.jpg" id="flag" />
+			<img width="150" height="33" border="0" src="https://www2.monroecounty.gov/themes/mc/col-flag.jpg" id="flag" alt="" />
 			<div id="ql" class="linklist">
 				<a href="#" id="ql-toggle" onclick="jQuery('#ql').toggleClass('open'); return false;">QUICK LINKS</a>
 				<ul>
@@ -178,9 +181,9 @@
 				</div>
 			</div>				
 			
-<div><a href="https://www2.monroecounty.gov/files/hr/Open Enrollment/2015/2015 OE fit friendly.pdf"><img alt="" src="https://www2.monroecounty.gov/files/hr/images/fit-friendly-2015-2.jpg" style="width: 140px; height: 170px; margin-left: 5px; margin-top: 10px;"></a></div>
-<div><a href="https://youtu.be/mDt_v8foa6g?list=PL2nqpuKntoLl_VSxbe5Gvdpmh-EFqVZNA"><img alt="" src="https://www2.monroecounty.gov/files/hr/images/12WOH-Honoree-logo.jpg" style="width: 140px; height: 146px; margin-left: 5px; margin-top: 10px;"></a></div>
-<div><a href="https://www.uscis.gov/e-verify"><img alt="" src="https://www2.monroecounty.gov/files/hr/images/E-Verify.jpg" style="width: 140px; height: 130px; margin-left: 5px; margin-top: 5px;"></a></div>
+<div><a href="https://www2.monroecounty.gov/files/hr/Open Enrollment/2015/2015 OE fit friendly.pdf"><img alt="Fit-Friendly Worksit GOLD achievement 2015" src="https://www2.monroecounty.gov/files/hr/images/fit-friendly-2015-2.jpg" style="width: 140px; height: 170px; margin-left: 5px; margin-top: 10px;"></a></div>
+<div><a href="https://youtu.be/mDt_v8foa6g?list=PL2nqpuKntoLl_VSxbe5Gvdpmh-EFqVZNA"><img alt="2012 Wealth of Health Awards Honoree" src="https://www2.monroecounty.gov/files/hr/images/12WOH-Honoree-logo.jpg" style="width: 140px; height: 146px; margin-left: 5px; margin-top: 10px;"></a></div>
+<div><a href="https://www.uscis.gov/e-verify"><img alt="I E-Verify" src="https://www2.monroecounty.gov/files/hr/images/E-Verify.jpg" style="width: 140px; height: 130px; margin-left: 5px; margin-top: 5px;"></a></div>
 
 
 
