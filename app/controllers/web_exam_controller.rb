@@ -46,6 +46,45 @@ class WebExamController < CrudController
 		@applicant = @obj.applicants.find params[:id2]
 	end
 	
+	# Copy pasted from applicant_controller
+	def applicant_print
+		load_obj
+		@obj = @obj.applicants.find params[:id2]
+		docs = []
+		wa = @obj.web_applicant
+		if wa
+			f = TempfileExt.open "applicant-#{@obj.id}-main.pdf", 'tmp'
+			f.close
+			IO.popen('HTMLDOC_NOCGI=TRUE;export HTMLDOC_NOCGI;htmldoc -f ' + f.path + ' -t pdf --path "/home/rails/hrapply/public/images" --webpage --header "..." --footer "..." --top .25in --bottom .25in --left .25in --right .25in --textfont Arial --fontsize 8 --headfootfont Arial --headfootsize 8 -', 'w+') { |io|
+				html = render_to_string(:layout => false, :template => 'applicant/print')
+				io.puts html
+				io.close_write
+			}
+			docs << f.path
+		end
+		@obj.documents.each { |d|
+			docs << d.path
+		}
+		if wa
+			wa.web_attachments.each { |d|
+				docs << d.pdf_path
+			}
+		end
+		docs_arg = docs.collect { |d| Shellwords.escape d }.join ' '
+		f = TempfileExt.open "applicant-#{@obj.id}.pdf", 'tmp'
+		f.close
+		`pdftk #{docs_arg} cat output #{f.path}`
+		send_file f.path, :filename => "application-#{@obj.id}.pdf"
+	end	
+	
+	# 
+	def web_attachment
+		load_obj
+		@obj = @obj.applicants.find params[:id2]
+		f = @obj.web_attachments.find(params[:id3])
+		send_file f.pdf_path, :filename => File.basename(f.name, File.extname(f.name)) + '.pdf'
+	end	
+	
 	def agency_access
 		load_obj
 		if request.post?

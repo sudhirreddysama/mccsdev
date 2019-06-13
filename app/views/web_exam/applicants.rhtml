@@ -22,7 +22,11 @@
 		<% @objs.each_with_index { |o, i| %>
 			<div class="app-review">
 				<div class="right">
-					<%= link_to 'View Application', {:controller => :applicant, :action => :view, :id => o.id}, :target => '_blank' %>&nbsp;&nbsp;
+					<% if @current_user.agency_level? %>
+						<%= link_to 'View Application', {:controller => :web_exam, :action => :applicant, :id => @obj.id, :id2 => o.id}, :target => '_blank' %>&nbsp;&nbsp;
+					<% else %>
+						<%= link_to 'View Application', {:controller => :applicant, :action => :view, :id => o.id}, :target => '_blank' %>&nbsp;&nbsp;
+					<% end %>
 				</div>
 				<h2>
 					<%= h o.person.ssn %> <%= h o.person.last_name %>, <%= h o.person.first_name %>

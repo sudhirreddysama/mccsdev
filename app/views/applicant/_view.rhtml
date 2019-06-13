@@ -5,6 +5,7 @@ wa = o.web_applicant
 is_agency = @current_user.agency_level?
 is_staff = @current_user.staff_level?
 is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type.seasonal
+web_exam_c = params[:controller] == 'web_exam'
 
 %>
 
@@ -60,7 +61,11 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 
 
 	<div class="tabs buttons">
-		<%= tab 'Printable Version', {:controller => :applicant, :action => :print, :id => @obj.id}, {}, :target => '_blank' %>
+		<% if web_exam_c %>
+			<%= tab 'Printable Version', {:controller => :web_exam, :action => :applicant_print, :id => params.id, :id2 => @obj.id}, {}, :target => '_blank', :class => 'tab-print' %>
+		<% else %>
+			<%= tab 'Printable Version', {:controller => :applicant, :action => :print, :id => @obj.id}, {}, :target => '_blank' %>
+		<% end %>
 		<% if o.approved = 'Y' && o.app_status && o.app_status.eligible != 'N' && (@current_user.staff_level? || (@current_user.perm_ag_form_changes && @current_user.is_agency_county?)) %>
 			<%= tab 'Start County 330 (New Hire) Form', {:controller => :form_county_hire, :action => :new, :from_applicant_id => o.id}, {}, :class => 'tab-form-mc' %>
 		<% end %>
@@ -191,8 +196,13 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 					<%= o.exam.exam_no if o.exam %>
 				</td>
 				<td>
-					<label>Exam Title (links to exam):</label>
-					<%= link_to o.exam.title, :controller => :exam, :action => :view, :id => o.exam_id if o.exam %>
+					<% if is_agency %>
+						<label>Exam Title:</label>
+						<%= o.exam.title if o.exam %>
+					<% else %>
+						<label>Exam Title (links to exam):</label>
+						<%= link_to o.exam.title, :controller => :exam, :action => :view, :id => o.exam_id if o.exam %>
+					<% end %>
 				</td>
 				<td>
 					<label>Approved?:</label>
@@ -685,8 +695,14 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 								<label>Click to Download/View:</label>
 								<% wa.web_attachments.each { |a| %>
 									<div>
-										<%= link_to a.name, {:controller => :applicant, :action => :web_attachment, :id => o.id, :id2 => a.id} %>
-										&nbsp;&nbsp;&nbsp;&nbsp;<%= link_to 'save to person', {:action => :web_attachment_copy, :id => o.id, :id2 => a.id}, {:class => 'dim', :style => 'font-size: 9px;'} %>
+										<% if web_exam_c %>
+											<%= link_to a.name, {:controller => :web_exam, :action => :web_attachment, :id => params.id, :id2 => o.id, :id3 => a.id} %>
+										<% else %>
+											<%= link_to a.name, {:controller => :applicant, :action => :web_attachment, :id => o.id, :id2 => a.id} %>
+										<% end %>
+										<% if !is_agency %>
+											&nbsp;&nbsp;&nbsp;&nbsp;<%= link_to 'save to person', {:action => :web_attachment_copy, :id => o.id, :id2 => a.id}, {:class => 'dim', :style => 'font-size: 9px;'} %>
+										<% end %>
 									</div>
 								<% } %>
 							<% end %>
