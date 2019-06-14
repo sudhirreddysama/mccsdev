@@ -15,59 +15,61 @@ edit_mode = params[:action] == 'edit' || params[:action] == 'new'
 <div id="form">
 	<h2 class="ct"><u>NEW HIRE REQUEST</u></h2>
 	<div>
-		<label style="width: 120px; display: inline-block;">Vac. Appr. #:&nbsp;</label><%= f.text_field :vacancy_no, :style => 'width: 100px;', :class => 'autofill-alt', :placeholder => search %>
-		<label style="display: inline-block;">&nbsp;Cert. List ID:&nbsp;</label><%= f.text_field :cert_id, :style => 'width: 100px;', :class => 'autofill', :placeholder => search %>
+		<label style="width: 130px; display: inline-block;">Vac. Appr. #:</label>
+		<%= f.text_field :vacancy_no, :style => 'width: 130px;', :class => 'autofill-alt', :placeholder => search %>
+		<label style="width: 110px; display: inline-block;">&nbsp;Cert. List ID:&nbsp;</label>
+		<%= f.text_field :cert_id, :style => 'width: 130px;', :class => 'autofill', :placeholder => search %>
 	</div>
-	<div class="flex">
-		<label style="width: 120px;">Employee Last Name:&nbsp;</label>
-		<div style="-webkit-box-flex: 3; flex: 3;"><%= f.text_field :last_name, :style => 'width: 100%;', :class => 'autofill', :placeholder => search %></div>
-		<label>&nbsp;First Name:&nbsp;</label>
-		<div style="-webkit-box-flex: 3; flex: 3;"><%= f.text_field :first_name, :style => 'width: 100%;', :class => 'autofill', :placeholder => search %></div>
-		<label>&nbsp;Middle Name:&nbsp;</label>
-		<div style="-webkit-box-flex: 2; flex: 2;"><%= f.text_field :middle_name, :style => 'width: 100%;', :class => 'autofill' %></div>
+	<div>
+		<label style="width: 130px; display: inline-block;">Employee Last Name:</label>
+		<%= f.text_field :last_name, :style => 'width: 130px;', :class => 'autofill', :placeholder => search %>
+		<label style="width: 110px; display: inline-block;">&nbsp;First Name:</label>
+		<%= f.text_field :first_name, :style => 'width: 130px;', :class => 'autofill', :placeholder => search %>
+		<label style="width: 100px; display: inline-block;">&nbsp;Middle Name:</label>
+		<%= f.text_field :middle_name, :style => 'width: 130px;', :class => 'autofill' %>
 	</div>
-	<div class="flex">
-		<label style="width: 120px;">County Organization #:&nbsp;</label>
-		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :county_org_no, :style => 'width: 100%;', :class => 'autofill-alt', :placeholder => search %></div>
-		<label>&nbsp;SAP Organization #:&nbsp;</label>
-		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :org_no, :style => 'width: 100%;', :class => 'autofill-alt', :placeholder => search %></div>
-		<label>&nbsp;Cost Center #:&nbsp;</label>
-		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :cost_center, :style => 'width: 100%;', :class => 'autofill-alt', :placeholder => search %></div>
+	<div>
+		<label style="width: 130px; display: inline-block;">County Organization #:</label>
+		<%= f.text_field :county_org_no, :style => 'width: 130px;', :class => 'autofill-alt', :placeholder => search %>
+		<label style="width: 110px; display: inline-block;">&nbsp;SAP Organization #:</label>
+		<%= f.text_field :org_no, :style => 'width: 130px;', :class => 'autofill-alt', :placeholder => search %>
+		<label style="width: 100px; display: inline-block;">&nbsp;Cost Center #:</label>
+		<%= f.text_field :cost_center, :style => 'width: 130px;', :class => 'autofill-alt', :placeholder => search %>
 	</div>
-	<div class="flex">
-		<label style="width: 120px;">Home Address Line 1:&nbsp;</label>
-		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :address, :style => 'width: 100%;', :class => 'autofill' %></div>
+	<div>
+		<label style="width: 130px; display: inline-block;">Home Address Line 1:</label>
+		<%= f.text_field :address, :style => 'width: 615px;', :class => 'autofill' %>
 	</div>
-	<div class="flex">
-		<label style="width: 120px;">Home Address Line 2:&nbsp;</label>
-		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :address2, :style => 'width: 100%;', :class => 'autofill' %></div>
+	<div>
+		<label style="width: 130px; display: inline-block;">Home Address Line 2:</label>
+		<%= f.text_field :address2, :style => 'width: 615px;', :class => 'autofill' %>
 	</div>
-	<div class="flex">
-		<label style="width: 120px;">Home Address City:&nbsp;</label>
-		<div style="-webkit-box-flex: 3; flex: 3;"><%= f.text_field :address_city, :style => 'width: 100%;', :class => 'autofill' %></div>
+	<div>
+		<label style="width: 130px; display: inline-block;">Home Address City:</label>
+		<%= f.text_field :address_city, :style => 'width: 270px;', :class => 'autofill' %>
 		<label>&nbsp;State:&nbsp;</label>
-		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.select :address_state, USState::NAMES, {}, :style => 'width: 100%;', :class => 'autofill' %></div>
+		<%= f.select :address_state, USState::NAMES, {}, :style => 'width: 130px;', :class => 'autofill' %>
 		<label>&nbsp;Zip:&nbsp;</label>
-		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :address_zip, :style => 'width: 100%;', :class => 'autofill' %></div>
+		<%= f.text_field :address_zip, :style => 'width: 130px;', :class => 'autofill' %>
 	</div>
 	<div>
 		Enter Mailing Address below <b>if different from Home Address</b>
 	</div>
-	<div class="flex">
-		<label style="width: 120px;">Mailing Address Line 1:&nbsp;</label>
-		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :mail_address, :style => 'width: 100%;', :class => 'autofill' %></div>
+	<div>
+		<label style="width: 130px; display: inline-block;">Mailing Address Line 1:</label>
+		<%= f.text_field :mail_address, :style => 'width: 615px;', :class => 'autofill' %>
 	</div>
-	<div class="flex">
-		<label style="width: 120px;">Mailing Address Line 2:&nbsp;</label>
-		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :mail_address2, :style => 'width: 100%;', :class => 'autofill' %></div>
+	<div>
+		<label style="width: 130px; display: inline-block;">Mailing Address Line 2:</label>
+		<%= f.text_field :mail_address2, :style => 'width: 615px;', :class => 'autofill' %>
 	</div>
-	<div class="flex">
-		<label style="width: 120px;">Mailing Address City:&nbsp;</label>
-		<div style="-webkit-box-flex: 3; flex: 3;"><%= f.text_field :mail_city, :style => 'width: 100%;', :class => 'autofill' %></div>
+	<div>
+		<label style="width: 130px; display: inline-block;">Mailing Address City:</label>
+		<%= f.text_field :mail_city, :style => 'width: 270px;', :class => 'autofill' %>
 		<label>&nbsp;State:&nbsp;</label>
-		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.select :mail_state, USState::NAMES, {}, :style => 'width: 100%;', :class => 'autofill' %></div>
+		<%= f.select :mail_state, USState::NAMES, {}, :style => 'width: 130px;', :class => 'autofill' %>
 		<label>&nbsp;Zip:&nbsp;</label>
-		<div style="-webkit-box-flex: 1; flex: 1;"><%= f.text_field :mail_zip, :style => 'width: 100%;', :class => 'autofill' %></div>
+		<%= f.text_field :mail_zip, :style => 'width: 130px;', :class => 'autofill' %>
 	</div>	
 	<div>
 		<label>Email:&nbsp;</label>

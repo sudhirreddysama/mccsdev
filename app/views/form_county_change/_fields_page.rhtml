@@ -13,33 +13,33 @@ search = @view ? '' : 'Search...'
 %>
 <div id="form">
 <h2 class="ct"><u>FORM 105: RECOMMENDATION FOR PERSONNEL CHANGE</u></h2>
-	<div class="flex">
-		<label style="width: 120px;">Employee Last Name:&nbsp;</label>
-		<%= f.text_field :last_name, :style => 'width: 140px;', :class => 'autofill', :placeholder => search %>
-		<label style="width: 110px;">&nbsp;First Name:&nbsp;</label>
-		<%= f.text_field :first_name, :style => 'width: 140px;', :class => 'autofill', :placeholder => search %>
-		<label style="width: 100px;">&nbsp;Middle Name:&nbsp;</label>
-		<%= f.text_field :middle_name, :style => 'width: 140px;', :class => 'autofill' %>
+	<div>
+		<label style="display: inline-block; width: 125px;">Employee Last Name:</label>
+		<%= f.text_field :last_name, :style => 'width: 130px;', :class => 'autofill', :placeholder => search %>
+		<label style="display: inline-block; width: 110px;">&nbsp;First Name:</label>
+		<%= f.text_field :first_name, :style => 'width: 130px;', :class => 'autofill', :placeholder => search %>
+		<label style="display: inline-block; width: 105px;">&nbsp;Middle Name:</label>
+		<%= f.text_field :middle_name, :style => 'width: 130px;', :class => 'autofill' %>
 	</div>
-	<div class="flex">
-		<label style="width: 120px;">&nbsp;SAP Personnel #:&nbsp;</label>
-		<%= f.text_field :personnel_no, :style => 'width: 140px;', :class => 'autofill', :placeholder => search %>
-		<label style="width: 110px;">&nbsp;Vac. Appr. #:&nbsp;</label>
-		<%= f.text_field :vacancy_no, :style => 'width: 140px;', :class => 'autofill-alt', :placeholder => search %>
+	<div>
+		<label style="display: inline-block; width: 125px;">&nbsp;SAP Personnel #:</label>
+		<%= f.text_field :personnel_no, :style => 'width: 130px;', :class => 'autofill', :placeholder => search %>
+		<label style="display: inline-block; width: 110px;">&nbsp;Vac. Appr. #:</label>
+		<%= f.text_field :vacancy_no, :style => 'width: 130px;', :class => 'autofill-alt', :placeholder => search %>
 	</div>
-	<div class="flex">
-		<label style="width: 120px;">County Organization #:&nbsp;</label>
-		<%= f.text_field :county_org_no, :style => 'width: 140px;', :class => 'autofill', :placeholder => search %>
-		<label style="width: 110px;">&nbsp;SAP Organization #:&nbsp;</label>
-		<%= f.text_field :org_no, :style => 'width: 140px;', :class => 'autofill', :placeholder => search %>
-		<label style="width: 100px;">&nbsp;Cost Center #:&nbsp;</label>
-		<%= f.text_field :cost_center, :style => 'width: 140px;', :class => 'autofill', :placeholder => search %>
+	<div>
+		<label style="display: inline-block; width: 125px;">County Organization #:</label>
+		<%= f.text_field :county_org_no, :style => 'width: 130px;', :class => 'autofill', :placeholder => search %>
+		<label style="display: inline-block; width: 110px;">&nbsp;SAP Organization #:</label>
+		<%= f.text_field :org_no, :style => 'width: 130px;', :class => 'autofill', :placeholder => search %>
+		<label style="display: inline-block; width: 105px;">&nbsp;Cost Center #:</label>
+		<%= f.text_field :cost_center, :style => 'width: 130px;', :class => 'autofill', :placeholder => search %>
 	</div>
-	<div class="flex">
-		<label style="width: 120px;">Current Title:&nbsp;</label>
-		<%= f.text_field :position, :style => 'width: 390px;', :class => 'autofill', :placeholder => search %>
-		<label style="width: 100px;">&nbsp;Current Position #:&nbsp;</label>
-		<%= f.text_field :position_no, :style => 'width: 140px;', :class => 'autofill', :placeholder => search %>
+	<div>
+		<label style="display: inline-block; width: 125px;">Current Title:</label>
+		<%= f.text_field :position, :style => 'width: 378px;', :class => 'autofill', :placeholder => search %>
+		<label style="display: inline-block; width: 105px;">&nbsp;Current Position #:</label>
+		<%= f.text_field :position_no, :style => 'width: 130px;', :class => 'autofill', :placeholder => search %>
 	</div>
 	<div>
 		<label>EFFECTIVE DATE OF CHANGE:</label>
