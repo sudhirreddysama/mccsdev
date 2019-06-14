@@ -35,10 +35,10 @@ is reviewed and updated when a residential certification is requested. Candidate
 		<div>
 			<table width="100%">
 				<tr>
-					<td width="25%"><strong>Town</strong></th>
-					<td width="25%"><strong>Village</strong></th>
-					<td width="25%"><strong>Fire Department</strong></th>
-					<td width="25%"><strong>School District</strong></th>
+					<td width="25%"><strong><label for="filter_town_ids">Town</label></strong></th>
+					<td width="25%"><strong><label for="filter_village_ids">Village</label></strong></th>
+					<td width="25%"><strong><label for="filter_fire_district_ids">Fire Department</label></strong></th>
+					<td width="25%"><strong><label for="filter_school_district_ids">School District</label></strong></th>
 				</tr>
 				<tr>
 					<td><%= f.select :town_ids, Town.find(:all, :order => 'name').collect { |t| [t.name, t.id] }, {}, :multiple => true, :style => 'width: 95%; height: 150px;' %></td>
