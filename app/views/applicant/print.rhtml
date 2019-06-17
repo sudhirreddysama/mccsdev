@@ -218,6 +218,7 @@
 									</td>
 									<td width="50%" valign="top">
 										<p> If no, have you received a General Equivalency Diploma (G.E.D.)? <b><%= @obj.education == 'ged' ? 'YES' : @obj.education == 'lths' ? 'NO' : '' %></b></p>
+										<p>Educatino Level: <b><%= h @obj.degree %></b></p>
 									</td>
 								</tr>
 							</table>
