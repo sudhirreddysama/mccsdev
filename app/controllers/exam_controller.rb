@@ -486,6 +486,26 @@ class ExamController < CrudController
 						})
 					
 					end					
+				elsif params[:bulk_email]
+
+					if @report[:only_active] == '1'
+						cond << 'app_statuses.code = "A"'
+					end
+					
+					@objs = Person.find(:all, {
+						:conditions => get_where(cond),
+						:order => 'people.last_name asc, people.first_name asc',
+						:include => [:applicants => [:exam, :exam_site, :app_status]]
+					})
+					emails = @objs.map(&:email_with_name).uniq * "\r"
+					emails = 'no emails found' if emails.blank?
+					fname = "tmp/emails-tmp-#{Time.now.to_i}-#{rand(9999)}.txt"
+					File.open(fname, 'w') { |f| f.write emails }
+					flash[:bulk_email_to_tmp_file] = fname
+					flash[:notice] = 'Emails preloaded from attendance report criteria.'
+					redirect_to :sc => nil, :sid => nil, :controller => :user, :action => :bulk_email
+					return
+					
 				end
 				
 				if @objs.empty?

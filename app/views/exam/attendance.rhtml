@@ -108,6 +108,9 @@
 			<label style="display: block;"><%= f.check_box :only_active %> Only show &quot;ACTIVE&quot; applicants?</label>
 		</td>
 	</tr>
+	<% if @current_user.admin_level? %>
+		<%= f.tr_submit 'Send Bulk Email', :name => 'bulk_email', :formtarget => '_blank' %>
+	<% end %>
 	<%= f.tr_submit 'Generate Cross Filing Report (PDF/Word)', :name => 'cross_filing', :formtarget => '_blank' %>
 	<%= f.tr_submit 'Generate Cross Filing Report (EXCEL)', :name => 'cross_filing_excel', :formtarget => '_blank' %>	
 	<%= f.tr_submit 'Generate Special Accommodations Report', :name => 'special_accommodations', :formtarget => '_blank' %>

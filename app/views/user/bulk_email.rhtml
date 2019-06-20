@@ -5,13 +5,16 @@
 	<%= f.tr_text_area :to, :label => 'To', :req => true, :after => '<div>Enter emails, one per line. Default is all active user emails.</div>' %>
 	<%= f.tr_text_field :subject, :label => 'Subject', :req => true %>
 	<%= f.tr_text_area :body, :label => 'Body', :req => true %>
-	<%= f.tr_submit 'Send Email' %>
+	<%= f.tr_submit 'Send Email', :id => 'submit' %>
 <% } %>
 <script type="text/javascript">
 	(function($) {
 		$('#email-form').bind('submit', function(e) {
 			if(!confirm('Are you sure you want to send this bulk email?')) {
 				e.preventDefault();
+			}
+			else {
+				$('#submit').attr('disabled', true);
 			}
 		});
 	})(jQuery);

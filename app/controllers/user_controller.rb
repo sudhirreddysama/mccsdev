@@ -58,13 +58,21 @@ class UserController < CrudController
 				redirect_to
 			end
 		else
-			emails = [] 
-			users = User.find(:all, :conditions => 'level != "disabled"', :include => :agency, :group => 'email', :order => 'agencies.agency_type = "COUNTY" desc')
+			to = ''
+			if flash[:bulk_email_to_tmp_file]
+				f = flash[:bulk_email_to_tmp_file]
+				to = IO.read f
+				File.delete f
+			else 
+				emails = [] 
+				users = User.find(:all, :conditions => 'level != "disabled"', :include => :agency, :group => 'email', :order => 'agencies.agency_type = "COUNTY" desc')
+				to = users.map(&:email_with_name).join("\r")
+			end
 			@mail = {
 				:from => @current_user.email_with_name,
 				:subject => '',
 				:body => '',
-				:to => users.map(&:email_with_name).join("\r")
+				:to => to
 			}
 		end
 	end
