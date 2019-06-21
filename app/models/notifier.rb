@@ -181,7 +181,7 @@ class Notifier < ActionMailer::Base
 	end
 	
 	def expiring_cr exams
-		recipients ['kconklin@monroecounty.gov', 'ahenning@monroecounty.gov', 'JToland@monroecounty.gov']
+		recipients ['ahenning@monroecounty.gov', 'MDolan@monroecounty.gov']
 		from DEFAULT_FROM
 		subject 'Continuous Recruitment Exams Expiring!'
 		body :exams => exams
