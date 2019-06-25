@@ -74,10 +74,10 @@ class FormCountyChange  < ActiveRecord::Base
 		:action_separation_provisional,
 		:if => Proc.new { |o| o.check_validation && o.action_separation && o.action_separation_provisional.nil? }
 	)
-	validates_presence_of(
-		:action_separation_county_org_no, :action_separation_sap_org_no, :action_separation_cost_center,
-		:if => Proc.new { |o| o.check_validation && o.action_separation && o.action_separation_code == '03 Retired' }
-	)
+	#validates_presence_of(
+	#	:action_separation_county_org_no, :action_separation_sap_org_no, :action_separation_cost_center,
+	#	:if => Proc.new { |o| o.check_validation && o.action_separation && o.action_separation_code == '03 Retired' }
+	#)
 	validates_presence_of(
 		:org_pe_po_co_org_no, :org_pe_po_sap_org_no, :org_pe_po_cost_center,
 		:if => Proc.new { |o| o.check_validation && o.org_move_person_position }
