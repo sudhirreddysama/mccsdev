@@ -1,4 +1,4 @@
-<% chg = @o.is_a?(FormCountyChange) %>
-The status for a County <% if chg %>330 Personnel Change<% else %>105 New Hire<% end %> form has been updated:
+<% chg = @o.is_a?(FormCountyChange) -%>
+The status for a County <% if chg %>105 Personnel Change<% else %>330 New Hire<% end %> form has been updated:
 
 <%= render :partial => 'county_form', :locals => {:o => @o, :chg => chg} %>
