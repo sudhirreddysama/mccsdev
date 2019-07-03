@@ -240,7 +240,7 @@ search = @view ? '' : 'Search...'
 		<label>Leave Start Date:</label>
 		<%= f.text_field :leave_start_date, :class => 'date', :value => (@obj.leave_start_date.strftime('%m/%d/%Y') rescue nil) %>&nbsp;
 		<label>Anticipated Return Date:</label>
-		<%= f.text_field :leave_anticipated_return_date, :class => 'date', :value => (@obj.leave_anticipated_return_date.strftime('%m/%d/%Y') rescue nil) %>
+		<%= f.text_field :leave_anticipated_return_date %>
 	</div>
 	<div>
 		<%= f.check_box :leave_return %><label for="obj_leave_return">Return From Leave:</label>&nbsp;
