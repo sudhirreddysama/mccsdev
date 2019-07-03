@@ -33,6 +33,7 @@ class CertController < CrudController
 			['Department', 'departments.name'],
 			['Agency', 'agencies.name'],
 			['Exam Title', 'exams.title'],
+			['Requested Date', 'certs.requested_date'],
 			['Certification Date', 'certs.certification_date'],
 			['Return Date', 'certs.return_date']
 		]

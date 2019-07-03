@@ -5,6 +5,7 @@
 			<th width="1%">ID</th>
 			<th width="1%">Status</th>
 			<th width="1%">Exam&nbsp;No.</th>
+			<th width="1%">Req.&nbsp;Date</th>
 			<th width="1%">Cert.&nbsp;Date</th>
 			<th width="1%">Return</th>
 			<th width="93%">Cert. Title</th>
@@ -20,6 +21,7 @@
 				<td><%= o.id %></td>
 				<td><%= cert_status o.status %></td>
 				<td class="nobr"><%= h o.exam.exam_no if o.exam %></td>
+				<td class="nobr"><%= o.requested_date.d0? %>
 				<td class="nobr"><%= o.certification_date.d0? %></td>
 				<td class="nobr"><%= o.return_date.d0? %></td>
 				<td><%= link_to o.set_title, :controller => :cert, :action => :view, :id => o.id %><% if o.division %> (<%= o.division.name %>)<% end %></td>
@@ -33,6 +35,12 @@
 					<td colspan="100" class="nobr"><span class="dim">Notes: </span><%= o.comments %></td>
 				</tr>
 			<% end %>
+			<% if !o.internal_notes.blank? %>
+				<tr>
+					<td colspan="3"></td>
+					<td colspan="100" class="nobr"><span class="dim">Internal Notes: </span><%= o.internal_notes %></td>
+				</tr>
+			<% end %>			
 		</tbody>
 	<% } %>
 </table>
