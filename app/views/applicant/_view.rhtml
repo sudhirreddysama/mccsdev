@@ -815,10 +815,12 @@ web_exam_c = params[:controller] == 'web_exam'
 							<label>End:</label>
 							<%= h e.end_date.d0? %>
 						</td>
-						<td>
-							<label>Salary:</label>
-							<%= h e.salary %>
-						</td>
+						<% if false %>
+							<td>
+								<label>Salary:</label>
+								<%= h e.salary %>
+							</td>
+						<% end %>
 						<td>
 							<label>Hours:</label>
 							<%= h e.hours %>
