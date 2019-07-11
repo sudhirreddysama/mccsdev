@@ -314,8 +314,12 @@
 				<p>&nbsp;</p>
 				<center><p>210 County Office Building * 39 West Main Street * Rochester, NY 14614-1471<br />
 				Phone: (585) 753-1700 * TTY: (585) 753-1091 * WEB SITE: www.monroecounty.gov<br />
-				Monroe County government prohibits discrimination in employment, program activities, procurement and contracting against any person due to such<br />
-				person's age,  marital status, disability, genetic predisposition or carrier status, race, color, creed, sexual orientation or national origin.<br />  
+				<% if false %>
+					Monroe County government prohibits discrimination in employment, program activities, procurement and contracting against any person due to such<br />
+					person's age,  marital status, disability, genetic predisposition or carrier status, race, color, creed, sexual orientation or national origin.<br />
+				<% end %>
+				Monroe County prohibits discrimination on the basis of race, color, religion, sex, national origin, age, disability, sexual orientation, marital status, creed,<br />
+				veteran status, military status, domestic violence victim status, gender identity, criminal history, genetic predisposition or carrier status, or retaliation.<br />
 				An Equal Opportunity Employer</p></center>
 <% if ep.exam.price.to_f > 0 %>
     <!-- NEW PAGE -->
