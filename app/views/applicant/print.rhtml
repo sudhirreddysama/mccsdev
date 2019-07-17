@@ -282,7 +282,7 @@
 										<% unless first %><hr /><% end; first = false %>
 										<p>Starting Date: <b><%= e.start_date ? e.start_date.strftime('%m/%d/%Y') : s %></b> Ending Date: <b><%= e.end_date ? e.end_date.strftime('%m/%d/%Y') : s %></b></p>
 										<p>Name &amp; address of employer: <b><%= comma_h e.name, e.address, e.address2, e.city, "#{e.state} #{e.zip}" %></b></p>
-										<% if false %><p>Salary: <b><%= e.salary.blank? ? s : h(e.salary) %></b> Hours worked per week: <b><%= h e.hours %></b></p><% end %>
+										<% if false %><p>Salary: <b><%= e.salary.blank? ? s : h(e.salary) %></b><% end %> Hours worked per week: <b><%= h e.hours %></b></p>
 										<p>Reason for leaving: <b><%= h e.reason_left %></b></p>
 										<h3>Your Job Title: <b><%= h e.title %></b></h3>
 										<p>Immediate Supervisors Name, Title & Phone number: <b><%= comma_h e.supervisor_name, e.supervisor_title, e.supervisor_phone %></b></p>
