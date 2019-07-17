@@ -87,6 +87,9 @@ var init_position_ac = function(field, obj) {
 			if(i) {
 				set_position_fields_from_to(i, obj);
 			}
+			if(obj.cb) {
+				obj.cb(i);
+			}
 			f.blur();
 		},
 		renderItem: function(ul, i) {

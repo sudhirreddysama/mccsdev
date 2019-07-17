@@ -72,15 +72,17 @@ search = @view ? '' : 'Search...'
 	</div>
 	<div style="padding-left: 20px;">
 		<label>Group:</label>
-		<%= f.text_field :action_group, :style => 'width: 80px;', :class => 'autofill-alt' %>
+		<%= f.text_field :action_group, :style => 'width: 70px;', :class => 'autofill-alt' %>
 		<label>Step:</label>
-		<%= f.text_field :action_step, :style => 'width: 80px;' %>
+		<%= f.text_field :action_step, :style => 'width: 70px;' %>
 		<label>Hourly Rate:</label>
-		<%= f.text_field :action_hourly_rate, :style => 'width: 80px;' %>
+		<%= f.text_field :action_hourly_rate, :style => 'width: 70px;' %>
+		<label>Biweekly Rate:</label>
+		<%= f.text_field :action_biweekly_rate, :style => 'width: 70px;' %>
 		<label>Job Code:</label>
-		<%= f.text_field :action_job_code, :style => 'width: 80px;', :class => 'autofill-alt' %>
+		<%= f.text_field :action_job_code, :style => 'width: 70px;', :class => 'autofill-alt' %>
 		<label>List #:</label>
-		<%= f.text_field :action_list_no, :style => 'width: 80px;' %>
+		<%= f.text_field :action_list_no, :style => 'width: 70px;' %>
 	</div>
 	<div>
 		<%= f.check_box :action_status_change %><label for="obj_action_status_change">Status Change:</label>&nbsp;
@@ -144,9 +146,9 @@ search = @view ? '' : 'Search...'
 	<div>
 		<div style="display: inline-block; width: 150px;"><%= f.check_box :org_move_position, :class => 'fields3' %><label for="obj_org_move_position">Move Position:</label></div>
 		<label style="display: inline-block; width: 50px;">From: </label>
-		<label>Co. Org #:</label> <%= f.text_field :org_po_co_org_no_from, :style => 'width: 110px;', :class => 'autofill fake-select', :placeholder => search %>
-		<label>Sap Org #:</label> <%= f.text_field :org_po_sap_org_no_from, :style => 'width: 110px;', :class => 'autofill fake-select', :placeholder => search %>
-		<label>Cost Center #:</label> <%= f.text_field :org_po_cost_center_from, :style => 'width: 110px;', :class => 'autofill fake-select', :placeholder => search %>		
+		<label>Co. Org #:</label> <%= f.text_field :org_po_co_org_no_from, :style => 'width: 110px;', :class => 'fake-select', :placeholder => search %>
+		<label>Sap Org #:</label> <%= f.text_field :org_po_sap_org_no_from, :style => 'width: 110px;', :class => 'fake-select', :placeholder => search %>
+		<label>Cost Center #:</label> <%= f.text_field :org_po_cost_center_from, :style => 'width: 110px;', :class => 'fake-select', :placeholder => search %>		
 	</div>
 	<div>
 		<div style="display: inline-block; width: 150px;">&nbsp;</div> <label style="display: inline-block; width: 50px;">To: </label>

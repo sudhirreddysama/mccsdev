@@ -11,6 +11,8 @@ class FormCountyChange  < ActiveRecord::Base
 	belongs_to :vacancy_data
 	#belongs_to :vacancy_data_new, :class_name => 'VacancyData', :foreign_key => 'vacancy_data_new_id'
 	
+	belongs_to :action_position_data, :class_name => 'VacancyData', :foreign_key => 'action_position_no', :primary_key => 'position_no'
+	
 	#belongs_to :vacancy, :foreign_key => 'vacancy_no', :primary_key => 'exec_approval_no', :conditions => 'vacancies.exec_approval_no != ""'
 	
 #	belongs_to :present_title_job, :class_name => 'Job', :foreign_key => 'present_title_id'
@@ -36,7 +38,7 @@ class FormCountyChange  < ActiveRecord::Base
 		:if => Proc.new { |o| o.check_validation && o.action_out_of_title }
 	)
 	validates_presence_of(
-		:action_title, :action_position_no, :action_group, :action_step, :action_hourly_rate, :action_job_code, :action_list_no,
+		:action_title, :action_position_no, :action_group, :action_step, :action_hourly_rate, :action_biweekly_rate, :action_job_code, :action_list_no,
 		:if => Proc.new { |o| o.check_validation && (o.action_promotion || o.action_out_of_title || o.action_title_change || o.action_reinstatement || o.action_demotion || o.action_miscellaneous) }
 	)
 	validates_presence_of(

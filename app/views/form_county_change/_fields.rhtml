@@ -32,6 +32,7 @@
 
 var vacancy_obj = <%= (@obj.vacancy ? @obj.vacancy.autocomplete_json_data : nil).to_json %>;
 var vacancy_data_obj = <%= (@obj.vacancy_data ? @obj.vacancy_data.autocomplete_json_data : nil).to_json %>;
+var action_position_data = <%= (@obj.action_position_data ? @obj.action_position_data.autocomplete_json_data : nil).to_json %>;
 
 var obj_vacancy_id = $('#obj_vacancy_id');
 var obj_vacancy_data_id = $('#obj_vacancy_data_id');
@@ -83,7 +84,16 @@ init_position_obj_ac({
 	job_no: obj_action_job_code,
 	salary_group: obj_action_group,
 	flsa_exempt_true: obj_action_flsa_exempt_true,
-	flsa_exempt_false: obj_action_flsa_exempt_false
+	flsa_exempt_false: obj_action_flsa_exempt_false,
+	cb: function(i) {
+		action_position_data = i;
+		if($('.fields3:checked').length) set_fields3a();
+	}
+});
+obj_action_position_no.change(function(e) {
+	if(action_position_data && action_position_data.position_no != $(this).val()) {
+		action_position_data = null;
+	}
 });
 init_position_obj_ac({
 	position: obj_org_org_position,
@@ -215,7 +225,7 @@ $('.fields2').change(function(e) {
 });
 
 var set_fields3a = function() {
-	var i = vacancy_data_obj;
+	var i = action_position_data || vacancy_data_obj;
 	if(!i) return;
 	$('#obj_org_po_co_org_no_from').val(i.county_org_no).effect('highlight');
 	$('#obj_org_po_sap_org_no_from').val(i.org_no).effect('highlight');
