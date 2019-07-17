@@ -194,7 +194,8 @@ class FormCountyHireController < CrudController
 		objs = WorkSchedule.find(:all, {
 			:conditions => get_where(cond),
 			:order => 'work_schedules.rule asc',
-			:limit => 20
+			:limit => 20,
+			:group => 'work_schedules.rule, work_schedules.text'
 		})
 		render :json => objs.map { |o| {:rule => o.rule, :text => o.text} }.to_json
 	end
