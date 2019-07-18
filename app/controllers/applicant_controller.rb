@@ -83,6 +83,7 @@ class ApplicantController < CrudController
 		})
 		cond << 'approved = "Y"'
 		cond << 'submitted_at > "%s"' % Date.today.years_ago(2)
+		cond << 'app_statuses.eligible in ("A", "I")'
 		inc = [:person, :exam, :app_status]
 		if !params.cert_id.blank?
 			inc << :cert_applicants
