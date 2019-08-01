@@ -998,7 +998,7 @@ web_exam_c = params[:controller] == 'web_exam'
 			<div class="row">
 				<table width="100%">
 					<tr>
-						<td style="padding-right: 5px; padding-bottom: 5px;"><%= e.id %>
+						<td style="padding-right: 5px; padding-bottom: 5px;">
 							<label>Admin Notes:</label>
 							<% n = @obj.applicant_notes.find_by_object_type_and_object_id 'education', e.id %>
 							<% if @current_user.staff_level? %>
