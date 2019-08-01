@@ -56,6 +56,7 @@
 <%= f.tr_text_field :check_no, :label => 'Check No.' %>
 <%= f.tr_select :agency_id, Agency.find(:all, :order => 'name').collect { |c| [c.name, c.id] }, :label => 'Agency', :include_blank => true %>
 <%= f.tr_select :department_id, Department.find(:all, :order => 'name').collect { |c| [c.name, c.id] }, :label => 'Department', :include_blank => true %>
+<%= f.tr_calendar_date_select :alternate_exam_date, :label => 'Alt Exam Date' %>
 <tr>
 	<th>Student Loans:</th>
 	<td>

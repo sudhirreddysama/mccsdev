@@ -283,6 +283,10 @@ web_exam_c = params[:controller] == 'web_exam'
 						<% elsif o.exam && o.exam.exam_site %>
 							<%= h o.exam.exam_site.name %>
 						<% end %>
+					</td>
+					<td>
+						<label>Alt Exam Date:</label>
+						<%= o.alternate_exam_date.d0? %>
 					&nbsp;</td>
 				</tr>
 			</table>
