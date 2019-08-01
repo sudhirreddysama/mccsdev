@@ -161,15 +161,15 @@ web_exam_c = params[:controller] == 'web_exam'
 		<table>
 			<tr>
 				<td>
-					<label>Home Phone:</label>
+					<label>Main Phone:</label>
 					<%= h phone_format(o.person.home_phone) %>
 				</td>
 				<td>
-					<label>Work Phone:</label>
+					<label>Alt. Phone:</label>
 					<%= h phone_format(o.person.work_phone) %>
 				</td>
 				<td>
-					<label>Cell Phone:</label>
+					<label>Alt. Phone 2:</label>
 					<%= h phone_format(o.person.cell_phone) %>
 				</td>
 				<td>
@@ -603,7 +603,8 @@ web_exam_c = params[:controller] == 'web_exam'
 					<tr>
 						<td><label>Convicted of law violation other than minor traffic violation?</label><%= yn? wa.law_violation %></td>
 						<td><label>Criminal charges pending?</label><%= yn? wa.pending_criminal_charges %></td>
-						<td><label>Ever removed from employment?</label><%= yn? wa.removed_employment %>&nbsp;</td>
+						<td><label>Ever dismissed from employment?</label><%= yn? wa.removed_employment %>&nbsp;</td>
+						<td><label>Ever resigned from employment rather than face dismissal?</label><%= yn? wa.resigned_employment %>&nbsp;</td>
 					</tr>
 				</table>
 			</div>
@@ -826,6 +827,10 @@ web_exam_c = params[:controller] == 'web_exam'
 							<%= h e.hours %>
 						</td>
 						<td>
+							<label>Paid/Volunteer</label>
+							<%= e.volunteer.nil? ? '' : e.volunteer ? 'Volunteer' : 'Paid' %>
+						</td>
+						<td>
 							<label>Title:</label>
 							<%= h e.title %>
 						&nbsp;</td>
@@ -952,7 +957,7 @@ web_exam_c = params[:controller] == 'web_exam'
 							<%= h e.school_name %>
 						</td>
 						<td>
-							<label>State:</label>
+							<label>State/Country:</label>
 							<%= h e.state %>
 						</td>
 						<td>
@@ -975,6 +980,10 @@ web_exam_c = params[:controller] == 'web_exam'
 								<%= e.graduation_date.d0? %>
 							</td>
 						<% end %>
+						<td>
+							<label>Graduated?</label>
+							<%= yn? e.graduated %>
+						</td>
 						<td>
 							<label>Semester Credits:</label>
 							<%= h e.credits_semester %>

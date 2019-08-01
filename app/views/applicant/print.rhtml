@@ -33,51 +33,29 @@
 				<table width="100%" cellspacing="0" cellpadding="8" border="1">
 					<% if seasonal %>
 						<tr>
-							<td><h3>Position: <%= ep.exam.name %></h3></td>
+							<td><h3>Position: <%= ep.exam.name rescue nil %></h3></td>
 						</tr>
 					<% else %>
 						<tr>
 							<td bgcolor="#f8f8f8" align="center">
-								<b>For Office Use Only</b>
-							</td>
-						</tr>
-						<tr>
-							<td bgcolor="#f8f8f8">
-								<table width="100%" cellspacing="4" cellpadding="0" border="0">
-									<tr>
-										<td width="33%">
-											<p><b>Qualifying Title: <u><%= s * 2 %></u></b></p>
-											<p><b>Qualifying Date: <u><%= s * 2 %></u></b></p>
-											<p><b>Qualifying Dept/Jurisdiction: <u><%= s * 2 %></u></b></p>
-											<p><b>Seniority Date: <u><%= s * 2 %></u></b></p>
-										</td>
-										<td width="33%">
-											<p><b>Qualified:</b></p>
-											<p><b><%= uchk %> Yes</b></p>
-											<p><b><%= uchk %> No</b></p>
-											<p><b>Reviewer's Initials: <u><%= s  * 2 %></u></b></p>
-										</td>
-										<td width="33%">
-											<p><b>Check # and Bank: <u><%= s * 2 %></u></b></p>
-											<% if ep.exam.price.to_f == 0 %>
-												<p><b><%= uchk %> Waiver&nbsp;&nbsp;&nbsp;&nbsp;<%= uchk %> Waiver-e</b></p>
-												<p><b><%= chk %> No Fee</b></p>
+								<p><b>For Office Use Only</b></p>
+								<p><b>Check/Money Order #: <u><%= s * 2 %></u><%= s * 3 %>
+									<% if ep.exam.price.to_f == 0 %>
+										<%= uchk %> Waiver&nbsp;&nbsp;&nbsp;&nbsp;<%= uchk %> Waiver-e
+										<%= chk %> No Fee
+									<% else %>
+										<% if @obj.waiver_requested %>
+											<% if @obj.waiver_county %>
+												<%= uchk %> Waiver&nbsp;&nbsp;&nbsp;&nbsp;<%= chk %> Waiver-e
 											<% else %>
-												<% if @obj.waiver_requested %>
-													<% if @obj.waiver_county %>
-														<p><b><%= uchk %> Waiver&nbsp;&nbsp;&nbsp;&nbsp;<%= chk %> Waiver-e</b></p>
-													<% else %>
-														<p><b><%= chk %> Waiver&nbsp;&nbsp;&nbsp;&nbsp;<%= uchk %> Waiver-e</b></p>
-													<% end %>
-												<% else %>
-													<p><b><%= uchk %> Waiver&nbsp;&nbsp;&nbsp;&nbsp;<%= uchk %> Waiver-e</b></p>
-												<% end %>
-												<p><b><%= uchk %> No Fee</b></p>
+												<%= chk %> Waiver&nbsp;&nbsp;&nbsp;&nbsp;<%= uchk %> Waiver-e
 											<% end %>
-											<p><b>Exam Series: <u><%= s * 2 %></u></b></p>
-										</td>
-									</tr>
-								</table>
+										<% else %>
+											<%= uchk %> Waiver&nbsp;&nbsp;&nbsp;&nbsp;<%= uchk %> Waiver-e
+										<% end %>
+										&nbsp;&nbsp;&nbsp;&nbsp;<%= uchk %> No Fee
+									<% end %>
+								</b></p>
 							</td>
 						</tr>
 						<tr>
@@ -113,8 +91,8 @@
 							<table width="100%" cellspacing="0" cellpadding="0" border="0">
 								<tr>
 									<td width="50%">
-										<p>Home Telephone Number: <b><%= h @obj.home_phone %></b></p>
-										<p>Work Telephone Number: <b><%= h @obj.work_phone %></b></p>
+										<p>Main Telephone Number: <b><%= h @obj.home_phone %></b></p>
+										<p>Alt. Telephone Number: <b><%= h @obj.work_phone %></b></p>
 									</td>
 									<td width="50%">
 										<p>Social Security Number: <b><%= h @obj.ssn %></b></p>
@@ -127,6 +105,23 @@
 							<% end %>
 						</td>
 					</tr>
+					<% if !seasonal %>
+						<tr>
+							<td>
+								<table width="100%" cellspacing="0" cellpadding="0" border="0">
+									<tr>
+										<td width="50%">Have you served in the Armed Forces of the U.S.A.? <b><%= @obj.army_served ? 'YES' : 'NO' %></b><br>&nbsp;</td>
+										<td width="50%">Dates of active service: From: <b><%= @obj.army_from ? @obj.army_from.strftime('%m/%d/%Y') : s %></b> To: <b><%= @obj.army_to ? @obj.army_to.strftime('%m/%d/%Y') : s %></b><br>&nbsp;</td>
+									</tr>
+								</table>				
+								<p><b>Veterans of the Armed Forces and Active Duty members soon to be discharged wishing to claim additional examination credits as veterans or
+								disabled veterans must submit a form VC-1 and/or form VC-4 and a copy of their discharge papers (form DD-214) with our office.</b></p>
+								<p><b>Have you ever been permanently appointed or promoted in the service of NY State or any of its civil divisions from an eligible list as a result of
+								additional veterans credits granted you on such list?</b> <b><%= @obj.vc_used ? 'YES' : 'NO' %></b></p>
+								<p>If yes, name of agency that established the eligible list: <b><%= @obj.vc_used_agency %></b></p>
+							</td>
+						</tr>
+					<% end %>
 					<tr>
 						<td>
 							<table cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -140,7 +135,7 @@
 										<% else %>
 											<p>Are you a citizen of the United States? <b><%= @obj.us_citizen ? 'YES' : 'NO' %></b></p>
 											<p>Do you have a valid New York State Driver's license? <b><%= @obj.state_drivers_license ? 'YES' : 'NO' %></b></p>
-											<p>Will you accept temporary work? <b><%= @obj.accept_temp_work ? 'YES' : 'NO' %></b></p>
+											<p>Will you accept part-time work? <b><%= @obj.accept_part_time_work ? 'YES' : 'NO' %></b></p>
 										<% end %>
 									</td>
 									<td width="50%" valign="top">
@@ -152,33 +147,21 @@
 											<p>If no, do you have a legal right to work in the US? <b><%= @obj.us_citizen ? 'NA' : @obj.us_right_to_work ? 'YES' : 'NO' %></b></p>
 											<p>Driver's license class: <b><%= @obj.drivers_license_class %></b></p>
 											<% if false %><p>If yes, what class? <b><%= @obj.us_right_to_work_class %></b></p><% end %>
-											<p>Will you accept part-time work? <b><%= @obj.accept_part_time_work ? 'YES' : 'NO' %></b></p>
+											<p>Will you accept temporary work? <b><%= @obj.accept_temp_work ? 'YES' : 'NO' %></b></p>
 										<% end %>
 									</td>
 								</tr>
 							</table>
 						</td>
 					</tr>
-					<% if !seasonal %>
-						<tr>
-							<td>
-								<p>Have you served in the Armed Forces of the U.S.A.? <b><%= @obj.army_served ? 'YES' : 'NO' %></b></p>
-								<p>Dates of active service: From: <b><%= @obj.army_from ? @obj.army_from.strftime('%m/%d/%Y') : s %></b> To: <b><%= @obj.army_to ? @obj.army_to.strftime('%m/%d/%Y') : s %></b>
-								<p>Wartime Veterans and Active Duty members soon to be discharged wishing to claim additional examination credits as veterans or disabled veterans 
-									must submit a form VC-1 and/or form VC-4 and a copy of their discharge papers (form DD-214) within 30 days of exam date.</p>
-								<p>Have you ever been appointed through the use of Veteran's Credits to any position in the State Civil Service or any City or Civil 
-								Division of New York State? <b><%= @obj.vc_used ? 'YES' : 'NO' %></b></p>
-								<p>If yes, where and when? <b><%= @obj.vc_used_agency %></b></p>
-							</td>
-						</tr>
-					<% end %>
 					<tr>
 						<td>
-							<p>An answer of YES to any of the following questions does not represent an automatic bar to employment. Each case is considered and evaluated in relation to the duties and responsibilities of the position for which you are applying:</p>
-							<p>Were you ever convicted of any violation of law other than a minor traffic violation?* <b><%= @obj.law_violation ? 'YES' : 'NO' %></b></p>
+							<p><b>An answer of YES to any of the following questions does not represent an automatic bar to employment. Each case is considered and evaluated in relation to the duties and responsibilities of the position for which you are applying:</b></p>
+							<p>Have you ever been convicted of any violation of law other than a minor traffic violation?* <b><%= @obj.law_violation ? 'YES' : 'NO' %></b></p>
 							<p>Do you currently have any criminal charges pending against you? <b><%= @obj.pending_criminal_charges ? 'YES' : 'NO' %></b></p>
-							<p>Were you ever removed from any type of employment? <b><%= @obj.removed_employment ? 'YES' : 'NO' %></b></p>
-							<p>* This question refers to all crimes, violations or offenses in any jurisdiction, including Federal and military offenses, except minor traffic infractions. It also includes Juvenile Offender status convictions. You do not need to include adjudications of Juvenile Delinquency or Youthful Offender status or arrests that did not lead to a conviction.</p>							
+							<p>Have you ever been dismissed from employment other than reduction in staff? <b><%= @obj.removed_employment ? 'YES' : 'NO' %></b></p>
+							<p>Have you ever resigned from employment rather than face discipline or dismissal? <b><%= @obj.resigned_employment.nil? ? '' : @obj.resigned_employment ? 'YES' : 'NO' %></b></p>
+							<p>* This question refers to all crimes, violations or offenses in any jurisdiction, including Federal and military offenses, except <u>minor</u> traffic infractions. It also includes Juvenile Offender status convictions. You do not need to include adjudications of Juvenile Delinquency or Youthful Offender status or arrests that did not lead to a conviction.</p>							
 						</td>
 					</tr>
 					<tr>
@@ -229,11 +212,12 @@
 							<h2>Education Above High School</h2>
 							<table width="100%" cellspacing="4" cellpadding="0" border="0">
 								<tr>
-									<td rowspan="2"><b>Name of School</b></td>
-									<td rowspan="2"><b>Location (State)</b></td>
-									<td rowspan="2"><b>Course or Major</b></td>
-									<td colspan="2"><b>Credits Completed</b></td>
-									<td rowspan="2"><b>Type of Degree/Certificate Received</b></td>
+									<td rowspan="2" valign="top"><b>Name of School</b></td>
+									<td rowspan="2" valign="top"><b>State or Country</b></td>
+									<td rowspan="2" valign="top"><b>Course or Major</b></td>
+									<td colspan="2" valign="top"><b>Credits Completed</b></td>
+									<td rowspan="2" valign="top"><b>Type of Degree</b></td>
+									<td rowspan="2" valign="top"><b>Graduated?</b></td>
 								</tr>
 								<tr><td><b>Sem. Hrs.</b></td><td><b>Qtr. Hrs.</b></td></tr>
 								<% @obj.web_educations.each { |e| %>
@@ -244,6 +228,7 @@
 										<td><%= h e.credits_semester %></td>
 										<td><%= h e.credits_quarter %></td>
 										<td><%= h e.degree %><% if ep.exam.require_degree && e.graduation_date %> (<%= e.graduation_date.strftime('%m/%d/%Y') %>)<% end %></td>
+										<td><b><%= e.graduated.nil? ? '' : e.graduated ? 'YES' : 'NO' %></b></td>
 									</tr>
 								<% } %>
 							</table>
@@ -270,10 +255,9 @@
 					<tr>
 						<td>
 							<h2>Work Experience</h2>
-								<p>Describe your employment, including military experience, beginning with your current or most recent employment. Submission of a resume does not relieve you of the 
-								responsibility for completing all sections of this application. The resume is a supplement to the application, and not a substitute for it.  To receive credit for a job, basic 
-								employment information such as address, name and title of supervisor, average number of hours in the workweek<% if false %>, final salary<% end %>, reason for leaving, specific job duties, your job 
-								title, etc. must be shown.</p>
+								<p>Describe your employment, including military experience, beginning with your current or most recent employment. Submission of a resume does not relieve you of the
+								responsibility for completing all sections of this application. The resume is a supplement to the application, and not a substitute for it. To receive credit for a job, basic
+								employment information such as address, name and title of supervisor, average number of hours in the workweek, reason for leaving, specific job duties, your job title, etc. must be shown.</p>
 								<% if @obj.web_employments.empty? %>
 									<p><b>None specified</b></p>
 								<% else %>
@@ -282,7 +266,7 @@
 										<% unless first %><hr /><% end; first = false %>
 										<p>Starting Date: <b><%= e.start_date ? e.start_date.strftime('%m/%d/%Y') : s %></b> Ending Date: <b><%= e.end_date ? e.end_date.strftime('%m/%d/%Y') : s %></b></p>
 										<p>Name &amp; address of employer: <b><%= comma_h e.name, e.address, e.address2, e.city, "#{e.state} #{e.zip}" %></b></p>
-										<% if false %><p>Salary: <b><%= e.salary.blank? ? s : h(e.salary) %></b><% end %> Hours worked per week: <b><%= h e.hours %></b></p>
+										<p>Hours worked per week: <b><%= h e.hours %></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Was the position paid or volunteer? <b><%= e.volunteer.nil? ? '' : e.volunteer ? 'VOLUNTEER' : 'PAID' %></b></p>
 										<p>Reason for leaving: <b><%= h e.reason_left %></b></p>
 										<h3>Your Job Title: <b><%= h e.title %></b></h3>
 										<p>Immediate Supervisors Name, Title & Phone number: <b><%= comma_h e.supervisor_name, e.supervisor_title, e.supervisor_phone %></b></p>
@@ -304,7 +288,7 @@
 							I further understand, and will otherwise submit thereto, that in accordance with the County's pre-employment drug testing policy, I may be required to submit 
 							to a urinalysis test as a condition for employment. Applicants may also be required to undergo a State and national criminal history background investigation, 
 							which will include a fingerprint check, to determine suitability for appointment. Failure to meet the standards for the background investigation may result in disqualification.						
-		</b></p>
+							</b></p>
 							<p>
 						<strong>Candidate Name:</strong> <%= @obj.first_name %> <%= @obj.last_name %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Online Account:</strong> <%= @obj.web_user.username %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<strong>Submission Date:</strong> <%= @obj.submitted_at ? @obj.submitted_at.strftime('%m/%d/%Y %I:%M%p') : '' %></p>
@@ -324,30 +308,26 @@
 <% if ep.exam.price.to_f > 0 %>
     <!-- NEW PAGE -->
     <h2>Special Arrangements for Examination</h2>
-
-    <p>If you need special arrangements because you are a Religious Observer [for religious reasons, cannot be tested on date of examination(s)], or
-      if you have a disability that requires you to have special accommodations or assistance for the completion of this application or for you to
-      participate in an examination, you must notify this Department at 585-753-1700 or 585-753-1091 (TDD) no later than the last date of filing
-      for this (these) examination(s).  Your request must include examination number(s) and title(s) and the type of special arrangements required
-      accompanied by all supporting documentation.</p>
-
-    <p>Monroe County, as an employer, does not discriminate on the basis of a disability and will make reasonable accommodations for employees
-      with special needs, due to a disability.  It is the responsibility of the applicant or employee to voluntarily disclose that they require an
-      accommodation based on their disability.</p>
-
-
+      
+		<p>If you need special arrangements because you are a Religious Observer [for religious reasons, cannot be tested on date of examination(s)], or
+			if you have a disability that requires you to have special accommodations or assistance for the completion of this application or for you to
+			participate in an examination, you must notify this Department at 585-753-1700 or 585-753-1091 (TDD) no later than the last date of filing for
+			this (these) examination(s). Your request must include examination number(s) and title(s) and the type of special arrangements required
+			accompanied by all supporting documentation.</p>
+			
+		<p>Monroe County, as an employer, does not discriminate on the basis of a disability and will make reasonable accommodations for employees
+			with special needs, due to a disability. It is the responsibility of the applicant or employee to voluntarily disclose that they require an
+			accommodation based on their disability.</p>
 
     <h2>Application Fee for Examination</h2>
-
-    <p>If the examination announcement indicates that an application fee is required for the examination(s) for which you are applying, you must
-      submit the required fee for each separate examination.  The required fee amount for each examination will be listed on the announcement.
-      Enclose a check or money order payable to the Monroe County Director of Finance with this application.  WE DO NOT ACCEPT
-      CASH.</p>
-
-    <p>Your application fee will not be refunded if you do not meet the requirements for admission to the examination.  Compare your
-      qualifications carefully to the requirements stated on the announcement and file only for those examinations for which you are
-      clearly qualified.</p>
-
+      
+		<p>If the examination announcement indicates that an application fee is required for the examination(s) for which you are applying, you must
+			submit the required fee for each separate examination. The required fee amount for each examination will be listed on the announcement.
+			Enclose a check or money order payable to the Monroe County Director of Finance with this application. WE DO NOT ACCEPT CASH.</p>
+			
+		<p>Your application fee will not be refunded if you do not meet the requirements for admission to the examination. Compare your qualifications
+			carefully to the requirements stated on the announcement and file only for those examinations for which you are clearly qualified.</p>
+      
     <h2>Application Fee Waiver Request and Certification</h2>
 
     <p>Civil Service Law Section 50.5(b): &quot;...fees shall be waived for candidates who certify to the state civil service department, a
@@ -356,10 +336,11 @@
 
     <p><%= @obj.waiver_requested ? chk : uchk %> I request that my application fee(s) be waived in accordance with Section 50.5(b) of the State Civil Service Law for the following reason(s):</p>
 
+    <table width="100%" cellpadding="0" border="0"><tr><td width="5%"></td><td width="90%">
     <table width="100%" cellspacing="4" cellpadding="0" border="0">
       <tr>
         <td valign="top" align="center" width="1%"><%= @obj.waiver_unemployed ? chk : uchk %></td>
-        <td width="99%" valign="top"> I am totally unemployed <strong><em>and</em></strong> I am primarily responsible for the support of my household.
+        <td width="99%" valign="top"> I am totally unemployed <strong><u>and</u></strong> I am primarily responsible for the support of my household.
           <strong>NOTE: Individuals who can be claimed as a dependent on any other person's tax return ARE NOT eligible for application fee waiver
             as head of household.</strong><br />&nbsp;</td>
       </tr>
@@ -393,6 +374,9 @@
           &nbsp;
         </td>
       </tr>
+      </table>
+      </td></tr></table>
+      <table width="100%" cellspacing="4" cellpadding="0" border="0">
       <tr>
         <td valign="top" align="center"><%= @obj.waiver_county ? chk : uchk %></td>
         <td valign="top">I am a full-time employee of Monroe County represented by CSEA Local 828, Unit 7400 at pay group 10 or below.<br />

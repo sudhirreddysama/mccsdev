@@ -1,0 +1,3038 @@
+commit 4ec28c2ba795da60b689a701608d2a3b9740ba95
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jul 18 17:05:05 2019 -0400
+
+    applicant ac fix
+
+commit b4bb9c642cd448c017ab971b68ca7cf44cdf69bf
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jul 17 15:24:29 2019 -0400
+
+    county change form changes
+
+commit c74b94208e6c042058e45d941dd0533345318207
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jul 17 14:01:35 2019 -0400
+
+    Letter head fix
+
+commit f852f620e421a2bbfb43869f3430695f4a2a3a61
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jul 17 13:40:52 2019 -0400
+
+    work schedule ac tweak
+
+commit f1e89867925944ce102b7d1065282e795de26b5c
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jul 17 13:21:13 2019 -0400
+
+    print fix
+
+commit 8e7b4760754caa67ca4eb1e700829312c7097d46
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jul 11 16:21:43 2019 -0400
+
+    eeo disclaimer
+
+commit 857932bc9304ab8121965fa48fe87253d80847b6
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jul 11 14:45:52 2019 -0400
+
+    no more salary info
+
+commit 27de2dae75075f7628717b4b89b3123ffdf21741
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jul 3 14:29:06 2019 -0400
+
+    leave anticipated date change text
+
+commit 887b9cf88a2af3d149a2f6fcae752c06cc02bbac
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jul 3 09:54:19 2019 -0400
+
+    added fields to cert list
+
+commit b411ab9ce632ff944d3c7efed8f512fd5b31db63
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 28 14:52:39 2019 -0400
+
+    email typo
+
+commit aefc6197c6690e9fc4e857dd133fe6056761677a
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 27 16:50:22 2019 -0400
+
+    222 fix
+
+commit 7e97d6d4d03ae328580699920bef2e59676b0e90
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jun 25 16:17:20 2019 -0400
+
+    action separation required fields change
+
+commit 57e08a76b7e0298d302c66521bc8ec9c025f0012
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 21 09:18:13 2019 -0400
+
+    email update
+
+commit 8a2d36c7e6d31aed1b2037799c5ed9d172979960
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 20 16:11:54 2019 -0400
+
+    bulk email from attendance report screen
+
+commit 6c10e095a34eab906a5f476753b7980acb9f079a
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 17 15:58:48 2019 -0400
+
+    bug fix oops
+
+commit 57f4b7875f1efb0a8882ecc9600567935f75636c
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 17 10:50:05 2019 -0400
+
+    edu level fix
+
+commit 5621537eee734e9ca4392c85558a9ad1a9a6fa77
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 17 09:59:58 2019 -0400
+
+    fix
+
+commit 70c4a1faea1a5a26ae2ae3c4d0815e756f4ae43d
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 17 09:58:28 2019 -0400
+
+    education
+
+commit 7ed7ddd7f526a9a06b322697e9e74a2e6068ddaf
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 17 09:56:08 2019 -0400
+
+    education section change
+
+commit 57a56efc79db39c0cadeb49ff99d969611aae92f
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 14 16:40:36 2019 -0400
+
+    form layout fix
+
+commit 5ffa28b5d5d73d7af7118705b10649fed6d0cde0
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 14 13:55:48 2019 -0400
+
+    ada
+
+commit b9fe78fe5f5f7efcd13d89be9b012f1885fa9523
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 13 17:06:17 2019 -0400
+
+    print fix
+
+commit 240b302bb95450c495e8950e87a24d2bd2e9041c
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 13 16:11:40 2019 -0400
+
+    link fixes
+
+commit da076edb99561057801814a1b175fdb94f5ad0c3
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 13 15:40:31 2019 -0400
+
+    ADA fixes
+
+commit cd213c3e56e6d3cc4a66b0b9d9bc5324bef6b77e
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 12 16:43:10 2019 -0400
+
+    upload fix
+
+commit 62128c9c666905905fccbb3628d1e4a0bdcab6c1
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 12 16:32:07 2019 -0400
+
+    title fix job pop up
+
+commit 483a6c64c45b801c21a3214c08e11197cbd208ba
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 12 14:13:27 2019 -0400
+
+    liaison fix
+
+commit 8a643827f7f691dab8f46c952d6d2b39d4f4ce51
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 12 14:11:17 2019 -0400
+
+    liaison fix
+
+commit 63dfd0a118a9afc12ba09a4065e52ded0483458e
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 12 14:08:25 2019 -0400
+
+    liaison fix
+
+commit 0bd47eaaafd63d83df8ddd0f7b0ea984dba7a143
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 12 14:03:36 2019 -0400
+
+    liaison fix
+
+commit 34dbdc477dd2ded65e7440171b3019dc6c486aad
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 12 13:04:17 2019 -0400
+
+    BIG update agency portal and forms
+
+commit 40f05fc81d7eade800688a8ca87bfeaff7c286e3
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 15 07:41:09 2019 -0500
+
+    mcso letter head
+
+commit baba5a89fa3e9462188f4bcc42c6ec08918ee555
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jan 9 15:39:44 2019 -0500
+
+    const
+
+commit c46ea5dd9c44f6163ad596274a00689f5263878c
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jan 9 15:37:15 2019 -0500
+
+    reeport
+
+commit 6e5105079de0786d33b2642631ef9a5fb73c5b70
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jan 9 15:32:13 2019 -0500
+
+    reports
+
+commit c087a5c58ab52d1393cc67cc7964bb6507714ca4
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jan 9 15:29:53 2019 -0500
+
+    New report
+
+commit 247d9cd075364f19ea76d57bad6e9e9ebec614b8
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jan 4 12:50:27 2019 -0500
+
+    web exam search for existing on entry
+
+commit d137458b7ab9da8485772f7b57bd06320a1a4f84
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Dec 17 11:01:01 2018 -0500
+
+    no leave date from hire form
+
+commit dce32ae9a877ff5a25cf327537206519d5042136
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Dec 7 09:40:40 2018 -0500
+
+    Preferred list expired status
+
+commit 18c9690616bb1ff6d5d55db6017f8e7690d74681
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Dec 4 16:42:56 2018 -0500
+
+    cert exam selection popup for non agency users
+
+commit 606b627fe9c55c70ac2adf0db87e645b47382051
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Nov 30 11:07:34 2018 -0500
+
+    hide new form nav for now
+
+commit 7d5ab418047233c10450e3ad178dc411e6f7cafd
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Nov 30 11:04:27 2018 -0500
+
+    drivers license class
+
+commit dfec55099496a1bc913f9d73226f5f72491c141f
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Nov 21 12:48:19 2018 -0500
+
+    remove logger stuff
+
+commit bedb99644e7bf358c62e52857b0ef907dc9a3d9a
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Nov 21 12:36:15 2018 -0500
+
+    spelling fix
+
+commit b54586cf05c7127a0e8224413cc9e3caf34c1df3
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Nov 21 12:01:11 2018 -0500
+
+    facesheets in word
+
+commit 36bea17135966708ca2a548b5f803f21fed8003e
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Nov 20 16:59:43 2018 -0500
+
+    color flip
+
+commit 514d57864800ad106fffa1d94fcf182cd39ded9e
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Nov 20 16:19:32 2018 -0500
+
+    https
+
+commit 8d987d8191263e2c50a2eaac198dd5fda08cfdc3
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Nov 20 16:17:00 2018 -0500
+
+    Force SSL
+
+commit 71eb38ded9b5ed0d6a8cdc136ec2c99ebb0462ef
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Nov 20 15:09:22 2018 -0500
+
+    colors for OC3
+
+commit 9ca87cda3c21e5c0df84d7107b85f9fca34d07c8
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Oct 18 16:31:51 2018 -0400
+
+    dont include disabled users in RTF email list
+
+commit 75035e04559bfff44ab07bae7e03d4657b7276e5
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Oct 11 11:54:14 2018 -0400
+
+    alphabetize emails2
+
+commit 973641dfd4d4b0e103086b02f9b27d00cf2eb93d
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Oct 11 11:52:10 2018 -0400
+
+    alphabetize emails
+
+commit aecdce7c1197f470ca2ec8c4673865841720bdce
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Oct 4 14:44:06 2018 -0400
+
+    Filter applicants for bulk letters by not F or R
+
+commit 312624448e67ad54ea1ef2e573959219a25b6088
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Oct 1 10:02:30 2018 -0400
+
+    report tweak font size
+
+commit cb0fc14b92898156bd104e8e3efe55db0e905885
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Sep 27 09:15:09 2018 -0400
+
+    tweak to report
+
+commit 3ccaefe81c48cf6f5e8f79bcf714485ac8de824b
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Sep 21 10:07:56 2018 -0400
+
+    parks letterhead
+
+commit fb9dffd532d01809c4aa4c2648761776b94d8c71
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Sep 18 14:39:24 2018 -0400
+
+    parks letter head
+
+commit f12916a0ab45dfee3b30cb01efff9ec5b950f2b7
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Sep 17 12:05:17 2018 -0400
+
+    dept doc tab
+
+commit 43ee385cbae1bf59214eff63309234e3fe0af027
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Sep 17 12:03:30 2018 -0400
+
+    department documents
+
+commit c677ca0511bf2f511607c3ebacac7221f4cbf0ef
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Sep 10 16:59:49 2018 -0400
+
+    Login notice for tim k
+
+commit ea77db910ba60446394b9bf9a505ea2b2283629a
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Sep 7 13:59:01 2018 -0400
+
+    provisional warning red
+
+commit 998b17527189179b5d96ab253a6f24f652c4591e
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Sep 7 13:23:12 2018 -0400
+
+    warning when cert return date is later than exam expiration date
+
+commit 0db82c5d93b5319254163197475d61abc866e02d
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Sep 7 11:18:56 2018 -0400
+
+    New commission report for elig lists
+
+commit add794a87efb98e87d0bd80dafebe7078ac68f0d
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Aug 30 15:39:19 2018 -0400
+
+    more cert list established warning stuff
+
+commit 1a5130be9ba7d9ab66af414f86600dd295095cbb
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Aug 30 14:52:50 2018 -0400
+
+    Aileen cert exam establish warning
+
+commit ee94501628d855b37b7ce4ca52846b213711a867
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 22 13:50:27 2018 -0400
+
+    added perf test status to export under exams
+
+commit f131433b680cba8c97e75d67658d2c6b45e60795
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 21 15:14:44 2018 -0400
+
+    Added gender to export
+
+commit f84737c5dac23f13d7203c2307b96a935504fe77
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 14 09:43:14 2018 -0400
+
+    browser copy paste warning
+
+commit a5a8511bff1df3e05d1a45b08e8ec57c48fbf3bc
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Aug 10 15:37:50 2018 -0400
+
+    mew report
+
+commit e9e8d5c8cb34beafe9c27b7513df37526645a1e0
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Aug 10 13:11:41 2018 -0400
+
+    New application button on person screen
+
+commit 3f9146b5c1c39e0fed8e6dd8b9cf33f7dd1a480f
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Aug 10 12:36:13 2018 -0400
+
+    report tweak
+
+commit 6119777866ed15c636b085b83f0338e83c9af1d4
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Aug 10 12:34:04 2018 -0400
+
+    New overview report
+
+commit a97420af28428690958adbdfe4dfd37c0a77a569
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Aug 9 10:16:40 2018 -0400
+
+    fix
+
+commit 6d85c1711356c5c4cc8a3db4769c20c30b89e27a
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Aug 9 10:15:31 2018 -0400
+
+    meta tags fix
+
+commit 1dbffed09953dd0d2670ee8dd5a59763a6a6bc9e
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Aug 9 10:11:31 2018 -0400
+
+    add facebook meta tags to layout
+
+commit f893c9109a967914884940edd81c095a527c808a
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Aug 9 10:03:48 2018 -0400
+
+    same
+
+commit 7604b2a8d4ae521065cc91080f66d6face5b40b0
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Aug 9 10:01:24 2018 -0400
+
+    work around for facebook no longer allowing api posts
+
+commit cf3468e0cc18c30b9c69242b146a3bbfec1d3135
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Aug 3 09:37:00 2018 -0400
+
+    ckeditor fix
+
+commit 63bc456d9a44d75f9895e2a1846383f581f1cf2f
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jul 30 12:08:25 2018 -0400
+
+    Joyce no more email
+
+commit ecc941bf0abfae7c222f7bffd6e286c719242240
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 27 15:18:40 2018 -0400
+
+    notice for provisional email
+
+commit 30aec7be650af6ce31179700f2382425b196280e
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jul 23 16:45:25 2018 -0400
+
+    turn params filter back on
+
+commit fea8f2982d2fc00c600d8f26c88fc10cda5df966
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jul 23 09:52:44 2018 -0400
+
+    temporarily turn parameter filtering off
+
+commit e397085cb11db1126081e672ba580eddc347aced
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jul 19 10:26:09 2018 -0400
+
+    Provisional emails
+
+commit 5feef90611e951a04e35379490845d98e6697ef5
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 6 13:47:40 2018 -0400
+
+    rearranged application view screen
+
+commit 85dc2e5432b00889a3dae805bc4ba24d8194106f
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jul 3 09:15:22 2018 -0400
+
+    Better import applicants handling
+
+commit 01b0bc381771de7180ce2cf3a1e916612e666c6e
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jul 2 16:23:39 2018 -0400
+
+    recertification clears notified date, only face sheets report
+
+commit 0b079311087434cbe0fbb4f68fb314fcb9cbde0c
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 29 10:08:44 2018 -0400
+
+    fix
+
+commit 2c7242f0637b3bbad537b9641ac462ff916e39a4
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 29 10:01:54 2018 -0400
+
+    toggle between old agency contact selection letter behavior and new
+
+commit 0f3a331daac03c8fb00a947bd79866db11839722
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 27 15:41:11 2018 -0400
+
+    better contact selection for agency contact letters
+
+commit 0a663c4e0d4f10f3be29daa2a75d816ae58d32a0
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 20 15:51:08 2018 -0400
+
+    Fix nav
+
+commit f373fee72966aa8399796fa622782a3721aa8f4c
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 20 14:30:46 2018 -0400
+
+    inactive toggle
+
+commit bc82ba30331a31fdf9e8590eb217145d2f3ca92f
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jun 19 09:39:04 2018 -0400
+
+    twitter testing
+
+commit 93cd6d4fbf9491ad3ab912ab4d2274d997bd1a19
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 18 15:24:23 2018 -0400
+
+    Joyce retiring changing emails
+
+commit c0016cea8e3b5f581d9e313f48fa7050b6b27c3d
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 18 13:38:57 2018 -0400
+
+    fix
+
+commit e90a9324608799240a2528f039bdeb5170b5001b
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 18 13:35:24 2018 -0400
+
+    num orange and green sheets for exams
+
+commit da5539c66cc364ed4914da553b70ea50a1c3808d
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 18 11:44:37 2018 -0400
+
+    turn on AoA emails
+
+commit bc737c69c6440083a7060136e475a0e1604881cb
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 18 11:42:42 2018 -0400
+
+    better Appointed Other List cert action handling
+
+commit 694de1d0625c1ab479bcf97851c4498442402cf5
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 18 09:33:27 2018 -0400
+
+    clear pop fileds
+
+commit 38a957d7ed63088c808cb9198c7ee4dd8f062bfa
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 15 09:21:07 2018 -0400
+
+    nav and cache buster
+
+commit a587f02f028ff46d0e582cb862ba8ec9ea4a125c
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 8 16:01:54 2018 -0400
+
+    why choose monroe county
+
+commit a24bf113355ffb80323ba5c8ce30feed856d907c
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 8 14:29:55 2018 -0400
+
+    error test
+
+commit 475eb75a4a27639ab69915c3c4b43ffc696b75e9
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 1 15:14:00 2018 -0400
+
+    Recruitment Brochure
+
+commit 310ac6ed56809dbc8cff87b2bb918e1c4fe9c827
+Author: root <root@WebCivilService.(none)>
+Date:   Wed May 30 20:59:05 2018 -0400
+
+    Nicole to aileen emails
+
+commit 302b56c61bfe8bbb13fea72dbff7bba5a7e34acc
+Author: root <root@WebCivilService.(none)>
+Date:   Wed May 30 18:47:46 2018 -0400
+
+    Copy paste documents from applicant fix
+
+commit 4f2a88c6ac32801435076c2cca8fa55c6a1e5214
+Author: root <root@WebCivilService.(none)>
+Date:   Fri May 25 10:29:31 2018 -0400
+
+    Added veterans letter head
+
+commit c80c32fcae84ee36d746917cb4225f9c4eeb74b6
+Author: root <root@WebCivilService.(none)>
+Date:   Tue May 15 16:42:36 2018 -0400
+
+    fix
+
+commit bab326fb066303a6644f1e0cbbec986805b4e392
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Apr 27 17:03:17 2018 -0400
+
+    asdf
+
+commit 74c0431a2138fea53546c26b1fb8252cef4ec05a
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Apr 27 16:27:11 2018 -0400
+
+    asdfasdf
+
+commit 2a1787cd299aab1d43830be03ea792dae952545e
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 25 12:19:03 2018 -0400
+
+    JS fix
+
+commit cdc16a4b7222360efdbad9d62ac23fe375015474
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Apr 13 10:58:11 2018 -0400
+
+    Get rid of asd
+
+commit b0a0325a0cbc19bc4dd94a9b3c12268be8ae02aa
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Feb 28 11:10:03 2018 -0500
+
+    Simple copying letters from bulk letters to documents
+
+commit a81005e0b7c426a76f159b37a22b8bd21a331199
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Feb 14 13:51:53 2018 -0500
+
+    added clean fields to contact export
+
+commit 227d7c11e0fffe6204511f7cbc01cb14dbb088cb
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Feb 14 13:48:25 2018 -0500
+
+    agency contact export
+
+commit 53d1bac6f3f5ba7f59fa3407a7994123a27c3cc3
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Feb 13 17:02:16 2018 -0500
+
+    added provisional letter checkbox, clean contact names
+
+commit 776c5f08a53d4ef60bd618bfd1e303d6fd96b0cf
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Feb 13 15:02:38 2018 -0500
+
+    Agency contact letters addresses
+
+commit 34237080e6f0b15dd637d68b6928b5ba37793f19
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Feb 5 09:56:27 2018 -0500
+
+    Added FTA to eligible list report
+
+commit fbf5ab136fc265897cd7fb2fd0f3c45a37cff708
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Feb 5 09:50:45 2018 -0500
+
+    new report options
+
+commit 3deab5a53bb5a82f617da4d7c5525e1d5241d368
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jan 26 16:55:45 2018 -0500
+
+    RTFV Emails
+
+commit 742b5e3bee6f912ed6ab734b8072b7197b2bf27a
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jan 25 13:48:49 2018 -0500
+
+    fix last commit
+
+commit 241ea4ff6674e60a4418c8001272e0a3ebcaeb1d
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jan 25 13:47:41 2018 -0500
+
+    fix to last commit
+
+commit a4f8e6f26e257d91d8a04d21fb08db5a799f7756
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jan 25 13:31:48 2018 -0500
+
+    Agency contact letters, reorganization of agency and department tabs
+
+commit 727076130d17bd454609b7d7d1868be81857f4f2
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 23 16:20:24 2018 -0500
+
+    Added gender back
+
+commit 15187e8894b85a7153ca3a7306ad60e000fccac8
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 23 12:59:35 2018 -0500
+
+    remove race/gender eeo stuff
+
+commit aa1b20b93e9a7c01874a3a64791e5f1ea5e61528
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jan 19 12:17:13 2018 -0500
+
+    Cert fix
+
+commit 91c5521dde0182c3d467bac2342c3ca796062ef6
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jan 18 12:59:15 2018 -0500
+
+    replace pwd with RAILS_ROOT because of out of memory error
+
+commit ceabfe66ba1bf18d06d08abd5175c8ab1f9baa16
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jan 18 11:07:42 2018 -0500
+
+    exception notice fix
+
+commit 9d23d4c2f95c880694e4e60451599bc909e89d5a
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jan 18 11:03:00 2018 -0500
+
+    fix exception notifier
+
+commit 075686240c6e72d194a07f9fbc1b1b4f3f8bab70
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jan 12 13:22:37 2018 -0500
+
+    Fix for notify cert specialist button
+
+commit 3658a9613135842fa5e0087aafcf3ca2db384914
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jan 10 11:50:06 2018 -0500
+
+    tiebreaker fix for multiple exam instance candidates on continuous lists
+
+commit 21e7e9702dd89b9bd9297b967bf623fbd4d406d0
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Dec 15 11:38:49 2017 -0500
+
+    pass scrub
+
+commit e389c1398492cdc73ec68e929a9ba2ad21e0b2f4
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Dec 8 15:54:09 2017 -0500
+
+    perf test report
+
+commit 6f574351528a4efb82bfd9b1425a434a59f9ba7e
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Nov 29 09:47:19 2017 -0500
+
+    Documents for preferred lists
+
+commit 61b3645e13b5d30104af45698fcf876f032dc592
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Nov 17 10:17:11 2017 -0500
+
+    High security exam text
+
+commit f628b491ef0cc1070ba1814c8f294954a54f2031
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Nov 2 15:49:16 2017 -0400
+
+    survey report fix
+
+commit 984782c0bea56eb89f8d0e58642e689455f40a27
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Nov 2 15:31:56 2017 -0400
+
+    Survey report
+
+commit db9492c86132ba1dd58548468eec948c3de3ff1b
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Nov 1 17:16:51 2017 -0400
+
+    new duplicate emails report and some survey stuff
+
+commit b64a4b848bf555499c20a46f402845e6dd90ea64
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Oct 31 14:19:11 2017 -0400
+
+    employee history actions in current employees report
+
+commit 48108618d8447df565ace992865afcfff34a4f65
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Oct 31 13:45:41 2017 -0400
+
+    Advanced search for web exam applicants list
+
+commit b3b6a3efaba7dc7ba1b2b48ac2ecaa8fbf7fd861
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Oct 30 15:18:24 2017 -0400
+
+    Advanced application search
+
+commit a1323fc5367f0c80d51c0c316fcb85e6656150ff
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Oct 25 09:44:24 2017 -0400
+
+    Fixed bug on scoring screen not saving calculated values because they weren't flagged as changed.
+
+commit 9519038a2e22f24a5b173c5ea71b9e729e3b310d
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Oct 11 15:32:58 2017 -0400
+
+    link change
+
+commit e2cb47f787b0642e7b2d83184834f8511c2700ec
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Oct 4 16:56:53 2017 -0400
+
+    Cache busting
+
+commit 08d009b5be940e2533b5380b2190cf3ef7c2ee58
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Oct 4 16:53:20 2017 -0400
+
+    contacts have department now, added elfinder support to ckeditor
+
+commit 683f3b4a83388d0bc300bac36189a1c10dab0476
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Oct 4 14:57:31 2017 -0400
+
+    Space between candidates on cert view
+
+commit c26c9062d1866e7cab962cc746d188a5366f2fcc
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Oct 3 15:30:03 2017 -0400
+
+    View performance test results on cert list view screen
+
+commit df42be975ea524905359edcaf282fa4a4a37ae3f
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Oct 3 14:01:11 2017 -0400
+
+    Smarter save changes bar for scoring only saves changed data
+
+commit 0df4e38e8b37bfaf875f0a8fb39e0eae59b799d9
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Oct 3 13:33:04 2017 -0400
+
+    Added status field to perf test scoring screen.
+
+commit faec5e3880be09ee7048720d96860b474a9a6b1e
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Sep 26 09:28:34 2017 -0400
+
+    Fix for face sheet report, room names with a dash.
+
+commit 2b43d96e8dd557e2b250ed7ee3b619a516a08611
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Sep 25 13:39:09 2017 -0400
+
+    slight email tweak
+
+commit ccf860c265a4aa26c74a90f66f41ef7663897250
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Sep 25 11:08:41 2017 -0400
+
+    Added fields to cert specialist email
+
+commit e1621253937f8dfec193ce56d7950c1a467b6d52
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Sep 19 10:42:13 2017 -0400
+
+    Formatta login service for public training site fix
+
+commit 7bc45aff4bb58d0f62d2cb9e841f6cc7b6c7b1ff
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Sep 19 10:19:23 2017 -0400
+
+    Fixed cert action dropdown to auto-fill blank cert actions
+
+commit d01a3a6c4e7cc749e32db1702ba020e04fa8f976
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Sep 12 09:52:10 2017 -0400
+
+    linkedIn button
+
+commit ac12cefed4f24d30b45f4d672e3df966772b6ba5
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Sep 1 14:12:32 2017 -0400
+
+    Changed formatta email sender
+
+commit 3dc16b1b9d21f1d93802bc4b8022ae1ff7398409
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Aug 24 15:26:15 2017 -0400
+
+    Make sure division is selected when creating certified list
+
+commit 6587904b257a84753cfb2bcb1f533280c82b2ac3
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Aug 24 15:09:21 2017 -0400
+
+    Divisons for certs, forms
+
+commit 4c6298293f82dfaa8d25283b5de55dca83e15793
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 23 16:19:24 2017 -0400
+
+    let onboarding people add new people records
+
+commit e11907f74a06504cf45b599485d98a6d36e6cedb
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 23 15:43:37 2017 -0400
+
+    Fix for preview
+
+commit 40c7bfa9e99eced9c73fdab2d9d6c80e125aead1
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 23 15:40:48 2017 -0400
+
+    Weird fix for missing space before strong tag
+
+commit ff4f9fb559fd031140da15d71cd032d8c19bfee9
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 8 14:18:55 2017 -0400
+
+    promotional agencies on new exams pdf/email
+
+commit 033b0bba16be5a9415fd6348d4a8c7175c410fa9
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Aug 7 10:55:14 2017 -0400
+
+    DOT Letterhead
+
+commit c583a912c1f1797ee2ca8f606157598f97e5aa22
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jul 31 14:00:50 2017 -0400
+
+    2 new permissions for agency tabs
+
+commit 4c3a588a95946cd891f7500e4c55561c54e69769
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 28 16:19:04 2017 -0400
+
+    people with allow_applicants permission edit people
+
+commit dd8a7b5a57b7bdb0fe0cc43afc2fdac55aa4924c
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 28 14:03:54 2017 -0400
+
+    Personnel areas and divisions tabs
+
+commit d17acbc3239254dbbcd8937ca638c34c90445067
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 14 11:44:42 2017 -0400
+
+    Letter tweaks
+
+commit 8373fe5cbc6b662001a8cb35cc3227937845a1bd
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 14 11:37:18 2017 -0400
+
+    letter tweaks
+
+commit c37ee520494fa15a893371dd721f5ac2dd3e9d01
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 14 11:25:18 2017 -0400
+
+    des letter footer, wkhtmltpdf update
+
+commit 912e060d4f399f8db5d1c91bff0789c489a45234
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jul 6 16:56:14 2017 -0400
+
+    Add send onboarding email/applicants tab permission check box
+
+commit 1e434df086951a2ae34039224445fdf4e06eab0f
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jul 6 15:35:35 2017 -0400
+
+    Changed formatta help contact in email
+
+commit 0b3a6bfe7ab49382631bf65fcae4b455d3e4cf3c
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 29 17:03:31 2017 -0400
+
+    Test Plans for Face Sheet
+
+commit 8cf2d2176baf9558c35f526dac78841f5800139b
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 22 11:35:56 2017 -0400
+
+    added exam review for face sheet
+
+commit 9b71f4c042c1c44c65b49517d85591a3b9df8f07
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 19 12:00:33 2017 -0400
+
+    alt exam date veteran deadline face sheet
+
+commit 37bc1017acd67477f74ab89edeb0e7a6f44ba083
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 19 10:41:33 2017 -0400
+
+    More face sheet stuff
+
+commit eba9c96802eb41d18cac557cb04b1598219bd2e7
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 15 12:04:39 2017 -0400
+
+    face sheet tweaks
+
+commit cfc6f7a1915b6e25cbfa5a7fd611df2e80048c86
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 15 11:58:27 2017 -0400
+
+    More face sheet tweaks
+
+commit 7ba24ce901189ac52c7effa93d7696fce9c4cfcb
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 15 11:15:17 2017 -0400
+
+    face sheet report tweaks
+
+commit 0bbed31e87f5a00d4351b7d60c5648f59803acf2
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 14 15:21:00 2017 -0400
+
+    high security flag
+
+commit 0debd50c796d8c425911745509822a2a17879c70
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 14 13:33:15 2017 -0400
+
+    FIX
+
+commit 9c274ffc94101cf880c452790296ee7260eb6c08
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 14 13:32:05 2017 -0400
+
+    Fix for assign_continuous_recruitment_exam_cron
+
+commit a7fb3fe7d5670f7902c07ec29519bd45762d1584
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jun 13 16:52:33 2017 -0400
+
+    new face sheet for exams/exam sites report
+
+commit 46ccae143d3c299db922476aac2280515b765b79
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 12 10:02:36 2017 -0400
+
+    Exam booklet count spreadsheet on attendance report tab
+
+commit 21f144e41b3d817ed59a8ce4442a3e332a8b767d
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 7 10:18:51 2017 -0400
+
+    added robots meta tag to applicant info to block indexing
+
+commit 1d0f30099046149fbb4e287aabcf6aa086e3c4ef
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 2 10:51:49 2017 -0400
+
+    Highlighting for joyce
+
+commit d93fb5776b45b57fa0514683590f4fe777acd18c
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 1 11:50:02 2017 -0400
+
+    png images for formatta emails
+
+commit 0f10d3a1d0980782b01d185247c4863e902e0615
+Author: root <root@WebCivilService.(none)>
+Date:   Tue May 23 14:58:38 2017 -0400
+
+    Added link to announcement from applications admin
+
+commit b9c28dd6bc53fc0db4793da2f1e6a73e0cad5ff1
+Author: root <root@WebCivilService.(none)>
+Date:   Thu May 18 13:59:22 2017 -0400
+
+    salt for formatta passwords
+
+commit aa6388a81ff2859d2ad44f00b96af84e1d4d2ab7
+Author: root <root@WebCivilService.(none)>
+Date:   Tue May 16 17:11:02 2017 -0400
+
+    onboarding email
+
+commit 4abc2461e79a91292304b16c792649a31c361c0c
+Author: root <root@WebCivilService.(none)>
+Date:   Tue May 16 12:33:05 2017 -0400
+
+    Formatta auth for training
+
+commit a9926cadf73837b710eff0a6320f7029efc97a8a
+Author: root <root@WebCivilService.(none)>
+Date:   Wed May 10 12:39:29 2017 -0400
+
+    Let liaisons make deliveries
+
+commit 224d32ca710b09fb244315191c3b6af032050324
+Author: root <root@WebCivilService.(none)>
+Date:   Wed May 10 09:51:00 2017 -0400
+
+    Added DHS letter format option
+
+commit c0e94ac3e22cd4b0ef09224322cb3fad8c06295c
+Author: root <root@WebCivilService.(none)>
+Date:   Tue May 9 12:54:08 2017 -0400
+
+    Middle name tweaks
+
+commit 2cc60c900014495f5396c91ea8f9eae52721a353
+Author: root <root@WebCivilService.(none)>
+Date:   Tue May 9 10:54:21 2017 -0400
+
+    Added Justificiation Memo to new title forms (222)
+
+commit 235e790fbf6878cb4acd8cf930e925e740f89632
+Author: root <root@WebCivilService.(none)>
+Date:   Tue May 9 09:26:06 2017 -0400
+
+    Fix for cert actions/list notes without a date
+
+commit b97263fcdf96082c53db033e2f84e5ee74d4c2a8
+Author: root <root@WebCivilService.(none)>
+Date:   Mon May 8 09:55:12 2017 -0400
+
+    Added divisions for users and RTFs
+
+commit c67aff45e79398cd5c6d3bb3af282f6faf4533c1
+Author: root <root@WebCivilService.(none)>
+Date:   Fri May 5 12:31:29 2017 -0400
+
+    Added exhausted field
+
+commit ede45e45bc88a9871b39eadd54f0d77eef611924
+Author: root <root@WebCivilService.(none)>
+Date:   Thu May 4 13:39:06 2017 -0400
+
+    another fix for ckeditor
+
+commit 6b99aa721cc8569000e3a3f94510aa07a3bcb3a7
+Author: root <root@WebCivilService.(none)>
+Date:   Thu May 4 13:32:26 2017 -0400
+
+    Image fix to allow style width height in ckeditor
+
+commit 20d9e940311756d06d8c56fceead0f3268c6e1e0
+Author: root <root@WebCivilService.(none)>
+Date:   Mon May 1 16:59:56 2017 -0400
+
+    Added text about letters page to letters email
+
+commit fbfe33399dda6053f8d82c05e7a921a3b9e54b33
+Author: root <root@WebCivilService.(none)>
+Date:   Mon May 1 16:51:11 2017 -0400
+
+    Public letter subjects
+
+commit cf13ceff3a2f8b11d0ad7d8261144ca622b3743e
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Apr 27 17:03:02 2017 -0400
+
+    add middle name to people
+
+commit e856d962af22f310acaa2118ecc50fe6a7d51a9e
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Apr 21 17:00:40 2017 -0400
+
+    Quick fix for letter templates and deliver after
+
+commit fdbcb3c959a74f3bbd49f3f45dd78a4e8ce7c3dd
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Apr 21 16:27:12 2017 -0400
+
+    deliver after on messages lists
+
+commit fa9786f4718ac72887ef2363236025585342ca92
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Apr 21 13:31:12 2017 -0400
+
+    Letters with delayed delivery will show delay date rather than current date in header
+
+commit 8b30fe4fec1d93891bb2632b9919a16cb3aa55b1
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 18 16:29:46 2017 -0400
+
+    Mail fix?
+
+commit d4898020b1a453cb37530071e19fd43f3664cd2c
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 18 14:54:52 2017 -0400
+
+    Added book number to person > view > applications
+
+commit 8f389b8f1cf660467ae8ae836ff6b64bddcf4dd0
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Apr 17 11:01:40 2017 -0400
+
+    session cookie decode fix
+
+commit 0d0c1b7193ef95ca8829424ab18c913939ad2485
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Apr 17 10:22:10 2017 -0400
+
+    changes to public exam/job listing
+
+commit 153117d57f2f0162ee78daed999ce0f655a51b7c
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Apr 14 10:19:04 2017 -0400
+
+    Test Email Change
+
+commit 61cc9887962b5b961968054ceeafc8a91c30894f
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Apr 13 12:48:00 2017 -0400
+
+    fill out personnel area/division fields
+
+commit ebef6f2569b71af11abe0a226014a071fa0fd04e
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 11 12:53:51 2017 -0400
+
+    Added fields
+
+commit 4ad8b3ba43fc254ea8e1ceb60cacaadb1c321f2f
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 5 11:38:24 2017 -0400
+
+    Formatta updates
+
+commit ff898885e36d28e755f836adab834c18dabaed87
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Apr 3 16:47:02 2017 -0400
+
+    Added removed employment field to seasonal applications
+
+commit cc24550c54cc10135366ccb691e6a61b132c0209
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Mar 27 09:23:36 2017 -0400
+
+    Added title to form changes screen
+
+commit 714ffd0809cf74488d2e7c563801f235fb18f40d
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Mar 20 12:11:33 2017 -0400
+
+    Delayed Letters
+
+commit b5ea926bfe62431789138372bd3e0ee04422992d
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Mar 14 14:19:42 2017 -0400
+
+    Change to formatta_id get rid of ambiguous chars
+
+commit ca4a4f81d2f31cc986a1dc898c9625ff63c48f81
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Mar 14 14:12:35 2017 -0400
+
+    Create formatta_ids for people
+
+commit c06db8ce16e32c7e4a483f45c956aed50a8d3e69
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Mar 13 11:50:57 2017 -0400
+
+    Joyce's requested changes to certs
+
+commit 1cc6bb7381b9ea6089a720aa1dd672b4d3b8cd32
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Feb 27 17:15:35 2017 -0500
+
+    Fix bulk exam site assignment
+
+commit 8233a3f57eeb431f04fc44500f2ff3120c12d903
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Feb 23 11:00:13 2017 -0500
+
+    Added documents to agencies.
+
+commit 4bbf2400962c938de68db634a91ac9564baaede6
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Feb 22 15:38:03 2017 -0500
+
+    report tweak
+
+commit 65aedfd590ddb11e60f1d050caaf5e338331629f
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Feb 21 16:42:04 2017 -0500
+
+    New annual report option
+
+commit e4181324b980b98fedfa5d6a09a0644bf038d9c0
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Feb 17 15:47:28 2017 -0500
+
+    Fleshed out agency export
+
+commit c4fe8ce6c2274f5dc0f3141a2f11c572b0a161fb
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Feb 15 11:44:21 2017 -0500
+
+    Added RESTRICTED label to cert view screen (was on print)
+
+commit 37a50ffad2e5dade56a41231299da1d62d3b485f
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Feb 15 11:27:34 2017 -0500
+
+    Added DES letterhead
+
+commit 05bd1936e87fc4e1279071313395d223fdac17fb
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Feb 13 17:13:59 2017 -0500
+
+    nav change
+
+commit cbc033a93e37778f2799cb31431690643738af6f
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Feb 13 16:41:51 2017 -0500
+
+    change on form_change
+
+commit 6e2739fc3ef87048d15026c4aeafd39c0f654ccd
+Author: root <root@WebCivilService.(none)>
+Date:   Sun Feb 5 16:02:17 2017 -0500
+
+    Fixed error requiring cr_group on exam create
+
+commit 410626ebc5d8fa8754b9dedc0a3734a6935439c9
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jan 20 16:51:01 2017 -0500
+
+    Changed how jobs select lists operate so they reflect current/prior employed
+
+commit b81e084a50847379e2e43d0796eab7bd864e3e3f
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jan 20 14:54:52 2017 -0500
+
+    Update to certification workflow emails
+
+commit f311629d85f08902c0ba11d737256412b0c914c2
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jan 20 13:32:58 2017 -0500
+
+    Added title note to report
+
+commit d3ca10414778fcd8bb69d30aa61f53d9dea13c30
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 17 12:16:16 2017 -0500
+
+    new user permission to get vacancy emails for their agency/dept
+
+commit 7391759498c69983ddc53711afd426dc086e8aef
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 10 16:00:29 2017 -0500
+
+    dept on user pages
+
+commit dd45b4ee09fb8d79742177c938aa830ac749b154
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 10 15:00:51 2017 -0500
+
+    Veterans credit note on cert lists
+
+commit 05370c3f349089353651707a7d553587f412b8a3
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 10 13:32:08 2017 -0500
+
+    Added out of county info to import applicants cert screen
+
+commit 07e9f3c21265a515e4a53d5b13fb701af1e3b890
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 10 13:11:30 2017 -0500
+
+    Added a button in completed phases of cert to notify cert specialist (Joyce)
+
+commit 5a6b5e4c06e802a57623f19ce3bef7def520940c
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jan 9 15:53:44 2017 -0500
+
+    Wording change for Brayton
+
+commit 939037f539e5466037394017a0d105ababb7f3c6
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jan 9 09:41:52 2017 -0500
+
+    Fixes to vacancy data import
+
+commit cb4995a441ba08e4efa3f134c7dcf97242e9b2e8
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Dec 19 11:31:42 2016 -0500
+
+    show perf test status on person view page
+
+commit df8d94ad139c50f252b6fe4ab66ae9d38943e9a1
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Dec 8 13:46:29 2016 -0500
+
+    Tweak to provisional change email
+
+commit 8b72e158565819d0e0104800a40488d8471f1b6d
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Dec 8 12:34:49 2016 -0500
+
+    Fix provisional separation email, certifications list - Tickets
+
+commit 6abe1789f2de0d3e0813b2b5e46b0e18dab28647
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Dec 1 12:36:02 2016 -0500
+
+    Fix bug where setting status on 105 form wouldnt work because validation failed
+
+commit d2d057e25ff74a550bdf00eec1f4a1c6ef708b8d
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Nov 28 11:43:24 2016 -0500
+
+    105 form separation REASON populated into empl action selection.
+
+commit b28675b7b3cd615dfc629ca6705d192376340716
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Nov 28 11:34:39 2016 -0500
+
+    bug fix last commit
+
+commit 168be4beaa5f228e063bc4c7d022b96bcf186b0e
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Nov 28 09:38:26 2016 -0500
+
+    auto populate employee action data from employee change form
+
+commit 76c076ed8abf23593e28933c6a5d8e2bb15182a5
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Nov 23 12:20:49 2016 -0500
+
+    Job time to form change promotions and title changes
+
+commit 7df833252585fa32f0488d41bc0a661b816a4726
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Nov 23 11:37:10 2016 -0500
+
+    Propogate new job title from change from through employee actions
+
+commit 77b9db241e75e5b92eed6592c7c3325eb6c0e407
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Nov 15 11:43:29 2016 -0500
+
+    change  to employee delete tabs
+
+commit 3f434e77d50c75aada3ee397136fbbaf65a79c32
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Nov 10 10:29:03 2016 -0500
+
+    overdue certs can now be completed by agency
+
+commit 1c948f2fa20b364495cdb9af83da3fc946161b6c
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Nov 3 09:33:13 2016 -0400
+
+    Fix vacancy data cron
+
+commit 681a21b4df09627164c7b9efa636764f5f37bcf1
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Oct 19 11:26:24 2016 -0400
+
+    Order depts by name in vacancy filter.
+
+commit b0aca7b27d417bbf7afec723264a846ec1c3e892
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Oct 12 16:24:11 2016 -0400
+
+    New 'withdrawn' status for form_title
+
+commit f940f6a8772a7f66d1e4929323b45b19fd09a04b
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Oct 12 13:48:47 2016 -0400
+
+    Test
+
+commit acb72b5c4593b6cc9ca6c0b30adf6b589868f3b8
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Oct 12 13:40:36 2016 -0400
+
+    merge fix?
+
+commit 64f297c9becafaccdfdd8b8eda32392010516a3e
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Oct 11 15:03:50 2016 -0400
+
+    New cron job for email when person is appointed of a certified list so is set to appointed-at-other-agency for all other certs.
+
+commit b208d54bddee5f249791e320c709eb1671f5ce2b
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Oct 3 12:37:48 2016 -0400
+
+    applicant appointed emails from generic address
+
+commit 39d096b84351a366e0fe513063589b2f3087ed49
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Oct 3 12:21:20 2016 -0400
+
+    Fix for other cert notifications when a blank cert_code is chosen
+
+commit c224d8282ce3e0bb0aa11b61d778c689bd5b3b11
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Sep 29 14:44:25 2016 -0400
+
+    Get rid of additional info field
+
+commit f758b4ca50f2f70e72d07f78fb3fb2369cb9f74d
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Sep 29 11:56:27 2016 -0400
+
+    Showing some legacy PSTek data that was never imported properly??
+
+commit 74807cae0838b1d5985ffb7e77099360c536fc03
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Sep 14 16:34:45 2016 -0400
+
+    When cert codes unavailable to agencies are assigned to certified list candidates the candidate actions are no longer editable by agencies.
+
+commit ba51495345382d8fe2c1c08a8eaf4247589afbd9
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Sep 14 12:01:18 2016 -0400
+
+    New Hire form to new employee record field transfer fixes.
+
+commit 58e50f4fbf37cd9cbc369cc5406ae1f69c005848
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Sep 14 11:45:37 2016 -0400
+
+    form_title and form_change fields transfer to employee history items fields better. Fix spelling mistake in email.
+
+commit d08097e2d261ca2e2f7558c73ea8f092ad37016b
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Sep 12 15:33:14 2016 -0400
+
+    approve all for web exams now sets status to active
+
+commit 8e5afe9401f0d8f08eecb235d9c84c45d3b96cf7
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Sep 12 13:50:13 2016 -0400
+
+    Approve All button for web posts. Notify agencies when a candidate is hired and they have an open cert with that candidate (for the same list)
+
+commit 343dc077b22065bd30f99edc6d257dcaa02bd941
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Sep 7 12:31:43 2016 -0400
+
+    added approval no to vacancy search
+
+commit 5086848b20fd0bc26cea00a330603c41f0876763
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Sep 2 16:05:03 2016 -0400
+
+    Retirement no updates from payroll cert page
+
+commit 0f7d263864d8340ee1653d47ef98027df4a87d1b
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 24 17:27:04 2016 -0400
+
+    Web posts on person view > applications list
+
+commit e3d2df0791c391e3767aa9f2432ea8d0549ad338
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 17 09:47:47 2016 -0400
+
+    Fix URLS
+
+commit 904fc5f38d0aace2874f5cdbc78a68d9acf85788
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 17 09:42:36 2016 -0400
+
+    temp change to error emails
+
+commit 5ae4ec1510a5a9b186dd0f46aa046e12a24172ce
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 16 15:37:16 2016 -0400
+
+    Fixed long text in required license/certificate
+
+commit 3b301f7b0993801819de91dbe789b04fa48c9ff9
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Aug 5 16:37:01 2016 -0400
+
+    Status change now includes classification change.
+
+commit 35757d99319b4a7938d9d4c97bd3e4d408b91280
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Aug 4 17:08:19 2016 -0400
+
+    Sync provisional checkboxes on empl change forms
+
+commit e6d2cf66086291fb89b2003a879fb3ed49bbf425
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 3 09:51:54 2016 -0400
+
+    Date of birth passed through hire form to new employee
+
+commit 57fd5ad54931bcf8bed374c864a60917fb269f0d
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Aug 1 09:52:04 2016 -0400
+
+    Notice for approvals of 105 form separations that are provisional.
+
+commit e098f361fc4757d85b14a239ffbc2e03d8996f3b
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 29 16:41:42 2016 -0400
+
+    More statuses on 222 filter
+
+commit 514ea88f8e4286ee24686ee69a765c973987b375
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 29 16:34:56 2016 -0400
+
+    Status filter for 222 forms
+
+commit 190df28ba555b0829e0b7d8a5fa9748627f150de
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 29 14:05:57 2016 -0400
+
+    Status search/sort on applications tab
+
+commit 0912affc0c910d5b6782fce3805c4128f2f7fa07
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 29 12:01:18 2016 -0400
+
+    CR Groups for different continuous exams with same title and type
+
+commit 38ba0081fd675f068c9dba24cd225f9113771c46
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jul 28 16:39:31 2016 -0400
+
+    Dept and Agency pages searchable and sortable by HR liaison and omb liaison
+
+commit 7c7bc36630e44f00718adea9a32f8ac9dbfca533
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jul 21 11:34:03 2016 -0400
+
+    Status filter to web_exams > applicants
+
+commit 7057cc6fafcf3dfa0ae8726d705bac8eebb0becb
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jul 14 16:10:59 2016 -0400
+
+    Fixed document link
+
+commit 0ae47f6599ee422c066bd49669a3f88f5e7cbc50
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jul 14 11:02:42 2016 -0400
+
+    330 Forms SSN Format
+
+commit 74442d942e4125f0c235daa3c9467c07850650a9
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jul 11 14:52:22 2016 -0400
+
+    Use last tiebreaker not first for CR
+
+commit ca849cd67ea9aca50caa32fe80844fb628493cf9
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jul 11 14:30:03 2016 -0400
+
+    Reuse tiebreakers for CR exams
+
+commit 65ecc425b8b2ae4e0775dfc5f10bc10555fca642
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jul 11 11:57:09 2016 -0400
+
+    Remove residency from import applicants
+
+commit 772cadc2dfa6bf1faa435a1610c84d4437373135
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jul 11 11:41:22 2016 -0400
+
+    Tweak to last change...
+
+commit ddb6dee3373daabfa397cd0763489fecfbc8bbf0
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jul 11 10:31:08 2016 -0400
+
+    Added valid until field to import cert applicants.
+
+commit db89fda3f15de9c31dbb563d5432f9fb6cd7359f
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jul 11 10:02:40 2016 -0400
+
+    Certified List changes to where notes/comments displayed.
+
+commit 3108f03aae3961fcbe953ab9659ab5d09fc4071a
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jul 6 09:41:29 2016 -0400
+
+    Added recipient to an email
+
+commit 2516c2d16e987bc1bad4365d00d53a204b93b8fb
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 29 12:04:43 2016 -0400
+
+    Liaisons get vacancy executive decision emails
+
+commit 2003bc3633d6feb5fd4b1f6b593372faf14cf794
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 13 11:58:05 2016 -0400
+
+    Cleared fields for recert
+
+commit 14f9bf13e90757d4ed18d88236452374ae5ba73a
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 10 14:30:03 2016 -0400
+
+    Stop residency lookup from blowing up on null zip.
+
+commit 44296a30ce66c248b35db6a458fdb63a48cf9f4e
+Author: root <root@WebCivilService.(none)>
+Date:   Thu May 19 11:44:23 2016 -0400
+
+    Starting point for recertifications
+
+commit 8f64c37a8e5dad243aaf92af527c0371ba29ab58
+Author: root <root@WebCivilService.(none)>
+Date:   Thu May 19 10:52:33 2016 -0400
+
+    Added restricted to public list viewing
+
+commit c5d54b75c400d8e653653304036309c0a10f41e6
+Author: root <root@WebCivilService.(none)>
+Date:   Thu May 19 10:21:04 2016 -0400
+
+    Change to how pending certified list emails go out when lists established.
+
+commit 7e752e7b58b2333d90e0b2101dbab867b92ceb64
+Author: root <root@WebCivilService.(none)>
+Date:   Mon May 16 13:23:29 2016 -0400
+
+    Added position # to vacancy report
+
+commit 2cb514bb95f3d59d32db20bc81b137cf21c30bfb
+Author: root <root@WebCivilService.(none)>
+Date:   Wed May 11 12:24:35 2016 -0400
+
+    Added email notification for pending certs when list established, Ticket G59A515989
+
+commit 3fdcf56217467539c22fa16b112424483f5dc99a
+Author: root <root@WebCivilService.(none)>
+Date:   Wed May 11 11:45:05 2016 -0400
+
+    Change grouping of exam/exam sites report, Ticket G5AB13244A
+
+commit 4a5cb94bc6e1f8498791d24f22713101f6269173
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Apr 28 12:07:57 2016 -0400
+
+    Removed 'Dear Candidate' from emails, hopefully helping SPAM score.
+
+commit c23d1df7461e746e844735ff0c96176354126f01
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Apr 28 12:06:40 2016 -0400
+
+    Allow lowercase email fields
+
+commit ed02e313e7c3bd4f28810fad725d15b8249fb5c8
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 27 13:48:57 2016 -0400
+
+    Quick fix
+
+commit 19420917fde84b927f6a93f55f674c6bc79e7cef
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 26 16:50:19 2016 -0400
+
+    One more fix.
+
+commit 41a5b30d1c8c763072b2cc4dac8d5277614fc719
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 26 16:45:43 2016 -0400
+
+    One more fix
+
+commit ad2f8a0e511befb30ffcac07face5630794cad36
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 26 16:41:07 2016 -0400
+
+    Forgot some files...
+
+commit d71dcebb65bf56d1d695c0706f001e0e0eb5c604
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 26 16:39:24 2016 -0400
+
+    Added account recovery option\!
+
+commit be1dfdbd281f40e03b2f5d5242909777e29741ad
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 26 13:25:16 2016 -0400
+
+    Change hooks for vacancies
+
+commit a18fdbcb4f184bb185df1112c26407e259aca36c
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 20 12:14:00 2016 -0400
+
+    Limit SAP Data Vacancy AutoComplete to Department/Agency
+
+commit be903d484d2cc96e88a637c91e55ddf0255cb200
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 19 17:37:21 2016 -0400
+
+    Vacancy fields help text
+
+commit 743380e23c2bf76ae4e8cda9556951f05ec858f3
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 19 11:09:31 2016 -0400
+
+    Changes to date filter.
+
+commit 46561cfdcdae88164e759bb7c290c8fac69bbd0c
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Apr 15 10:24:16 2016 -0400
+
+    changes to default emails
+
+commit ff3f6e6a64e90a2bfb2738542a070c12f9d69578
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Apr 15 09:22:10 2016 -0400
+
+    Changed meeting sort for vacancies
+
+commit 5ebec9356dca893644a86371723ade1679bbde83
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 13 13:06:42 2016 -0400
+
+    Slight tweak to OMB waiting for vacancies
+
+commit 9550d0ef8d0b74506268094d2f4e9ecd6ddeafdc
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Apr 8 14:11:54 2016 -0400
+
+    Applicants for CR Web posts will be auto-imported into exams
+
+commit 37b4fb0d5273268405c5a41e4c3c9105b7bc83c7
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Apr 8 11:38:58 2016 -0400
+
+    Custom email error handling - log those errors\!
+
+commit 31cfba5e99016a92cd23c0a78ad638aee517b4e0
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Apr 7 12:07:59 2016 -0400
+
+    Change to complete/expired status
+
+commit 501c7e107cd505559497d22ba351435829e7f503
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 5 16:47:10 2016 -0400
+
+    Scoring filter on bulk letters
+
+commit 1b0e260a478423ef557eae6d9117185d2fa7cc1f
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 5 14:04:02 2016 -0400
+
+    Applicant user vars are no longer uppercased.
+
+commit 57ce33a4e9c0b2136b3599a9356cd8367e3e79f0
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 5 11:51:26 2016 -0400
+
+    Moved approval used date/candidate hired to place agencys can see it when they view filled request to fill vacancy
+
+commit ea4bb9b4cc40c55a97567153602d533cf3a39aad
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Apr 4 15:10:47 2016 -0400
+
+    Filter sort tweak
+
+commit 6099ec7fd8c22a43357281074066d53d9b324fe2
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Apr 4 15:04:20 2016 -0400
+
+    Sort change
+
+commit 8a87a3ca88e90277557efe57ae16fa3adcf6643f
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Apr 4 14:18:29 2016 -0400
+
+    Layout fix.
+
+commit c57d8653d0684fcbd980f17a01e43d8af3a3f445
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 31 13:43:01 2016 -0400
+
+    VacancyData cron
+
+commit f00e82f4f090a2e9f16caf629d69d703ab6c923a
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Mar 25 16:48:12 2016 -0400
+
+    Export to Exam > Scoring tabs
+
+commit c37ec53847be2c5436788451774a96630d5ed191
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Mar 25 14:52:54 2016 -0400
+
+    Fix for performance test history on scoring screen
+
+commit 99487ddbda4ab42cab600fc092f2ee6baaaa8dbb
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Mar 25 13:00:19 2016 -0400
+
+    Added DOB back to application even if it is not required.
+
+commit 20f47dcc633191cd35465084a7084b97d58aaafe
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 24 14:39:32 2016 -0400
+
+    Sort options in scoring pages
+
+commit de28fd59fdf01c5ac1de37b2d0d42b032358033f
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 24 09:46:50 2016 -0400
+
+    Vacancy MTG report tweak
+
+commit fbfaf8306026072dd3d3bfa6d14a05062d644449
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Mar 23 23:16:36 2016 -0400
+
+    Hidden filter button for hitting return on search field fix
+
+commit cbdc9c853680ba35a3f8cfb0abbd5bf3004d50e7
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Mar 21 09:19:29 2016 -0400
+
+    Fixed vacancy filter submit on return
+
+commit b0224446e1cff6b1b3998d9b053621886c8262b6
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Mar 18 14:13:13 2016 -0400
+
+    Request to fill vacancies update
+
+commit 38f7d3dac68a7a90d50c326d8ca3fdb878ed6267
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Mar 14 13:12:11 2016 -0400
+
+    Quick fix for Agency.get_users - people were being emailed when they shouldn't
+
+commit 4655ed643bef2a8ed1cf6a92937833713123105c
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 10 15:02:24 2016 -0500
+
+    Added new user permission + omb liaisons
+
+commit 7ea9d7ce0d7a8516c675791591b04523ac0b2619
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 10 11:49:22 2016 -0500
+
+    Added veteran notes field
+
+commit c9b433bd83c58270a35cba6d34f3d0c27189f3ed
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Mar 9 14:25:39 2016 -0500
+
+    Added race to exam/list > Applicants export
+
+commit 52bf81741e5062272834683c13e98f95b6fda7c1
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Mar 8 16:56:53 2016 -0500
+
+    Race added to cert export
+
+commit d645f17ab09ac95b0b2e32da092f417eec4a0f31
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Mar 7 12:13:58 2016 -0500
+
+    Fixed waiver field on web import
+
+commit e5275fbadf112eecaf6ce526fb083794e9e391b6
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Mar 2 18:09:20 2016 -0500
+
+    Fix to application attachments when viewing from web exam as view-only
+
+commit fb239495bb7209cec029e21ee88df50402073efa
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Feb 18 09:50:49 2016 -0500
+
+    Added fields to certified list export
+
+commit dc9ddcc2b48ec205916891ddb05afb3a09c8a9f3
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Feb 17 15:27:47 2016 -0500
+
+    top texts, changes to pref list & web post agency access, start of req to fill vacancy stuff.
+
+commit 4c3e31c62888200a6514f75e8bede9b8842abc73
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Feb 10 13:48:38 2016 -0500
+
+    Added X-UA-Compatible IE meta tag (edge)
+
+commit fe0b579c30fab9ffeb23348c0f4c8cccb4c00573
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Feb 8 17:11:22 2016 -0500
+
+    Fixed braytons name in exam pdf
+
+commit b91c16953a6a395b709a96deb3ff40be6faa9559
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Feb 1 09:14:56 2016 -0500
+
+    Removed promotional message from public elig lists view
+
+commit de6c34f8df4bb0a417de1fbe1d3b7e720e4102da
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jan 28 16:47:41 2016 -0500
+
+    Change to how sort_by_department works
+
+commit ea0690a85aa4bf88c4e7c6d092c966ae1cb2ceeb
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 26 13:13:32 2016 -0500
+
+    New filter for performace test codes
+
+commit 1f1b097cc4d8f34d6d31f998ae6ebe3972bae84b
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 26 09:33:49 2016 -0500
+
+    Optimize query on employee page
+
+commit 465c77147858c998e531ccfe28576ca26d685653
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jan 22 15:12:52 2016 -0500
+
+    New total on attendance report
+
+commit 6859440228a27bf0886189386ece224bd255a400
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 19 15:37:06 2016 -0500
+
+    Search placeholder
+
+commit 9640b02327492246e54dda39b611cb5772c4eca4
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 19 15:34:05 2016 -0500
+
+    New left logo ads
+
+commit 224d6c27307119582dd69e1c0ed2385e7b748b95
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 19 10:37:30 2016 -0500
+
+    Payroll certification wage changes: skip employee when previous action cant be found.
+
+commit 3e8cff4c602e75b92420faded3347846e903f689
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 12 14:11:02 2016 -0500
+
+    FIxed demographics report
+
+commit 1ccd85ce7cb799248168b2508cfce36157afc84b
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jan 7 12:40:15 2016 -0500
+
+    Update to reports
+
+commit d7fd6eb41d62cf3d94b9e8d41ff26bdce83c4436
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jan 5 14:45:43 2016 -0500
+
+    Cheryl Dinolfo
+
+commit 1f0a8ab6b900e35f614f874777c1dc1462a7b81e
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jan 4 16:33:29 2016 -0500
+
+    Fixed applicant veterans enlisted_to field in edit form
+
+commit 0620975df6797a4713f9a2d4edc020da96ec16ac
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Dec 24 10:30:36 2015 -0500
+
+    Can now copy letter PDFs into documents tabs
+
+commit e02f7d5f2d509e6220add813696dce07b16b5b01
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Dec 23 16:35:16 2015 -0500
+
+    Cross filing exams shows up now even if web application not present.
+
+commit 9604b7eb5e31de972f3843799f7a14668d8d6fd2
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Dec 17 11:42:57 2015 -0500
+
+    Fixed date word wrap on printing eligible lists
+
+commit 3c792a537a1858391e750c85100af87dbeb2d618
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Dec 11 16:51:06 2015 -0500
+
+    Sort on web_exams>Applicants by disapproved/approved
+
+commit 7b2bd62ee4d728523f7505e430c73d4b36d94d5d
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Dec 9 12:37:38 2015 -0500
+
+    Added notes to exam sites
+
+commit 0f9b3a4eb7637433eaa98bc0d7fa82fe3d26c0a1
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Dec 3 09:25:17 2015 -0500
+
+    Fixed drug testing field
+
+commit 4b92734a4fb6560d53f269917c4a0771c95eda9d
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Nov 24 10:36:25 2015 -0500
+
+    Last commit missed file...
+
+commit 7e6819f36185b9b583ff691e5bac0c06eb5e9798
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Nov 24 10:34:43 2015 -0500
+
+    Copying Documents
+
+commit 6250076b02779ec459ebe2df5438d6c34b3fc1ab
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Nov 23 16:54:48 2015 -0500
+
+    Changed EEO categories
+
+commit 79947f3021c24e79ef2afc440932428cf38fcdf3
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Nov 23 14:42:16 2015 -0500
+
+    Admin can now edit cross_filing_exams text and it shows up in reports.
+
+commit 0da7d2a9f141efa20fd6781b5095f674403dfb28
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Nov 23 14:22:23 2015 -0500
+
+    Importing web exams will put all crossfiling exams into cross_filing_exams field
+
+commit ce3caf6beead93123d924da9cb7fe77034b3c264
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Nov 23 10:49:18 2015 -0500
+
+    EXCEL Option for Cross Filing Report
+
+commit 887b22336a9c494b22d32194edbd91d130ecf741
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Oct 15 14:38:45 2015 -0400
+
+    Changed who received 'notify agency' emails when the agency is MONROE COUNTY
+
+commit ef58c4b16feeb8f350757d0c10bbfc54685bd95a
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Oct 15 10:57:37 2015 -0400
+
+    Added sort/search options to provisionals tab
+
+commit bdfdac40acf311c60aafc15d6c18235d3c30ede1
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Oct 2 10:08:21 2015 -0400
+
+    Tweaks to previewing new exam emails
+
+commit ef82c8a03f554f9a2c219fd61127faf52a23e83c
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Oct 1 15:48:28 2015 -0400
+
+    Performance test report template file
+
+commit ebf46f1565dbf39bed885dbca8e657121fa5f0b1
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Oct 1 15:43:39 2015 -0400
+
+    Added performance test report.
+
+commit f6012faf46606f87d86781060b6ffd87a3ae7442
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Sep 28 14:51:14 2015 -0400
+
+    Special accommodations report
+
+commit 44cf57fae78cfa7e187a2805d2e26e06a50651dd
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Sep 25 10:38:50 2015 -0400
+
+    Fixed one report option from previous commit
+
+commit 9e0f12f8a64e72fe13c41c4d32baced2f26c2ed3
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Sep 25 09:33:00 2015 -0400
+
+    attendance/statistics report - new option - only show applicants with alternate exam date.
+
+commit 12520fc9f47b218cea2b85f25cce99d60c7ff480
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Sep 16 15:45:55 2015 -0400
+
+    Fixed form_titles created_at filter
+
+commit 7868d3777c86dc7527710a1320311a7c6ccb93bc
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Sep 11 12:20:06 2015 -0400
+
+    For agency users, checks date entered for certified list aciton dates agains cert date and return date
+
+commit a628273faeb15be0526cc27c82c959c86b7ef634
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Sep 11 11:24:39 2015 -0400
+
+    Added age-at-exam-date to applicants/_view.rhtml
+
+commit 1c692d5c181ae7b396c762273c947d8b8259b7a7
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Sep 1 16:13:01 2015 -0400
+
+    Fixing seniority date calcs
+
+commit 03d9b7d67901d5fe050ffd35641421570e5b4887
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Aug 31 11:47:47 2015 -0400
+
+    Added log link for cert_applicants
+
+commit 45d8b2c45a02cf8f8bd04577155f842b2e88ca21
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 26 10:54:05 2015 -0400
+
+    Fix for mismatch report, wasn't showing full address
+
+commit 9ff5e48456ab356c1c2636830af0bc3a68cf77e5
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 26 10:12:36 2015 -0400
+
+    One more fix...
+
+commit d005c9dfcf07299378ac63db0fc4fa2386801927
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 26 10:09:47 2015 -0400
+
+    One more fix...
+
+commit a092418d46763ecdfa8072c42a847344fa46590e
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 26 10:07:05 2015 -0400
+
+    One more fix...
+
+commit 43bc9d944bb41f78aa030c6a52ea6196675a7f4e
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 26 10:02:40 2015 -0400
+
+    Final tweaks to 222 form (hopefully)
+
+commit 433cd89864cced89867215d6575c73a8a2ad3eb8
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 25 14:43:06 2015 -0400
+
+    Quick fix...
+
+commit 1a695ccc81729683e98c06690a3f598db2623ffe
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 25 14:41:21 2015 -0400
+
+    Added employee/applicant mismatch report
+
+commit 15a33d9d79ea34657d0cea030ca9aa5ca63ac870
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 25 12:18:32 2015 -0400
+
+    Removed 222 form dev. message, added seniority points field to application view screen and scoring screen.
+
+commit 1a92e016988b20f74f0e0c054968d071ac318bb2
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 25 09:55:24 2015 -0400
+
+    Last 222 Changes
+
+commit 715c5159e9fc3266ac0816316ddd3a73dbcbe691
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 25 09:10:32 2015 -0400
+
+    Reverted provisional report per Nicole's request
+
+commit a02533f6d405df3314ab02153e6959b168e87668
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Aug 24 16:00:09 2015 -0400
+
+    Added search tip on Agencies > Titles
+
+commit d3d40db68b48b7405cb0f91d6773d89c31bf343e
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Aug 24 15:47:19 2015 -0400
+
+    Added notes field to provisionals
+
+commit 56be24096bfaeca8b18ff3b9f2391622c5dbb466
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Aug 24 12:35:42 2015 -0400
+
+    Added DB Change hooks to contact model
+
+commit d9b9907ba348b87881711e6f0c9b155f92a51c73
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Aug 20 12:13:29 2015 -0400
+
+    Tweaks to the 222 form.
+
+commit 5d81fd2835648d28a85ce5cd61ff501239ce2695
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 19 11:01:35 2015 -0400
+
+    Liaison can now see buttons in cert when status is 'requested'
+
+commit 65e836be7c8985c0228ab1e0d9c5cc1170d0d78d
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Aug 19 09:26:43 2015 -0400
+
+    Reverted new email/notice stuff, left it visible for user isadmin.
+
+commit 131c91f98cbc49800a07b16c241322ab987bcb29
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 18 15:43:33 2015 -0400
+
+    Changed provisional overview screen from P/F to Illegal (column)
+
+commit 7e81d613a187ec32305d6b24533bca5b8623a605
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 18 12:36:55 2015 -0400
+
+    Fixed Messaging button so everyone can see it...
+
+commit 09b71d3abf7586538af5d7a54d1955a93662765e
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 18 09:35:43 2015 -0400
+
+    Changed the provisional pass/fail dropdown
+
+commit 623c900ce28db6d756557375f6941ce5235b4df4
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Aug 17 13:30:46 2015 -0400
+
+    New approval/disapproval/messsage system for cert lists.
+
+commit 3c0e5292b1bf84aeab235ee39cceebfb92200f69
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Aug 14 15:26:48 2015 -0400
+
+    Added alternate exam date to attendance report
+
+commit df8d8783ac32dd66e172684ae32dec10ceecdf2d
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Aug 7 15:09:51 2015 -0400
+
+    Quick Fix to save new error handling in TableFormBuilder
+
+commit e23b587389e2d5b1cd23e82bdb0d8cfe08ba841d
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Aug 7 14:31:08 2015 -0400
+
+    SSN Merge ignores bad SSNs, preferred list can be sorted by status, changed certified list required fields.
+
+commit e48b600cdaf6c2eca6487cf59086748f3e428555
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Aug 4 16:33:40 2015 -0400
+
+    Fixed bandscoring so it will work for scores over 100
+
+commit 79e079f7183b179744734e4a1e7a0f2e7f64c824
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 31 15:55:09 2015 -0400
+
+    Fixed navigation when web_exam is super-controller (:sc = web_exam)
+
+commit 556a437d2c268db2569a69b42faf059428bce75f
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jul 27 14:20:08 2015 -0400
+
+    Give form_title controller same tab access as other form_ controllers
+
+commit a9af2be4e78894765a2116e1ee53b00ab2876d31
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 24 09:31:17 2015 -0400
+
+    Fix title form search
+
+commit 43dd97853aa21739d09f79ad2bde16cee1e64afa
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jul 22 16:31:23 2015 -0400
+
+    Fixed issue where links in popups could be clicked to select the wrong record type by browsing away from the controller.
+
+commit faf3bcf362db905d914841da560fffdc49758ae8
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jul 22 16:00:11 2015 -0400
+
+    Liaisons can change cert response actions.
+
+commit e6e010f0d76b1de6bc3c5e5d87d85c3221fca104
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jul 22 11:28:54 2015 -0400
+
+    Fix navigation in Exams > Provisionals > Documents > View.
+
+commit 6c3eb218303725e7c6a8745b8719166dbff1944d
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jul 21 16:48:14 2015 -0400
+
+    Hidden 222 Form agency and department dropdowns for agency users.
+
+commit ee60e734babf2c74e650316b0d2552a5d62089b6
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jul 21 16:42:53 2015 -0400
+
+    Moved development message for 222 forms...
+
+commit 4f756f7996c7f93a45f529062c3f050058615c64
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jul 21 16:40:54 2015 -0400
+
+    Enabled 222 Forms in production, but with an 'under construction' message, so HR can test it out in the produciton environment.
+
+commit c209819b69f953e9c829df2efde94a11fbc97f65
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jul 21 16:33:34 2015 -0400
+
+    Finished printable version of 222 form. Provisionals have document attachments. Liaisons can edit agency info.
+
+commit 7641f0ac2e9a2a5383ac32755f10fd9d1860f72b
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jul 16 17:10:27 2015 -0400
+
+    Fix blank page appearing on exam notice email PDFs
+
+commit d90fbfdc8f0528ea9ca3bc73c9d248c93896b4de
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jul 10 16:08:03 2015 -0400
+
+    Cert select popup no longer limited to just status=certified
+
+commit cd04e853bcd683468184835d85f9127f2f6d3989
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jul 9 10:21:04 2015 -0400
+
+    Changed VET INFO text on scoring screen to better indicate the veteran info is coming from the applicaiton, not the person (blue text comes from person).
+
+commit 27e059a59fafb32545510d5387d2f36fedd12496
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jul 8 15:49:01 2015 -0400
+
+    Limited job options in employee filter and reports filter.
+
+commit 7c616d70506371fe08cf3c300814b2848dfd2fe8
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jul 7 16:37:51 2015 -0400
+
+    Better fix for last commit
+
+commit c0c81a00f734424b47d68f66262f1a8e24ab0180
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jul 7 16:32:32 2015 -0400
+
+    Job select popup not setting agency filter when agency field in parent form is absent (passes undefined as agency_id)
+
+commit 1514e13963af3277c296a3a12350124a965eca83
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jul 1 10:01:14 2015 -0400
+
+    Fixed issue where PDFS with tables were messing up first row on new pages.
+
+commit 6072f8127a66bd5cbeb39cb635941c815cee6e08
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jun 23 11:45:06 2015 -0400
+
+    Agency.get_users will now exclude disabled users.
+
+commit 820bb5a7c3e863013ec1833f8867f6f0f1488411
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 19 16:44:11 2015 -0400
+
+    Added append option when selecting cert_end_of_lists and cert_bottom_notes
+
+commit 8ec2ff92d916d7887ef152026dbfd4832f17027a
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 19 11:50:45 2015 -0400
+
+    Added type filed to cert end of list and cert comment models/views
+
+commit e7b9e5efb7595939af5c19f24e1dd465be227aaf
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 19 09:49:53 2015 -0400
+
+    Fixed permissions so agency users with 'allow web post review' can see unapproved applications.
+
+commit 66aaf53f8b06e6739bd2cde0b5dfeba8f90b9436
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 18 16:13:35 2015 -0400
+
+    Send Cert Notify Agency emails to users separately to avoid broken monroecounty.gov email errors that prevent anyone from getting the mail.
+
+commit 14de4438d647e0da5c5022c55f274720f45e4f0d
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Jun 17 13:49:53 2015 -0400
+
+    Changed cert print so it wont create table of contents and open Adobe Readers bookmark panel
+
+commit 71ca07a51607a9e37827163551c81a56215e98f4
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Jun 16 16:34:04 2015 -0400
+
+    Updated version of wkhtmltopdf. If problems occur wkhtmltopdf9 can still be used. Improved kerning though yay%H
+    ;
+
+commit 87d4d733501666a221a4cfe7948b0273020cc926
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Jun 12 13:22:22 2015 -0400
+
+    Cloning web_exams now clears the facebook, twitter and notifier flags.
+
+commit 87d9e127f00ded37e85d027307c6bd881bf133ac
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Jun 11 13:58:56 2015 -0400
+
+    Changed signature image to try to solve PDF problem (it's printing out all black?)
+
+commit 903229589498d90b70bcc753c051697828c7fa23
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Jun 1 12:24:00 2015 -0400
+
+    Fixed disabled users so they can't login.
+
+commit a2ff75e3ddc92047b7376387d030e743580065f3
+Author: root <root@WebCivilService.(none)>
+Date:   Fri May 29 13:28:16 2015 -0400
+
+    Fixed 'all applicants' link for web_exams got agency users.
+
+commit 395360ab020604536e815cdb82deafb6dc3f4031
+Author: root <root@WebCivilService.(none)>
+Date:   Fri May 29 09:11:52 2015 -0400
+
+    Added Kristina to CR expiring email, removed Aileen.
+
+commit 469cf436a096dcb608d9726758137f2af1819f0d
+Author: root <root@WebCivilService.(none)>
+Date:   Thu May 28 14:54:52 2015 -0400
+
+    Job selects replaced with popups, limited by agencies, other misc changes.
+
+commit e3637dc23247dc9b77132e55af38c88a0f4f7102
+Author: root <root@WebCivilService.(none)>
+Date:   Thu May 28 13:11:48 2015 -0400
+
+    Cert signature shows up as long as certification date present, archived cert actions remain selectable if previously selected.
+
+commit 05b16cbde41f13ccfdd9f7ff228994136c316a46
+Author: root <root@WebCivilService.(none)>
+Date:   Wed May 27 15:38:05 2015 -0400
+
+    Quick fix to add part time info to public eligible list pages
+
+commit cdcc3a7b7ff561a880e1ee260a149beca23fc4a9
+Author: root <root@WebCivilService.(none)>
+Date:   Fri May 22 14:34:06 2015 -0400
+
+    Veterans tab style...
+
+commit a58ce210a548c08f1e32efc81e9918fb2630c943
+Author: root <root@WebCivilService.(none)>
+Date:   Fri May 22 14:32:50 2015 -0400
+
+    Added new veterans credits tab under applicants(people)
+
+commit 9ce25f19e2051ca8372fcebfe378a2a950ba3583
+Author: root <root@WebCivilService.(none)>
+Date:   Fri May 22 13:55:33 2015 -0400
+
+    Changed veteran options in app/models/const.rb
+
+commit 9d668d672fea7754a38a06ad9ad5f13b13a866ce
+Author: root <root@WebCivilService.(none)>
+Date:   Tue May 19 11:07:01 2015 -0400
+
+    When editing a cert, selecting a new exam will now update the cert job_id
+
+commit 4ccc661b2ae9dd110cacd82d0c8fe351d3a19552
+Author: root <root@WebCivilService.(none)>
+Date:   Fri May 15 14:16:42 2015 -0400
+
+    Quick fix for issue where cloned messages wont be delivered via email
+
+commit bc78c8a6ce937e6f3a683af78f9c5e9ee1f15479
+Author: root <root@WebCivilService.(none)>
+Date:   Fri May 8 11:00:15 2015 -0400
+
+    Fixed -bash printing on eligible lists
+
+commit a0b2697cd0580a44b1bab96ffe87328400286c45
+Author: root <root@WebCivilService.(none)>
+Date:   Thu May 7 10:00:29 2015 -0400
+
+    Spelling Fix
+
+commit 4567095db4415bc1bd7c5115e50d9509d9843aa4
+Author: root <root@WebCivilService.(none)>
+Date:   Wed May 6 10:46:34 2015 -0400
+
+    Don't override gender (M/F) with blank string when importing applications.
+
+commit 43f633102f23319e853054b401464333c8f6ea9c
+Author: root <root@WebCivilService.(none)>
+Date:   Tue May 5 14:36:52 2015 -0400
+
+    Added document uploads to new/edit forms. Tweak liaison permissions to allow web post document management
+
+commit 6d48fa6e6eff2dd78a1a181d8da53c312252361f
+Author: root <root@WebCivilService.(none)>
+Date:   Mon May 4 14:04:50 2015 -0400
+
+    Handle missing web exams in web_exam/all_applicants
+
+commit bd9e2109eb46e1c6d464f574e9d75f8137d07fff
+Author: root <root@WebCivilService.(none)>
+Date:   Mon May 4 12:32:30 2015 -0400
+
+    Added HR address to certain emails (compliance with CAN-SPAM act).
+
+commit 50dd0511d96d0cccba2aab1d48e1f62ebfa98543
+Author: root <root@WebCivilService.(none)>
+Date:   Fri May 1 14:57:14 2015 -0400
+
+    Remove old Google Analytics
+
+commit 045371ab8f91d1673e2b39a738cbebe4f3c5bc13
+Author: root <root@WebCivilService.(none)>
+Date:   Fri May 1 14:51:37 2015 -0400
+
+    Google Analytics
+
+commit 873f07121c32add09876e920ce9ff1d06f83264a
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Apr 30 12:32:55 2015 -0400
+
+    Added tables/CRUD for cert end_of_list and bottom_note fields.
+
+commit dcff205c97361d3c985aec6388901e4f306055d7
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 29 16:03:13 2015 -0400
+
+    Added code for email blasting via the console (for twitter/facebook blast)
+
+commit 7537de8e2becb0548eb11917fec40f27fbdf545b
+Merge: 5f54393 9af409b
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Apr 27 14:18:37 2015 -0400
+
+    Merge ../mccsdev
+
+commit 9af409b82fa0a571e4f0ca7573ec5adacd5fcbee
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Apr 27 14:18:24 2015 -0400
+
+    Allow Liaisons to upload documents to web posts
+
+commit 5f54393a21e3d34fef4e906b610302364827f4da
+Merge: 77cc2da 6ae27ca
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Apr 27 13:52:19 2015 -0400
+
+    Merge ../mccsdev
+
+commit 6ae27caade78f542d8cdb3dea268df009f908495
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Apr 27 13:52:05 2015 -0400
+
+    Fixed bug with payroll certifications that would generate error when an employee was deleted. Also allowed access to staff acoounts to the Facebook/Twitter tab.
+
+commit 77cc2da0956b2fb695d3e1a53bf8a45226eae71b
+Merge: 8ebdaf1 8c42ffe
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Apr 23 11:55:42 2015 -0400
+
+    Merge ../mccsdev
+
+commit 8c42ffef8763c7a6eb5cb6777bbcedb64e493a87
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Apr 23 11:55:19 2015 -0400
+
+    Allow liaisons to see documents tab for web posts. Patty English says Lillian Gucciardo needs this...
+
+commit 8ebdaf117d03e72098a474ef691531854ae4ad81
+Merge: 2375a1d 1b00221
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 22 13:59:27 2015 -0400
+
+    Merge ../mccsdev
+
+commit 1b002211cc58a3c2199a92cca8acab2dd62964dc
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 22 13:59:14 2015 -0400
+
+    Try to fix session data in exception notifier
+
+commit 2375a1d90981b5f430b27e7e5968026c972bfa6e
+Merge: dd9f030 bb1380b
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 22 13:54:06 2015 -0400
+
+    Merge ../mccsdev
+
+commit bb1380bf79f8b5f2b4c01b146d914a1d6f9944b1
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 22 13:53:46 2015 -0400
+
+    Fixed preferred list export bug (added load_obj to action)
+
+commit dd9f0302d19efd021bcf1fdb766cb59a87c4fa8b
+Merge: 0efb924 500299b
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 21 16:51:16 2015 -0400
+
+    Merge ../mccsdev
+
+commit 500299b737a124f2ee212c57b3e12bc8f9c05b3c
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 21 16:51:05 2015 -0400
+
+    Small changes to certified lists process
+
+commit 0efb9248e16e90b5a869806ecb8e7191637444d8
+Merge: 95652c0 6a1c3e0
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 21 14:08:24 2015 -0400
+
+    Merge ../mccsdev
+
+commit 6a1c3e0c73066466271d93656878b9e5ccfae4fe
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 21 14:08:12 2015 -0400
+
+    Fixed cert_applicants bug where comments = '-bash'
+
+commit 95652c0f3893655ff464776e1a0316b2868c1766
+Merge: 8e0c800 d51f07b
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 15 13:37:06 2015 -0400
+
+    Merge ../mccsdev
+
+commit d51f07b266e2176da7b6d2388741e19a9a8dcfb4
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 15 13:36:50 2015 -0400
+
+    Removed non-existant agency-web_exam many to many relationship
+
+commit 8e0c8006fd5b3bdf332705fa0add972c9d8ec7cc
+Merge: 01225d7 e9c6c3a
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 14 15:54:51 2015 -0400
+
+    Merge ../mccsdev
+
+commit e9c6c3a3e3df0066e96880702204554b68a5c2f7
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 14 15:53:32 2015 -0400
+
+    Quick fix for liaison permissions.
+
+commit 01225d7d12846ee3b1a2a2aebe6fe59bb8b0d32c
+Merge: 26556d2 1bc884d
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 14 12:48:44 2015 -0400
+
+    Merge ../mccsdev
+
+commit 1bc884dcfaf3836271af0f710ce09280a4159860
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 14 12:48:29 2015 -0400
+
+    Title form changes, certified list changes.
+
+commit 26556d2763e17ca1c4b9bce0548c8383b5dd567b
+Merge: 5cf457a a1bd011
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 14 10:16:54 2015 -0400
+
+    Merge ../mccsdev
+
+commit a1bd0117a77965367956938e8c48e690ffb8634c
+Author: root <root@WebCivilService.(none)>
+Date:   Tue Apr 14 10:16:44 2015 -0400
+
+    Twitter posts now link to individual exams.
+
+commit 5cf457aae6ba89b9f85a0b8d8ed29cc8f17f5487
+Merge: fe82806 d2f6998
+Author: root <root@WebCivilService.(none)>
+Date:   Sun Apr 12 23:53:32 2015 -0400
+
+    Merge ../mccsdev
+
+commit d2f69989339b36fc6a619559ace66edd4b11260f
+Author: root <root@WebCivilService.(none)>
+Date:   Sun Apr 12 23:53:23 2015 -0400
+
+    Fixed pay_cert document link.
+
+commit fe82806dbb201867eb28daf66de890c482b8d0bd
+Merge: 4f55478 454abff
+Author: root <root@WebCivilService.(none)>
+Date:   Sun Apr 12 23:49:45 2015 -0400
+
+    Fixing Conflict...
+
+commit 454abff6ec70d2bfdf682c19b57231d5b50a0b0b
+Author: root <root@WebCivilService.(none)>
+Date:   Sun Apr 12 23:47:18 2015 -0400
+
+    Quick Fix...
+
+commit 51da0f01e526ac132cfa5851de5f4fe662faa92e
+Author: root <root@WebCivilService.(none)>
+Date:   Sun Apr 12 23:37:04 2015 -0400
+
+    Quick fix for last commit...
+
+commit 4f55478fc69b7d6e6e9c676a63eb5b5b7bd8bb91
+Merge: f759e68 ac391a8
+Author: root <root@WebCivilService.(none)>
+Date:   Sun Apr 12 23:35:44 2015 -0400
+
+    Merge ../mccsdev
+
+commit ac391a83266b01a6754749470208db1e6921328f
+Author: root <root@WebCivilService.(none)>
+Date:   Sun Apr 12 23:30:17 2015 -0400
+
+    Allow multiple documents to be uploaded to payroll certifications.
+
+commit f759e6891b8553e642d60ff72a35cfa6bba1d8cd
+Author: root <root@WebCivilService.(none)>
+Date:   Sun Apr 12 23:30:17 2015 -0400
+
+    Allow multiple documents to be uploaded to payroll certifications.
+
+commit 470fe806baf6073d86739d3573aa5246f8e04a41
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Apr 10 16:30:59 2015 -0400
+
+    Update public left menu.
+
+commit 737a1a6c88ad14174a90a6a0e536c3362b298fe7
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Apr 9 13:33:29 2015 -0400
+
+    Fixed accidentally setting environment to development in environment.rb
+
+commit 65f98995796bd0da36123bdc52e442750683da07
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Apr 9 13:16:30 2015 -0400
+
+    Add an edit view for delivery records - they can't be edited so just display message.
+
+commit 90bc29fa90e1262c89af9af875b16bea0e85347a
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Apr 9 13:12:34 2015 -0400
+
+    Veterans Changes, Certified List Changes, Facebook + Twitter Integration, Etc.
+
+commit dfbab46aa16d2d016985ec1aac39a4061a88c725
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Apr 2 10:45:14 2015 -0400
+
+    Fix calendar date select bug when jumping from 31st to 1st of next month.
+
+commit 94a8b248030d3294343d929a7683fb3db702c890
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 1 16:35:27 2015 -0400
+
+    Turn off production class caching until I can figure out why models aren't reloading on restart
+
+commit 09aec05e27e8f00ef040e2bef449f7a6f8cf5ae5
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 1 14:10:43 2015 -0400
+
+    Fixed rank column in database and proper detection when person is eligible for a list twice (two overlapping exams)
+
+commit 7da05a26d18d488074af41b0fbcffb57ec9bc795
+Author: root <root@WebCivilService.(none)>
+Date:   Wed Apr 1 11:16:01 2015 -0400
+
+    Test Demo Commit
+
+commit 67409bdfaf03c3fed43634fde3b87aa0e04dbf9a
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Mar 30 15:11:16 2015 -0400
+
+    Fix for deleted messages after email already sent out.
+
+commit f742ae437c96785f322e4847579826508d703000
+Author: root <root@WebCivilService.(none)>
+Date:   Mon Mar 30 09:25:50 2015 -0400
+
+    Quick fix for missing employees on form_change record, breaking form_change/view
+
+commit c628e587a01f247c329bcba8844b355479ac146f
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Mar 27 13:24:19 2015 -0400
+
+    Fixed veterans=on issue
+
+commit 13363bbc5c0725ffa0929a4556e98e4393798f2e
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Mar 27 12:16:22 2015 -0400
+
+    Fixed dollar sign in uploaded file names
+
+commit 261bde99babfb86732cceac694e43c84d87d9f84
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Mar 27 11:07:18 2015 -0400
+
+    Fix MS Office triggering error emails on weird OPTIONS requests
+
+commit 6174fafee21028943941cf71948e79d3409b9c33
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 26 11:53:57 2015 -0400
+
+    Email is required if contact preference is not postal
+
+commit 604cb58c475d740fa350e4a58db1a8e7dfca2b3e
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Mar 20 14:20:22 2015 -0400
+
+    330 form required fields
+
+commit ea6ab23b2fffeb739d4d9065acf7c6c46c696a0a
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Mar 20 13:58:00 2015 -0400
+
+    Updates from spreadsheet
+
+commit eacb9c8f8af6b6972f81f8b7eeb696f59f709782
+Author: root <root@WebCivilService.(none)>
+Date:   Fri Mar 20 10:26:25 2015 -0400
+
+    Fix deleted person in public lists (show UNKNOWN)
+
+commit 8a68c72f95975bd56f429c550ea5c81375ae7958
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 19 14:36:26 2015 -0400
+
+    Fixes from HR spreadsheet
+
+commit a14640e331607dfdb5036118a58a33d0b71392f2
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 12 14:16:58 2015 -0400
+
+    Fix email preview double render error
+
+commit 50ffe76e10e27232a0850918c32bb0309e92629c
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 12 14:12:51 2015 -0400
+
+    Fix to allow resending of county exam email PDF notices.
+
+commit 34fd8c495b5d52f8bc636ab9596f57247f1a7c59
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 12 13:02:13 2015 -0400
+
+    Development Database Config Fix
+
+commit 13e47c44ec01f4b189ebcef45920e14415e9cb1a
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 12 12:14:42 2015 -0400
+
+    Dev Fix
+
+commit 6c5b77df3ad4acdb32449894efacad6238228bce
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 12 11:35:19 2015 -0400
+
+    Link hrapply development database
+
+commit 4110b8ca89d64442bb1763476fad9f68fe3a4661
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 12 10:34:52 2015 -0400
+
+    Development Database
+
+commit a671ae3d87fe15e01cc0546f352be193ebaf487b
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 12 10:29:00 2015 -0400
+
+    Development Setup
+
+commit 0f8a6fa58b88903328745b9ed2eea3240f0f724f
+Author: root <root@WebCivilService.(none)>
+Date:   Thu Mar 12 10:25:08 2015 -0400
+
+    Initial Commit
