@@ -307,17 +307,19 @@
 				An Equal Opportunity Employer</p></center>
 <% if ep.exam.price.to_f > 0 %>
     <!-- NEW PAGE -->
-    <h2>Special Arrangements for Examination</h2>
-      
-		<p>If you need special arrangements because you are a Religious Observer [for religious reasons, cannot be tested on date of examination(s)], or
-			if you have a disability that requires you to have special accommodations or assistance for the completion of this application or for you to
-			participate in an examination, you must notify this Department at 585-753-1700 or 585-753-1091 (TDD) no later than the last date of filing for
-			this (these) examination(s). Your request must include examination number(s) and title(s) and the type of special arrangements required
-			accompanied by all supporting documentation.</p>
+    <% if ep.exam.web_exam_type.show_pdf_special %>
+			<h2>Special Arrangements for Examination</h2>
 			
-		<p>Monroe County, as an employer, does not discriminate on the basis of a disability and will make reasonable accommodations for employees
-			with special needs, due to a disability. It is the responsibility of the applicant or employee to voluntarily disclose that they require an
-			accommodation based on their disability.</p>
+			<p>If you need special arrangements because you are a Religious Observer [for religious reasons, cannot be tested on date of examination(s)], or
+				if you have a disability that requires you to have special accommodations or assistance for the completion of this application or for you to
+				participate in an examination, you must notify this Department at 585-753-1700 or 585-753-1091 (TDD) no later than the last date of filing for
+				this (these) examination(s). Your request must include examination number(s) and title(s) and the type of special arrangements required
+				accompanied by all supporting documentation.</p>
+			
+			<p>Monroe County, as an employer, does not discriminate on the basis of a disability and will make reasonable accommodations for employees
+				with special needs, due to a disability. It is the responsibility of the applicant or employee to voluntarily disclose that they require an
+				accommodation based on their disability.</p>
+		<% end %>
 
     <h2>Application Fee for Examination</h2>
       
