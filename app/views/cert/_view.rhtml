@@ -363,7 +363,10 @@
 					<td><div style="position: relative;"><a name="ca-<%= ca.id %>" style="position: absolute; top: -50px;"></a><%= i + 1 %>.</div></td>
 					<td>
 						<% if @current_user.agency_level? %>
-							<%= link_to "#{p.last_name} #{p.first_name}", {:controller => :cert, :action => :view_applicant, :id => @obj.id, :id2 => ca.id}, :target => '_blank' %>
+							<%= "#{p.last_name} #{p.first_name}" %>
+							<% if false %>
+								<%= link_to "#{p.last_name} #{p.first_name}", {:controller => :cert, :action => :view_applicant, :id => @obj.id, :id2 => ca.id}, :target => '_blank' %>
+							<% end %>
 						<% else %>
 							<%= link_to "#{p.last_name} #{p.first_name}", {:controller => :applicant, :action => :view, :id => a.id}, :target => '_blank' %>
 						<% end %>

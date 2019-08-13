@@ -421,6 +421,8 @@ class CertController < CrudController
 	end
 
 	def view_applicant
+		# Disabled - agency users can't see application.
+		render_nothing and return false
 		load_obj
 		@cert_applicant = @obj.cert_applicants.find(params[:id2])
 		@applicant = @cert_applicant.applicant
