@@ -403,7 +403,7 @@ web_exam_c = params[:controller] == 'web_exam'
 					</td>					
 					<td>
 						<label>Division:</label>
-						<%= @obj.division.name is @obj.division %>						
+						<%= @obj.division.name if @obj.division %>						
 					</td>
 				</tr>
 			</table>
