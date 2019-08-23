@@ -40,23 +40,32 @@
 <% end %>
 
 <% @pref_list = PreferredList.find(:first, :conditions => ['status != "exhausted" and job_id = ? and agency_id = ? and department_id = ?', @obj.job_id, @obj.agency_id, @obj.department_id]) %>
-<% if @obj.exam && @obj.exam.job && @obj.exam.exam_type == 'OC' %>
-	<% @prom_list = Exam.find(:first, :conditions => ['exam_type = "PROM" and established_date <= date(now()) and valid_until >= date(now()) and job_id = ?', @obj.exam.job_id]) %>
-	<% if @prom_list %>
-		<%= link_to('This certified list is for an open competitive exam but a promotional list exists for this job title! Click here to view exam', {:sc => nil, :sid => nil, :controller => 'exam', :action => :view, :id => @prom_list.id}, :style => 'display: block; margin: 5px; padding: 5px; background-color: #800; text-align: center; color: #fff; text-decoration: none; font-weight: bold;')%>
-	<% end %>
-<% end %>
 <% if @pref_list %>
 	<%= link_to('Preferred list exists for this job/agency/department! Click here to view', {:sc => nil, :sid => nil, :controller => 'preferred_list', :action => :view, :id => @pref_list.id}, :style => 'display: block; margin: 5px; padding: 5px; background-color: #800; text-align: center; color: #fff; text-decoration: none; font-weight: bold;')%>
 <% end %>
 <% if !@obj.completed_date %>
-	<% others = @obj.other_open_certs_error_attr %>
-	<% if !others.empty? %>
+	<% 
+		others_proms = @obj.other_open_certs_alt_prom_exams_attr
+		others = others_proms.other_certs
+		proms = others_proms.prom_exams 
+	%>
+	<% if !others.empty? || !proms.empty? %>
 		<div style="text-align: center; margin: 5px; padding: 5px; background: #fdd;" class="red2">
-			<div>Other open certified lists for agency/department/division &amp; title found! Click to view</div>
-			<% others.each { |ot| %>
-				<div><%= link_to "#{ot.title}, Requested: #{ot.requested_date ? ot.requested_date.d0 : '(unknown)'}", {:action => :view, :id => ot.id}, :style => 'color: #fff;' %></div>
-			<% } %>
+			<% if !others.empty? %>
+				<div>Other open certified lists for agency/department/division &amp; title found! Click to view:</div>
+				<% others.each { |ot| %>
+					<div><%= link_to "#{ot.title}, Requested: #{ot.requested_date ? ot.requested_date.d0 : '(unknown)'}", {:action => :view, :id => ot.id}, :style => 'color: #fff;' %></div>
+				<% } %>
+			<% end %>
+			<% if !proms.empty? %>
+				<div>Promotional exams/candidates found for this title and agency/department/division! Click to request certified list:</div>
+				<% proms.each { |ex| %>
+					<div><%= link_to(
+						"#{ex.exam_no} #{ex.title}, Established: #{ex.established_date ? ex.established_date.d0 : ''}, Expires: #{ex.valid_until ? ex.valid_until.d0 : '(unknown)'}, # Candidates: #{ex.applicants_count}",
+						{:action => :new, 'obj[exam_id]' => ex.id, 'obj[agency_id]' => o.agency_id, 'obj[department_id]' => o.department_id, 'obj[division_id]' => o.division_id} 
+					) %></div>					
+				<% } %>
+			<% end %>
 		</div>
 	<% end %>
 <% end %>

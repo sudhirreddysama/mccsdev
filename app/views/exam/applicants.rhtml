@@ -25,13 +25,15 @@
 </script>
 <div class="marg"><%= submit_tag 'Set Approved / Active', :onclick => 'set_defaults()' %></div>
 <div class="marg nobr">
-	<%= form_tag :action => :set_agency_department, :id => @obj.id %>
-		Set Dept/Agency For All: &nbsp;&nbsp;&nbsp;
-		<%= select_tag 'agency_id', options_for_select([[nil, 'Agency...']] + @agency_opts) %>&nbsp;&nbsp;&nbsp;
-		<%= select_tag 'department_id', options_for_select([[nil, 'Department']] + @department_opts) %>&nbsp;&nbsp;&nbsp;
+	<% @org = {} %>
+	<% form_for(:org, :url => {:action => :set_agency_department, :id => @obj.id}) { |f_org| %>
+		Set Dept/Agency/Div For All: &nbsp;&nbsp;&nbsp;
+		<%= f_org.select :agency_id, @agency_opts, :include_blank => true %>&nbsp;&nbsp;&nbsp;
+		<%= f_org.select :department_id, @department_opts, :include_blank => true %>&nbsp;&nbsp;&nbsp;
+		<%= partial 'division/division_select', :f => f_org, :o => @org, :field_name => 'org' %><br>
 		<%= submit_tag 'Set Dept/Agency', :confirm => 'This will set the dept/agency for all applicants. Continue?' %>
-		<label><%= check_box_tag 'only_blank' %> Only Update if Agency/Dept is Blank</label>
-	</form>
+		<label><%= f_org.check_box :only_blank %> Only Update if Agency/Dept/Div is Blank</label>
+	<% } %>
 </div>
 <form id="review-form" onsubmit="return false;">
 	<%= partial 'pages' %>

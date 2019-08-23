@@ -1,8 +1,10 @@
 <% if department_id.blank? %>
-	<span class="dim">(select department to view divisions)</span>
+	<%= hidden_field_tag "#{field_name}[division_id]", '' %>
+	<span class="dim">(select dept. to view divisions)</span>
 <% else %>
 	<% if opts.empty? %>
-		<span class="dim">(no divisions for department)</span>
+		<%= hidden_field_tag "#{field_name}[division_id]", '' %>
+		<span class="dim">(no divisions for dept.)</span>
 	<% else %>
 		<% opts = [['Select Division...', '']] + opts %>
 		<%= select_tag "#{field_name}[division_id]", options_for_select(opts, division_id) %>

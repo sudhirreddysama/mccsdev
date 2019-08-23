@@ -90,9 +90,8 @@ class Vacancy < ActiveRecord::Base
 		if exec_decision_changed?
 			u = Agency.get_liaison(agency, department)
 			u2 = Agency.get_omb_liaison(agency, department)
-			cond = ['users.vacancy_emails = 1']
-			cond << (division ? 'users.division_id is null or users.division_id = %d' % division.id : 'users.division_id is null')
-			u3 = agency.get_users(department, true, cond).to_a
+			#cond << (division ? 'users.division_id is null or users.division_id = %d' % division.id : 'users.division_id is null')
+			u3 = agency.get_users(department, division, 'users.vacancy_emails = 1').to_a
 			if exec_decision == 'Submitted' && exec_decision_was == 'Started'
 				users = ([u, u2] + u3).reject(&:nil?).uniq
 				Notifier.deliver_vacancy_submitted(users, self) if !users.empty?

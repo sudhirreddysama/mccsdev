@@ -1,4 +1,6 @@
 class FormCountyHire  < ActiveRecord::Base
+	
+	has_many :form_actions, :as => :obj
 
 	belongs_to :agency
 	belongs_to :department

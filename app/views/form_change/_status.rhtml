@@ -1,3 +1,11 @@
+<% 
+
+can_submit_hr = @current_user.level == 'agency-head' || @current_user.admin_level? 
+@update_js = true
+
+county_form = @obj.is_a?(FormCountyHire) || @obj.is_a?(FormCountyChange)
+
+%>
 <% if params[:action] != 'print' %>
 	<div class="tabs buttons">
 		<%= tab 'Printable Version', {:action => :print, :id => @obj.id}, {}, :target => '_blank' %>
@@ -10,16 +18,16 @@
 		<% end %>		
 		<div class="clear"></div>
 	</div>
-
-	<% if true || @current_user.agency_level? %>
-		<% if @obj.status == 'started' || @obj.status == 'disapproved' %>
-			<% if @obj.class == FormTitle && @obj.memo_of_explanation.blank? %>
-				<%= link_to 'Before submitting this 222 form please fill out the Justification Memo by clicking here or the &quot;Justification Memo&quot; tab above.', 
-					{:action => :memo, :id => @obj.id},
-					:style => 'display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: underline;' 
-				%>
-			<% else %>
-				<% if @current_user.level == 'agency-head' || @current_user.admin_level? %>
+	<% if @obj.status == 'started' || @obj.status == 'disapproved' %>
+		<% if @obj.class == FormTitle && @obj.memo_of_explanation.blank? %>
+			<%= link_to 'Before submitting this 222 form please fill out the Justification Memo by clicking here or the &quot;Justification Memo&quot; tab above.', 
+				{:action => :memo, :id => @obj.id},
+				:style => 'display: block; margin: 5px; padding: 5px; color: #fff; background-color: #800; text-align: center; text-decoration: underline;' 
+			%>
+		<% else %>
+		
+			<% if !county_form %>
+				<% if can_submit_hr %>
 					<%= link_to('This form has not yet been submitted to HR. Click here to submit.', 
 						{:action => :submit, :id => @obj.id},
 						:confirm => 'Are you sure you want to submit this form? No changes can be made after submitting. Please make sure all required information and documents have been provided.',
@@ -30,10 +38,26 @@
 						This form has not yet been submitted to HR. An agency-head level user must submit it from this page.
 					</div>
 				<% end %>
+			<% else %>
+				<%= partial 'errors', :errors => @act.errors.full_messages %>
+				<div id="submit-form">
+					<a href="#" id="submit-form-toggle" onclick="jQuery('#submit-form-panel').slideToggle(200); return false;">CLICK HERE TO SUBMIT FORM TO HR</a>
+					<div id="submit-form-panel" style="<% if @act.errors.empty? %>display: none;<% end %>">
+						<% form_for(:act) { |f| %>
+							<div><label><span style="<% if !can_submit_hr %>color: #bbb;<% end %>"><%= f.radio_button :submit_option, 'HR', :disabled => !can_submit_hr %> Submit To HR</span>&nbsp;&nbsp;&nbsp;(only available to Agency Head level users)</label></div>
+							<div><label><%= f.radio_button :submit_option, 'User' %> Send To: </label>&nbsp;&nbsp;&nbsp;<%= f.select :recipient_id, o.agency.get_users(o.department, o.division, 'users.perm_ag_form_changes = 1').map { |u| 
+								[u.name + (u.level == 'agency-head' ? ' (Agency Head)' : ''), u.id] 
+							}, {:include_blank => ([o.agency.name, o.department && o.department.name].compact.uniq * ' - ') + ' USERS...' }, :style => 'width: 200px;'
+							%></div>
+							<div><label for="act_note">Message/Note (optional, will be included in email &amp; log):</div>
+							<div><%= f.text_area :note, :style => 'width: 100%; height: 40px;' %></div>
+							<div style="text-align: center;"><button type="submit" name="submit" value="submit">Submit Form</button> <button type="submit" name="submit" value="abandon">Abandon Form</button></div>
+						<% } %>
+					</div>
+				</div>				
 			<% end %>
 		<% end %>
 	<% end %>
-
 <% end %>
 
 <% form = (@current_user.staff_level? || @current_user.level == 'liaison') && !(params[:action] == 'print') %>
@@ -53,6 +77,9 @@
 						<% statuses = ['started', 'submitted', 'approved', 'disapproved'] %>
 						<% if ft %>
 							<% statuses = ['started', 'submitted', 'review', 'info-needed', 'withdrawn', 'approved', 'disapproved'] %>
+						<% end %>
+						<% if county_form %>
+							<% statuses << 'abandoned' %>
 						<% end %>
 						<%= select :obj, :status, statuses %>
 					<% else %>

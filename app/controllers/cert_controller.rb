@@ -192,11 +192,11 @@ class CertController < CrudController
 		@obj.job_id = @obj.exam ? @obj.exam.job_id : nil
 	end
 	
-	def check_open_certs
+	def check_open_certs_prom_exams
 		# Build a fake object to check open certs against it
 		build_obj
 		@obj.id = params.id
-		render :json => @obj.other_open_certs_error_attr.to_json
+		render :json => @obj.other_open_certs_alt_prom_exams_attr.to_json
 	end
 
 	def cert_upload

@@ -73,16 +73,33 @@ class Cert < ActiveRecord::Base
 		cond = ['certs.completed_date is null']
 		cond << DB.escape('certs.agency_id = %d', agency_id) if agency_id
 		cond << DB.escape('certs.department_id = %d', department_id) if department_id
-		cond << DB.escape('certs.job_id = %d', job_id) if job_id
 		cond << DB.escape('certs.division_id = %d', division_id) if division_id
+		cond << DB.escape('certs.job_id = %d', job_id) if job_id
 		cond << DB.escape('certs.id != %d', id) if id
 		cond << 'exams.exam_type in ("PROM", "NCP")' if et == 'PROM' || et == 'NCP'
 		cond << 'exams.exam_type = "OC"' if et == 'OC'
-		Cert.find(:all, :include => :exam, :conditions => cond.join(' and '), :order => 'certs.id desc')
+		return Cert.find(:all, :include => :exam, :conditions => cond.join(' and '), :order => 'certs.id desc')
 	end
 	
 	def other_open_certs_error_attr
 		other_open_certs.map { |c| {:id => c.id, :title => c.title, :requested_date => c.requested_date} }
+	end
+	
+	def alt_prom_exams
+		return [] if !exam
+		return exam.alt_prom_exams(agency, department, division)
+	end
+	
+	def alt_prom_exams_error_attr
+		alt_prom_exams.map { |e| {
+				:id => e.id, :exam_no => e.exam_no, :title => e.title, :established_date => e.established_date,
+				:valid_until => e.valid_until, :applicants_count => e.applicants.length, :exam_type => e.exam_type
+			}
+		}
+	end
+	
+	def other_open_certs_alt_prom_exams_attr
+		{:other_certs => other_open_certs_error_attr, :prom_exams => alt_prom_exams_error_attr}
 	end
 	
 	def autocomplete_json_data
@@ -96,6 +113,22 @@ class Cert < ActiveRecord::Base
 			:certification_date => certification_date,
 			:requested_date => requested_date
 		}
+	end
+	
+	def agency_users_to_notify
+		return agency ? agency.get_users(department, division, 'users.show_cert_lists = 1') : []					
+	end
+	
+	def self.cert_overdue_cron
+		p "Running Cert Overdue Cron #{Date.today}"
+		Cert.find(:all, :conditions => ['return_date = ? and (completed_date is null)', Date.today]).each { |c|
+			users = (c.agency_users_to_notify + [Agency.get_liaison(c.agency, c.department)]).compact
+			p "Cert Found: #{c.id}, Users: #{users.map(&:username) * ', '}"
+			if !users.empty?
+				Notifier.deliver_cert_overdue(c, users)
+			end
+		}
+		p 'Done Running Cert Overdue Cron'
 	end
 	
 	include DbChangeHooks

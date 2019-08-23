@@ -38,40 +38,36 @@ class LetterController < CrudController
 	end
 
 	def apply
-		objs = {
-			:applicant => nil,
-			:person => nil,
-			:exam => nil,
-			:cert => nil,
-			:web_exam => nil
-		}
-		
-		to = params[:obj_type].titleize.gsub(' ', '').constantize.find params[:obj_id]
-		
-		#if params[:obj]
-		#	to.attributes = params[:obj] # don't save
-		#end
-		
-		case params[:obj_type]
-			when 'applicant'
-				objs[:applicant] = to
-				objs[:person] = to.person
-				objs[:exam] = to.exam
-				objs[:web_exam] = to.web_exam
+		objs = {}
+		if params[:obj_type]
+			objs = {
+				:applicant => nil,
+				:person => nil,
+				:exam => nil,
+				:cert => nil,
+				:web_exam => nil
+			}
+			to = params[:obj_type].titleize.gsub(' ', '').constantize.find params[:obj_id]
+			case params[:obj_type]
+				when 'applicant'
+					objs[:applicant] = to
+					objs[:person] = to.person
+					objs[:exam] = to.exam
+					objs[:web_exam] = to.web_exam
 				
-			when 'person'
-				objs[:person] = to
+				when 'person'
+					objs[:person] = to
 				
-			when 'web_exam'
-				objs[:web_exam] = to				
+				when 'web_exam'
+					objs[:web_exam] = to				
 			
-			when 'exam'
-				objs[:exam] = to
+				when 'exam'
+					objs[:exam] = to
 				
-			when 'cert'
-				objs[:cert] = to
-				objs[:exam] = to.exam
-				
+				when 'cert'
+					objs[:cert] = to
+					objs[:exam] = to.exam
+			end
 		end
 		
 		objs[:user] = @current_user

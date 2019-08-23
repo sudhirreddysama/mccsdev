@@ -35,7 +35,7 @@
 					label << @obj.agency.name if @obj.agency && @obj.agency.name != 'MONROE COUNTY'
 					label << @obj.department.name if @obj.department
 				%>
-				<%= select_tag 'email_id', options_for_select([[label.join(' - ') + ' USERS...', '']] + @obj.agency.get_users(@obj.department, true, [@obj.division ? 'users.division_id is null or users.division_id = %d' % @obj.division.id : 'users.division_id is null']).collect { |u| 
+				<%= select_tag 'email_id', options_for_select([[label.join(' - ') + ' USERS...', '']] + @obj.agency.get_users(@obj.department, @obj.division, 'users.perm_ag_vacancies = 1').collect { |u| 
 					[u.email_with_name + (u.level == 'agency-head' ? ' (Agency Head)' : ''), u.id] 
 				}) %>
 				<%= submit_tag 'Send Email' %>

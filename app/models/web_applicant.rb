@@ -26,6 +26,16 @@ class WebApplicant < ActiveRecord::Base
 		['Graduate study beyond Master\'s', 'mgrad'],
 		['Doctorate', 'doc']]
 	
+	def find_fire_school_swis
+		a = residence_different ? res_address : address
+		z = residence_different ? res_zip : zip
+		x = Parcel.find :first, :conditions => ['address like ? and left(PAR_ZIP, 5) = ?', a, z.to_s[0, 5]]
+		fire = x ? FireDistrict.find_by_parcels_name(x.DISTRICT) : nil
+		school = x ? SchoolDistrict.find_by_code(x.SCH_CODE) : nil
+		swis = x ? SwisCode.find_by_swis_code(x.SWIS) : nil
+		return fire, school, swis
+	end
+	
 	def self.web_import
 		apps = WebApplicant.find(:all, {
 			:conditions => 'exported_mccs = 0 and submit_complete = 1 and submitted_at > "2013-01-04 12:00:00"'
@@ -41,66 +51,11 @@ class WebApplicant < ActiveRecord::Base
 				wa.previous_last_name.to_s.upcase.strip
 			])
 			
-			#first_name = wa.first_name.to_s.upcase.strip
+			fire, school, swis = wa.find_fire_school_swis
+			town = swis ? swis.town : nil
+			village = swis ? swis.village : nil
 			
-			#unless wa.middle_name.blank?
-			#	first_name += ' ' + wa.middle_name.to_s.upcase.strip[0..0] + '.'
-			#end
-      a = wa.residence_different ? wa.res_address : wa.address
-      z = wa.residence_different ? wa.res_zip : wa.zip
-      a = a.gsub("STREET","ST");
-      a = a.gsub("DRIVE","DR");
-      a = a.gsub("AVENUE","AVE");
-      a = a.gsub("ROAD","RD");
-      a = a.gsub("LANE","LN");
-      a = a.gsub("  "," ");
-
-      a.delete! ','
-      a.delete! '.'
-      a.strip!
-      x = Parcel.find :first, :conditions => ['address like ? and left(PAR_ZIP, 5) = ?',"%#{a}", z[0, 5]]
-      if x
-        if wa.fire
-        exp_fire = FireDistrict.find_by_name wa.fire.upcase
-        if !exp_fire
-          logger.warn "no fire district for #{wa.fire.upcase}"
-        end
-        end
-        if wa.school
-        exp_school = SchoolDistrict.find_by_name wa.school.upcase
-        if !exp_school
-          logger.warn "no school district for #{wa.school.upcase}"
-        end
-        end
-        web_swis = WebSwis.find_by_swis_code x.SWIS
-        logger.warn "SWIS=#{x.SWIS}"
-        if web_swis
-          exp_town = Town.find_by_name web_swis.pstek_town_name.upcase
-        end
-        town_id = exp_town ? exp_town.id : 0
-        if web_swis
-          exp_village = Village.find_by_name web_swis.pstek_village_name.upcase
-          logger.warn "Village=#{web_swis.pstek_village_name.upcase}"
-        end
-        village_id = exp_village ? exp_village.id : 0
-
-      end
-      if x
-        fire_id = exp_fire ? exp_fire.id : 0
-        school_id = exp_school ? exp_school.id : 0
-        village_id = exp_village ? village_id : 0
-        town_id = exp_town ? exp_town.id : 0
-      else
-        fire_id = exp_fire ? exp_fire.id : 0
-        school_id = exp_school ? exp_school.id : 0
-        village_id = exp_village ? exp_village.id : 0
-        town_id = exp_town ? exp_town.id : 0
-      end
-      if wa.residence_different
-        county_id = wa.res_county.to_s.upcase.strip
-      else
-        county_id =   wa.county.to_s.upcase.strip
-      end
+			wa_county = (wa.residence_different ? wa.res_county : wa.county).to_s.upcase.strip
 
 			attr = {
 				:first_name => wa.first_name.to_s.upcase.strip,
@@ -125,12 +80,17 @@ class WebApplicant < ActiveRecord::Base
 				:date_of_birth => wa.dob,
 				:race => wa.race.to_s,
 				:contact_via => wa.contact_via,
-        :fire_district_id => fire_id,
-        :school_district_id => school_id,
-        :village_id => village_id,
-        :town_id => town_id,
-        :county_id => county_id=="MONROE" ? 2 : 7
+        :county_id => wa_county == 'MONROE' ? 2 : 7
     	}
+    	
+    	old_res = p ? p.residence_different? ? "#{p.residence_address} #{p.residence_zip}" : "#{p.mailing_address} #{p.mailing_zip}" : nil
+    	new_res = wa.residence_different? ? "#{attr[:residence_address]} #{attr[:residence_zip]}" : "#{attr[:mailing_address]} #{attr[:mailing_zip]}"
+    	res_changed = old_res != new_res
+    	
+    	attr[:fire_district_id] = fire ? fire.id : nil if res_changed || (p && p.fire_district.nil?)
+    	attr[:school_district_id] = school ? school.id : nil if res_changed || (p && p.school_district.nil?)
+    	attr[:town_id] = town ? town.id : nil if res_changed || (p && p.town.nil?)
+    	attr[:village_id] = village ? village.id : nil if res_changed || (p && p.village.nil?)
     	
     	unless wa.gender.blank?
     		attr[:gender] = wa.gender.to_s.upcase.strip

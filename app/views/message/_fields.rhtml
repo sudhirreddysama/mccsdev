@@ -31,11 +31,16 @@
 		
 		$('#obj_letter_id').change(function(e) {
 			
+			data = {}
+			if(super_c) {
+				data = {obj_type: super_c, obj_id: super_id};
+			}
+			
 			var letter_id = $(this).val();
 			$('#obj_subject, #obj_body').addClass('busy-bg');			
 			$.ajax({
 				url: root_url + 'letter/apply/' + letter_id,
-				data: {obj_type: super_c, obj_id: super_id},
+				data: data,
 				dataType: 'json',
 				success: function(data, status, xhr) {
 					$('#obj_subject, #obj_public_name, #obj_body').removeClass('busy-bg');

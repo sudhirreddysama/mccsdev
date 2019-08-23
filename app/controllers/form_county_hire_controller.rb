@@ -111,13 +111,30 @@ class FormCountyHireController < CrudController
 	end
 	
 	def view
+		@act = params[:act]
 		if request.post?
-			FormCountyChange.update_county_form_status_and_notify @obj, @current_user, params[:obj]			
-			flash[:notice] = 'Status has been updated.'
-			redirect_to
-		else
-			super
+			if params[:obj]
+				FormCountyChange.update_county_form_status_and_notify @obj, @current_user, params[:obj]			
+				flash[:notice] = 'Status has been updated.'
+				redirect_to
+				return
+			elsif params[:act]
+				@act = @obj.form_actions.build(params[:act])
+				@act.user = @current_user
+				if FormCountyChange.process_form_action(@act, params.submit == 'abandon')
+					flash[:notice] = 'Form has been processed.'
+					redirect_to
+					return
+				end
+			end
 		end
+		@act = FormAction.new({:submit_option => (@current_user.level == 'agency-head' || @current_user.admin_level?) ? 'HR' : 'User' }) if !@act		
+		super
+	end
+	
+	def save_redirect
+		@obj.form_actions.create({:status => @obj.status, :hr_status => @obj.hr_status, :note => 'Form Started', :user => @current_user})
+		super
 	end
 	
 	def submit

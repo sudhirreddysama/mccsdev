@@ -5,7 +5,7 @@
 			<% if params[:id2] == 'perf' %>
 				<th>Perf. Status
 			<% end %>
-			<th>Sort</th>
+			<th>Search/Sort</th>
 		</tr>
 		<tr>
 			<td>
@@ -19,24 +19,25 @@
 			<td class="subform">
 				<table>
 					<tr>
-						<tr>
-							<td>
-								<%= f.select :sort1, @orders, :include_blank => 'Sort 1' %>
-								&nbsp;&nbsp;<%= f.select :dir1, [['Asc', 'asc'], ['Desc', 'desc']] %>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<%= f.select :sort2, @orders, :include_blank => 'Sort 2' %>
-								&nbsp;&nbsp;<%= f.select :dir2, [['Asc', 'asc'], ['Desc', 'desc']] %>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<%= f.select :sort3, @orders, :include_blank => 'Sort 3' %>
-								&nbsp;&nbsp;<%= f.select :dir3, [['Asc', 'asc'], ['Desc', 'desc']] %>
-							</td>
-						</tr>
+						<td><%= f.text_field :search, :placeholder => 'Search' %></td>
+					</tr>
+					<tr>
+						<td>
+							<%= f.select :sort1, @orders, :include_blank => 'Sort 1' %>
+							&nbsp;&nbsp;<%= f.select :dir1, [['Asc', 'asc'], ['Desc', 'desc']] %>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<%= f.select :sort2, @orders, :include_blank => 'Sort 2' %>
+							&nbsp;&nbsp;<%= f.select :dir2, [['Asc', 'asc'], ['Desc', 'desc']] %>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<%= f.select :sort3, @orders, :include_blank => 'Sort 3' %>
+							&nbsp;&nbsp;<%= f.select :dir3, [['Asc', 'asc'], ['Desc', 'desc']] %>
+						</td>
 					</tr>
 				</table>
 			</td>

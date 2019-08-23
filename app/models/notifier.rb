@@ -5,22 +5,35 @@ class Notifier < ActionMailer::Base
 	
 	# This is called from county form controllers. Need to see if there are any recipients before sending email.
 	def self.county_form_recipient f
+		u = nil
 		case f.hr_status
 			when 'liaison', 'liaison-final'
 				u = Agency.get_liaison(f.agency, f.department)
-				u ? u.email_with_name : nil
+				#u ? u.email_with_name : nil
 			when 'exam-mgr'
-				'Aileen Henning <AHenning@monroecounty.gov>'
+				#'Aileen Henning <AHenning@monroecounty.gov>'
+				u = User.find_by_username 'ahenning'
 			when 'hr-mgr'
-				'Patty English <PEnglish@monroecounty.gov>'
+				#'Patty English <PEnglish@monroecounty.gov>'
+				u = User.find_by_username 'penglish'
 			when 'hr-director'
-				'Brayton Connard <BConnard@monroecounty.gov>'
+				#'Brayton Connard <BConnard@monroecounty.gov>'
+				u = User.find_by_username 'connardb'
 			when 'payroll'
 				u = f.department && f.department.payroll_user
-				u ? u.email_with_name : nil
+				#u ? u.email_with_name : nil
 			when 'benefits'
-				'Debra Wood <DebraWood@monroecounty.gov>'
+				#'Debra Wood <DebraWood@monroecounty.gov>'
+				u = User.find_by_username 'dwood'
 		end
+		return u
+	end
+	
+	def cert_overdue c, users
+		subject "Certified List Overdue Notice (#{c.id})"
+		recipients users.map(&:email_with_name)
+		from DEFAULT_FROM
+		body :c => c
 	end
 
 	def county_form_status f, to_email, from_email
@@ -33,14 +46,24 @@ class Notifier < ActionMailer::Base
 		body :o => f
 	end
 	
-	def county_form_hr_status f, to_email, from_email
+	def county_form_hr_status f, to_email, from_email, act = nil
 		recipients to_email
 		from from_email
 		typ = 'County Form'
 		typ = '105(C) Personnel Change Form' if f.is_a?(FormCountyChange)
 		typ = '330(C) New Hire Form' if f.is_a?(FormCountyHire)
 		subject "[#{f.hr_status}] #{typ} (#{f.id} - #{f.name})"
-		body :o => f
+		body :o => f, :act => act
+	end
+	
+	def form_action act
+		recipients act.recipient.email_with_name
+		from act.user.email_with_name
+		typ = 'County Form'
+		typ = '105(C) Personnel Change Form' if act.obj.is_a?(FormCountyChange)
+		typ = '330(C) New Hire Form' if act.obj.is_a?(FormCountyHire)
+		subject "[#{act.obj.status}] #{typ} (#{act.obj.id} - #{act.obj.name})"
+		body :o => act.obj, :act => act
 	end
 	
 	def lost_password u, url

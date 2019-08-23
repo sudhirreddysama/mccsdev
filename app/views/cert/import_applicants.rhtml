@@ -134,10 +134,15 @@
 							<%
 						
 								exclude_actions = a.cert_applicants.find(:all, :include => [{:cert => :agency}, :cert_code], :order => 'certs.certification_date desc', :conditions => ['cert_codes.exclude = 1 and certs.agency_id = ? and certs.department_id = ?', @obj.agency_id, @obj.department_id])
-						
+								
+								has_changes = p.person_updates.find(:first, :conditions => 'date(created_at) >= date_sub(curdate(), interval 30 day)')
+								
 							%>
+							<% if has_changes %>
+								<span style="color: #800;">RES. CHANGES LAST 30 DAYS</span>&nbsp;&nbsp;&nbsp;
+							<% end %>
 							<% if a.agency_residency %>
-								<span style="color: #a0a;">&nbsp;&nbsp;&nbsp;BOCES RES.</span>
+								<span style="color: #a0a;">BOCES RES.</span>&nbsp;&nbsp;&nbsp;
 							<% end %>
 							<% if !exclude_actions.empty? %>&nbsp;<br />
 								<span class="dim">Prev. Agency Declination:</span>

@@ -1,0 +1,3 @@
+<% fields_for(:obj) { |f| %>
+	<%= f.select :exam_site_ids, @options || [], {}, :multiple => true, :style => 'width: 600px; height: 100px;' %>
+<% } %>

@@ -1,0 +1,7 @@
+<% chg = @o.is_a?(FormCountyChange) -%>
+A County <% if chg %>105 Personnel Change<% else %>330 New Hire<% end %> form has been sent to you for your review:
+
+Message/Note:
+<% if @act && !@act.blank? %><%= @act.note %><% else %>(blank)<% end %>
+
+<%= render :partial => 'county_form', :locals => {:o => @o, :chg => chg} %>

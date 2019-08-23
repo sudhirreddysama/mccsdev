@@ -12,6 +12,7 @@ class Applicant < ActiveRecord::Base
 		
 	belongs_to :agency
 	belongs_to :department
+	belongs_to :division
 		
 	has_many :list_notes
 	has_many :web_attachments, :through => :web_applicant

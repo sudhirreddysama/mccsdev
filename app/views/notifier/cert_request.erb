@@ -6,7 +6,10 @@ Exam: <%= @c.exam ? @c.exam.exam_no : 'None' %>
 Title: <%= @c.job ? @c.job.name : 'None' %>
 Agency: <%= @c.agency ? @c.agency.name : 'None' %>
 Department: <%= @c.department ? @c.department.name : 'None' %>
-<% others = @c.other_open_certs_error_attr; if !others.empty? -%>
+<% others_proms = @c.other_open_certs_alt_prom_exams_attr
+others = others_proms.other_certs
+proms = others_proms.prom_exams
+if !others.empty? -%>
 
 OTHER OPEN CERTIFIED LISTS FOUND FOR AGENCY/DEPT/DIV & TITLE:
 <% others.each { |o| -%>

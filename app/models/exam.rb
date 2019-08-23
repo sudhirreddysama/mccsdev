@@ -136,6 +136,15 @@ class Exam < ActiveRecord::Base
 		{:established_date => established_date, :valid_until => valid_until}
 	end
 	
+	def alt_prom_exams(agency = nil, department = nil, division = nil)
+		return [] if exam_type == 'PROM' || exam_type == 'NCP' || !job
+		cond = ['exams.exam_type in ("PROM", "NCP") and exams.established_date <= date(now()) and exams.valid_until >= date(now()) and job_id = %d' % job_id.to_i]
+		cond << 'applicants.agency_id = %d' % agency.id if agency
+		cond << 'applicants.department_id = %d' % department.id if department
+		cond << 'applicants.division_id = %d' % division.id if division
+		cond << 'app_statuses.eligible = "A"'
+		Exam.find(:all, :conditions => "(#{cond * ') and ('})", :include => {:applicants => :app_status})
+	end
 	
 	
 	def calc_rank_and_pos
@@ -278,6 +287,24 @@ class Exam < ActiveRecord::Base
 	
 	def grey_on_master?
 		return ((valid_until and valid_until < Time.now.to_date) || (!valid_until and given_at and given_at.advance(:years => 1) < Time.now.to_date))
+	end
+	
+	def self.exams_and_sites_for(from, to, given_by)
+		cond = [DB.escape('date(exams.given_at) between "%s" and "%s"', from.to_s, to.to_s)]
+		cond << 'exams.given_by in (%s)' % given_by.map(&:to_i).join(', ') unless given_by.blank?
+		where = '(' + cond.join(') and (') + ')'
+		exams = Exam.find(:all, {
+			:conditions => where,
+			:order => 'exams.exam_no'
+		});
+		sites = ExamSite.find(:all, {
+			:include => {:applicants => :exam},
+			:conditions => where,
+			:order => 'exam_sites.name',
+			:group => 'exam_sites.id',
+			:order => 'exam_sites.name'
+		});		
+		return exams, sites
 	end
 	
 	include DbChangeHooks

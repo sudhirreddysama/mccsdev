@@ -15,12 +15,14 @@
 			<td><%= f.text_field :user5, :size => 20, :class => 'user-var' %></td>
 		</tr>
 	</table>
-	<table id="agency-<%= o.id %>" style="display: none;">
+	<table id="agency-<%= o.id %>" style="<% if !(@obj.is_a?(Exam) && @obj.exam_type == 'PROM') %>display: none;<% end %>">
 		<tr>
 			<td>Agency:</td>
-			<td><%= f.select :agency_id, @agency_opts, {:include_blank => true}, :class => 'agency' %></td>
+			<td><%= o.agency ? o.agency.name : '(blank)' %></td>
 			<td>Department:</td>
-			<td><%= f.select :department_id, @department_opts, {:include_blank => true}, :class => 'department' %></td>
+			<td><%= o.department ? o.department.name : '(blank)' %></td>
+			<td>Division:</td>
+			<td><%= o.division ? o.division.name : '(blank)' %></td>
 		</tr>
 	</table>
 	<table>

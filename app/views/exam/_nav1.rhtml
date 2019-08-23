@@ -1,11 +1,14 @@
 <% unless @current_user.agency_level? %>
-    <%= tab 'Attendance/Statistics', {:sc => nil, :sid => nil, :controller => :exam, :action => :attendance, :id => (params[:sid] || params[:id])} %>
+    <%= tab 'Atnd/Stat', {:sc => nil, :sid => nil, :controller => :exam, :action => :attendance, :id => (params[:sid] || params[:id])} %>
     <%= tab 'Provisionals', {:controller => :provisional}, {:action => :index, :id => nil, :sc => nil, :sid => nil}, :class => 'tab-provisional' + (params[:sc] == 'provisional' ? ' active' : '') %>
 <% end %>
-<%= tab 'Preferred/Military Lists', {:controller => :preferred_list}, {:action => :index, :id => nil, :sc => nil, :sid => nil}, :class => 'tab-preferred' %>
+<%= tab 'Pref/Mil Lists', {:controller => :preferred_list}, {:action => :index, :id => nil, :sc => nil, :sid => nil}, :class => 'tab-preferred' %>
 <% unless @current_user.agency_level? %>
-	<%= tab 'Exam Sessions', {:controller => :exam, :action => :sessions, :id => nil, :sc => nil, :sid => nil}, {}, :class => 'tab-calendar' %>
+	<%= tab 'Sessions', {:controller => :exam, :action => :sessions, :id => nil, :sc => nil, :sid => nil}, {}, :class => 'tab-calendar' %>
 	<%= tab 'Calendar', {:controller => :exam, :action => :calendar, :id => nil, :sc => nil, :sid => nil}, {}, :class => 'tab-calendar' %>
+	<% if false && @current_user.staff_level? %>
+		<%= tab 'Bulk Letters', {:controller => :bulk_bulk_message}, {:action => :index, :id => nil, :sc => nil, :sid => nil}, :class => 'tab-letter' %>
+	<% end %>
 <% end %>
 
 

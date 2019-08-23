@@ -63,7 +63,9 @@ class CertApplicant < ActiveRecord::Base
 			aoa ||= CertCode.find_by_code 'AOA'
 			ca = CertApplicant.find(h.ca_id)
 			logger.info "Setting Cert Code CA #{h.ca_id} Cert #{h.id} For #{h.first_name} #{h.last_name}"
-			users = ca.cert.agency ? ca.cert.agency.get_users(ca.cert.department) : []
+			users = ca.cert.agency_users_to_notify
+			
+			
 			ca.cert_code = aoa
 			ca.action_date = ca.action_date
 			ca.save

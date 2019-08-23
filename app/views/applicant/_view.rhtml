@@ -1,5 +1,7 @@
 <% 
 
+@update_js = true
+
 wa = o.web_applicant 
 
 is_agency = @current_user.agency_level?
@@ -8,21 +10,58 @@ is_seasonal = o.web_exam && o.web_exam.web_exam_type && o.web_exam.web_exam_type
 web_exam_c = params[:controller] == 'web_exam'
 
 %>
-
+<div class="tabs buttons">
+	<% if web_exam_c %>
+		<%= tab 'Printable Version', {:controller => :web_exam, :action => :applicant_print, :id => params.id, :id2 => @obj.id}, {}, :target => '_blank', :class => 'tab-print' %>
+	<% else %>
+		<%= tab 'Printable Version', {:controller => :applicant, :action => :print, :id => @obj.id}, {}, :target => '_blank' %>
+	<% end %>
+	<% if o.approved == 'Y' && o.app_status && o.app_status.eligible != 'N' && (@current_user.staff_level? || (@current_user.perm_ag_form_changes && @current_user.is_agency_county?)) %>
+		<%= tab 'Start County 330 (New Hire) Form', {:controller => :form_county_hire, :action => :new, :from_applicant_id => o.id}, {}, :class => 'tab-form-mc' %>
+	<% end %>
+	<div class="clear"></div>
+</div>
 <% if is_staff %>
 	<script type="text/javascript">
-		
+		var obj_id = <%= @obj.id.to_json %>;
 		var admin_notes;
-		
 		(function($) {
-		
-			$(window).bind('beforeunload', function(){
+			$(window).on('beforeunload', function(){
 				$('input').blur();
 				if(window.notes_dirty) {
-					return 'Notes haven\'t finished saving. Leave page anyway?';
+					return 'Changes haven\'t finished saving. Leave page anyway?';
 				}
 			});
 			
+			// New code - fields for applicant.
+			$(function() {
+				$('.staff-fields').on('change', 'input,select,textarea', function(e) { 
+					$this = $(this);
+					$this.addClass('busy-bg');
+					data = $this.serialize();
+					if($this.attr('id') == 'obj_department_id') {
+						data += '&obj%5Bdivision_id%5D='
+					}
+					window.notes_dirty = true;
+					$.ajax({
+						method: 'POST',
+						data: data,
+						url: root_url + 'applicant/admin_notes/' + obj_id,
+						complete: function(xhr, status) {
+							$this.removeClass('busy-bg');
+						},
+						success: function() {
+							$this.effect('highlight');
+							window.notes_dirty = false;
+						},
+						error: function(xhr, status, error) {
+							alert('Error updating fields.');
+						}
+					});
+				});
+			});
+			
+			// Old code - notes for education/trainings/etc.
 			admin_notes = function(t) {
 				t = $(t);
 				t.addClass('busy-bg');
@@ -34,45 +73,25 @@ web_exam_c = params[:controller] == 'web_exam'
 				d[typ] = val;
 				window.notes_dirty = true;
 				$.ajax({
+					method: 'POST',
 					url: root_url + 'applicant/admin_notes/<%= @obj.id %>/'+ id,
 					data: d,
 					complete: function(xhr, status) {
 						t.removeClass('busy-bg');
 					},
 					success: function(data, status, xhr) {
-						new Effect.Highlight(t.attr('id'), {
-							startcolor: '#ddffdd',
-							endcolor: '#ffffee'
-						});
+						t.effect('highlight');
 						window.notes_dirty = false;
 					},
 					error: function(xhr, status, error) {
-						if(confirm('Error updating notes. Try again?')) {
-							admin_notes(t)
-						}
+						alert('Error udpdating fields.');
 					}			
 				});
 			}
-			
 		})(jQuery);
 		
 	</script>
 <% end %>
-
-
-	<div class="tabs buttons">
-		<% if web_exam_c %>
-			<%= tab 'Printable Version', {:controller => :web_exam, :action => :applicant_print, :id => params.id, :id2 => @obj.id}, {}, :target => '_blank', :class => 'tab-print' %>
-		<% else %>
-			<%= tab 'Printable Version', {:controller => :applicant, :action => :print, :id => @obj.id}, {}, :target => '_blank' %>
-		<% end %>
-		<% if o.approved == 'Y' && o.app_status && o.app_status.eligible != 'N' && (@current_user.staff_level? || (@current_user.perm_ag_form_changes && @current_user.is_agency_county?)) %>
-			<%= tab 'Start County 330 (New Hire) Form', {:controller => :form_county_hire, :action => :new, :from_applicant_id => o.id}, {}, :class => 'tab-form-mc' %>
-		<% end %>
-		<div class="clear"></div>
-		
-	</div>
-
 <div class="viewer">
 	<div class="header">General Info.</div>
 
@@ -216,10 +235,10 @@ web_exam_c = params[:controller] == 'web_exam'
 		</table>
 	</div>
 
-	<div class="row">
-		<table>
-			<tr>
-				<% if !is_seasonal %>
+	<% if !is_seasonal %>
+		<div class="row">
+			<table>
+				<tr>
 					<td>
 						<label>Raw:</label>
 						<%= o.base_score.n2? %>
@@ -239,19 +258,11 @@ web_exam_c = params[:controller] == 'web_exam'
 					<td>
 						<label>Final:</label>
 						<%= o.final_score.n2? %>
-					</td>
-				<% end %>
-				<td>
-					<label>Agency:</label>
-					<%= h o.agency.name if o.agency %>
-				</td>
-				<td>
-					<label>Department:</label>
-					<%= h o.department.name if o.department %>
-				&nbsp;</td>
-			</tr>
-		</table>
-	</div>
+					&nbsp;</td>
+				</tr>
+			</table>
+		</div>
+	<% end %>
 	
 	<% if !is_seasonal %>
 		<div class="row">
@@ -310,38 +321,105 @@ web_exam_c = params[:controller] == 'web_exam'
 		<% end %>
 	<% end %>
 	
-	<div class="row">
-		<table width="100%">
-			<tr>
-				<td>
-					<label>Admin Notes:</label>
-					<% if @current_user.staff_level? %>
-						<%= text_area_tag "applicant-#{@obj.id}", @obj.notes, :onchange => 'admin_notes(this);', :style => 'height: 30px; width: 95%;' %>
-						<label>Seniority Date:</label>
-						<%= calendar_date_select_tag "seniority_date-#{@obj.id}", @obj.seniority_date, :onchange => 'admin_notes(this);' %>						
-					<% else %>
-						<%= nl2br_h @obj.notes %>&nbsp;
-					<% end %>
-				</td>
-			</tr>
-		</table>
-	</div>
-	
-	<% if !is_seasonal %>
+	<% if is_staff %>
+		<div class="staff-fields">
+			<%		
+			@agency_opts = Agency.find(:all, :order => 'name').collect { |a| [a.name, a.id] }
+			@department_opts = Department.find(:all, :order => 'name').collect { |d| [d.name, d.id] }
+			%>
+			<% fields_for(:obj) { |ff| %>
+				<div class="row">
+					<table width="100%">
+						<tr>
+							<td>
+								<label>Admin Notes:</label>
+									<%= ff.text_area :notes, :style => 'height: 30px; width: 95%;' %>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="row">
+					<table>
+						<tr>
+							<td>
+								<label>Seniority Date:</label>
+								<%= ff.text_field :seniority_date, :value => @obj.seniority_date.dy0? %>			
+								<script>$('#obj_seniority_date').datepicker();</script>			
+							</td>
+							<td>
+								<label>Agency:</label>
+								<%= ff.select :agency_id, @agency_opts, :include_blank => true %>						
+							</td>					
+							<td>
+								<label>Department:</label>
+								<%= ff.select :department_id, @department_opts, :include_blank => true %>						
+							</td>					
+							<td>
+								<label>Division:</label>
+								<%= partial 'division/division_select', :f => ff, :o => @obj, :field_name => 'obj' %><br>			
+							</td>
+						</tr>
+					</table>
+				</div>
+				<% if !is_seasonal %>
+					<div class="row">
+						<table width="100%">
+							<tr>
+								<td>
+									<label>List Notes (will appear on eligible list):</label>
+									<%= ff.text_area :list_note, :style => 'height: 30px; width: 95%;' %>
+								</td>
+							</tr>
+						</table>
+					</div>			
+				<% end %>
+			<% } %>
+		</div>
+	<% else %>
 		<div class="row">
 			<table width="100%">
 				<tr>
 					<td>
-						<label>List Notes (will appear on eligible list):</label>
-						<% if @current_user.staff_level? %>
-							<%= text_area_tag "list-#{@obj.id}", @obj.list_note, :onchange => 'admin_notes(this);', :style => 'height: 30px; width: 95%;' %>
-						<% else %>
-							<%= nl2br_h @obj.list_note %>&nbsp;
-						<% end %>
+						<label>Admin Notes:</label>
+						<%= nl2br_h @obj.notes %>&nbsp;
 					</td>
 				</tr>
 			</table>
 		</div>
+		<div class="row">
+			<table>
+				<tr>
+					<td>
+						<label>Seniority Date:</label>
+						<%= @obj.seniority_date.d0? %>
+					</td>
+					<td>
+						<label>Agency:</label>
+						<%= @obj.agency.name if @obj.agency %>						
+					</td>					
+					<td>
+						<label>Department:</label>
+						<%= @obj.department.name if @obj.department %>						
+					</td>					
+					<td>
+						<label>Division:</label>
+						<%= @obj.division.name is @obj.division %>						
+					</td>
+				</tr>
+			</table>
+		</div>
+		<% if !is_seasonal %>		
+			<div class="row">
+				<table width="100%">
+					<tr>
+						<td>
+							<label>List Notes (will appear on eligible list):</label>
+							<%= nl2br_h @obj.list_note %>&nbsp;
+						</td>
+					</tr>
+				</table>
+			</div>		
+		<% end %>
 	<% end %>
 		
 </div>

@@ -180,35 +180,33 @@ class ApplicantController < CrudController
 	
 	def admin_notes
 		load_obj
-		if params[:educations]
-			n = @obj.applicant_notes.find_or_create_by_object_type_and_object_id 'education', params[:id2]
-			v = params[:educations]
-			#@obj.web_applicant.web_educations.find(params[:id2]).update_attribute :admin_notes, params[:educations]
-		elsif params[:employments]
-			n = @obj.applicant_notes.find_or_create_by_object_type_and_object_id 'employment', params[:id2]
-			v = params[:employments]
-			#@obj.web_applicant.web_employments.find(params[:id2]).update_attribute :admin_notes, params[:employments]
-		elsif params[:certifications]
-			n = @obj.applicant_notes.find_or_create_by_object_type_and_object_id 'certification', params[:id2]
-			v = params[:certifications]
-			#@obj.web_applicant.web_certifications.find(params[:id2]).update_attribute :admin_notes, params[:certifications]
-		elsif params[:trainings]
-			n = @obj.applicant_notes.find_or_create_by_object_type_and_object_id 'training', params[:id2]
-			v = params[:trainings]
-			#@obj.web_applicant.web_trainings.find(params[:id2]).update_attribute :admin_notes, params[:trainings]
-		elsif params[:applicant]
-			@obj.update_attribute :notes, params[:applicant]
-		elsif params[:list]
-			@obj.update_attribute :list_note, params[:list]
-		elsif params[:seniority_date]
-			@obj.update_attribute :seniority_date, params[:seniority_date]
-		end
+		if request.post?
+			if params[:educations]
+				n = @obj.applicant_notes.find_or_create_by_object_type_and_object_id 'education', params[:id2]
+				v = params[:educations]
+				#@obj.web_applicant.web_educations.find(params[:id2]).update_attribute :admin_notes, params[:educations]
+			elsif params[:employments]
+				n = @obj.applicant_notes.find_or_create_by_object_type_and_object_id 'employment', params[:id2]
+				v = params[:employments]
+				#@obj.web_applicant.web_employments.find(params[:id2]).update_attribute :admin_notes, params[:employments]
+			elsif params[:certifications]
+				n = @obj.applicant_notes.find_or_create_by_object_type_and_object_id 'certification', params[:id2]
+				v = params[:certifications]
+				#@obj.web_applicant.web_certifications.find(params[:id2]).update_attribute :admin_notes, params[:certifications]
+			elsif params[:trainings]
+				n = @obj.applicant_notes.find_or_create_by_object_type_and_object_id 'training', params[:id2]
+				v = params[:trainings]
+				#@obj.web_applicant.web_trainings.find(params[:id2]).update_attribute :admin_notes, params[:trainings]
+			elsif params[:obj]
+				@obj.update_attributes params[:obj]
+			end
 		
-		if n
-			if v.blank?
-				n.destroy
-			else
-				n.update_attribute :notes, v
+			if n
+				if v.blank?
+					n.destroy
+				else
+					n.update_attribute :notes, v
+				end
 			end
 		end
 		

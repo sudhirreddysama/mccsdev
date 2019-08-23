@@ -501,6 +501,7 @@ input.ucase, textarea.ucase { text-transform: uppercase; }
 .form-status.form-hold { background-color: #088; }
 .form-status.form-filled { background-color: #808; }
 .form-status.form-expired { background-color: #000; }
+.form-status.form-abandoned { background-color: #000; }
 
 .form-status.form-hr-dept { background-color: #000; }
 .form-status.form-hr-liaison { background-color: #800; }
@@ -617,3 +618,15 @@ sup.ref { line-height: 0; font-size: 8px; font-weight: normal; }
 #app .select2-container--open .select2-selection--single,
 #app .select2-container--open .select2-selection--multiple { border-color: #048 #048 #fff #048; background: #fff; /* box-shadow: 3px 3px #888; */ }
 #app .select2-dropdown { border-radius: 0; border-color: #fff #048 #048 #048; margin-top: -1px; /* box-shadow: 3px 3px #888; */ }
+
+
+#submit-form { margin: 5px; }
+#submit-form-toggle { display: block; padding: 5px; color: #fff; background-color: #080; text-align: center; text-decoration: underline; }
+#submit-form-toggle:hover { background-color: #040; }
+#submit-form-panel { display: block; border: 5px solid #080; padding: 5px; padding-bottom: 0; border-top: 0; }
+#submit-form-panel form { display: block; margin: 0 auto; max-width: 8.5in; }
+#submit-form-panel form > div { padding-bottom: 5px; }
+#submit-form button { background: #080; color: #fff; border: none; border-radius: 5px; padding: 5px 10px; text-decoration: none; }
+#submit-form button:hover { background: #040; }
+#submit-form button[value=abandon] { background: #800; }
+#submit-form button[value=abandon]:hover { background: #400; }

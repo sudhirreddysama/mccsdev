@@ -1,0 +1,94 @@
+<div class="viewer">
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>ID:</label>
+					<%= o.id %>
+				</td>
+				<td>
+					<label>Subject:</label>
+					<%= h o.subject %>
+				</td>
+				<td>
+					<label>Subject (Public):</label>
+					<%= h o.public_name %>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Created:</label>
+					<%= o.created_at.dt0? %>
+				</td>
+				<td>
+					<label>Created By:</label>
+					<%= o.user.username if o.user %>
+				</td>
+				<td>
+					<label>From/Reply To:</label>
+					<%= h o.email_from %>
+				</td>
+				<td>
+					<label>Force Postal:</label>
+					<%= yn o.force_postal %>
+				</td>
+				<td>
+					<label>Deliver After:</label>
+					<%= h o.deliver_after.dt0? %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+	<div class="row">
+		<table>
+			<tr>
+				<td>
+					<label>Status(es):</label>
+					<%= h o.app_statuses.collect(&:name).join(', ') %>
+				&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<table class="dg">
+	<thead>
+		<tr>
+			<th width="1%">Actions</th>
+			<th width="1%">ID</th>
+			<th width="1%" class="nobr">View PDF</th>
+			<th width="48%">Message</th>
+			<th width="49%">Applicant/Agency Contact (AC)</th>
+			<th width="1%" class="nobr">To Docs</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @obj.messages.each { |m| %>
+			<tr class="<%= cycle 'odd', 'even' %>">
+				<td class="nobr">
+					<%
+						opt = m.applicant_id ? 
+							{:sc => :applicant, :sid => m.applicant_id, :controller => :message, :id => m.id, :action => :view} :
+							{:sc => :contact, :sid => m.contact_id, :controller => :message, :id => m.id, :action => :view}
+					%>
+					<%= link_to image_tag('icons/zoom.png', :size => '16x16', :alt => 'view', :title => 'View'), opt %>
+					<%= link_to image_tag('icons/pencil.png', :size => '16x16', :alt => 'edit', :title => 'Edit'), opt.merge(:action => :edit) %>				
+				</td>
+				<td><%= m.id %></td>
+				<td><%= link_to 'View PDF', opt.merge(:action => :print_pdf), :target => '_blank' %></td>
+				<td><%= link_to m.subject, opt.merge(:action => :view) %></td>
+				<td>
+					<% if m.applicant %>
+						<%= link_to m.applicant.label, :sc => nil, :sid => nil, :controller => :applicant, :action => :view, :id => m.applicant_id %>
+					<% elsif m.contact %>
+						<%= link_to m.contact.name, :sc => nil, :sid => nil, :controller => :contact, :action => :view, :id => m.contact_id %> (AC)
+					<% end %>
+				</td>
+				<td width="1%" class="nobr"><%= link_to 'To Docs', :sc => params[:sc], :sid => params[:sid], :controller => :document, :action => :new_from_message, :id => m.id %></td>
+			</tr>
+		<% } %>
+	</tbody>
+</table>

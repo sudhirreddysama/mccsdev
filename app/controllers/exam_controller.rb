@@ -128,14 +128,17 @@ class ExamController < CrudController
 	
 	def set_agency_department
 		load_obj
-		cond = nil
-		if params[:only_blank]
-			cond = 'applicants.agency_id is null and applicants.department_id is null'
+		org = params[:org]
+		if request.post? && org
+			cond = nil
+			if org.only_blank == '1'
+				cond = 'applicants.agency_id is null and applicants.department_id is null and applicants.division_id is null'
+			end
+			@obj.applicants.find(:all, :conditions => cond).each { |a|
+				a.update_attributes :department_id => org.department_id, :agency_id => org.agency_id, :division_id => org.division_id
+			}
+			flash[:notice] = 'Applicants have been updated.'
 		end
-		@obj.applicants.find(:all, :conditions => cond).each { |a|
-			a.update_attributes :department_id => params[:department_id], :agency_id => params[:agency_id]
-		}
-		flash[:notice] = 'Applicants have been updated.'
 		redirect_to :action => :applicants, :id => @obj.id
 	end
 	
@@ -665,24 +668,7 @@ class ExamController < CrudController
 	def attendance_autocomplete
 		from = Date.parse(params[:from_date])
 		to = Date.parse(params[:to_date])
-		
-		cond = [DB.escape('date(exams.given_at) between "%s" and "%s"', from.to_s, to.to_s)]
-		
-		cond << 'exams.given_by in (%s)' % params[:given_by].map(&:to_i).join(', ') unless params[:given_by].blank?
-		
-		exams = Exam.find(:all, {
-			:conditions => get_where(cond),
-			:order => 'exams.exam_no'
-		});
-		
-		sites = ExamSite.find(:all, {
-			:include => {:applicants => :exam},
-			:conditions => get_where(cond),
-			:order => 'exam_sites.name',
-			:group => 'exam_sites.id',
-			:order => 'exam_sites.name'
-		});		
-		
+		exams, sites = Exam.exams_and_sites_for(from, to, params[:given_by])
 		@options = exams.collect { |e| ["#{e.exam_no} - #{e.title}", e.id] }
 		exam_ids = render_to_string(:inline => '<%= partial "attendance_exam_ids" %>')
 		@options = sites.map { |s| [s.name, s.id] }
@@ -729,7 +715,11 @@ class ExamController < CrudController
 		
 		@statuses = AppStatus.find(:all, :order => 'app_statuses.name')
 		
-		@cond = []
+		@cond = get_search_conditions @filter[:search], {
+			'people.first_name' => :like,
+			'people.last_name' => :like,
+			'people.ssn' => :like,
+		}
 		
 		unless @filter[:statuses].blank?
 			none = @filter[:statuses].delete('NONE')

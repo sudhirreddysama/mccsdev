@@ -34,7 +34,13 @@ class VacancyController < CrudController
 			emails = []
 			DB.query('select u.email from users u
 				left join vacancies v on u.id in (v.submitter_id, v.user_id)
-				where u.level != "disabled" and (v.id is not null or u.only_vacancy = 1 or u.allow_vacancy_omb = 1 or u.allow_vacancy_admin = 1 or u.vacancy_emails = 1)
+				left join agencies a on a.id = u.agency_id
+				where u.level != "disabled" and (
+					(u.allow_vacancy_omb = 1 or u.allow_vacancy_admin = 1 or u.vacancy_emails = 1) or
+					(v.id is not null and 
+						(u.level not like "agency%%" or (a.agency_type = "COUNTY" and u.perm_ag_vacancies = 1))
+					)
+				)
 				group by u.email'
 			).each_hash { |h|
 				emails << h.email

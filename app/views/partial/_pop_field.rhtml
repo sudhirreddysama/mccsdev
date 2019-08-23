@@ -51,8 +51,8 @@
 			e.preventDefault();
 			$('#' + id).val('');
 			$('#' + id + '_text').val('');
-			$('#' + id).change();
 			$('#' + id).data('attr', null);
+			$('#' + id).change();
 			$(this).hide();			
 		});
 	})(jQuery);

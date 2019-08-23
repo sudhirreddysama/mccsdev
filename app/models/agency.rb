@@ -58,15 +58,22 @@ class Agency < ActiveRecord::Base
 		contacts.select(&:primary).map { |c| [c.lastname, c.firstname, c.title, c.email, c.phone, c.fax].reject(&:blank?).join(',') }.join('/')
 	end
 	
-	def get_users d, include_vacancy_only = false, cond = []
+	def get_users d = nil, div = nil, condition = nil
 		# if no department, just find everyone with this agency_id who also has no department
 		# if department and agency is MONROE COUNTY, only include people specifically in that department (excluding people with no department)
 		# if department and agency is NOT MONROE COUNTY, include people in that department AND ALSO users with NO department
-		c = 'users.level != "disabled" and ' + (include_vacancy_only ? '' : 'users.only_vacancy = 0 and ')
-		cond << (d ? 
-			c + '(' + (name != 'MONROE COUNTY' ? 'users.department_id is null or ' : '') + ('users.department_id = %d)' % d.id) : 
-			c + 'users.department_id is null'
-		)
+		cond = ['users.level != "disabled"']
+		cond << condition if condition
+		cond << (div ? 'users.division_id is null or users.division_id = %d' % div.id : 'users.division_id is null')
+		if d
+			if name == 'MONROE COUNTY'
+				cond << 'users.department_id = %d' % d.id
+			else
+				cond << 'users.department_id is null or users.department_id = %d' % d.id
+			end
+		else
+			cond << 'users.department_id is null'
+		end
 		u = users.find(:all, {
 			:conditions => '(' + cond.join(') and (') + ')',
 			:order => 'users.name'

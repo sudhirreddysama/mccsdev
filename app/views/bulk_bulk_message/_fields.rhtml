@@ -1,0 +1,76 @@
+<% if @obj.new_record? %>
+	<%= f.tr_calendar_date_select :from_date, :label => 'From Date', :onchange => 'date_change()' %>
+	<%= f.tr_calendar_date_select :to_date, :label => 'To Date', :onchange => 'date_change()' %>
+	<tr>
+		<th>State/Local:</th>
+		<td>
+			<% Const::GIVEN_BY.each { |g| %>
+				<label style="display: block;"><%= f.check_box "given_by_#{g[1]}", :onchange => 'date_change()' %> <%= h g[0] %></label>
+			<% } %>
+		</td>
+	</tr>
+	<tr>
+		<th>Exams: <span class="req">*</span></th>
+		<td>
+			<% @options = [] %>
+			<%= partial 'exam_ids' %>
+			<div>Ctrl/Shift click to select multiple. If no exam is selected, all will be included.</div>
+		</td>
+	</tr>
+	<tr>
+		<th>Exam Sites: <span class="req">*</span></th>
+		<td>
+			<% @options = [] %>
+			<%= partial 'exam_site_ids' %>
+			<div>Ctrl/Shift click to select multiple. If no site is selected, all will be included.</div>
+		</td>
+	</tr>	
+	<script type="text/javascript">
+	
+		var date_change;	
+	
+		(function($) {
+	
+			date_change = function(e) {
+				from = $('#obj_from_date').val();
+				to = $('#obj_to_date').val();
+				given_by = []
+			
+				if($('#obj_given_by_1:checked')[0]) given_by.push(1)
+				if($('#obj_given_by_2:checked')[0]) given_by.push(2)
+				if($('#obj_given_by_3:checked')[0]) given_by.push(3)
+			
+				if(from && !to) {
+					to = from;
+					$('#obj_to_date').val(from);
+				}
+				if(from && to) {
+					$('#obj_exam_ids').addClass('busy-bg');
+					$('#obj_exam_site_ids').addClass('busy-bg');
+					$.ajax({
+						url: <%= url_for(:action => :exams_autocomplete).to_json %>,
+						data: {
+							from_date: from,
+							to_date: to,
+							given_by: given_by
+						},
+						complete: function() {
+							$('#obj_exam_ids').removeClass('busy-bg');
+							$('#obj_exam_site_ids').removeClass('busy-bg');
+						},
+						success: function(data, status, xhr) {
+							$('#obj_exam_ids').replaceWith(data.exam_ids);
+							$('#obj_exam_site_ids').replaceWith(data.exam_site_ids);
+						},
+						error: function() {
+							alert('Error loading exam options.');
+						}
+					});
+				}
+			}
+	
+		})(jQuery);
+
+	</script>
+<% end %>
+<%= partial 'bulk_message/fields', :f => f, :o => o %>

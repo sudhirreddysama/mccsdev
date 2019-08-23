@@ -95,6 +95,30 @@ class Person < ActiveRecord::Base
 			residence_is = 'BLANK' if residence_is.blank? or residence_is == 'NY'
 			changes << "Residence address changed from #{residence_was} to #{residence_is}. "
 		end
+		if town_id_changed?
+			o = town_id_was ? Town.find_by_id(town_id_was) : nil
+			town_was = o ? o.name : 'BLANK'
+			town_is = town ? town.name : 'BLANK'
+			changes << "Town changed from #{town_was} to #{town_is}."
+		end
+		if village_id_changed?
+			o = village_id_was ? Village.find_by_id(village_id_was) : nil
+			village_was = o ? o.name : 'BLANK'
+			village_is = village ? village.name : 'BLANK'
+			changes << "Village changed from #{village_was} to #{village_is}."
+		end
+		if school_district_id_changed?
+			o = school_district_id_was ? SchoolDistrict.find_by_id(school_district_id_was) : nil
+			school_district_was = o ? o.name : 'BLANK'
+			school_district_is = school_district ? school_district.name : 'BLANK'
+			changes << "School changed from #{school_district_was} to #{school_district_is}."
+		end
+		if fire_district_id_changed?
+			o = fire_district_id_was ? FireDistrict.find_by_id(fire_district_id_was) : nil
+			fire_district_was = o ? o.name : 'BLANK'
+			fire_district_is = fire_district ? fire_district.name : 'BLANK'
+			changes << "Fire changed from #{fire_district_was} to #{fire_district_is}."
+		end
 		unless changes.empty?
 			au = person_updates.create({
 				:user_id => Thread.current[:user_id],

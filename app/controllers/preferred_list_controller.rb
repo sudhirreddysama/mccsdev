@@ -181,7 +181,7 @@ class PreferredListController < CrudController
 		load_obj
 		@obj.update_attribute :status, 'certified'
 		flash[:notice] = 'Preferred list status has been changed to certified. Agency users can now input actions and upload documents.'
-		u = @obj.agency ? @obj.agency.get_users(@obj.department) : nil
+		u = @obj.agency ? @obj.agency.get_users(@obj.department, nil, 'users.show_pref_lists = 1') : nil
 		if u
 			Notifier.deliver_perf_certify u, @obj
 		end

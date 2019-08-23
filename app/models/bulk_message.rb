@@ -2,6 +2,8 @@ class BulkMessage < ActiveRecord::Base
 
 	has_many :messages, :dependent => :destroy
 	
+	belongs_to :bulk_bulk_message
+	
 	belongs_to :letter
 	belongs_to :exam
 	belongs_to :cert

@@ -1,5 +1,7 @@
 class FormCountyChange  < ActiveRecord::Base
 
+	has_many :form_actions, :as => :obj
+	
 	belongs_to :agency
 	belongs_to :department
 	belongs_to :division
@@ -239,26 +241,58 @@ class FormCountyChange  < ActiveRecord::Base
 		(1..6).to_a.reverse.find { |i| %w(cost_center order_no percent fund grant).find { |f| !send("org_fund_#{f}#{i}").blank? } } || 0
 	end
 	
-	def self.update_county_form_status_and_notify f, u, attr
+	def self.update_county_form_status_and_notify f, u, attr, act = nil
 		f.status_user = u
 		f.status_date = Time.now.to_date
 		old_status = f.status
 		old_hr_status = f.hr_status
+		old_status_reason = f.status_reason
 		f.update_attributes attr
 		status_changed = old_status != f.status
 		hr_status_changed = old_hr_status != f.hr_status
+		status_reason_changed = old_status_reason != f.status_reason
+		recipient = nil
 		if status_changed
 			emails = [f.user, f.submitter].reject(&:nil?).map(&:email_with_name).uniq
+			recipient = f.submitter
 			if !emails.blank?
 				Notifier.deliver_county_form_status f, emails, u.email_with_name
 			end
 		end
 		if hr_status_changed
-			emails = Notifier.county_form_recipient(f)
-			if !emails.blank?
-				Notifier.deliver_county_form_hr_status f, emails, u.email_with_name
+			recipient2 = Notifier.county_form_recipient(f)
+			if recipient2
+				Notifier.deliver_county_form_hr_status f, recipient2.email_with_name, u.email_with_name, act
 			end
 		end	
+		if !act
+			act = f.form_actions.create :user => u, :note => status_reason_changed ? f.status_reason : ''
+		end
+		act.hr_status = f.hr_status
+		act.status = f.status
+		act.recipient = recipient2 || recipient
+		act.save
+	end
+	
+	def self.process_form_action act, abandon = false
+		if abandon
+			act.status = 'abandoned'
+			act.hr_status = 'dept'
+			FormCountyChange.update_county_form_status_and_notify act.obj, act.user, {:status => 'abandoned', :hr_status => 'dept', :submitter_id => act.user.id, :submitted_at => Time.now}, act		
+		elsif act.submit_option == 'HR'
+			act.status = 'submitted'
+			act.hr_status = 'liaison'
+			FormCountyChange.update_county_form_status_and_notify act.obj, act.user, {:status => 'submitted', :hr_status => 'liaison', :submitter_id => act.user.id, :submitted_at => Time.now}, act
+		elsif act.submit_option == 'User'
+			act.status = act.obj.status
+			act.hr_status = act.obj.hr_status
+			act.errors.add :base, '^Select a recipient' if act.recipient.nil?
+			if act.errors.empty?
+				act.save
+				Notifier.deliver_form_action act
+			end
+		end
+		return act.errors.empty?
 	end
 	
 	include DbChangeHooks
