@@ -165,7 +165,14 @@ class Const
 		['DSA', '11'],
 		['Elected Official, Co', '12'],
 		['Sheriff\'s Exec Staff', '13'],
-		['union', '14-Non'],
+		['Non-union', '14'],
+		['Non-union PT w/o Ben', '15'],
+		['CSEA PT', '16'],
+		['FSW PT w/ Benefits', '17'],
+		['FSW-PT/Seas/PD,w/oBN', '18'],
+		['Temporary', '19'],
+		['Seasonal', '20'],
+		['IUOE Part-Time', '27'],
 	]
 	
 	HR_STATUSES = ['dept', 'liaison', 'exam-mgr', 'hr-mgr', 'hr-director', 'liaison-final', 'payroll', 'benefits', 'done']
