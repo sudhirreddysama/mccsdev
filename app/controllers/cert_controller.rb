@@ -404,8 +404,7 @@ class CertController < CrudController
 	end
 	
 	def load_notify_agency_users
-		cond = [@obj.division ? 'users.division_id is null or users.division_id = %d' % @obj.division.id : 'users.division_id is null']
-		@notify_agency_users = @obj.agency ? @obj.agency.get_users(@obj.department, false, cond) : []	
+		@notify_agency_users = @obj.agency_users_to_notify
 	end
 		
 	def notify_specialist
