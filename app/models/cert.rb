@@ -116,7 +116,7 @@ class Cert < ActiveRecord::Base
 	end
 	
 	def agency_users_to_notify
-		return agency ? agency.get_users(department, division, 'users.show_cert_lists = 1') : []					
+		return agency ? agency.get_users(department, division, 'users.show_cert_lists = 1 and users.perm_cert_notices = 1') : []					
 	end
 	
 	def self.cert_overdue_cron
