@@ -1,9 +1,10 @@
 <% 
 
 can_submit_hr = @current_user.level == 'agency-head' || @current_user.admin_level? 
-@update_js = true
 
 county_form = @obj.is_a?(FormCountyHire) || @obj.is_a?(FormCountyChange)
+
+@update_js = true if county_form
 
 %>
 <% if params[:action] != 'print' %>
