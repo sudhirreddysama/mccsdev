@@ -62,7 +62,10 @@ class AccountController < ApplicationController
 						:last_name => p.last_name,
 						:personnel_area_no => p.personnel_area_no,
 						:personnel_area_name => p.personnel_area_name,
-						:personnel_division_name => p.personnel_division_name
+						:personnel_division_name => p.personnel_division_name,
+						:formatta_id => p.formatta_id,
+						:formatta_user => p.formatta_user,
+						:id => p.id
 					}.to_json
 					return
 				end
