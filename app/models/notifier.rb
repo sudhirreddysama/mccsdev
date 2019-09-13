@@ -30,10 +30,12 @@ class Notifier < ActionMailer::Base
 	end
 	
 	def cert_overdue c, users
-		subject "Certified List Overdue Notice (#{c.id})"
+		days = (c.return_date - Date.today).to_i
+		lbl = days == 0 ? 'today' : days == 1 ? 'tomorrow' : "in #{days} days"
+		subject "Certified List Overdue Notice (#{c.id} - Due #{lbl})"
 		recipients users.map(&:email_with_name)
 		from DEFAULT_FROM
-		body :c => c
+		body :c => c, :days => days, :lbl => lbl
 	end
 
 	def county_form_status f, to_email, from_email

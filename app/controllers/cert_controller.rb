@@ -186,7 +186,7 @@ class CertController < CrudController
 			@obj.requested_date = Time.now.to_date
 			@obj.requestor = @current_user.name
 		end
-		if !request.post? && @obj.agency
+		if !request.post? && @obj.agency && !@skip_build_auto_dept
 			@obj.department = Department.find_by_name @obj.agency.name
 		end
 		@obj.job_id = @obj.exam ? @obj.exam.job_id : nil
@@ -194,6 +194,7 @@ class CertController < CrudController
 	
 	def check_open_certs_prom_exams
 		# Build a fake object to check open certs against it
+		@skip_build_auto_dept = true
 		build_obj
 		@obj.id = params.id
 		render :json => @obj.other_open_certs_alt_prom_exams_attr.to_json

@@ -6,6 +6,8 @@
 @objs.each { |o|
 
 	is_promo = false
+	
+	# Web exam doesn't have the promotional info. Have to find the mccs exam.
 	exam = Exam.find_by_exam_no(o.no.to_s)
 	if exam
 		if exam.exam_type == 'PROM'
@@ -42,10 +44,12 @@
 			th.r, td.r { text-align: right; }
 			.nobr { white-space: nowrap; }
 			tr { page-break-inside: avoid; }
+			.head { page-break-before: always; }
+			a { color: #036; }
 		</style>
 	</head>
 	<body>
-		<% head = capture { %>
+		<% head_head = capture { %>
 			<div class="head">
 				<img class="left" style="padding-right: 10px; " src="/home/rails/mccs/public/images/mclogo.gif" width="120" height="120" />
 				<h1>Department of Human Resources &amp; Civil Service</h1>
@@ -53,8 +57,11 @@
 				<div class="left">Cheryl Dinolfo<br />County Executive</div>
 				<div class="right" style="text-align: right;">Brayton McK. Connard, SPHR<br />Director</div>
 			</div>
+		<% } %>	
+		<% head = capture { %>
+			<%= head_head %>
 			<p style="text-align: justify;">Applications are now being accepted for the following examinations. Exam announcements for each title are 
-			available online at <a href="http://www.monroecounty.gov/hrapply">http://www.monroecounty.gov/hrapply</a> or at the Department of Human Resources. The announcement 
+			available online at <a href="http://www.monroecounty.gov/hrapply" target="_blank">http://www.monroecounty.gov/hrapply</a> or at the Department of Human Resources. The announcement 
 			provides important information for candidates such as minimum qualifications, job duties, exam scope (areas 
 			covered on the exam), fees, residency requirements and other information.  It is imperative that candidates 
 			check the information on the exam announcement before applying. Please take note of the exam date and closing 
@@ -73,7 +80,7 @@
 				</tr>
 				<% @public.each { |o| %>
 					<tr>
-						<td><%= h o.name %></td>
+						<td><%= link_to o.name, "https://cs.monroecounty.gov/hrapply/apply/view/#{o.id}", :target => '_blank' %></td>
 						<td><%= h o.no %></td>
 						<td class="c nobr"><%= h o.exam_date.strftime '%B %d' rescue nil %></td>
 						<td class="c nobr"><%= h o.deadline.strftime '%B %d' rescue nil %></td>
@@ -83,14 +90,11 @@
 			</table>
 		<% end %>
 		<% if !@promo.empty? %>
-			<% if !@public.empty? %>
-				<div style="page-break-before: always; height: 0; overflow: hidden;">&nbsp;</div>
-			<% end %>
 			<%= head %>
 			<h3>EXAMINATIONS OPEN TO EMPLOYEES OF THE FOLLOWING JURISDICTIONS</h3>
 			<table>
 				<tr>
-					<th>Open To:</th>
+					<th>Open To</th>
 					<th>Exam Title</th>
 					<th>Exam<br />Number</th>
 					<th class="c">Exam<br />Date</th>
@@ -100,13 +104,38 @@
 				<% @promo.each { |o| %>
 					<tr>
 						<td><%= h(o.promotional_agencies.blank? ? o.who_may_apply : o.promotional_agencies) %></td>
-						<td><%= h o.name %></td>
+						<td><%= link_to o.name, "https://cs.monroecounty.gov/hrapply/apply/view/#{o.id}" , :target => '_blank'%></td>
 						<td class="nobr"><%= h o.no %></td>
 						<td class="c nobr"><%= h o.exam_date.strftime '%b %d' rescue nil %></td>
 						<td class="c nobr"><%= h o.deadline.strftime '%b %d' rescue nil %></td>
 						<td class="r nobr"><% if o.price.to_f > 0 %>$<%= nwp o.price, 0 %><% else %>None<% end %></td>
 					</tr>
 				<% } %>
+			</table>
+		<% end %>
+		<% if !@jobs.empty? %>
+			<%= head_head %>
+			<p style="text-align: justify;">Applications are now being accepted for the following job postings. Job announcements for each title are 
+			available online at <a href="http://www.monroecounty.gov/hrapply">http://www.monroecounty.gov/hrapply</a> or at the Department of Human Resources. The announcement 
+			provides important information for candidates such as minimum qualifications, job duties, fees, residency requirements and other information.  It is imperative that candidates 
+			check the information on the job announcement before applying. Please take note of the closing 
+			date listed below.</p>	
+			<h3>JOB ANNOUNCEMENTS</h3>
+			<table>
+				<tr>
+					<th>Job Title</th>
+					<th>Department</th>
+					<th class="c nobr">Closing<br />Date</th>
+					<th class="r nobr">Fee</th>
+				</tr>
+				<% @jobs.each { |o| %>
+					<tr>
+						<td><%= link_to o.name, "https://cs.monroecounty.gov/hrapply/apply/view/#{o.id}", :target => '_blank' %></td>
+						<td><%= h o.promotional_agencies %></td>
+						<td class="c nobr"><% if o.deadline %><%= h o.deadline.strftime '%B %d' %><% else %>None<% end %></td>
+						<td class="r nobr"><% if o.price.to_f > 0 %>$<%= nwp o.price, 0 %><% else %>None<% end %></td>
+					</tr>
+				<% } %>		
 			</table>
 		<% end %>
 	</body>

@@ -169,10 +169,12 @@
 	<td><%= f.text_field :who_may_apply, :label => 'Who May Apply' %></td>
 </tr>
 <tr>
-	<th>Promotional Agencies:</th>
+	<th>Agency/Dept:</th>
 	<td>
 		<%= f.text_area :promotional_agencies, :size => '60x2' %>
-		<div>Agencies candidate must be employed by to be eligible for a promotional exam. Appears on the &quot;Exam Notice Emails&quot; (only for promotional)</div>
+		<div>Appears on the Exam/Job Notice PDF Emails</div>
+		<div>Promotional Exams: Enter agency(ies) candidate must be employed by to be eligible.</div>
+		<div>Job Announcements: Enter department of job vacancy.</div>
 	</td>
 </tr>
 <%= f.tr_text_field :announcement_file, :label => 'Announcement File' %>

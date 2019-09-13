@@ -306,7 +306,8 @@ class WebExamController < CrudController
 		end
 		d2 = d.advance(:days => -1)
 		@objs = WebExam.find(:all, :conditions => "publish between '#{d2} 16:00:01' and '#{d} 16:00:00' and exam_date is not null and published = 1", :order => 'name, no')
-		if @objs.empty?
+		@jobs = WebExam.find(:all, :conditions => "publish between '#{d2} 16:00:01' and '#{d} 16:00:00' and exam_type_id = 4 and published = 1", :order => 'name, no')
+		if @objs.empty? && @jobs.empty?
 			render :inline => 'No exams found.'
 		else
 			@fname = "#{d.to_s}.pdf"
@@ -330,6 +331,8 @@ class WebExamController < CrudController
 			render :inline => "<a href=\"/mccs" + (RAILS_ENV == 'development' ? 'dev' : '') + "/new-exams/#{@fname}\">#{@fname}</a>"
 		end
 	end
+	
+	# This URL is hit by cron
 	skip_before_filter :authenticate, :only => :send_exam_emails
 	skip_before_filter :check_access, :only => :send_exam_emails
 

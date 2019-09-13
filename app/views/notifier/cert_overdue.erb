@@ -1,4 +1,4 @@
-A certified list for your agency/department has a return date of today and will become "overdue" tomorrow. Please enter actions for each candidate and "complete" the list by clicking the green bar at the top of the cert overview page (link below).
+A certified list for your agency/department is due <%= @lbl.upcase %>. Please enter actions for each candidate and "complete" the list by clicking the green bar at the top of the cert overview page (link below).
 
 Certified List Title:
 <%= @c.title %>
@@ -6,4 +6,4 @@ Certified List Title:
 View Certified List:
 https://cs.monroecounty.gov/mccs<%= RAILS_ENV == 'development' ? 'dev' : '' %>/cert/view/<%= @c.id %>
 
-This email is being sent to the agency/department users for the certified list and the HR liaison for the agency/department.
+This is an AUTOMATED email from HR MAX being sent to the agency/department users and the HR liaison for the certified list.

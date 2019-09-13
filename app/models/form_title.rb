@@ -27,6 +27,7 @@ class FormTitle  < ActiveRecord::Base
 				err 'Cost center no. is required' if cost_center.blank?
 				err 'SAP org no. is required' if sap_number.blank?
 				err 'For funding select grant funding or non-grant funding' if !['Grant Funded', 'Non-Grant Funded'].include?(grant_funded)
+				err 'Select either Mid-Year or Annual Budget in County Departments section' if annual_budget.nil?
 			else
 				err 'Division, unit or section is required' if division_unit_section.blank?
 			end

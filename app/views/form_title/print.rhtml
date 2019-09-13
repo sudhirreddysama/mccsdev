@@ -59,6 +59,10 @@ county = !o.agency || !o.agency.agency_type || o.agency.agency_type == 'COUNTY'
 				organizational unit.<br />
 				&nbsp;<br />
 				<strong>DO NOT COPY EXISTING JOB DESCRIPTIONS.</strong>
+				<% if o.annual_budget %>
+				<br />&nbsp;
+					<div style="text-align: center; font-size: 14px; font-weight: bold;">ANNUAL BUDGET</div>
+				<% end %>
 			</td>
 			<td width="40%" class="b p">
 				This is a request to:<br />

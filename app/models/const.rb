@@ -24,26 +24,31 @@ class Const
 		'CITY'
 	]
 	
-	JOB_CLASSES = [
-		['UNCLASSIFIED', 'U'],
-		['COMPETITIVE', 'C'],
-		['NON-COMPETITIVE', 'N'],
-		['55A NON-COMPETITIVE', '5'],
-		['LABOR', 'L'],
-		['EXEMPT', 'E'],
-		['PENDING CLASSIFICATION', 'D']
-	]
+	jc = JobClass.find(:all, :order => 'sort').to_a
+	
+	JOB_CLASSES = jc.map { |c| [c.description, c.code] }
+	JOB_CLASSES_SHORT = jc.map { |c| [c.short, c.code] }
+	
+# 	JOB_CLASSES = [
+# 		['UNCLASSIFIED', 'U'],
+# 		['COMPETITIVE', 'C'],
+# 		['NON-COMPETITIVE', 'N'],
+# 		['55A NON-COMPETITIVE', '5'],
+# 		['LABOR', 'L'],
+# 		['EXEMPT', 'E'],
+# 		['PENDING CLASSIFICATION', 'D']
+# 	]
 	JOB_CLASSES_HASH = rassoc_to_hash JOB_CLASSES
 	
-	JOB_CLASSES_SHORT = [
-		['UNCLASS', 'U'],
-		['COMP', 'C'],
-		['NON-COMP', 'N'],
-		['55A', '5'],
-		['LABOR', 'L'],
-		['EXEMPT', 'E'],
-		['PENDING', 'D']
-	]
+# 	JOB_CLASSES_SHORT = [
+# 		['UNCLASS', 'U'],
+# 		['COMP', 'C'],
+# 		['NON-COMP', 'N'],
+# 		['55A', '5'],
+# 		['LABOR', 'L'],
+# 		['EXEMPT', 'E'],
+# 		['PENDING', 'D']
+# 	]
 	JOB_CLASSES_SHORT_HASH = rassoc_to_hash JOB_CLASSES_SHORT
 	
 	GIVEN_BY = [

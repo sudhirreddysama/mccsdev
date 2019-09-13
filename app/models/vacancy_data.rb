@@ -17,7 +17,9 @@ class VacancyData < ActiveRecord::Base
 		logger.info 'Loading File'
 		objs = []
 		first = true
-		ftp.gettextfile('position_maxx.txt', 'tmp/position_maxx.txt') { |line|
+		ftp_file = 'position_maxx.txt'
+		ftp_file = 'position_maxx_qr1.txt'
+		ftp.gettextfile(ftp_file, 'tmp/position_maxx.txt') { |line|
 			if first
 				first = false
 				next

@@ -27,6 +27,13 @@ class Cert < ActiveRecord::Base
 	validates_presence_of :temp_duration, :if => Proc.new { |c| c.job_type == 'T' && c.agency_submit }
 	validates_presence_of :requestor, :number_of_positions, :request_type, :job_time, :job_type, :general_or_residential, :salary_range
 	
+	def validate
+		other = other_open_certs_alt_prom_exams_attr
+		if other.prom_exams.find { |e| !e.agency_cert_id }
+			errors.add :base, 'Promotional exam/candidates were found for the open competitive exam you are requesting. A certified list for the promotional exam must be requested first.'
+		end
+	end
+	
 	def agency_submit
 		if Thread.current[:current_user]
 			return Thread.current[:current_user].agency_level?
@@ -91,15 +98,29 @@ class Cert < ActiveRecord::Base
 	end
 	
 	def alt_prom_exams_error_attr
-		alt_prom_exams.map { |e| {
+		alt_prom_exams.map { |e| 
+			# See if they already have a cert for the alt promo
+			cond = [DB.escape('certs.completed_date is null and certs.exam_id = %d', e.id)]
+			cond << DB.escape('certs.agency_id = %d', agency_id) if agency_id
+			cond << DB.escape('certs.department_id = %d', department_id) if department_id
+			cond << DB.escape('certs.division_id = %d', division_id) if division_id
+			c = Cert.find(:first, :conditions => cond.join(' and '))
+			o = {
 				:id => e.id, :exam_no => e.exam_no, :title => e.title, :established_date => e.established_date,
 				:valid_until => e.valid_until, :applicants_count => e.applicants.length, :exam_type => e.exam_type
 			}
+			if c
+				o[:agency_cert_id] = c.id
+				o[:agency_cert_requested_date] = c.requested_date
+				o[:agency_cert_title] = c.title
+			end
+			o
 		}
 	end
 	
 	def other_open_certs_alt_prom_exams_attr
-		{:other_certs => other_open_certs_error_attr, :prom_exams => alt_prom_exams_error_attr}
+		return @other_open_certs_alt_prom_exams_attr if @other_open_certs_alt_prom_exams_attr
+		@other_open_certs_alt_prom_exams_attr = {:other_certs => other_open_certs_error_attr, :prom_exams => alt_prom_exams_error_attr}
 	end
 	
 	def autocomplete_json_data
@@ -121,9 +142,9 @@ class Cert < ActiveRecord::Base
 	
 	def self.cert_overdue_cron
 		p "Running Cert Overdue Cron #{Date.today}"
-		Cert.find(:all, :conditions => ['return_date = ? and (completed_date is null)', Date.today]).each { |c|
+		Cert.find(:all, :conditions => ['return_date in (?, ?) and (completed_date is null)', Date.today, Date.today + 5]).each { |c|
 			users = (c.agency_users_to_notify + [Agency.get_liaison(c.agency, c.department)]).compact
-			p "Cert Found: #{c.id}, Users: #{users.map(&:username) * ', '}"
+			p "Cert Found: #{c.id}, #{c.return_date}, Users: #{users.map(&:username) * ', '}"
 			if !users.empty?
 				Notifier.deliver_cert_overdue(c, users)
 			end

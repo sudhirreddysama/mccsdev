@@ -1,3 +1,6 @@
+<style>
+	#county-fields { background: #f0f0f0; }
+</style>
 <tr style="background: #e8e8e8;">
 	<th></th>
 	<th>1. General Information</th>
@@ -32,7 +35,7 @@
 		<td><%= partial 'division/division_select', :f => f, :o => o, :field_name => 'obj' %></td>
 	</tr>
 <% end %>
-<tr>
+<tr id="county-fields">
 	<th>County Departments:</th>
 	<td class="subform">
 		<table>
@@ -47,6 +50,12 @@
 				<td>
 					<label><%= f.radio_button :grant_funded, 'Grant Funded' %> Grant Funded</label>&nbsp;
 					<label><%= f.radio_button :grant_funded, 'Non-Grant Funded' %> Non-Grant Funded</label>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<label><%= f.radio_button :annual_budget, false %> Mid-Year</label>&nbsp;
+					<label><%= f.radio_button :annual_budget, true %> Annual Budget</label>
 				</td>
 			</tr>
 		</table>

@@ -10,7 +10,7 @@ class FormCountyHireController < CrudController
 
 	def index
 		@filter = get_filter({
-			:sort1 => 'form_county_changes.created_at',
+			:sort1 => 'form_county_hires.created_at',
 			:dir1 => 'desc'
 		})
 		@orders = [

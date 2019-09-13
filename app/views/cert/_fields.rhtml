@@ -248,19 +248,45 @@
 				}
 			}
 			if(exams.length) {
-				conflicts.append($('<div class="red2">').html('<b>Promotional exams/candidates found! Click to select PROMOTIONAL exam instead of OPEN COMPETITIVE:</b>'));
+				exams_has_cert = [];
+				exams_no_cert = [];
 				for(var i = 0; i < exams.length; i++) {
 					var e = exams[i];
-					var d1 = Date.parse(e.established_date);
-					var d2 = Date.parse(e.valid_until);
-					var a = $('<a class="red2 use-prom" href="#">').text(
-						e.exam_no + ' ' + e.title + ' ' + ', Established: ' + (d1 ? d1.toString('MM/dd/yyyy') : '(unknown)') + ', Expires: ' + (d2 ? d2.toString('MM/dd/yyyy') : '(unknown)') +
-						', # Candidates: ' + e.applicants_count
-										
-					);
-					a.data('exam', e);
-					conflicts.append($('<div>').append(a));
+					if(e.agency_cert_id) {
+						exams_has_cert.push(e);
+					}
+					else {
+						exams_no_cert.push(e);
+					}
 				}
+				if(exams_no_cert.length) {
+					conflicts.append($('<div class="red2">').html('<b>Promotional exams/candidates found! Click to select PROMOTIONAL exam instead of OPEN COMPETITIVE:</b>'));
+					for(var i = 0; i < exams_no_cert.length; i++) {
+						var e = exams_no_cert[i];
+						var d1 = Date.parse(e.established_date);
+						var d2 = Date.parse(e.valid_until);
+						var a = $('<a class="red2 use-prom" href="#">').text(
+							e.exam_no + ' ' + e.title + ' ' + ', Established: ' + (d1 ? d1.toString('MM/dd/yyyy') : '(unknown)') + ', Expires: ' + (d2 ? d2.toString('MM/dd/yyyy') : '(unknown)') +
+							', # Candidates: ' + e.applicants_count
+										
+						);
+						a.data('exam', e);
+						conflicts.append($('<div>').append(a));
+					}
+				}
+				if(exams_has_cert.length) {
+					conflicts.append($('<div class="dim">').html('<b>Promotional certified list found! Click to view:</b>'));
+					for(var i = 0; i < exams_has_cert.length; i++) {
+						var e = exams_has_cert[i];
+						var d1 = Date.parse(e.established_date);
+						var d2 = Date.parse(e.valid_until);
+						var rd = Date.parse(e.agency_cert_requested_date);
+						var a = $('<a class="dim" href="<%= url_for :action => :view %>/' + e.agency_cert_id + '" target="_blank">').text(
+							e.agency_cert_title + ', Requested: ' + (rd ? rd.toString('MM/dd/yyyy') : '(unknown)')
+						);
+						conflicts.append($('<div>').append(a));
+					}
+				}				
 			}
 			if(!exams.length && !certs.length) {
 				conflicts.append($('<span class="dim">').text('no open certified lists found for agency/department/division & title)'));
@@ -305,16 +331,18 @@
 			}		
 		}
 		
-		obj_exam_id_change = function(e) {
+		obj_exam_id_change = function(init) {
 			var attr = exam_id.data('attr');
 			html = '';
 			set_exam_date_info(attr);
 			$('#exam_attr').html(html);
 			check_return_date();
-			check_open_certs_prom_exams();
+			if(!init) {
+				check_open_certs_prom_exams();
+			}
 		}
-		obj_exam_id_change();
-		exam_id.change(obj_exam_id_change);
+		obj_exam_id_change(true);
+		exam_id.change(function(e) { obj_exam_id_change(false); });
 	
 		department_row = department_select.closest('tr');
 		var toggle_department = function() {
