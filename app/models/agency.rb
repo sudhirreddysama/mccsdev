@@ -58,6 +58,10 @@ class Agency < ActiveRecord::Base
 		contacts.select(&:primary).map { |c| [c.lastname, c.firstname, c.title, c.email, c.phone, c.fax].reject(&:blank?).join(',') }.join('/')
 	end
 	
+	def is_county?
+		agency_type == 'COUNTY'
+	end
+	
 	def get_users d = nil, div = nil, condition = nil
 		# if no department, just find everyone with this agency_id who also has no department
 		# if department and agency is MONROE COUNTY, only include people specifically in that department (excluding people with no department)

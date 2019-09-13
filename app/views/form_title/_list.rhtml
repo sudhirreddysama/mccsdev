@@ -7,11 +7,13 @@
 			<th width="1%">Created</th>
 			<th width="1%">Effective</th>
 			<% if @current_user.agency_level? %>
-				<th width="95%">Title</th>
-			<% else %>
 				<th width="45%">Title</th>
-				<th width="25%">Agency</th>
-				<th width="25%">Department</th>
+				<th width="45%" class="nobr">MidYr/Budget</th>
+			<% else %>
+				<th width="40%">Title</th>
+				<th width="15%" class="nobr">MidYr/Budget</th>
+				<th width="20%">Agency</th>
+				<th width="20%">Department</th>
 			<% end %>
 		</tr>
 	</thead>
@@ -29,6 +31,7 @@
 				<td class="nobr"><%= o.created_at.d0? %></td>
 				<td class="nobr"><%= o.effective_date.d0? %></td>
 				<td><%= link_to o.title, :action => :view, :id => o.id %></td>
+				<td><% if o.agency && o.agency.is_county? %><%= o.annual_budget.nil? ? '' : o.annual_budget ? 'Annual Budget' : 'Mid-Year' %><% end %></td>
 				<% if !@current_user.agency_level? %>
 					<td><%= h o.agency.name if o.agency %></td>
 					<td><%= h o.department.name if o.department %><% if o.division %> (<%= o.division.name %>)<% end %></td>
