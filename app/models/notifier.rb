@@ -194,7 +194,7 @@ class Notifier < ActionMailer::Base
 	def new_exams e, fname, txt = ''
 		recipients e
 		from DEFAULT_FROM
-		subject 'New Civil Service Exams Announced'
+		subject 'New Civil Service Exams/Job Postings Announced'
 		body :fname => fname, :txt => txt
 	end
 	
