@@ -56,6 +56,7 @@ class ExamController < CrudController
 		load_obj
 		@obj.reviewed_by = params[:reviewed_by]
 		@obj.review_complete = params[:review_complete]
+		@obj.additional_info_deadline = params[:additional_info_deadline]
 		@obj.save
 		redirect_to :action => :view, :id => @obj.id
 		flash[:notice] = 'Review information updated.'

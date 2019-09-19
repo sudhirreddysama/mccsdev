@@ -61,8 +61,9 @@
 				<% if @current_user.liaison_level? || @current_user.staff_level? %>
 					<td style="padding-top: 3px;">
 						<%= form_tag :action => :set_review, :id => @obj.id %>
-							Reviewed By: <%= text_field_tag :reviewed_by, @obj.reviewed_by, :size => 30 %>
-							Review Complete: <%= check_box_tag :review_complete, 1, @obj.review_complete %>
+							<label style="display: inline-block; font-size: 1em; color: #000;">Reviewed By: <%= text_field_tag :reviewed_by, @obj.reviewed_by, :size => 25 %></label>&nbsp;&nbsp;&nbsp;
+							<label style="display: inline-block; font-size: 1em; color: #000;"><%= check_box_tag :review_complete, 1, @obj.review_complete %> Review Complete</label>&nbsp;&nbsp;&nbsp;
+							<label style="display: inline-block; font-size: 1em; color: #000;">Addt'l Info Deadline: <%= calendar_date_select_tag :additional_info_deadline, @obj.additional_info_deadline, :size => 15 %></label>&nbsp;&nbsp;&nbsp;
 							<%= submit_tag 'Update' %>
 						</form>
 					</td>
