@@ -28,9 +28,11 @@ class Cert < ActiveRecord::Base
 	validates_presence_of :requestor, :number_of_positions, :request_type, :job_time, :job_type, :general_or_residential, :salary_range
 	
 	def validate
-		other = other_open_certs_alt_prom_exams_attr
-		if other.prom_exams.find { |e| !e.agency_cert_id }
-			errors.add :base, 'Promotional exam/candidates were found for the open competitive exam you are requesting. A certified list for the promotional exam must be requested first.'
+		if new_record?
+			other = other_open_certs_alt_prom_exams_attr
+			if other.prom_exams.find { |e| !e.agency_cert_id }
+				errors.add :base, 'Promotional exam/candidates were found for the open competitive exam you are requesting. A certified list for the promotional exam must be requested first.'
+			end
 		end
 	end
 	
