@@ -35,12 +35,14 @@
 					<td colspan="100" class="nobr"><span class="dim">Notes: </span><%= o.comments %></td>
 				</tr>
 			<% end %>
-			<% if !o.internal_notes.blank? %>
-				<tr>
-					<td colspan="3"></td>
-					<td colspan="100" class="nobr"><span class="dim">Internal Notes: </span><%= o.internal_notes %></td>
-				</tr>
-			<% end %>			
+			<% if @current_user.staff_level? %>
+				<% if !o.internal_notes.blank? %>
+					<tr>
+						<td colspan="3"></td>
+						<td colspan="100" class="nobr"><span class="dim">Internal Notes: </span><%= o.internal_notes %></td>
+					</tr>
+				<% end %>			
+			<% end %>
 		</tbody>
 	<% } %>
 </table>
