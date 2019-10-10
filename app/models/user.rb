@@ -150,6 +150,10 @@ class User < ActiveRecord::Base
   	agency_level? && agency && agency.agency_type == 'COUNTY'
   end
   
+  def is_agency_not_county?
+  	agency_level? && !(agency && agency.agency_type == 'COUNTY')
+  end  
+  
   def switch_username
   	if @switch_username 
   		return @switch_username 

@@ -35,32 +35,34 @@
 		<td><%= partial 'division/division_select', :f => f, :o => o, :field_name => 'obj' %></td>
 	</tr>
 <% end %>
-<tr id="county-fields">
-	<th>County Departments:</th>
-	<td class="subform">
-		<table>
-			<tr>
-				<th>Cost Center No.:</th>
-				<th>SAP Org. No.:</th>
-				<th>Funding:</th>
-			</tr>
-			<tr>
-				<td><%= f.text_field :cost_center, :style => 'width: 150px;' %></td>
-				<td>2910<%= f.text_field :sap_number, :style => 'width: 150px;' %></td>
-				<td>
-					<label><%= f.radio_button :grant_funded, 'Grant Funded' %> Grant Funded</label>&nbsp;
-					<label><%= f.radio_button :grant_funded, 'Non-Grant Funded' %> Non-Grant Funded</label>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3">
-					<label><%= f.radio_button :annual_budget, false %> Mid-Year</label>&nbsp;
-					<label><%= f.radio_button :annual_budget, true %> Annual Budget</label>
-				</td>
-			</tr>
-		</table>
-	</td>
-</tr>
+<% if !@current_user.is_agency_not_county? %>
+	<tr id="county-fields">
+		<th>County Departments:</th>
+		<td class="subform">
+			<table>
+				<tr>
+					<th>Cost Center No.:</th>
+					<th>SAP Org. No.:</th>
+					<th>Funding:</th>
+				</tr>
+				<tr>
+					<td><%= f.text_field :cost_center, :style => 'width: 150px;' %></td>
+					<td>2910<%= f.text_field :sap_number, :style => 'width: 150px;' %></td>
+					<td>
+						<label><%= f.radio_button :grant_funded, 'Grant Funded' %> Grant Funded</label>&nbsp;
+						<label><%= f.radio_button :grant_funded, 'Non-Grant Funded' %> Non-Grant Funded</label>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<label><%= f.radio_button :annual_budget, false %> Mid-Year</label>&nbsp;
+						<label><%= f.radio_button :annual_budget, true %> Annual Budget</label>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+<% end %>
 <% if !@current_user.agency_level? %>
 	<tr>
 		<th>HR Use Only:</th>
@@ -91,22 +93,24 @@
 		</td>
 	</tr>
 <% end %>
-<tr>
-	<th>Outside Jurisdictions:</th>
-	<td class="subform">
-		<table>
-			<tr>
-				<th>Division, Unit, or Section:</th>
-			</tr>
-			<tr>
-				<td>
-					<%= f.text_field :division_unit_section, :style => 'width: 150px;' %>
-					(For Towns, Villages, School Districts, Special Districts)
-				</td>
-			</tr>
-		</table>
-	</td>
-</tr>
+<% if !@current_user.is_agency_county? %>
+	<tr>
+		<th>Outside Jurisdictions:</th>
+		<td class="subform">
+			<table>
+				<tr>
+					<th>Division, Unit, or Section:</th>
+				</tr>
+				<tr>
+					<td>
+						<%= f.text_field :division_unit_section, :style => 'width: 150px;' %>
+						(For Towns, Villages, School Districts, Special Districts)
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+<% end %>
 <tr>
 	<th>This is a Request to: <span class="req">*</span></th>
 	<td>

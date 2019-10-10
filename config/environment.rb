@@ -82,6 +82,22 @@ require 'savon'
 require 'twitter_oauth'
 require 'koala' #Facebook
 
+
+require 'net/ldap'
+#LDAP_HOST = '10.100.224.38'
+LDAP_HOST = '10.100.224.210'
+LDAP_PORT = 389
+LDAP_BASE = 'ou=mc,dc=mc,dc=ad,dc=monroecounty,dc=gov'
+LDAP_USER = 'ldaplook'
+LDAP_PASS = 'ldapl00k'
+LDAP_DOMAIN = '@monroecounty.gov'
+LDAP_DOMAIN2 = '@mc.ad.monroecounty.gov'
+
+# Test:
+# c = Net::LDAP.new(:host => LDAP_HOST, :port => LDAP_PORT, :base => LDAP_BASE, :auth => {:username => LDAP_USER, :password => LDAP_PASS, :method => :simple})
+# c.bind
+
+
 CalendarDateSelect.format = :american
 
 Rack::Utils.key_space_limit = 262144
