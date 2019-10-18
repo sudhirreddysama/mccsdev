@@ -1,0 +1,12 @@
+<%= partial 'errors', :errors => o.errors.full_messages %>
+<% table_form_for(:obj, :html => {:multipart => true, :id => 'obj-form', :class => 'check-dirty'}) { |f| %>
+	<%= partial 'fields', :f => f, :o => o %>
+	<%= partial 'upload/field' %>
+	<tr>
+		<th></th>
+		<td>
+			<%= submit_tag 'Submit Form' %>
+			<%= submit_tag 'Save and Finish Later (ignore errors)', :name => 'obj[skip_validation]' %>
+		</td>
+	</tr>
+<% } %>

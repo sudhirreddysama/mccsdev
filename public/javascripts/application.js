@@ -63,6 +63,23 @@ jQuery(function($) {
 		});
 	});
 	
+	var check_dirty = $('form.check-dirty');
+	check_dirty.live('change', function(e) {
+		$(this).data('dirty', true);
+	}).submit(function(e) {
+		$(this).data('dirty', false);
+	});
+	if(check_dirty.length) {
+		$(window).bind('beforeunload', function() {
+			var dirty = false;
+			for(var i = 0; i < check_dirty.length && !dirty; i++) {
+				dirty = $(check_dirty[i]).data('dirty');
+			}
+			if(dirty) {
+				return 'You have unsaved changes on this page. Leave anyway?';
+			}
+		});	
+	}
 });
 
 

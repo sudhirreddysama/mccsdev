@@ -155,6 +155,8 @@ edit_mode = params[:action] == 'edit' || params[:action] == 'new'
 		<%= f.text_field :birth_date, :style => 'width: 140px;', :class => 'date', :value => (@obj.birth_date.strftime('%m/%d/%Y') rescue nil), :class => 'autofill' %><br>
 		<label style="display: inline-block; width: 120px;">Social Sec. No.:</label>
 		<%= f.text_field :ssn, :style => 'width: 140px;', :class => 'autofill' %>
+		<label style="display: inline-block; width: 120px;"><span class="hr-field">*</span>SAP New Hire ID:</label>
+		<%= f.text_field :new_hire_sap_id, :style => 'width: 140px;' %>
 	</div>
 	<div style="width: 30%; float: right;">
 		<label style="display: inline-block; width: 120px;">Physical Agility:</label>

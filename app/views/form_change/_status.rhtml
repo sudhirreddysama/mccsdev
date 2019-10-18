@@ -2,18 +2,29 @@
 
 can_submit_hr = @current_user.level == 'agency-head' || @current_user.admin_level? 
 
-county_form = @obj.is_a?(FormCountyHire) || @obj.is_a?(FormCountyChange)
+form_county_hire = @obj.is_a?(FormCountyHire)
+form_county_change = @obj.is_a?(FormCountyChange)
 
-@update_js = true if county_form
+form_county = form_county_hire || form_county_change
+
+@update_js = true if form_county
 
 %>
+<%= partial 'errors', :errors => @errors %>
 <% if params[:action] != 'print' %>
 	<div class="tabs buttons">
 		<%= tab 'Printable Version', {:action => :print, :id => @obj.id}, {}, :target => '_blank' %>
 		<% if @obj.employee %>
 			<%= tab 'Employee History Details', {:controller => :employee, :action => :print, :id => @obj.employee_id}, {}, :target => '_blank' %>
 		<% end %>
-		<% if false || @current_user.username == 'isadmin' %>
+		<% if false && form_county_hire && @current_user.staff_level? %>
+			<%= form_tag %>
+				<input type="hidden" name="sap_submit" value="1" />
+				<% confirm = o.new_hire_sap_id.blank? ? 'Are you sure you want to submit to SAP?' : 'This form already has a new hire SAP ID. Are you sure you want to resend it?' %>
+				<a href="#" class="tab-sap_submit" id="sap_submit" onclick="if(confirm('<%= confirm %>')) { $(this.parentNode).submit(); } return false;"><span><%= o.new_hire_sap_id.blank? ? 'Send' : 'Resend' %> to SAP</span></a>
+			</form>
+		<% end %>
+		<% if false && @current_user.username == 'isadmin' %>
 			<% 'this was implemented as a generic solution to approvals/disapprovals but HR eventually decided against it so it disabled for all but user isadmin' %>
 			<a data-popup-title="Approvals/Messages/Send To..." href="<%= url_for({:popup => true, :sc => params[:controller], :sid => @obj.id, :controller => :notice}) %>" class="tab tab-delivery popup"><span>Approvals/Messages/Send To...</span></a>		
 		<% end %>		
@@ -27,7 +38,7 @@ county_form = @obj.is_a?(FormCountyHire) || @obj.is_a?(FormCountyChange)
 			%>
 		<% else %>
 		
-			<% if !county_form %>
+			<% if !form_county %>
 				<% if can_submit_hr %>
 					<%= link_to('This form has not yet been submitted to HR. Click here to submit.', 
 						{:action => :submit, :id => @obj.id},
@@ -79,7 +90,7 @@ county_form = @obj.is_a?(FormCountyHire) || @obj.is_a?(FormCountyChange)
 						<% if ft %>
 							<% statuses = ['started', 'submitted', 'review', 'info-needed', 'withdrawn', 'approved', 'disapproved'] %>
 						<% end %>
-						<% if county_form %>
+						<% if form_county %>
 							<% statuses << 'abandoned' %>
 						<% end %>
 						<%= select :obj, :status, statuses %>

@@ -16,12 +16,15 @@ class FormTitle  < ActiveRecord::Base
 	
 	attr :status_notify, true
 	
+	attr :skip_validation, true
+	
 	def validate
 		if !http_posted
 			return
 		end
 		err 'Agency is required' if agency.blank?
 		err 'Department is required' if department.blank?
+		return if skip_validation
 		if agency
 			if agency.agency_type == 'COUNTY'
 				err 'Cost center no. is required' if cost_center.blank?

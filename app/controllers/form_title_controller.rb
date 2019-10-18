@@ -85,6 +85,7 @@ class FormTitleController < CrudController
 	
 	def memo
 		load_obj
+		@obj.skip_validation = true
 		edit
 	end
 	
@@ -114,6 +115,12 @@ class FormTitleController < CrudController
 	
 	def submit
 		load_obj
+		@obj.http_posted = true
+		if !@obj.valid?
+			flash[:errors] = ['Before this form is submitted the following errors must be resolved.'] + @obj.errors.full_messages
+			redirect_to :action => :edit, :id => @obj.id
+			return
+		end
 		u = Agency.get_liaison(@obj.agency, @obj.department)
 		if u
 			Notifier.deliver_form_submitted [u], @obj

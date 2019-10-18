@@ -113,7 +113,13 @@ class FormCountyHireController < CrudController
 	def view
 		@act = params[:act]
 		if request.post?
-			if params[:obj]
+			if params[:sap_submit]
+				if sap_submit
+					flash[:notice] = "Form has been submitted to SAP. New hire SAP ID is #{@obj.new_hire_sap_id}."
+					redirect_to
+					return
+				end
+			elsif params[:obj]
 				FormCountyChange.update_county_form_status_and_notify @obj, @current_user, params[:obj]			
 				flash[:notice] = 'Status has been updated.'
 				redirect_to
@@ -234,6 +240,15 @@ class FormCountyHireController < CrudController
 	def print
 		@opt = {:margin => '.3in'}
 		super
+	end
+	
+	def sap_submit
+		res = SAP.submit_new_hire(@obj)
+		@errors = res[:errors]
+		if res[:success]
+			@obj.update_attribute :new_hire_sap_id, res[:sap_id]
+		end
+		return res[:success]
 	end
 
 end

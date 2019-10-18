@@ -1,6 +1,10 @@
 <style>
 	#county-fields { background: #f0f0f0; }
 </style>
+<tr>
+	<th></th>
+	<td><span class="req">* Required Fields</span><br>To skip required fields and finish this form later, click &quot;Save and Finish Later&quot; at the bottom of this form.</td>
+</tr>
 <tr style="background: #e8e8e8;">
 	<th></th>
 	<th>1. General Information</th>
@@ -37,7 +41,7 @@
 <% end %>
 <% if !@current_user.is_agency_not_county? %>
 	<tr id="county-fields">
-		<th>County Departments:</th>
+		<th>County Departments: <span class="req">*</span></th>
 		<td class="subform">
 			<table>
 				<tr>
@@ -95,7 +99,7 @@
 <% end %>
 <% if !@current_user.is_agency_county? %>
 	<tr>
-		<th>Outside Jurisdictions:</th>
+		<th>Outside Jurisdictions: <span class="req">*</span></th>
 		<td class="subform">
 			<table>
 				<tr>
