@@ -1,0 +1,37 @@
+<style>
+	label { display: inline; font-weight: normal; }
+</style>
+<%
+ca = @obj
+c = @obj.cert
+e = c.exam
+
+done = !ca.response_when.nil?
+
+%>
+<h1>Canvass Response</h1>
+
+<p>
+	<b>Exam:</b> <%= e.exam_no %> <%= e.title %><br>
+	<b>Salary Range:</b> <%= c.salary_range %>
+</p>
+<% if done %>
+<p style="color: #800;">Your response to this canvass was recorded on <%= ca.response_when.dt0? %> The below form is read only.</p>
+<% end %>
+
+<h2>Please Check Below:</h2>
+<% form_for(:obj) { |f| %>
+	<div><label><%= f.radio_button :response, 'Y', :disabled => done %> I am interested in this position.</label></div>
+	<div><label><%= f.radio_button :response, 'N', :disabled => done %> I am not interested in this position because of (please choose reason below):</label></div>
+	<div style="padding-left: 50px;">
+		<div><label><%= f.radio_button :response_reason, 'Salary', :disabled => done %> Salary</label></div>
+		<div><label><%= f.radio_button :response_reason, 'Department', :disabled => done %> Department</label></div>
+		<div><label><%= f.radio_button :response_reason, 'Unavailable', :disabled => done %> I am unable to accept/consider new employment</label> until <%= f.text_field :response_date, :style => 'width: 80px;' %> (date)</div>
+		<div><label><%= f.radio_button :response_reason, 'Remove', :disabled => done %> I am no longer interested in employment for this title;</label> please remove my name from the eligible list.</div>
+	</div>
+	<div style="margin-top: 1em;">
+		<div><label for="response_notes">Additional Notes/Explanation:</label></div>
+		<div><%= f.text_area :response_notes, :style => 'width: 100%; height: 60px;', :disabled => done %></div>
+	</div>
+	<div style="margin-top: 1em;"><%= f.submit 'Submit Response' %></div>
+<% } %>

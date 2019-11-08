@@ -25,7 +25,7 @@ Rails::Initializer.run do |config|
 	config.gem 'holidays'
 	config.gem 'american_date'
 	config.gem 'spreadsheet'
-	config.gem 'fastercsv', :version => '1.5.1'
+	# config.gem 'fastercsv', :version => '1.5.1'
 	config.gem 'mail'
 
   # Only load the plugins named here, in the order given (default is alphabetical).
@@ -75,7 +75,7 @@ require 'net/pop'
 require 'net/ftp'
 require 'shellwords'
 require 'securerandom'
-require 'savon'
+# require 'savon'
 
 #require 'twitter'
 #require 'oauth' 
@@ -120,11 +120,11 @@ end
 ExceptionNotifier.exception_recipients = %w(jessesternberg@monroecounty.gov)# rgrape@monroecounty.gov sduritza@monroecounty.gov)
 ExceptionNotifier.sender_address = %("MCCS Error" <mccs@monroecounty.gov>)
 
-#ActionMailer::Base.delivery_method = :smtp
-#ActionMailer::Base.smtp_settings[:address] = '10.100.224.102' #'173.84.13.11' #'66.192.47.11'
-#ActionMailer::Base.raise_delivery_errors = true
-#ActionMailer::Base.delivery_method = :sendmail
-#ActionMailer::Base.sendmail_settings[:arguments] = '-i -t -fwebmaster@monroecounty.gov'
+ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.smtp_settings[:address] = '10.100.224.102' #'173.84.13.11' #'66.192.47.11'
+ActionMailer::Base.raise_delivery_errors = true
+ActionMailer::Base.delivery_method = :sendmail
+ActionMailer::Base.sendmail_settings[:arguments] = '-i -t -fwebmaster@monroecounty.gov'
 
 
 

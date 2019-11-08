@@ -75,6 +75,25 @@ class CertApplicant < ActiveRecord::Base
 		}
 	end
 	
+	def response_url
+		if response_key.blank?
+			create_response_key
+			save
+		end
+		'https://cs.monroecounty.gov/mccs' + (RAILS_ENV == 'development' ? 'dev' : '') + "/lists/respond/#{id}/#{response_key}" 
+	end
+	
+	def create_response_key
+		return if !response_key.blank?
+  	c = '23456789bcdghkmnpqrstwxyz'.split('')
+  	self.response_key = (0..7).map { c[rand(c.size)] }.join
+  end
+  
+  before_save :create_response_key
+  
+  
+  after_create :create_download_key
+	
 	include DbChangeHooks
 	
 end

@@ -1,5 +1,5 @@
 <% content_for(:head) { %>
-	<%= stylesheet_link_tag 'county-form.css?v3' %>
+	<%= stylesheet_link_tag 'county-form.css' %>
 <% } %>
 <% 
 
@@ -72,17 +72,17 @@ search = @view ? '' : 'Search...'
 	</div>
 	<div style="padding-left: 20px;">
 		<label>Group:</label>
-		<%= f.text_field :action_group, :style => 'width: 70px;', :class => 'autofill-alt' %>
+		<%= f.text_field :action_group, :style => 'width: 65px;', :class => 'autofill-alt' %>
 		<label>Step:</label>
-		<%= f.text_field :action_step, :style => 'width: 70px;' %>
+		<%= f.text_field :action_step, :style => 'width: 65px;' %>
 		<label>Hourly Rate:</label>
-		<%= f.text_field :action_hourly_rate, :style => 'width: 70px;' %>
+		<%= f.text_field :action_hourly_rate, :style => 'width: 65px;' %>
 		<label>Biweekly Rate:</label>
-		<%= f.text_field :action_biweekly_rate, :style => 'width: 70px;' %>
+		<%= f.text_field :action_biweekly_rate, :style => 'width: 65px;' %>
 		<label>Job Code:</label>
-		<%= f.text_field :action_job_code, :style => 'width: 70px;', :class => 'autofill-alt' %>
+		<%= f.text_field :action_job_code, :style => 'width: 65px;', :class => 'autofill-alt' %>
 		<label>List #:</label>
-		<%= f.text_field :action_list_no, :style => 'width: 70px;' %>
+		<%= f.text_field :action_list_no, :style => 'width: 65px;' %>
 	</div>
 	<div>
 		<%= f.check_box :action_status_change %><label for="obj_action_status_change">Status Change:</label>&nbsp;
@@ -252,18 +252,21 @@ search = @view ? '' : 'Search...'
 	<h2><u>NOTES TO HR</u> (Include any explanatory information regarding the personnel change included on this form)</h2>
 	<div><%= f.text_area :notes, :style => 'width: 100%; height: 40px;' %></div>
 	<% if params[:action] == 'print' %>
-		<div id="sign-lines">
-			<div><span style="width: 180px;">Departmental Authorization: </span><span class="sign-line" style="width: 300px;"></span>&nbsp;&nbsp;<span>Date:&nbsp;</span><span class="sign-line" style="width: 100px;"></span></div>
-			<div><span style="width: 180px;">Human Resources Authorization: </span><span class="sign-line" style="width: 300px;"></span>&nbsp;&nbsp;<span>Date:&nbsp;</span><span class="sign-line" style="width: 100px;"></span></div>
-		</div>
-		<h2 class="ct">FOR HUMAN RESOURCES USE ONLY</h2>
-		<table id="hr-boxes">
-			<tr>
-				<td>Liaisons</td>
-				<td>Org. Management</td>
-				<td>Payroll</td>
-				<td>Benefits</td>
-			</tr>
-		</table>
+		<%= partial 'form_county_change/form_actions_print', :o => @obj %>
+		<% if false %>
+			<div id="sign-lines">
+				<div><span style="width: 180px;">Departmental Authorization: </span><span class="sign-line" style="width: 300px;"></span>&nbsp;&nbsp;<span>Date:&nbsp;</span><span class="sign-line" style="width: 100px;"></span></div>
+				<div><span style="width: 180px;">Human Resources Authorization: </span><span class="sign-line" style="width: 300px;"></span>&nbsp;&nbsp;<span>Date:&nbsp;</span><span class="sign-line" style="width: 100px;"></span></div>
+			</div>
+			<h2 class="ct">FOR HUMAN RESOURCES USE ONLY</h2>
+			<table id="hr-boxes">
+				<tr>
+					<td>Liaisons</td>
+					<td>Org. Management</td>
+					<td>Payroll</td>
+					<td>Benefits</td>
+				</tr>
+			</table>
+		<% end %>
 	<% end %>	
 </div>

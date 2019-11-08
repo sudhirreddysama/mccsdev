@@ -75,6 +75,17 @@ class ListsController < ApplicationController
 		})
 	end
 	
+	def respond
+		@obj = CertApplicant.find_by_id_and_response_key(params[:id], params[:id2])
+		render_nothing and return if !@obj
+		if request.post?
+			@obj.response_when = Time.now
+			@obj.update_attributes params[:obj]
+			flash[:notice] = 'Your response has been recorded. Thank you!'
+			redirect_to
+		end
+	end
+	
 	def applicant
 		@obj = PublicPerson.find(params[:id], {
 			:conditions => '(app_statuses.eligible != "N" or app_statuses.code = "X") and app_statuses.code != "R" and 

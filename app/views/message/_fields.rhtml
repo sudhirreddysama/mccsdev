@@ -1,4 +1,9 @@
-<%= f.tr_select :letter_id, Letter.find(:all, :order => 'letters.name asc').collect { |l| [l.name, l.id] }, :include_blank => 'Blank Template', :label => 'Letter Template' %>
+<%
+
+@letters = Letter.find(:all, :order => 'letters.name asc', :conditions => (@current_user.agency_level? ? 'agency_use = 1' : nil))
+
+%>
+<%= f.tr_select :letter_id, @letters.collect { |l| [l.name, l.id] }, :include_blank => 'Blank Template', :label => 'Letter Template' %>
 <%= f.tr_text_field :subject, :label => 'Subject', :style => 'width: 400px;', :req => true, :class => 'ucase', :after => '<div>Administrative label</div>' %>
 <%= f.tr_text_field :public_name, :label => 'Subject (Public)', :style => 'width: 400px;', :req => true, :class => 'ucase', :after => '<div>What candidate sees as letter subject</div>' %>
 <%= f.tr_text_field :email_from, :label => 'From/Reply To', :style => 'width: 400px;', :req => false %>

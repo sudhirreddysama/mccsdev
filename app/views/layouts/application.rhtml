@@ -123,6 +123,9 @@ is_agency = %w{agency department contact}.include?(sc || c)
 					<% if @current_user.perm_ag_applicants %>
 						<%= tab 'Applicants', {:controller => :person, :sc => nil}, {}, {:class => 'tab-person' + (sc == 'person' ? ' active' : ''), :title => 'Applicants'} %>			
 					<% end %>
+					<% if @current_user.perm_cert_letters %>
+						<%= tab 'Delivery', {:controller => :delivery, :sc => nil}, {}, {:class => 'tab-delivery' + (sc == 'delivery' ? ' active' : ''), :title => 'Deliver Letters to Applicants'} %>				
+					<% end %>
 			
 				<% else %>
 					<%= tab 'Employees', {:controller => :employee, :sc => nil}, {}, {:class => 'tab-employee' + (sc == 'employee' || c == 'vacancy_data' || sc == 'vacancy_data' || c == 'pay_cert' || sc == 'pay_cert' || c == 'form_change' || sc == 'form_change' || c == 'form_hire' || sc == 'form_hire' || c == 'form_title' || sc == 'form_title' || c == 'vacancy' || sc == 'vacancy' || c == 'form_county_hire' || sc == 'form_county_hire' || c == 'form_county_change' || sc == 'form_county_change' ? ' active' : ''), :title => 'Employees + History'} %>

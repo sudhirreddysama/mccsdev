@@ -1,4 +1,13 @@
 class BulkMessageController < CrudController
+
+	skip_before_filter :block_agency_users
+	def check_access
+		return true if @current_user.above_agency_level?
+		return true if @current_user.perm_cert_letters && @sobj.is_a?(Cert)
+		# TO DO: CHECK ACCESS FOR INDIVIDUAL CERTS!!!
+		render_nothing and return false
+	end
+	before_filter :check_access, :except => :autocomplete
 	
 	def index
 		@filter = get_filter({

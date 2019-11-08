@@ -1,5 +1,13 @@
 class DeliveryController < CrudController
 
+	skip_before_filter :block_agency_users
+	def check_access
+		return true if @current_user.above_agency_level?
+		return true if @current_user.agency_level? && @current_user.perm_cert_letters
+		render_nothing and return false
+	end
+	before_filter :check_access, :except => :autocomplete
+
 	def index
 		@opt = {
 			:order => 'deliveries.created_at desc'

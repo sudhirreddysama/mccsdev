@@ -1,5 +1,5 @@
 <% content_for(:head) { %>
-	<%= stylesheet_link_tag 'county-form.css?v3' %>
+	<%= stylesheet_link_tag 'county-form.css' %>
 <% } %>
 <% 
 
@@ -22,68 +22,75 @@ edit_mode = params[:action] == 'edit' || params[:action] == 'new'
 	</div>
 	<div>
 		<label style="width: 130px; display: inline-block;">Employee Last Name:</label>
-		<%= f.text_field :last_name, :style => 'width: 130px;', :class => 'autofill', :placeholder => search %>
+		<%= f.text_field :last_name, :style => 'width: 130px;', :class => 'autofill sap', :placeholder => search %>
 		<label style="width: 110px; display: inline-block;">&nbsp;First Name:</label>
-		<%= f.text_field :first_name, :style => 'width: 130px;', :class => 'autofill', :placeholder => search %>
+		<%= f.text_field :first_name, :style => 'width: 130px;', :class => 'autofill sap', :placeholder => search %>
 		<label style="width: 100px; display: inline-block;">&nbsp;Middle Name:</label>
-		<%= f.text_field :middle_name, :style => 'width: 130px;', :class => 'autofill' %>
+		<%= f.text_field :middle_name, :style => 'width: 130px;', :class => 'autofill sap' %>
 	</div>
 	<div>
 		<label style="width: 130px; display: inline-block;">County Organization #:</label>
 		<%= f.text_field :county_org_no, :style => 'width: 130px;', :class => 'autofill-alt', :placeholder => search %>
 		<label style="width: 110px; display: inline-block;">&nbsp;SAP Organization #:</label>
-		<%= f.text_field :org_no, :style => 'width: 130px;', :class => 'autofill-alt', :placeholder => search %>
+		<%= f.text_field :org_no, :style => 'width: 130px;', :class => 'autofill-alt sap', :placeholder => search %>
 		<label style="width: 100px; display: inline-block;">&nbsp;Cost Center #:</label>
 		<%= f.text_field :cost_center, :style => 'width: 130px;', :class => 'autofill-alt', :placeholder => search %>
 	</div>
 	<div>
 		<label style="width: 130px; display: inline-block;">Home Address Line 1:</label>
-		<%= f.text_field :address, :style => 'width: 615px;', :class => 'autofill' %>
+		<%= f.text_field :address, :style => 'width: 615px;', :class => 'autofill sap' %>
 	</div>
 	<div>
 		<label style="width: 130px; display: inline-block;">Home Address Line 2:</label>
-		<%= f.text_field :address2, :style => 'width: 615px;', :class => 'autofill' %>
+		<%= f.text_field :address2, :style => 'width: 615px;', :class => 'autofill sap' %>
 	</div>
 	<div>
 		<label style="width: 130px; display: inline-block;">Home Address City:</label>
-		<%= f.text_field :address_city, :style => 'width: 270px;', :class => 'autofill' %>
+		<%= f.text_field :address_city, :style => 'width: 270px;', :class => 'autofill sap' %>
 		<label>&nbsp;State:&nbsp;</label>
-		<%= f.select :address_state, USState::NAMES, {}, :style => 'width: 130px;', :class => 'autofill' %>
+		<%= f.select :address_state, USState::NAMES, {}, :style => 'width: 130px;', :class => 'autofill sap' %>
 		<label>&nbsp;Zip:&nbsp;</label>
-		<%= f.text_field :address_zip, :style => 'width: 130px;', :class => 'autofill' %>
+		<%= f.text_field :address_zip, :style => 'width: 130px;', :class => 'autofill sap' %>
 	</div>
 	<div>
 		Enter Mailing Address below <b>if different from Home Address</b>
 	</div>
 	<div>
 		<label style="width: 130px; display: inline-block;">Mailing Address Line 1:</label>
-		<%= f.text_field :mail_address, :style => 'width: 615px;', :class => 'autofill' %>
+		<%= f.text_field :mail_address, :style => 'width: 615px;', :class => 'autofill sap' %>
 	</div>
 	<div>
 		<label style="width: 130px; display: inline-block;">Mailing Address Line 2:</label>
-		<%= f.text_field :mail_address2, :style => 'width: 615px;', :class => 'autofill' %>
+		<%= f.text_field :mail_address2, :style => 'width: 615px;', :class => 'autofill sap' %>
 	</div>
 	<div>
 		<label style="width: 130px; display: inline-block;">Mailing Address City:</label>
-		<%= f.text_field :mail_city, :style => 'width: 270px;', :class => 'autofill' %>
+		<%= f.text_field :mail_city, :style => 'width: 270px;', :class => 'autofill sap' %>
 		<label>&nbsp;State:&nbsp;</label>
-		<%= f.select :mail_state, USState::NAMES, {}, :style => 'width: 130px;', :class => 'autofill' %>
+		<%= f.select :mail_state, USState::NAMES, {}, :style => 'width: 130px;', :class => 'autofill sap' %>
 		<label>&nbsp;Zip:&nbsp;</label>
-		<%= f.text_field :mail_zip, :style => 'width: 130px;', :class => 'autofill' %>
+		<%= f.text_field :mail_zip, :style => 'width: 130px;', :class => 'autofill sap' %>
 	</div>	
 	<div>
 		<label>Email:&nbsp;</label>
-		<%= f.text_field :email, :style => 'width: 250px;', :class => 'autofill' %>
+		<%= f.text_field :email, :style => 'width: 250px;', :class => 'autofill sap' %>
 		<label>&nbsp;Phone:&nbsp;</label>
-		<%= f.text_field :phone, :style => 'width: 150px;', :class => 'autofill' %>
+		<%= f.text_field :phone, :style => 'width: 150px;', :class => 'autofill sap' %>
 		<label>&nbsp;Cell Phone:&nbsp;</label>
-		<%= f.text_field :phone2, :style => 'width: 150px;', :class => 'autofill' %>
+		<%= f.text_field :phone2, :style => 'width: 150px;', :class => 'autofill sap' %>
 	</div>
 	<div>
-		<label>Title:&nbsp;</label>
+		<label style="display: inline-block; width: 70px;">Position #:&nbsp;</label>
+		<%= f.text_field :position_no, :style => 'width: 150px;', :class => 'autofill-alt sap', :placeholder => search %>
+		<label style="display: inline-block; width: 90px;">&nbsp;Position Name:&nbsp;</label>
 		<%= f.text_field :position, :style => 'width: 350px;', :class => 'autofill-alt', :placeholder => search %>
-		<label>&nbsp;Position #:&nbsp;</label>
-		<%= f.text_field :position_no, :style => 'width: 150px;', :class => 'autofill-alt', :placeholder => search %>
+	</div>
+	<div>
+		<label style="display: inline-block; width: 70px;">*Job Code #:&nbsp;</label>
+		<%= f.text_field :job_code, :style => 'width: 150px;', :class => 'autofill-alt' %>
+		<label style="display: inline-block; width: 90px;">&nbsp;*Job Name:&nbsp;</label>
+		<%= f.text_field :job_name, :style => 'width: 350px;', :class => 'autofill-alt' %><br>
+		* A job code/name that does not match the position indicates an &quot;in lieu of&quot; appointment.
 	</div>
 	<div>
 		<label>Move Position to SAP Organization #:&nbsp;</label>
@@ -91,11 +98,11 @@ edit_mode = params[:action] == 'edit' || params[:action] == 'new'
 	</div>	
 	<div>
 		<label>Salary Group:&nbsp;</label>
-		<%= f.text_field :salary_group, :style => 'width: 100px;', :class => 'autofill-alt' %>
+		<%= f.text_field :salary_group, :style => 'width: 100px;', :class => 'autofill-alt sap' %>
 		<label>&nbsp;Salary Step:&nbsp;</label>
-		<%= f.text_field :salary_step, :style => 'width: 100px;' %>
+		<%= f.text_field :salary_step, :style => 'width: 100px;', :class => 'sap' %>
 		<label>&nbsp;Hourly Rate:&nbsp;</label>
-		<%= f.text_field :hourly_rate, :style => 'width: 100px;' %>
+		<%= f.text_field :hourly_rate, :style => 'width: 100px;', :class => 'sap' %>
 		<label>&nbsp;Biweekly Rate:&nbsp;</label>
 		<%= f.text_field :biweekly_rate, :style => 'width: 100px;' %>
 	</div>
@@ -110,7 +117,7 @@ edit_mode = params[:action] == 'edit' || params[:action] == 'new'
 		<%= f.radio_button :physical_required, true %><label for="obj_physical_required_true"> Yes</label>&nbsp;&nbsp;
 		<%= f.radio_button :physical_required, false %><label for="obj_physical_required_false"> No</label>&nbsp;&nbsp;
 		<label><b>Rehire? SAP ID#:</b>&nbsp;</label>
-		<%= f.text_field :rehire_sap_no, :style => 'width: 100px;' %><% if edit_mode %> <a href="#" id="load-rehire">Click to Load SAP# From SSN (below)</a><% end %>
+		<%= f.text_field :rehire_sap_no, :style => 'width: 100px;', :class => 'sap' %><% if edit_mode %> <a href="#" id="load-rehire">Click to Load SAP# From SSN (below)</a><% end %>
 	</div>		
 	<div>
 		<label><b>Days/Times <u>NOT AVAILABLE</u> for Drug Testing:&nbsp;</b></label>
@@ -118,33 +125,37 @@ edit_mode = params[:action] == 'edit' || params[:action] == 'new'
 	</div>
 	<div>
 		<label><b>TENTATIVE HIRE DATE&nbsp;</b></label>
-		<%= f.text_field :effective_date, :style => 'width: 200px;', :class => 'date', :value => (@obj.effective_date.strftime('%m/%d/%Y') rescue nil) %>
+		<%= f.text_field :effective_date, :style => 'width: 200px;', :class => 'date sap', :value => (@obj.effective_date.strftime('%m/%d/%Y') rescue nil) %>
 	</div>
 	<div class="ct">* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *</div>
-	<% if params[:action] == 'print' %>
-		<div id="sign-lines">
-			<div><span style="width: 180px;">Department Nomination: </span><span class="sign-line" style="width: 300px;"></span>&nbsp;&nbsp;<span>Date:&nbsp;</span><span class="sign-line" style="width: 100px;"></span></div>
-			<div><span style="width: 180px;">Liaison Approval: </span><span class="sign-line" style="width: 300px;"></span>&nbsp;&nbsp;<span>Date:&nbsp;</span><span class="sign-line" style="width: 100px;"></span></div>
-			<div><span style="width: 180px;">Human Resources Approval: </span><span class="sign-line" style="width: 300px;"></span>&nbsp;&nbsp;<span>Date:&nbsp;</span><span class="sign-line" style="width: 100px;"></span></div>
-		</div>
-		<div class="ct">* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *</div>
+	<% if false %>
+		<% if params[:action] == 'print' %>
+			<div id="sign-lines">
+				<div><span style="width: 180px;">Department Nomination: </span><span class="sign-line" style="width: 300px;"></span>&nbsp;&nbsp;<span>Date:&nbsp;</span><span class="sign-line" style="width: 100px;"></span></div>
+				<div><span style="width: 180px;">Liaison Approval: </span><span class="sign-line" style="width: 300px;"></span>&nbsp;&nbsp;<span>Date:&nbsp;</span><span class="sign-line" style="width: 100px;"></span></div>
+				<div><span style="width: 180px;">Human Resources Approval: </span><span class="sign-line" style="width: 300px;"></span>&nbsp;&nbsp;<span>Date:&nbsp;</span><span class="sign-line" style="width: 100px;"></span></div>
+			</div>
+			<div class="ct">* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *</div>
+		<% end %>
 	<% end %>
-	<div style="width: 35%; float: left;">
+	<div style="width: 36%; float: left;">
 		<label style="display: inline-block; width: 120px;">Civil Service Class:</label>
-		<%= f.select :classification, @class_opts, {:include_blank => true}, :style => 'width: 140px;' %><br>
+		<%= f.select :classification, @class_opts, {:include_blank => true}, :style => 'width: 140px;', :class => 'sap' %><br>
 		<label style="display: inline-block; width: 120px;">Civil Service Status:</label>
-		<%= f.select :civil_service_status, @status_opts, {:include_blank => true}, :style => 'width: 140px;', :class => 'autofill' %><br>
-		<label style="display: inline-block; width: 120px;">Job Code:</label>
-		<%= f.text_field :job_code, :style => 'width: 140px;', :class => 'autofill-alt' %><br>
+		<%= f.select :civil_service_status, @status_opts, {:include_blank => true}, :style => 'width: 140px;', :class => 'autofill sap' %><br>
+		<% if false %>
+			<label style="display: inline-block; width: 120px;">Job Code:</label>
+			<%= f.text_field :job_code, :style => 'width: 140px;', :class => 'autofill-alt' %><br>
+		<% end %>
 		<label style="display: inline-block; width: 120px;">List Number:</label>
 		<%= f.text_field :list_no, :style => 'width: 140px;', :class => 'autofill' %><br>
 		<label style="display: inline-block; width: 120px;">Work Schedule Code:</label>
-		<%= f.text_field :work_schedule_code, :style => 'width: 140px;', :placeholder => search, :class => 'fake-select' %><br>
+		<%= f.text_field :work_schedule_code, :style => 'width: 140px;', :placeholder => search, :class => 'fake-select sap' %><br>
 		<label style="display: inline-block; width: 120px;"><span class="hr-field">*</span>FLSA Status:</label>
-		<%= f.radio_button :flsa_exempt, true, :class => 'autofill' %><label for="obj_flsa_exempt_true"> Exempt</label>&nbsp;&nbsp;
+		<%= f.radio_button :flsa_exempt, true, :class => 'autofill' %><label for="obj_flsa_exempt_true"> Exempt</label>&nbsp;
 		<%= f.radio_button :flsa_exempt, false, :class => 'autofill' %><label for="obj_flsa_exempt_false"> Non-Exempt</label>
 	</div>
-	<div style="width: 35%; float: left;">
+	<div style="width: 36%; float: left;">
 		<label style="display: inline-block; width: 120px;"><span class="hr-field">*</span>Physical Date/Time:</label>
 		<%= f.text_field :physical_date, :style => 'width: 140px;', :class => 'datetime', :value => (@obj.physical_date.strftime('%m/%d/%Y %I:%M %P') rescue nil) %><br>
 		<label style="display: inline-block; width: 120px;"><span class="hr-field">*</span>Benefits Date:</label>
@@ -152,13 +163,13 @@ edit_mode = params[:action] == 'edit' || params[:action] == 'new'
 		<label style="display: inline-block; width: 120px;"><span class="hr-field">*</span>Drug Test Date/Time:</label>
 		<%= f.text_field :drug_test_date, :style => 'width: 140px;', :class => 'datetime', :value => (@obj.drug_test_date.strftime('%m/%d/%Y %I:%M %P') rescue nil) %><br>
 		<label style="display: inline-block; width: 120px;"><span class="hr-field">*</span>Birth Date:</label>
-		<%= f.text_field :birth_date, :style => 'width: 140px;', :class => 'date', :value => (@obj.birth_date.strftime('%m/%d/%Y') rescue nil), :class => 'autofill' %><br>
+		<%= f.text_field :birth_date, :style => 'width: 140px;', :value => (@obj.birth_date.strftime('%m/%d/%Y') rescue nil), :class => 'autofill date sap' %><br>
 		<label style="display: inline-block; width: 120px;">Social Sec. No.:</label>
-		<%= f.text_field :ssn, :style => 'width: 140px;', :class => 'autofill' %>
+		<%= f.text_field :ssn, :style => 'width: 140px;', :class => 'autofill sap' %>
 		<label style="display: inline-block; width: 120px;"><span class="hr-field">*</span>SAP New Hire ID:</label>
 		<%= f.text_field :new_hire_sap_id, :style => 'width: 140px;' %>
 	</div>
-	<div style="width: 30%; float: right;">
+	<div style="width: 28%; float: right;">
 		<label style="display: inline-block; width: 120px;">Physical Agility:</label>
 		<%= f.radio_button :physical_agility, true %><label for="obj_physical_agility_true"> Yes</label>&nbsp;&nbsp;
 		<%= f.radio_button :physical_agility, false %><label for="obj_physical_agility_false"> No</label><br>
@@ -172,8 +183,9 @@ edit_mode = params[:action] == 'edit' || params[:action] == 'new'
 		<%= f.radio_button :onboard_email, true %><label for="obj_onboard_email_true"> Yes</label>&nbsp;&nbsp;
 		<%= f.radio_button :onboard_email, false %><label for="obj_onboard_email_false"> No</label><br>
 		<label style="display: inline-block; width: 120px;">Gender</label>
+		<span class="sap">
 		<%= f.radio_button :gender, 'M', :class => 'autofill' %><label for="obj_gender_m"> M</label>&nbsp;&nbsp;
-		<%= f.radio_button :gender, 'F', :class => 'autofill' %><label for="obj_gender_f"> F</label>
+		<%= f.radio_button :gender, 'F', :class => 'autofill' %><label for="obj_gender_f"> F</label></span>
 	</div>
 	<div style="clear: both;"><span class="hr-field">*Entered by HR Department</span></div>
 	<div style="clear: both;">
@@ -208,14 +220,17 @@ edit_mode = params[:action] == 'edit' || params[:action] == 'new'
 	<div><b><u>NOTES TO HR</u> (Include any explanatory information regarding the new hire included on this form)</b></div>
 	<div><%= f.text_area :notes, :style => 'width: 100%; height: 40px;' %></div>	
 	<% if params[:action] == 'print' %>
-		<h2 class="ct">FOR HUMAN RESOURCES USE ONLY</h2>
-		<table id="hr-boxes">
-			<tr>
-				<td>Liaisons</td>
-				<td>Org. Management</td>
-				<td>Payroll</td>
-				<td>Benefits</td>
-			</tr>
-		</table>
+		<%= partial 'form_county_change/form_actions_print', :o => @obj %>
+		<% if false %>
+			<h2 class="ct">FOR HUMAN RESOURCES USE ONLY</h2>
+			<table id="hr-boxes">
+				<tr>
+					<td>Liaisons</td>
+					<td>Org. Management</td>
+					<td>Payroll</td>
+					<td>Benefits</td>
+				</tr>
+			</table>
+		<% end %>
 	<% end %>		
 </div>

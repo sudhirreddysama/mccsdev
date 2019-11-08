@@ -2,6 +2,7 @@
 body.print #form { width: 7.9in; padding: 0; border: none; margin: 0; box-shadow: none; }
 table.form #form { margin: 0; }
 .flex { display: -webkit-box; display: flex; }
+.nobr { white-space: nowrap; }
 #form * { box-sizing: border-box; }
 #form > h2 { font-size: 1em; margin: 0; padding: 0; font-weight: bold; border: none; margin: 5px 0; font-size: 13px; line-height: 18px; }
 #form > div { margin: 2px 0; }
@@ -71,3 +72,11 @@ Nevermind, bad idea, makes text look like it can't be edited.
 #sign-lines { padding-left: 50px; }
 #hr-boxes { border-collapse: collapse; width: 80%; margin: 0 auto; }
 #hr-boxes td { padding: 5px; width: 25%; text-align: center; vertical-align: middle; }
+
+#approval-log td,
+#approval-log th { padding: 0 2px; text-align: left; }
+#form .tc { text-align: center !important; }
+#form .tl { text-align: left !important; }
+#form .tr { text-align: right !important; }
+
+#form.sap-hover .sap { background-color: #0f8; }

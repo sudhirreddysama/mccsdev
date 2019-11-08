@@ -7,6 +7,7 @@ class Message < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :bulk_message
 	belongs_to :contact
+	belongs_to :cert_applicant
 	
 	validates_presence_of :subject, :body, :public_name
 	

@@ -20,7 +20,7 @@ class Letter < ActiveRecord::Base
 			'exam.deadline.long',
 			'exam.deadline.time'
 		],
-		'Applicant' => [
+		'Person' => [
 			'person.first_name',
 			'person.last_name',
 			'person.full_name',
@@ -29,6 +29,8 @@ class Letter < ActiveRecord::Base
 			'person.full_residence_address',
 			'person.full_residence_address_inline',
 			'person.ssn_last4',
+		],
+		'Applicant' => [
 			'applicant.raw_score',
 			'applicant.base_score',
 			'applicant.veterans_credits',
@@ -68,6 +70,9 @@ class Letter < ActiveRecord::Base
 			'cert.salary_range',
 			'cert.job_type',
 			'cert.job_time'
+		],
+		'Cert Candidate' => [
+			'cert_applicant.response_url'
 		],
 		'Web Post' => [
 			'web.no',
@@ -121,6 +126,7 @@ class Letter < ActiveRecord::Base
 		cert = objs[:cert]
 		user = objs[:user]
 		contact = objs[:contact]
+		cert_applicant = objs[:cert_applicant]
 		
 		exam = cert.exam if cert && !exam
 		person = applicant.person if applicant && !person
@@ -129,11 +135,13 @@ class Letter < ActiveRecord::Base
 		
 		vars = []
 		vars << 'Exam/List' if exam
-		vars << 'Applicant' if applicant || person
+		vars << 'Applicant' if applicant
+		vars << 'Person' if person
 		vars << 'Certification' if cert
 		vars << 'Web Post' if web
 		vars << 'User' if user
 		vars << 'Agency Contact' if contact
+		vars << 'Cert Candidate' if cert_applicant
 		
 		vars.each { |scope|
 			VARS[scope].each { |var|

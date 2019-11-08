@@ -17,12 +17,19 @@ form_county = form_county_hire || form_county_change
 		<% if @obj.employee %>
 			<%= tab 'Employee History Details', {:controller => :employee, :action => :print, :id => @obj.employee_id}, {}, :target => '_blank' %>
 		<% end %>
-		<% if false && form_county_hire && @current_user.staff_level? %>
+		<% if form_county_hire && @current_user.staff_level? %>
 			<%= form_tag %>
 				<input type="hidden" name="sap_submit" value="1" />
 				<% confirm = o.new_hire_sap_id.blank? ? 'Are you sure you want to submit to SAP?' : 'This form already has a new hire SAP ID. Are you sure you want to resend it?' %>
 				<a href="#" class="tab-sap_submit" id="sap_submit" onclick="if(confirm('<%= confirm %>')) { $(this.parentNode).submit(); } return false;"><span><%= o.new_hire_sap_id.blank? ? 'Send' : 'Resend' %> to SAP</span></a>
 			</form>
+			<script>
+				$('#sap_submit').mouseenter(function(e) {
+					$('#form').addClass('sap-hover');
+				}).mouseleave(function(e) {
+					$('#form').removeClass('sap-hover');
+				});
+			</script>
 		<% end %>
 		<% if false && @current_user.username == 'isadmin' %>
 			<% 'this was implemented as a generic solution to approvals/disapprovals but HR eventually decided against it so it disabled for all but user isadmin' %>

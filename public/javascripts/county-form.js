@@ -50,6 +50,7 @@ var set_position_fields_from_to = function(data_obj, fields_obj) {
 	}
 	if(obj.salary_group) obj.salary_group.val(i.salary_group).effect('highlight');
 	if(obj.job_no) obj.job_no.val(i.job_no).effect('highlight');
+	if(obj.job_name) obj.job_name.val(i.position).effect('highlight');
 	if(obj.cost_center) obj.cost_center.val(i.cost_center).effect('highlight');
 	if(obj.org_no) obj.org_no.val(i.org_no).effect('highlight');
 	if(obj.county_org_no) obj.county_org_no.val(i.county_org_no).effect('highlight');

@@ -114,14 +114,23 @@ class BulkMessage < ActiveRecord::Base
 				})
 			}
 		else
-			cond << 'applicants.id in (%s)' % applicant_ids.join(',') unless applicant_ids.empty?		
-			apps = o.applicants.find(:all, :conditions => cond.join(' and '))
+			app_cond = applicant_ids.empty? ? nil : 'applicants.id in (%s)' % applicant_ids.join(',')
+			apps = o.applicants.find(:all, :conditions => app_cond)
+			
+			cert_applicants = {}
+			if cert
+				cert_app_cond = applicant_ids.empty? ? nil : 'cert_applicants.applicant_id in (%s)' % applicant_ids.join(',')
+				cert_applicants = cert.cert_applicants.find(:all, :conditions => cert_app_cond).index_by(&:applicant_id)
+			end
+			
 			update_attribute :message_count, apps.size
 			apps.each { |a|
+				ca = cert_applicants[a.id]
 				m = messages.create(attr + {
 					:applicant => a,
 					:person => a.person,
-					:body => Letter.apply(body, {:applicant => a, :person => a.person}),
+					:cert_applicant => ca,
+					:body => Letter.apply(body, {:applicant => a, :person => a.person, :cert_applicant => ca}),
 				})
 			}
 		end

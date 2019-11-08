@@ -1,6 +1,6 @@
 <tr style="background: #e8e8e8;"><th></th><th>User Login</th></tr>
 <%= f.tr_text_field :username, :label => 'Username', :req => true, :autocomplete => 'off' %>
-<tr>
+<tr class="password">
 	<th>Password: <% if @obj.new_record? %><span class="req">*</span><% end %></th>
 	<td>
 		<%= f.password_field :password, :autocomplete => 'new-password', :size => 60 %>
@@ -8,6 +8,7 @@
 	</td>
 </tr>
 <%= f.tr_password_field :password_confirmation, :label => 'Confirm Password', :help => 'Please retype the password.', :req => @obj.new_record?, :autocomplete => 'new-password' %>
+<%#= f.tr_check :auth_ldap, :label => 'AD Authenticate', :text => 'Authenticate through Active Directory (use network/pc login). If checked, password field is not required. Username must match AD login.' %>
 <%= f.tr_check :reset_password, :label => 'Reset Password:', :text => 'Check here to force user to enter a new password next time they login.' %>
 <tr style="background: #e8e8e8;"><th></th><th>User Information</th></tr>
 <%= f.tr_text_field :name, :label => 'Name', :req => true %>
@@ -46,6 +47,7 @@
 		<label style="padding-left: 20px;"><%= f.check_box :allow_web_post_review, :class => '' %> Allow Web Post Applicant Review (user can approve/disapprove applications)</label><br>
 		<label><%= f.check_box :show_pref_lists, :class => 'def1 def2' %> Access Preferred Lists Tab</label><br>
 		<label><%= f.check_box :show_cert_lists, :class => 'def1 def2' %> Access Certified Lists Tab</label><br>
+		<label style="padding-left: 20px;"><%= f.check_box :perm_cert_letters, :class => '' %> Send Certified Lists Letters</label><br>
 		<label style="padding-left: 20px;"><%= f.check_box :perm_cert_notices, :class => 'def1 def2' %> Receive certified lists email notifications for agency/dept/division</label><br>
 		<label><%= f.check_box :perm_ag_reports, :class => 'def2' %> Access Reports Tab</label><br>
 		<label><%= f.check_box :perm_ag_applicants, :class => '' %> Access Applications Tab (view ALL applicants)</label><br>
@@ -113,3 +115,49 @@
 <% if false %>
 	<%= f.tr_check :view_web_post_for_agency, :label => 'View all Web Posts for Agency?', :text => 'Check here to allow this agency user to view all web posts for their own agency.' %>
 <% end %>
+
+<%= stylesheet_link_tag '/jquery-ui-1.11.4.custom/jquery-ui.css' %>
+<%= javascript_include_tag '/jquery-1.12.3.js' %>
+<%= javascript_include_tag '/jquery-ui-1.11.4.custom/jquery-ui.js' %>
+
+<!-- <script>
+var toggle_password = function() {
+var val = $('#obj_auth_ldap').is(':checked');
+$('tr.password').toggle(!val);
+}
+$('#obj_auth_ldap').change(toggle_password);
+toggle_password();
+var set_user = function(item) {
+	$('#obj_username').val(item.username);
+	$('#obj_first_name').val(item.first_name);
+	$('#obj_last_name').val(item.last_name);
+	$('#obj_phone').val(item.phone);
+	$('#obj_title').val(item.title);
+	$('#obj_email').val(item.mail);
+	$('#obj_auth_ldap').prop('checked', true);
+	toggle_password();
+}
+$('#obj_username').autocomplete({
+		source: '<%#= url_for controller: :users, action: :ldap_autocomplete %>',
+		minLength: 2,
+		response: function(e, ui) {
+			$(this).removeClass('busy-bg');
+		},
+		search: function(e, ui) {
+			$(this).addClass('busy-bg');
+		},
+		select: function(e, ui) {
+			set_user(ui.item);
+			e.preventDefault();
+		},
+		focus: function(e, ui) {
+			set_user(ui.item);
+			e.preventDefault();
+		}
+	}).data('ui-autocomplete')._renderItem = function(ul, item) {
+		return $('<li>')
+			.append(item.username + ' (' + item.first_name + ' ' + item.last_name + ')')
+			.appendTo(ul);
+	};
+</script> -->
+

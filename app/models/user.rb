@@ -69,15 +69,15 @@ class User < ActiveRecord::Base
   	return nil if n.blank? || p.blank?
   	u = find_by_username n
   	return nil if !u
-  	bad = u.encrypted_password != Digest::SHA1.hexdigest(p.to_s + SALT)
-  	bad ||= !USER_LEVELS.include?(u.level)
-  	bad ||= u.failed_logins.to_i > 5
-  	if bad
-  		u.update_attribute :failed_logins, u.failed_logins.to_i + 1
-  		return nil
-  	end
-  	u.update_attributes :activation_key => '', :failed_logins => 0, :failed_recoveries => 0
-  	return u
+    bad = u.encrypted_password != Digest::SHA1.hexdigest(p.to_s + SALT)
+    bad ||= !USER_LEVELS.include?(u.level)
+    bad ||= u.failed_logins.to_i > 5
+    if bad
+      u.update_attribute :failed_logins, u.failed_logins.to_i + 1
+      return nil
+    end
+    u.update_attributes :activation_key => '', :failed_logins => 0, :failed_recoveries => 0
+    return u
   end
   
   def self.authenticate_by_activation_key uid, k
@@ -188,5 +188,51 @@ class User < ActiveRecord::Base
 			where u.level like "agency%"'
 		)
 	end
+
+  # def self.authenticate_ldap u, p
+  #   return nil if u.blank? || p.blank?
+  #   conn = Net::LDAP.new(host: LDAP_HOST, port: LDAP_PORT, base: LDAP_BASE, auth: {username: "#{u}#{LDAP_DOMAIN}", password: p, method: :simple})
+  #   if conn.bind
+  #     results = conn.search filter: Net::LDAP::Filter.equals('samaccountname', u)     
+  #     return results.first
+  #   else
+  #     conn = Net::LDAP.new(:host => LDAP_HOST, :port => LDAP_PORT, :base => LDAP_BASE, :auth => {:username => "#{u}#{LDAP_DOMAIN2}", :password => p, :method => :simple})
+  #     if conn.bind
+  #       results = conn.search :filter => Net::LDAP::Filter.equals('samaccountname', u)
+  #       return results.first
+  #     end
+  #   end
+  #   return nil
+  # rescue Net::LDAP::LdapError => e # Connection errors
+  #   return false
+  # end 
+  
+  # def self.lookup_ldap u
+  #   return [] if u.blank?
+  #   conn = Net::LDAP.new(host: LDAP_HOST, port: LDAP_PORT, base: LDAP_BASE, auth: {username: LDAP_USER, password: LDAP_PASS, method: :simple})
+  #   if conn.bind
+  #     return conn.search({filter: 
+  #       Net::LDAP::Filter.equals('objectCategory', 'person') & 
+  #       Net::LDAP::Filter.equals('objectClass', 'user') & 
+  #       (Net::LDAP::Filter.begins('samaccountname', u) | Net::LDAP::Filter.contains('cn', u))
+  #     })
+  #   end
+  #   return []
+  # rescue  Net::LDAP::LdapError => e # Connection errors
+  #   return []
+  # end
+  
+  # def self.lookup_ou_users_ldap ou
+  #   conn = Net::LDAP.new(host: LDAP_HOST, port: LDAP_PORT, base: "OU=#{ou},#{LDAP_BASE}", auth: {username: LDAP_USER, password: LDAP_PASS, method: :simple})
+  #   if conn.bind
+  #     return conn.search({filter:
+  #       Net::LDAP::Filter.equals('objectCategory', 'person') & 
+  #       Net::LDAP::Filter.equals('objectClass', 'user')
+  #     })
+  #   end
+  #   return []
+  # rescue  Net::LDAP::LdapError => e # Connection errors
+  #   return []
+  # end
 	
 end

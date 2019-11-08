@@ -1,4 +1,10 @@
-<%= f.tr_text_field :name, :label => 'Name', :req => true, :class => 'ucase' %>
+<tr>
+	<th>Name: <span class="req">*</span></th>
+	<td>
+		<%= f.text_field :name, :class => 'ucase', :size => 60 %>
+		<label><%= f.check_box :agency_use %> Allow Agency Use</label>
+	</td>
+</tr>
 <%= f.tr_text_field :public_name, :label => 'Subject (Public)', :req => true, :class => 'ucase' %>
 <tr>
 	<th>Body: <span class="req">*</span></th>
@@ -7,20 +13,36 @@
 		<div style="float: left;">
 			<table id="tplvars" style="width: 500px;">
 				<tr><th colspan="4">Template Variables:</th></tr>
-				<% cls = ['Exam/List', 'Applicant', 'Certification', 'Web Post', 'User', 'Agency Contact'] %>
 				<tr>
-					<% cls.each { |c| %>
-						<th width="25%"><%= c %></th>
-					<% } %>
-				</tr>
-				<tr>
-					<% cls.each { |c| %>
-						<td>
-							<% Letter::VARS[c].each { |v| %>
-								<a href="#">$$<%= v %>$$</a><br />
-							<% } %>
-						</td>
-					<% } %>
+					<td>
+						<b>Exam/List</b><br>
+						<% Letter::VARS['Exam/List'].each { |v| %><a href="#">$$<%= v %>$$</a><br /><% } %>
+					</td>
+					<td>
+						<b>Applicant</b><br>
+						<% Letter::VARS['Applicant'].each { |v| %><a href="#">$$<%= v %>$$</a><br /><% } %>				
+					</td>
+					<td>
+						<b>Person</b><br>
+						<% Letter::VARS['Person'].each { |v| %><a href="#">$$<%= v %>$$</a><br /><% } %>
+						&nbsp;<br>
+						<b>Agency Contact</b><br>
+						<% Letter::VARS['Agency Contact'].each { |v| %><a href="#">$$<%= v %>$$</a><br /><% } %>		
+					</td>
+					<td>
+						<b>Certification</b><br>
+						<% Letter::VARS['Certification'].each { |v| %><a href="#">$$<%= v %>$$</a><br /><% } %>
+						&nbsp;<br>
+						<b>Cert Candidate</b><br>
+						<% Letter::VARS['Cert Candidate'].each { |v| %><a href="#">$$<%= v %>$$</a><br /><% } %>
+					</td>
+					<td>
+						<b>Web Post</b><br>
+						<% Letter::VARS['Web Post'].each { |v| %><a href="#">$$<%= v %>$$</a><br /><% } %>
+						&nbsp;<br>
+						<b>User</b><br>
+						<% Letter::VARS['User'].each { |v| %><a href="#">$$<%= v %>$$</a><br /><% } %>
+					</td>
 				</tr>
 			</table>
 		</div>

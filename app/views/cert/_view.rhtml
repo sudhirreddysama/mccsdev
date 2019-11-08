@@ -425,6 +425,21 @@
 					<td>
 						<% if @current_user.staff_level? || @current_user.liaison_level? || (@current_user.agency_level? && (@obj.status == 'certified' || @obj.status == 'overdue') && @obj.certification_date <= Time.now.to_date) %>
 							<table>
+								<% if ca.response_when %>
+									<tr>
+										<td colspan="2">
+											Online Response: 
+											<%= ca.response_when.d0 %> 
+											<% if ca.response == 'Y' %><b style="color: #080;">INTERESTED</b><% elsif ca.response == 'N' %><b style="color: #800;">NOT INTERESTED</b><% end %>
+											<% if ca.response == 'N' %>
+												Reason: <%= ca.response_reason %><% if ca.response_reason == 'Unavailable' %> (until<%= ca.response_date %>)<% end %>
+											<% end %>
+											<% if !ca.response_notes.blank? %>
+												<a href="#" onclick="alert(<%= h ca.response_notes.to_json %>); return false;">Notes</a>
+											<% end %>
+										</td>
+									</tr>
+								<% end %>
 								<tr>
 									<td class="nobr">Action:</td><%
 									

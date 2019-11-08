@@ -1,0 +1,25 @@
+<div><b>Status/Approval Log</b></div>
+<table id="approval-log">
+	<thead>
+		<tr>
+			<th width="1%" class="nobr tc">Date/Time</th>
+			<th width="1%" class="nobr tc">User</th>
+			<th width="1%" class="nobr tc">Status</th>
+			<th width="1%" class="nobr tc">HR Status</th>
+			<th width="1%" class="nobr tc">Recipient</th>
+			<th width="99%">Message/Note</th>
+		</tr>
+	</thead>
+	<% o.form_actions.find(:all, :order => 'created_at desc').each { |a| %>
+		<tbody>
+			<tr class="<%= cycle 'odd', 'even' %>">
+				<td class="nobr"><%= a.created_at.dt0? %></td>
+				<td class="nobr"><%= a.user ? a.user.name : '' %></td>
+				<td class="nobr tc"><%= form_status a.status %></td>
+				<td class="nobr tc"><%= form_hr_status a.hr_status %></td>
+				<td class="nobr"><%= a.recipient ? a.recipient.name : '' %></td>
+				<td><%= nl2br_h a.note %></td>
+			</tr>
+		</tbody>
+	<% } %>
+</table></div></div>

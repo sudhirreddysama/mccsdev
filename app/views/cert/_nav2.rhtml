@@ -1,7 +1,8 @@
+<% sc = params[:sc] || params[:controller] %>
 <% if @current_user.staff_level? %>
 	<%= tab 'Import Applicants', {:sc => nil, :sid => nil, :controller => :cert, :action => :import_applicants, :id => (params[:sid] || params[:id])}, {}, {:class => 'tab-import_applicants'} %>
 <% end %>
-<%= tab 'Documents', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>
-<% unless @current_user.agency_level? %>
-	<%= tab 'Letters', {:sc => (params[:sc] || params[:controller]), :sid => (params[:sid] || @obj.id), :controller => :bulk_message}, {:action => :index, :id => nil}, {:class => 'tab-letter'} %>
+<%= tab 'Documents', {:sc => sc, :sid => (params[:sid] || @obj.id), :controller => :document}, {:action => :index, :id => nil}, {:class => 'tab-attachments'} %>
+<% if !@current_user.agency_level? || (@current_user.perm_cert_letters && sc == 'cert') %>
+	<%= tab 'Letters', {:sc => sc, :sid => (params[:sid] || @obj.id), :controller => :bulk_message}, {:action => :index, :id => nil}, {:class => 'tab-letter'} %>
 <% end %>

@@ -31,6 +31,19 @@ class UserController < CrudController
 		}
 		super
 	end
+
+	# def ldap_autocomplete
+	# 	results = User.lookup_ldap params.term
+	# 	results.map! { |r| {
+	# 		first_name: r[:givenname][0],
+	# 		last_name: r[:sn][0],
+	# 		username: r[:samaccountname][0],
+	# 		title: r[:title][0],
+	# 		phone: r[:telephonenumber][0],
+	# 		mail: r[:mail][0]
+	# 	}}
+	# 	render json: results.to_json
+	# end
 	
 	def user_flip
 		session[:current_user_id] = params[:id]

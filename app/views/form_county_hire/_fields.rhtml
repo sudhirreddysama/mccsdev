@@ -1,6 +1,6 @@
 <% @update_js = true %>
 <% content_for(:head) { %>
-	<%= javascript_include_tag 'county-form.js?v2' %>
+	<%= javascript_include_tag 'county-form.js' %>
 	<%= javascript_include_tag '/jquery.datetimepicker/jquery.datetimepicker.js' %>
 	<%= stylesheet_link_tag '/jquery.datetimepicker/jquery.datetimepicker.css' %>
 <% } %>
@@ -69,6 +69,7 @@ var obj_mail_state = $('#obj_mail_state');
 var obj_mail_zip = $('#obj_mail_zip');		
 var obj_list_no = $('#obj_list_no');
 var obj_job_code = $('#obj_job_code');
+var obj_job_name = $('#obj_job_name');
 var obj_email = $('#obj_email');
 var obj_phone = $('#obj_phone');
 var obj_ssn = $('#obj_ssn');
@@ -86,6 +87,7 @@ var pos_fields = {
 	position: obj_position,
 	position_no: obj_position_no,
 	job_no: obj_job_code,
+	job_name: obj_job_name,
 	salary_group: obj_salary_group,
 	flsa_exempt_true: obj_flsa_exempt_true,
 	flsa_exempt_false: obj_flsa_exempt_false,

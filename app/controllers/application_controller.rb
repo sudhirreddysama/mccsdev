@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 	
 	def force_ssl
 		unless request.ssl?
-			redirect_to :protocol => 'https://'
+			# redirect_to :protocol => 'https://'
 			return false
 		end
 	end
@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
 	
 	def forbid_ssl
 		if request.ssl?
-			redirect_to :protocol => 'http://'
+			# redirect_to :protocol => 'http://'
 			return false
 		end
 	end

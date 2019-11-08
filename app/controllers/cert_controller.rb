@@ -5,6 +5,7 @@ class CertController < CrudController
 		return true if @current_user.above_agency_level?
 		return true if @current_user.agency_level? && @current_user.show_cert_lists
 		render_nothing and return false
+		# TO DO: CHECK ACCESS FOR INDIVIDUAL CERTS!!!
 	end
 	before_filter :check_access, :except => :autocomplete
 	
