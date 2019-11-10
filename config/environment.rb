@@ -92,6 +92,7 @@ LDAP_USER = 'ldaplook'
 LDAP_PASS = 'ldapl00k'
 LDAP_DOMAIN = '@monroecounty.gov'
 LDAP_DOMAIN2 = '@mc.ad.monroecounty.gov'
+LDAP_USER_DN_REGEX = /OU=(ISAD|SHZA|SHZB|SHZC|SHAD),/
 
 # Test:
 # c = Net::LDAP.new(:host => LDAP_HOST, :port => LDAP_PORT, :base => LDAP_BASE, :auth => {:username => LDAP_USER, :password => LDAP_PASS, :method => :simple})

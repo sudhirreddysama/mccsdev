@@ -12,7 +12,9 @@ class AccountController < ApplicationController
 				u = User.authenticate @login[:username], @login[:password]
 				if u
 					session[:current_user_id] = u.id
-					if u.reset_password || u.password_set_at.nil? || Time.now > u.password_set_at.advance(:months => 6)
+					if u.auth_ldap == 1
+						session[:reset_password] = false
+					elsif u.reset_password || u.password_set_at.nil? || Time.now > u.password_set_at.advance(:months => 6)
 						session[:reset_password] = true
 					end
 					login_hook u

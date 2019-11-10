@@ -7,8 +7,11 @@
 		<% unless @obj.new_record? %><div>Leave blank to keep current password.</div><% end %><div>Min: 8 characters, must contain 1 of each: uppercase, lowercase, number, special character (#%$@*...)</div>
 	</td>
 </tr>
-<%= f.tr_password_field :password_confirmation, :label => 'Confirm Password', :help => 'Please retype the password.', :req => @obj.new_record?, :autocomplete => 'new-password' %>
-<%#= f.tr_check :auth_ldap, :label => 'AD Authenticate', :text => 'Authenticate through Active Directory (use network/pc login). If checked, password field is not required. Username must match AD login.' %>
+<tr class="password">
+	<th>Confirm&nbsp;Password:<span class="req">*</span></th>
+	<td><%= f.password_field :password_confirmation, :req => @obj.new_record?, :size => 60, :autocomplete => 'new-password' %><div>Please retype password.</div></td>
+</tr>
+<%= f.tr_check :auth_ldap, :label => 'AD Authenticate', :text => 'Authenticate through Active Directory (use network/pc login). If checked, password field is not required. Username must match AD login.' %>
 <%= f.tr_check :reset_password, :label => 'Reset Password:', :text => 'Check here to force user to enter a new password next time they login.' %>
 <tr style="background: #e8e8e8;"><th></th><th>User Information</th></tr>
 <%= f.tr_text_field :name, :label => 'Name', :req => true %>
@@ -120,7 +123,7 @@
 <%= javascript_include_tag '/jquery-1.12.3.js' %>
 <%= javascript_include_tag '/jquery-ui-1.11.4.custom/jquery-ui.js' %>
 
-<!-- <script>
+<script>
 var toggle_password = function() {
 var val = $('#obj_auth_ldap').is(':checked');
 $('tr.password').toggle(!val);
@@ -138,7 +141,7 @@ var set_user = function(item) {
 	toggle_password();
 }
 $('#obj_username').autocomplete({
-		source: '<%#= url_for controller: :users, action: :ldap_autocomplete %>',
+		source: '<%= url_for :controller => :user, :action => :ldap_autocomplete %>',
 		minLength: 2,
 		response: function(e, ui) {
 			$(this).removeClass('busy-bg');
@@ -159,5 +162,5 @@ $('#obj_username').autocomplete({
 			.append(item.username + ' (' + item.first_name + ' ' + item.last_name + ')')
 			.appendTo(ul);
 	};
-</script> -->
+</script>
 
